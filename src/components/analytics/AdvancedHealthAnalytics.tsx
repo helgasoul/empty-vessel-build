@@ -10,7 +10,7 @@ import InteractiveDashboard from './InteractiveDashboard';
 import PredictiveTrends from './PredictiveTrends';
 import AgeGroupComparison from './AgeGroupComparison';
 import CorrelationAnalysis from './CorrelationAnalysis';
-import LongTermTrends from './LongTermTrends';
+import SafeLongTermTrends from './SafeLongTermTrends';
 import MedicalDataExport from './MedicalDataExport';
 import { useHealthData } from '@/hooks/useHealthData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -227,7 +227,7 @@ const AdvancedHealthAnalytics = () => {
           </TabsContent>
 
           <TabsContent value="long-term">
-            <LongTermTrends />
+            <SafeLongTermTrends />
           </TabsContent>
 
           <TabsContent value="ai-analysis">
