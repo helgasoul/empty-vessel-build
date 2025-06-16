@@ -26,7 +26,7 @@ const FounderSection = () => {
   // Используем данные из базы данных или обновленные данные по умолчанию
   const founder = founderInfo || {
     name: 'Др. Ольга Пучкова',
-    title: 'Врач-онколог, маммолог • Основатель и CEO YTime',
+    title: 'Врач-онколог, маммолог • Основатель и CEO PREVENT',
     description: 'Врач-онколог с 20-летним опытом работы в области женского здоровья и превентивной медицины. Специалист по ранней диагностике онкологических заболеваний, эксперт в области маммологии и ультразвуковой диагностики. Ольга посвятила свою карьеру созданию персонализированного подхода к профилактике заболеваний, объединяя глубокие медицинские знания с современными технологиями для заботы о здоровье каждой женщины.',
     education: [
       'Московская Медицинская Академия им И.М. Сеченова, лечебное дело (1999-2005)',
@@ -56,7 +56,7 @@ const FounderSection = () => {
         </div>
         
         <h2 className="text-4xl font-montserrat font-bold text-gray-900 dark:text-white mb-4">
-          Кто стоит за <span className="prevent-gradient-primary bg-clip-text text-transparent">YTime</span>
+          Кто стоит за <span className="prevent-gradient-primary bg-clip-text text-transparent">PREVENT</span>
         </h2>
         
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-roboto">
