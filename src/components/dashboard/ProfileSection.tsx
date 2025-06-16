@@ -117,9 +117,7 @@ const ProfileSection = () => {
   const userAge = profile?.date_of_birth ? calculateAge(profile.date_of_birth) : profile?.age;
 
   if (isEditing) {
-    return (
-      <ProfileEditForm />
-    );
+    return <ProfileEditForm />;
   }
 
   if (loading) {
