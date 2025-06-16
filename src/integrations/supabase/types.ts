@@ -294,6 +294,189 @@ export type Database = {
           },
         ]
       }
+      medication_logs: {
+        Row: {
+          created_at: string
+          id: string
+          medication_id: string
+          notes: string | null
+          side_effects_experienced: string | null
+          taken_at: string
+          user_id: string
+          was_on_time: boolean
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          medication_id: string
+          notes?: string | null
+          side_effects_experienced?: string | null
+          taken_at?: string
+          user_id: string
+          was_on_time?: boolean
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          medication_id?: string
+          notes?: string | null
+          side_effects_experienced?: string | null
+          taken_at?: string
+          user_id?: string
+          was_on_time?: boolean
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medication_logs_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medication_reminders: {
+        Row: {
+          created_at: string
+          days_of_week: number[]
+          id: string
+          is_active: boolean
+          last_taken_at: string | null
+          medication_id: string
+          reminder_time: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          days_of_week?: number[]
+          id?: string
+          is_active?: boolean
+          last_taken_at?: string | null
+          medication_id: string
+          reminder_time: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          days_of_week?: number[]
+          id?: string
+          is_active?: boolean
+          last_taken_at?: string | null
+          medication_id?: string
+          reminder_time?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medication_reminders_medication_id_fkey"
+            columns: ["medication_id"]
+            isOneToOne: false
+            referencedRelation: "medications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medications: {
+        Row: {
+          created_at: string
+          dosage: string
+          frequency: string
+          id: string
+          instructions: string | null
+          is_active: boolean
+          medication_name: string
+          side_effects: string | null
+          specific_times: string[] | null
+          times_per_day: number
+          treatment_plan_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          dosage: string
+          frequency: string
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          medication_name: string
+          side_effects?: string | null
+          specific_times?: string[] | null
+          times_per_day?: number
+          treatment_plan_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          dosage?: string
+          frequency?: string
+          id?: string
+          instructions?: string | null
+          is_active?: boolean
+          medication_name?: string
+          side_effects?: string | null
+          specific_times?: string[] | null
+          times_per_day?: number
+          treatment_plan_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medications_treatment_plan_id_fkey"
+            columns: ["treatment_plan_id"]
+            isOneToOne: false
+            referencedRelation: "treatment_plans"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      menstrual_cycles: {
+        Row: {
+          created_at: string
+          cycle_end_date: string | null
+          cycle_length: number | null
+          cycle_start_date: string
+          flow_intensity: string | null
+          id: string
+          notes: string | null
+          period_length: number | null
+          predicted_next_cycle: string | null
+          symptoms: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cycle_end_date?: string | null
+          cycle_length?: number | null
+          cycle_start_date: string
+          flow_intensity?: string | null
+          id?: string
+          notes?: string | null
+          period_length?: number | null
+          predicted_next_cycle?: string | null
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cycle_end_date?: string | null
+          cycle_length?: number | null
+          cycle_start_date?: string
+          flow_intensity?: string | null
+          id?: string
+          notes?: string | null
+          period_length?: number | null
+          predicted_next_cycle?: string | null
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activity_level: string | null
@@ -442,6 +625,93 @@ export type Database = {
           results_data?: Json
           risk_level?: string
           risk_percentage?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      symptom_mood_logs: {
+        Row: {
+          created_at: string
+          energy_level: number | null
+          id: string
+          log_date: string
+          mood_rating: number | null
+          mood_tags: string[] | null
+          notes: string | null
+          sleep_quality: number | null
+          stress_level: number | null
+          symptoms: string[] | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          energy_level?: number | null
+          id?: string
+          log_date: string
+          mood_rating?: number | null
+          mood_tags?: string[] | null
+          notes?: string | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          energy_level?: number | null
+          id?: string
+          log_date?: string
+          mood_rating?: number | null
+          mood_tags?: string[] | null
+          notes?: string | null
+          sleep_quality?: number | null
+          stress_level?: number | null
+          symptoms?: string[] | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      treatment_plans: {
+        Row: {
+          consultation_id: string | null
+          created_at: string
+          doctor_name: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean
+          notes: string | null
+          plan_name: string
+          start_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          consultation_id?: string | null
+          created_at?: string
+          doctor_name?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          plan_name: string
+          start_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          consultation_id?: string | null
+          created_at?: string
+          doctor_name?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean
+          notes?: string | null
+          plan_name?: string
+          start_date?: string
           updated_at?: string
           user_id?: string
         }
