@@ -25,13 +25,14 @@ import { Recipe, NutritionGoal, MealPlan } from './nutrition/types';
 const NutritionIntegration = () => {
   const [activeTab, setActiveTab] = useState<'today' | 'plans' | 'recipes'>('today');
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
+  const [waterCount, setWaterCount] = useState(6);
 
   const dailyGoals: NutritionGoal[] = [
     { name: 'Калории', current: 1680, target: 2000, unit: 'ккал', color: 'bg-blue-500' },
     { name: 'Белки', current: 85, target: 120, unit: 'г', color: 'bg-green-500' },
     { name: 'Жиры', current: 65, target: 80, unit: 'г', color: 'bg-yellow-500' },
     { name: 'Углеводы', current: 180, target: 250, unit: 'г', color: 'bg-purple-500' },
-    { name: 'Вода', current: 6, target: 8, unit: 'стаканов', color: 'bg-cyan-500' },
+    { name: 'Вода', current: waterCount, target: 8, unit: 'стаканов', color: 'bg-cyan-500' },
     { name: 'Клетчатка', current: 18, target: 25, unit: 'г', color: 'bg-emerald-500' }
   ];
 
@@ -173,11 +174,32 @@ const NutritionIntegration = () => {
   };
 
   const handleAddProduct = () => {
-    toast.info("Открывается форма добавления продукта...");
+    // Simulate adding a product with calories and macros
+    const products = [
+      { name: "Яблоко среднее", calories: 95, protein: 0.5, carbs: 25, fat: 0.3 },
+      { name: "Банан", calories: 105, protein: 1.3, carbs: 27, fat: 0.4 },
+      { name: "Греческий йогурт 150г", calories: 130, protein: 15, carbs: 9, fat: 0 },
+      { name: "Орехи миндаль 30г", calories: 173, protein: 6.4, carbs: 6.2, fat: 15 }
+    ];
+    
+    const randomProduct = products[Math.floor(Math.random() * products.length)];
+    
+    toast.success(`Продукт "${randomProduct.name}" добавлен!`, {
+      description: `${randomProduct.calories} ккал, Б: ${randomProduct.protein}г, Ж: ${randomProduct.fat}г, У: ${randomProduct.carbs}г`
+    });
   };
 
   const handleLogWater = () => {
-    toast.success("Стакан воды записан! 💧");
+    if (waterCount < 8) {
+      setWaterCount(prev => prev + 1);
+      toast.success(`Стакан воды записан! 💧`, {
+        description: `Выпито: ${waterCount + 1} из 8 стаканов. Отличная работа!`
+      });
+    } else {
+      toast.success("Цель по воде уже достигнута! 🎉", {
+        description: "Вы отлично справляетесь с питьевым режимом!"
+      });
+    }
   };
 
   return (
