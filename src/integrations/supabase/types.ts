@@ -9,6 +9,42 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      genetic_data: {
+        Row: {
+          created_at: string
+          gene_variants: Json | null
+          id: string
+          lab_name: string | null
+          results: Json | null
+          test_date: string | null
+          test_type: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          gene_variants?: Json | null
+          id?: string
+          lab_name?: string | null
+          results?: Json | null
+          test_date?: string | null
+          test_type: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          gene_variants?: Json | null
+          id?: string
+          lab_name?: string | null
+          results?: Json | null
+          test_date?: string | null
+          test_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       health_recommendations: {
         Row: {
           category: string
