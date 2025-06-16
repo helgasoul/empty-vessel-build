@@ -655,6 +655,160 @@ export type Database = {
           },
         ]
       }
+      family_access_logs: {
+        Row: {
+          accessed_at: string
+          accessed_by: string
+          accessed_data_type: string
+          accessed_member_id: string | null
+          family_group_id: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          accessed_at?: string
+          accessed_by: string
+          accessed_data_type: string
+          accessed_member_id?: string | null
+          family_group_id: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          accessed_at?: string
+          accessed_by?: string
+          accessed_data_type?: string
+          accessed_member_id?: string | null
+          family_group_id?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_access_logs_accessed_member_id_fkey"
+            columns: ["accessed_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_access_logs_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_access_members: {
+        Row: {
+          access_level: string
+          access_permissions: Json
+          created_at: string
+          family_group_id: string
+          id: string
+          invited_by: string
+          is_active: boolean
+          joined_at: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_level?: string
+          access_permissions?: Json
+          created_at?: string
+          family_group_id: string
+          id?: string
+          invited_by: string
+          is_active?: boolean
+          joined_at?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_level?: string
+          access_permissions?: Json
+          created_at?: string
+          family_group_id?: string
+          id?: string
+          invited_by?: string
+          is_active?: boolean
+          joined_at?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_access_members_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_access_tokens: {
+        Row: {
+          access_permissions: Json
+          created_at: string
+          created_by: string
+          expires_at: string
+          family_group_id: string
+          id: string
+          invitation_message: string | null
+          invited_email: string
+          invited_name: string | null
+          is_used: boolean
+          token_code: string
+          updated_at: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          access_permissions?: Json
+          created_at?: string
+          created_by: string
+          expires_at: string
+          family_group_id: string
+          id?: string
+          invitation_message?: string | null
+          invited_email: string
+          invited_name?: string | null
+          is_used?: boolean
+          token_code: string
+          updated_at?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          access_permissions?: Json
+          created_at?: string
+          created_by?: string
+          expires_at?: string
+          family_group_id?: string
+          id?: string
+          invitation_message?: string | null
+          invited_email?: string
+          invited_name?: string | null
+          is_used?: boolean
+          token_code?: string
+          updated_at?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_access_tokens_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       family_documents: {
         Row: {
           created_at: string

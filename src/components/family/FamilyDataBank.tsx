@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Users, FileText, Heart, Upload } from "lucide-react";
+import { Plus, Users, FileText, Heart, Upload, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import FamilyGroupList from "./FamilyGroupList";
@@ -11,6 +11,7 @@ import CreateFamilyGroupModal from "./CreateFamilyGroupModal";
 import FamilyMembersList from "./FamilyMembersList";
 import FamilyMedicalHistory from "./FamilyMedicalHistory";
 import FamilyDocuments from "./FamilyDocuments";
+import FamilyAccessManagement from "./FamilyAccessManagement";
 
 interface FamilyGroup {
   id: string;
@@ -128,7 +129,7 @@ const FamilyDataBank: React.FC = () => {
           <div className="lg:col-span-3">
             {selectedFamily ? (
               <Tabs defaultValue="members" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-3">
+                <TabsList className="grid w-full grid-cols-4">
                   <TabsTrigger value="members" className="flex items-center space-x-2">
                     <Users className="w-4 h-4" />
                     <span>Члены семьи</span>
@@ -140,6 +141,10 @@ const FamilyDataBank: React.FC = () => {
                   <TabsTrigger value="documents" className="flex items-center space-x-2">
                     <FileText className="w-4 h-4" />
                     <span>Документы</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="access" className="flex items-center space-x-2">
+                    <Shield className="w-4 h-4" />
+                    <span>Доступ</span>
                   </TabsTrigger>
                 </TabsList>
 
@@ -153,6 +158,13 @@ const FamilyDataBank: React.FC = () => {
 
                 <TabsContent value="documents">
                   <FamilyDocuments familyGroupId={selectedFamily.id} />
+                </TabsContent>
+
+                <TabsContent value="access">
+                  <FamilyAccessManagement 
+                    familyGroupId={selectedFamily.id}
+                    familyGroupName={selectedFamily.family_name}
+                  />
                 </TabsContent>
               </Tabs>
             ) : (
