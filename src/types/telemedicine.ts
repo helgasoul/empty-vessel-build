@@ -52,3 +52,32 @@ export interface EnhancedTelemedicineSession {
   created_at: string;
   updated_at: string;
 }
+
+// Типы для данных из Supabase (до преобразования)
+export interface RawVideoConferenceIntegration {
+  id: string;
+  user_id: string;
+  platform_type: string;
+  platform_user_id?: string;
+  access_token?: string;
+  refresh_token?: string;
+  token_expires_at?: string;
+  integration_status: string;
+  platform_settings: any;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface RawCalendarIntegration {
+  id: string;
+  user_id: string;
+  calendar_type: string;
+  calendar_id?: string;
+  access_token?: string;
+  refresh_token?: string;
+  token_expires_at?: string;
+  integration_status: string;
+  sync_settings: any;
+  created_at: string;
+  updated_at: string;
+}

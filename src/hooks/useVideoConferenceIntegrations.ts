@@ -2,7 +2,15 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import type { VideoConferenceIntegration } from '@/types/telemedicine';
+import type { VideoConferenceIntegration, RawVideoConferenceIntegration } from '@/types/telemedicine';
+
+// Функция для преобразования данных из Supabase в типизированные данные
+const transformVideoConferenceIntegration = (raw: RawVideoConferenceIntegration): VideoConferenceIntegration => ({
+  ...raw,
+  platform_type: raw.platform_type as VideoConferenceIntegration['platform_type'],
+  integration_status: raw.integration_status as VideoConferenceIntegration['integration_status'],
+  platform_settings: raw.platform_settings || {}
+});
 
 export const useVideoConferenceIntegrations = () => {
   const [integrations, setIntegrations] = useState<VideoConferenceIntegration[]>([]);
@@ -21,7 +29,8 @@ export const useVideoConferenceIntegrations = () => {
 
       if (error) throw error;
       
-      setIntegrations(data || []);
+      const transformedData = (data || []).map(transformVideoConferenceIntegration);
+      setIntegrations(transformedData);
     } catch (error) {
       console.error('Ошибка при загрузке интеграций видеоконференций:', error);
       toast.error('Не удалось загрузить интеграции');
@@ -46,9 +55,10 @@ export const useVideoConferenceIntegrations = () => {
 
       if (error) throw error;
 
-      setIntegrations(prev => [data, ...prev]);
+      const transformedData = transformVideoConferenceIntegration(data);
+      setIntegrations(prev => [transformedData, ...prev]);
       toast.success('Интеграция видеоконференций создана');
-      return data;
+      return transformedData;
     } catch (error) {
       console.error('Ошибка при создании интеграции:', error);
       toast.error('Не удалось создать интеграцию');
@@ -67,11 +77,12 @@ export const useVideoConferenceIntegrations = () => {
 
       if (error) throw error;
 
+      const transformedData = transformVideoConferenceIntegration(data);
       setIntegrations(prev => prev.map(integration => 
-        integration.id === id ? data : integration
+        integration.id === id ? transformedData : integration
       ));
       toast.success('Интеграция обновлена');
-      return data;
+      return transformedData;
     } catch (error) {
       console.error('Ошибка при обновлении интеграции:', error);
       toast.error('Не удалось обновить интеграцию');

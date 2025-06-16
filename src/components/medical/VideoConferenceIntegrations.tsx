@@ -23,17 +23,21 @@ const VideoConferenceIntegrations = () => {
   const { integrations, loading, createIntegration, updateIntegration, deleteIntegration } = useVideoConferenceIntegrations();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingIntegration, setEditingIntegration] = useState<VideoConferenceIntegration | null>(null);
-  const [formData, setFormData] = useState({
-    platform_type: 'zoom' as const,
+  const [formData, setFormData] = useState<{
+    platform_type: VideoConferenceIntegration['platform_type'];
+    platform_user_id: string;
+    integration_status: VideoConferenceIntegration['integration_status'];
+  }>({
+    platform_type: 'zoom',
     platform_user_id: '',
-    integration_status: 'active' as const
+    integration_status: 'active'
   });
 
   const platforms = [
-    { value: 'zoom', label: 'Zoom', icon: '🎥' },
-    { value: 'google_meet', label: 'Google Meet', icon: '📹' },
-    { value: 'teams', label: 'Microsoft Teams', icon: '💼' },
-    { value: 'webex', label: 'Cisco Webex', icon: '🌐' }
+    { value: 'zoom' as const, label: 'Zoom', icon: '🎥' },
+    { value: 'google_meet' as const, label: 'Google Meet', icon: '📹' },
+    { value: 'teams' as const, label: 'Microsoft Teams', icon: '💼' },
+    { value: 'webex' as const, label: 'Cisco Webex', icon: '🌐' }
   ];
 
   const getStatusIcon = (status: string) => {
@@ -150,7 +154,8 @@ const VideoConferenceIntegrations = () => {
                 <Label htmlFor="platform">Платформа</Label>
                 <Select
                   value={formData.platform_type}
-                  onValueChange={(value: any) => setFormData({ ...formData, platform_type: value })}
+                  onValueChange={(value: VideoConferenceIntegration['platform_type']) => 
+                    setFormData({ ...formData, platform_type: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -182,7 +187,8 @@ const VideoConferenceIntegrations = () => {
                 <Label htmlFor="status">Статус</Label>
                 <Select
                   value={formData.integration_status}
-                  onValueChange={(value: any) => setFormData({ ...formData, integration_status: value })}
+                  onValueChange={(value: VideoConferenceIntegration['integration_status']) => 
+                    setFormData({ ...formData, integration_status: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />

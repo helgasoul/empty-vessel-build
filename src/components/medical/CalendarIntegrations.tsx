@@ -23,16 +23,20 @@ const CalendarIntegrations = () => {
   const { integrations, loading, createIntegration, updateIntegration, deleteIntegration } = useCalendarIntegrations();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingIntegration, setEditingIntegration] = useState<CalendarIntegration | null>(null);
-  const [formData, setFormData] = useState({
-    calendar_type: 'google_calendar' as const,
+  const [formData, setFormData] = useState<{
+    calendar_type: CalendarIntegration['calendar_type'];
+    calendar_id: string;
+    integration_status: CalendarIntegration['integration_status'];
+  }>({
+    calendar_type: 'google_calendar',
     calendar_id: '',
-    integration_status: 'active' as const
+    integration_status: 'active'
   });
 
   const calendars = [
-    { value: 'google_calendar', label: 'Google Calendar', icon: '📅' },
-    { value: 'outlook', label: 'Microsoft Outlook', icon: '📆' },
-    { value: 'apple_calendar', label: 'Apple Calendar', icon: '🗓️' }
+    { value: 'google_calendar' as const, label: 'Google Calendar', icon: '📅' },
+    { value: 'outlook' as const, label: 'Microsoft Outlook', icon: '📆' },
+    { value: 'apple_calendar' as const, label: 'Apple Calendar', icon: '🗓️' }
   ];
 
   const getStatusIcon = (status: string) => {
@@ -149,7 +153,8 @@ const CalendarIntegrations = () => {
                 <Label htmlFor="calendar_type">Тип календаря</Label>
                 <Select
                   value={formData.calendar_type}
-                  onValueChange={(value: any) => setFormData({ ...formData, calendar_type: value })}
+                  onValueChange={(value: CalendarIntegration['calendar_type']) => 
+                    setFormData({ ...formData, calendar_type: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />
@@ -181,7 +186,8 @@ const CalendarIntegrations = () => {
                 <Label htmlFor="status">Статус</Label>
                 <Select
                   value={formData.integration_status}
-                  onValueChange={(value: any) => setFormData({ ...formData, integration_status: value })}
+                  onValueChange={(value: CalendarIntegration['integration_status']) => 
+                    setFormData({ ...formData, integration_status: value })}
                 >
                   <SelectTrigger>
                     <SelectValue />
