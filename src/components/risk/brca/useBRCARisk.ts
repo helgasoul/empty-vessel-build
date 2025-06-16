@@ -103,14 +103,14 @@ export const useBRCARisk = (onComplete?: () => void) => {
     try {
       const results = calculateBRCARisk(data);
 
-      // Сохраняем результаты оценки
+      // Сохраняем результаты оценки - преобразуем объекты в JSON
       const { error: assessmentError } = await supabase
         .from('risk_assessments')
         .insert({
           user_id: user.id,
           assessment_type: 'BRCA',
-          assessment_data: data,
-          results_data: results,
+          assessment_data: data as any, // Приводим к any для совместимости с Json типом
+          results_data: results as any, // Приводим к any для совместимости с Json типом
           risk_percentage: results.riskPercentage,
           risk_level: results.riskLevel,
           recommendations: results.recommendations,
@@ -129,12 +129,12 @@ export const useBRCARisk = (onComplete?: () => void) => {
               gene_variants: {
                 BRCA1: data.brca1_mutation ? 'pathogenic' : 'normal',
                 BRCA2: data.brca2_mutation ? 'pathogenic' : 'normal',
-              },
+              } as any, // Приводим к any для совместимости с Json типом
               results: {
                 brca1_positive: data.brca1_mutation,
                 brca2_positive: data.brca2_mutation,
                 risk_assessment: results,
-              }
+              } as any // Приводим к any для совместимости с Json типом
             });
 
           if (geneticError) {
