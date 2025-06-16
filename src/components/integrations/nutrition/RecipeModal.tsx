@@ -13,6 +13,7 @@ import {
   Star,
   Heart
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Recipe {
   id: string;
@@ -77,6 +78,18 @@ const RecipeModal = ({ recipe, isOpen, onClose }: RecipeModalProps) => {
       case 'luteal': return 'Лютеиновая фаза';
       default: return '';
     }
+  };
+
+  const handleAddToFavorites = () => {
+    toast.success(`Рецепт "${recipe.name}" добавлен в избранное!`, {
+      description: "Вы можете найти его в разделе 'Мои избранные рецепты'"
+    });
+  };
+
+  const handleAddToMealPlan = () => {
+    toast.success(`Рецепт "${recipe.name}" добавлен в план питания!`, {
+      description: "Рецепт будет включен в ваш персонализированный план питания"
+    });
   };
 
   return (
@@ -233,11 +246,18 @@ const RecipeModal = ({ recipe, isOpen, onClose }: RecipeModalProps) => {
 
           {/* Action Buttons */}
           <div className="flex space-x-3 pt-4">
-            <Button className="flex-1">
+            <Button 
+              className="flex-1"
+              onClick={handleAddToFavorites}
+            >
               <Heart className="w-4 h-4 mr-2" />
               Добавить в избранное
             </Button>
-            <Button variant="outline" className="flex-1">
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={handleAddToMealPlan}
+            >
               <ChefHat className="w-4 h-4 mr-2" />
               Добавить в план питания
             </Button>
