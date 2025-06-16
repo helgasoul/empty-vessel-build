@@ -9,6 +9,47 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      health_recommendations: {
+        Row: {
+          category: string
+          completed: boolean
+          created_at: string
+          description: string
+          id: string
+          priority: number
+          risk_assessment_id: string | null
+          title: string
+        }
+        Insert: {
+          category: string
+          completed?: boolean
+          created_at?: string
+          description: string
+          id?: string
+          priority?: number
+          risk_assessment_id?: string | null
+          title: string
+        }
+        Update: {
+          category?: string
+          completed?: boolean
+          created_at?: string
+          description?: string
+          id?: string
+          priority?: number
+          risk_assessment_id?: string | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_recommendations_risk_assessment_id_fkey"
+            columns: ["risk_assessment_id"]
+            isOneToOne: false
+            referencedRelation: "risk_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       profiles: {
         Row: {
           activity_level: string | null
@@ -66,6 +107,45 @@ export type Database = {
           smoking_status?: string | null
           updated_at?: string
           weight?: number | null
+        }
+        Relationships: []
+      }
+      risk_assessments: {
+        Row: {
+          assessment_data: Json
+          assessment_type: string
+          created_at: string
+          id: string
+          recommendations: string[] | null
+          results_data: Json
+          risk_level: string
+          risk_percentage: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assessment_data: Json
+          assessment_type: string
+          created_at?: string
+          id?: string
+          recommendations?: string[] | null
+          results_data: Json
+          risk_level: string
+          risk_percentage: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assessment_data?: Json
+          assessment_type?: string
+          created_at?: string
+          id?: string
+          recommendations?: string[] | null
+          results_data?: Json
+          risk_level?: string
+          risk_percentage?: number
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
