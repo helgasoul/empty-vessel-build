@@ -10,24 +10,53 @@ import {
 import WorkoutCard from './fitness/WorkoutCard';
 import ProgramCard from './fitness/ProgramCard';
 import VideoModal from './fitness/VideoModal';
+import ProgramLessonsModal from './fitness/ProgramLessonsModal';
+import LessonVideoModal from './fitness/LessonVideoModal';
 import { useWorkouts } from './fitness/useWorkouts';
 import { useFitnessPrograms } from './fitness/useFitnessPrograms';
-import { Workout } from './fitness/types';
+import { Workout, FitnessProgram, ProgramLesson } from './fitness/types';
 
 const FitnessIntegration = () => {
   const [activeTab, setActiveTab] = useState<'workouts' | 'programs'>('workouts');
   const [currentVideo, setCurrentVideo] = useState<Workout | null>(null);
+  const [selectedProgram, setSelectedProgram] = useState<FitnessProgram | null>(null);
+  const [currentLesson, setCurrentLesson] = useState<ProgramLesson | null>(null);
 
   const { todayWorkouts, handleWorkoutAction } = useWorkouts();
-  const { programs, handleProgramAction } = useFitnessPrograms();
+  const { programs, handleProgramAction, markLessonCompleted } = useFitnessPrograms();
 
   const onWorkoutAction = (workout: Workout) => {
     handleWorkoutAction(workout, setCurrentVideo);
   };
 
+  const onProgramAction = (program: FitnessProgram) => {
+    const result = handleProgramAction(program);
+    if (result === 'show_lessons' && program.enrolled) {
+      setSelectedProgram(program);
+    }
+  };
+
+  const onPlayLesson = (lesson: ProgramLesson) => {
+    setCurrentLesson(lesson);
+    setSelectedProgram(null); // Закрываем модал со списком уроков
+  };
+
+  const onMarkLessonCompleted = (lesson: ProgramLesson) => {
+    markLessonCompleted(lesson.id);
+    setCurrentLesson(null); // Закрываем модал с видео
+  };
+
   const closeVideo = () => {
     console.log('Закрываем видео');
     setCurrentVideo(null);
+  };
+
+  const closeProgramLessons = () => {
+    setSelectedProgram(null);
+  };
+
+  const closeLessonVideo = () => {
+    setCurrentLesson(null);
   };
 
   return (
@@ -89,7 +118,7 @@ const FitnessIntegration = () => {
                   <ProgramCard 
                     key={program.id} 
                     program={program} 
-                    onAction={handleProgramAction}
+                    onAction={onProgramAction}
                   />
                 ))}
               </div>
@@ -98,10 +127,25 @@ const FitnessIntegration = () => {
         </CardContent>
       </Card>
 
+      {/* Модальные окна */}
       <VideoModal 
         workout={currentVideo}
         isOpen={!!currentVideo}
         onClose={closeVideo}
+      />
+      
+      <ProgramLessonsModal
+        program={selectedProgram}
+        isOpen={!!selectedProgram}
+        onClose={closeProgramLessons}
+        onPlayLesson={onPlayLesson}
+      />
+      
+      <LessonVideoModal
+        lesson={currentLesson}
+        isOpen={!!currentLesson}
+        onClose={closeLessonVideo}
+        onMarkCompleted={onMarkLessonCompleted}
       />
     </div>
   );

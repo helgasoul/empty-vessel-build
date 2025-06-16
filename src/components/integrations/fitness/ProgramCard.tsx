@@ -11,7 +11,8 @@ import {
   ExternalLink,
   Building2,
   Globe,
-  Heart
+  Heart,
+  BookOpen
 } from "lucide-react";
 import { FitnessProgram } from './types';
 
@@ -46,99 +47,114 @@ const getPartnerTypeText = (type?: string) => {
   }
 };
 
-const ProgramCard = ({ program, onAction }: ProgramCardProps) => (
-  <Card className="prevent-card">
-    <CardHeader className="p-4">
-      <div className="relative">
-        <img 
-          src={program.thumbnail} 
-          alt={program.name}
-          className="w-full h-32 object-cover rounded-lg mb-3"
-        />
-        {program.enrolled && (
-          <Badge className="absolute top-2 right-2 bg-primary">
-            Записан
-          </Badge>
-        )}
-        {program.partner_type && (
-          <Badge variant="outline" className="absolute top-2 left-2 bg-white/90 text-xs">
-            {getPartnerIcon(program.partner_type)}
-            <span className="ml-1">{getPartnerTypeText(program.partner_type)}</span>
-          </Badge>
-        )}
-      </div>
+const ProgramCard = ({ program, onAction }: ProgramCardProps) => {
+  const completedLessons = program.lessons?.filter(lesson => lesson.completed).length || 0;
+  const totalLessons = program.lessons?.length || 0;
 
-      <div>
-        <Badge variant="secondary" className="mb-2">
-          {program.level}
-        </Badge>
-        <CardTitle className="text-lg font-montserrat line-clamp-2">
-          {program.name}
-        </CardTitle>
-        <CardDescription className="font-roboto">
-          с {program.instructor}
-        </CardDescription>
-      </div>
-    </CardHeader>
-
-    <CardContent className="p-4 pt-0">
-      <div className="space-y-3">
-        <p className="text-sm text-gray-600 dark:text-gray-300">
-          {program.description}
-        </p>
-
-        <div className="grid grid-cols-2 gap-2 text-sm">
-          <div className="flex items-center space-x-1">
-            <Calendar className="w-4 h-4" />
-            <span>{program.duration_weeks} недель</span>
-          </div>
-          <div className="flex items-center space-x-1">
-            <Dumbbell className="w-4 h-4" />
-            <span>{program.workouts_per_week}x в неделю</span>
-          </div>
+  return (
+    <Card className="prevent-card">
+      <CardHeader className="p-4">
+        <div className="relative">
+          <img 
+            src={program.thumbnail} 
+            alt={program.name}
+            className="w-full h-32 object-cover rounded-lg mb-3"
+          />
+          {program.enrolled && (
+            <Badge className="absolute top-2 right-2 bg-primary">
+              Записан
+            </Badge>
+          )}
+          {program.partner_type && (
+            <Badge variant="outline" className="absolute top-2 left-2 bg-white/90 text-xs">
+              {getPartnerIcon(program.partner_type)}
+              <span className="ml-1">{getPartnerTypeText(program.partner_type)}</span>
+            </Badge>
+          )}
         </div>
 
         <div>
-          <p className="text-sm font-medium mb-1">Фокус:</p>
-          <div className="flex flex-wrap gap-1">
-            {program.focus_areas.map((area, index) => (
-              <Badge key={index} variant="outline" className="text-xs">
-                {area}
-              </Badge>
-            ))}
-          </div>
+          <Badge variant="secondary" className="mb-2">
+            {program.level}
+          </Badge>
+          <CardTitle className="text-lg font-montserrat line-clamp-2">
+            {program.name}
+          </CardTitle>
+          <CardDescription className="font-roboto">
+            с {program.instructor}
+          </CardDescription>
         </div>
+      </CardHeader>
 
-        {program.enrolled && program.progress !== undefined && (
-          <div className="space-y-2">
-            <div className="flex justify-between text-sm">
-              <span>Прогресс программы</span>
-              <span>{program.progress}%</span>
+      <CardContent className="p-4 pt-0">
+        <div className="space-y-3">
+          <p className="text-sm text-gray-600 dark:text-gray-300">
+            {program.description}
+          </p>
+
+          <div className="grid grid-cols-2 gap-2 text-sm">
+            <div className="flex items-center space-x-1">
+              <Calendar className="w-4 h-4" />
+              <span>{program.duration_weeks} недель</span>
             </div>
-            <Progress value={program.progress} className="h-2" />
+            <div className="flex items-center space-x-1">
+              <Dumbbell className="w-4 h-4" />
+              <span>{program.workouts_per_week}x в неделю</span>
+            </div>
           </div>
-        )}
 
-        <Button 
-          className="w-full"
-          variant={program.enrolled ? "outline" : "default"}
-          onClick={() => onAction(program)}
-        >
-          {program.enrolled ? (
-            <>
-              <Video className="w-4 h-4 mr-2" />
-              Продолжить
-            </>
-          ) : (
-            <>
-              <ExternalLink className="w-4 h-4 mr-2" />
-              Записаться
-            </>
+          <div>
+            <p className="text-sm font-medium mb-1">Фокус:</p>
+            <div className="flex flex-wrap gap-1">
+              {program.focus_areas.map((area, index) => (
+                <Badge key={index} variant="outline" className="text-xs">
+                  {area}
+                </Badge>
+              ))}
+            </div>
+          </div>
+
+          {program.enrolled && totalLessons > 0 && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Уроки пройдены</span>
+                <span>{completedLessons}/{totalLessons}</span>
+              </div>
+              <Progress value={(completedLessons / totalLessons) * 100} className="h-2" />
+            </div>
           )}
-        </Button>
-      </div>
-    </CardContent>
-  </Card>
-);
+
+          {program.enrolled && program.progress !== undefined && (
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Прогресс программы</span>
+                <span>{program.progress}%</span>
+              </div>
+              <Progress value={program.progress} className="h-2" />
+            </div>
+          )}
+
+          <Button 
+            className="w-full"
+            variant={program.enrolled ? "outline" : "default"}
+            onClick={() => onAction(program)}
+          >
+            {program.enrolled ? (
+              <>
+                <BookOpen className="w-4 h-4 mr-2" />
+                Смотреть уроки
+              </>
+            ) : (
+              <>
+                <ExternalLink className="w-4 h-4 mr-2" />
+                Записаться
+              </>
+            )}
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+};
 
 export default ProgramCard;

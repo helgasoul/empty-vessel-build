@@ -15,6 +15,20 @@ export interface Workout {
   video_url?: string;
 }
 
+export interface ProgramLesson {
+  id: string;
+  title: string;
+  duration: number;
+  difficulty: 'Легкий' | 'Средний' | 'Сложный';
+  type: string;
+  description: string;
+  thumbnail: string;
+  video_url: string;
+  completed?: boolean;
+  week: number;
+  lesson_number: number;
+}
+
 export interface FitnessProgram {
   id: string;
   name: string;
@@ -29,4 +43,5 @@ export interface FitnessProgram {
   progress?: number;
   website_url?: string;
   partner_type?: 'fitness_club' | 'online_platform' | 'yoga_studio';
+  lessons?: ProgramLesson[];
 }
