@@ -17,8 +17,8 @@ export const saveCRCProAssessment = async (
       assessment_type: 'crc_pro',
       risk_percentage: riskResult.risk_percentage,
       risk_level: riskResult.risk_level,
-      assessment_data: formData,
-      results_data: riskResult,
+      assessment_data: formData as any,
+      results_data: riskResult as any,
       recommendations: riskResult.recommendations
     })
     .select()
