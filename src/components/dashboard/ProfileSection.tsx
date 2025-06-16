@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
-import { User, Edit, Calendar, Ruler, Weight } from "lucide-react";
+import { User, Edit, Calendar, Ruler, Weight, Heart, Phone, Shield } from "lucide-react";
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
 import type { Tables } from '@/integrations/supabase/types';
 
@@ -88,6 +88,26 @@ const ProfileSection = () => {
     return genders[gender as keyof typeof genders] || gender;
   };
 
+  const getStressLevelText = (level: string) => {
+    const levels = {
+      'low': 'Низкий',
+      'moderate': 'Умеренный',
+      'high': 'Высокий',
+      'very_high': 'Очень высокий'
+    };
+    return levels[level as keyof typeof levels] || level;
+  };
+
+  const getExerciseFrequencyText = (frequency: string) => {
+    const frequencies = {
+      'never': 'Никогда',
+      'rarely': 'Редко',
+      'weekly': 'Еженедельно',
+      'daily': 'Ежедневно'
+    };
+    return frequencies[frequency as keyof typeof frequencies] || frequency;
+  };
+
   const userName = profile?.full_name || user?.user_metadata?.full_name || user?.email || 'Пользователь';
   const userAge = profile?.date_of_birth ? calculateAge(profile.date_of_birth) : profile?.age;
 
@@ -117,116 +137,183 @@ const ProfileSection = () => {
     );
   }
 
+  const isProfileComplete = profile?.full_name && profile?.age && profile?.gender;
+  const hasHealthInfo = profile?.family_history || profile?.chronic_conditions || profile?.current_medications;
+
   return (
-    <Card>
-      <CardHeader className="flex flex-row items-center space-y-0 pb-4">
-        <div className="flex-1">
-          <CardTitle className="flex items-center space-x-2">
-            <User className="w-5 h-5 text-pink-600" />
-            <span>Профиль</span>
-          </CardTitle>
-          <CardDescription>Ваша личная информация</CardDescription>
-        </div>
-        <Button 
-          variant="ghost" 
-          size="sm"
-          onClick={() => setIsEditing(true)}
-        >
-          <Edit className="w-4 h-4" />
-        </Button>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-center space-x-4">
-          <Avatar className="w-16 h-16">
-            <AvatarFallback className="bg-gradient-to-r from-pink-500 to-purple-600 text-white">
-              {getInitials(userName)}
-            </AvatarFallback>
-          </Avatar>
+    <div className="space-y-6">
+      <Card>
+        <CardHeader className="flex flex-row items-center space-y-0 pb-4">
           <div className="flex-1">
-            <h3 className="font-semibold text-lg text-gray-900">{userName}</h3>
-            <p className="text-sm text-gray-600">{user?.email}</p>
-            <div className="flex gap-2 mt-1">
-              <Badge variant="secondary">
-                {profile?.activity_level ? getActivityLevelText(profile.activity_level) : 'Активный пользователь'}
-              </Badge>
-              {profile?.gender && (
-                <Badge variant="outline">{getGenderText(profile.gender)}</Badge>
-              )}
+            <CardTitle className="flex items-center space-x-2">
+              <User className="w-5 h-5 text-pink-600" />
+              <span>Профиль</span>
+            </CardTitle>
+            <CardDescription>Ваша личная информация</CardDescription>
+          </div>
+          <Button 
+            variant="ghost" 
+            size="sm"
+            onClick={() => setIsEditing(true)}
+          >
+            <Edit className="w-4 h-4" />
+          </Button>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="flex items-center space-x-4">
+            <Avatar className="w-16 h-16">
+              <AvatarFallback className="bg-gradient-to-r from-pink-500 to-purple-600 text-white">
+                {getInitials(userName)}
+              </AvatarFallback>
+            </Avatar>
+            <div className="flex-1">
+              <h3 className="font-semibold text-lg text-gray-900">{userName}</h3>
+              <p className="text-sm text-gray-600">{user?.email}</p>
+              <div className="flex gap-2 mt-1 flex-wrap">
+                <Badge variant="secondary">
+                  {profile?.activity_level ? getActivityLevelText(profile.activity_level) : 'Активный пользователь'}
+                </Badge>
+                {profile?.gender && (
+                  <Badge variant="outline">{getGenderText(profile.gender)}</Badge>
+                )}
+                {profile?.stress_levels && (
+                  <Badge variant="outline" className="text-xs">
+                    Стресс: {getStressLevelText(profile.stress_levels)}
+                  </Badge>
+                )}
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className="grid grid-cols-2 gap-4 pt-4 border-t">
-          <div className="text-center">
-            <p className="text-2xl font-bold text-pink-600">
-              {userAge || '--'}
-            </p>
-            <p className="text-xs text-gray-600">Возраст</p>
+          <div className="grid grid-cols-2 gap-4 pt-4 border-t">
+            <div className="text-center">
+              <p className="text-2xl font-bold text-pink-600">
+                {userAge || '--'}
+              </p>
+              <p className="text-xs text-gray-600">Возраст</p>
+            </div>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-purple-600">
+                {profile?.height || '--'}
+              </p>
+              <p className="text-xs text-gray-600">Рост (см)</p>
+            </div>
           </div>
-          <div className="text-center">
-            <p className="text-2xl font-bold text-purple-600">
-              {profile?.height || '--'}
-            </p>
-            <p className="text-xs text-gray-600">Рост (см)</p>
-          </div>
-        </div>
 
-        {profile?.weight && (
-          <div className="pt-2">
+          {profile?.weight && (
+            <div className="pt-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600 flex items-center">
+                  <Weight className="w-4 h-4 mr-1" />
+                  Вес:
+                </span>
+                <span className="text-gray-900">{profile.weight} кг</span>
+              </div>
+            </div>
+          )}
+
+          {profile?.exercise_frequency && (
+            <div className="pt-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600 flex items-center">
+                  <Heart className="w-4 h-4 mr-1" />
+                  Тренировки:
+                </span>
+                <span className="text-gray-900">{getExerciseFrequencyText(profile.exercise_frequency)}</span>
+              </div>
+            </div>
+          )}
+
+          {profile?.emergency_contact_name && (
+            <div className="pt-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600 flex items-center">
+                  <Phone className="w-4 h-4 mr-1" />
+                  Экстренный контакт:
+                </span>
+                <span className="text-gray-900">{profile.emergency_contact_name}</span>
+              </div>
+            </div>
+          )}
+
+          {profile?.last_checkup_date && (
+            <div className="pt-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600 flex items-center">
+                  <Calendar className="w-4 h-4 mr-1" />
+                  Последний осмотр:
+                </span>
+                <span className="text-gray-900">
+                  {new Date(profile.last_checkup_date).toLocaleDateString('ru-RU')}
+                </span>
+              </div>
+            </div>
+          )}
+
+          {profile?.health_goals && (
+            <div className="pt-2 border-t">
+              <div className="text-sm">
+                <span className="text-gray-600 font-medium">Цели:</span>
+                <p className="text-gray-900 mt-1 text-xs leading-relaxed">
+                  {profile.health_goals.length > 100 
+                    ? `${profile.health_goals.substring(0, 100)}...` 
+                    : profile.health_goals}
+                </p>
+              </div>
+            </div>
+          )}
+
+          <div className="pt-4 border-t">
             <div className="flex items-center justify-between text-sm">
               <span className="text-gray-600 flex items-center">
-                <Weight className="w-4 h-4 mr-1" />
-                Вес:
+                <Calendar className="w-4 h-4 mr-1" />
+                Регистрация:
               </span>
-              <span className="text-gray-900">{profile.weight} кг</span>
+              <span className="text-gray-900">
+                {user?.created_at ? new Date(user.created_at).toLocaleDateString('ru-RU') : 'Недавно'}
+              </span>
             </div>
           </div>
-        )}
 
-        {profile?.health_goals && (
-          <div className="pt-2 border-t">
-            <div className="text-sm">
-              <span className="text-gray-600 font-medium">Цели:</span>
-              <p className="text-gray-900 mt-1 text-xs leading-relaxed">
-                {profile.health_goals.length > 100 
-                  ? `${profile.health_goals.substring(0, 100)}...` 
-                  : profile.health_goals}
-              </p>
+          {!isProfileComplete && (
+            <div className="pt-4 border-t">
+              <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
+                <p className="text-sm text-orange-800">
+                  Заполните основную информацию профиля для получения персонализированных рекомендаций
+                </p>
+                <Button 
+                  className="mt-2 w-full" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Заполнить основную информацию
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        <div className="pt-4 border-t">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-600 flex items-center">
-              <Calendar className="w-4 h-4 mr-1" />
-              Регистрация:
-            </span>
-            <span className="text-gray-900">
-              {user?.created_at ? new Date(user.created_at).toLocaleDateString('ru-RU') : 'Недавно'}
-            </span>
-          </div>
-        </div>
-
-        {(!profile?.full_name || !profile?.age || !profile?.gender) && (
-          <div className="pt-4 border-t">
-            <div className="bg-orange-50 border border-orange-200 rounded-lg p-3">
-              <p className="text-sm text-orange-800">
-                Заполните профиль для получения персонализированных рекомендаций
-              </p>
-              <Button 
-                className="mt-2 w-full" 
-                variant="outline" 
-                size="sm"
-                onClick={() => setIsEditing(true)}
-              >
-                Заполнить профиль
-              </Button>
+          {isProfileComplete && !hasHealthInfo && (
+            <div className="pt-4 border-t">
+              <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+                <p className="text-sm text-blue-800 flex items-center">
+                  <Shield className="w-4 h-4 mr-2" />
+                  Добавьте медицинскую информацию для более точных рекомендаций по здоровью
+                </p>
+                <Button 
+                  className="mt-2 w-full" 
+                  variant="outline" 
+                  size="sm"
+                  onClick={() => setIsEditing(true)}
+                >
+                  Добавить медицинскую информацию
+                </Button>
+              </div>
             </div>
-          </div>
-        )}
-      </CardContent>
-    </Card>
+          )}
+        </CardContent>
+      </Card>
+    </div>
   );
 };
 

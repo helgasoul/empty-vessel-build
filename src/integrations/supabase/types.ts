@@ -55,57 +55,111 @@ export type Database = {
           activity_level: string | null
           age: number | null
           alcohol_consumption: string | null
+          allergies: string | null
+          chronic_conditions: string | null
           created_at: string
           current_health_issues: string | null
+          current_medications: string | null
           date_of_birth: string | null
+          dietary_restrictions: string | null
           email: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
+          emergency_contact_relation: string | null
+          exercise_frequency: string | null
+          family_history: string | null
           full_name: string | null
           gender: string | null
           health_goals: string | null
           height: number | null
           id: string
+          insurance_info: string | null
+          last_checkup_date: string | null
           lifestyle: string | null
           medical_history: string | null
+          mental_health_history: string | null
+          preferred_doctor: string | null
+          previous_surgeries: string | null
+          reproductive_health: string | null
+          sleep_patterns: string | null
           smoking_status: string | null
+          stress_levels: string | null
           updated_at: string
+          vaccination_history: string | null
           weight: number | null
         }
         Insert: {
           activity_level?: string | null
           age?: number | null
           alcohol_consumption?: string | null
+          allergies?: string | null
+          chronic_conditions?: string | null
           created_at?: string
           current_health_issues?: string | null
+          current_medications?: string | null
           date_of_birth?: string | null
+          dietary_restrictions?: string | null
           email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relation?: string | null
+          exercise_frequency?: string | null
+          family_history?: string | null
           full_name?: string | null
           gender?: string | null
           health_goals?: string | null
           height?: number | null
           id: string
+          insurance_info?: string | null
+          last_checkup_date?: string | null
           lifestyle?: string | null
           medical_history?: string | null
+          mental_health_history?: string | null
+          preferred_doctor?: string | null
+          previous_surgeries?: string | null
+          reproductive_health?: string | null
+          sleep_patterns?: string | null
           smoking_status?: string | null
+          stress_levels?: string | null
           updated_at?: string
+          vaccination_history?: string | null
           weight?: number | null
         }
         Update: {
           activity_level?: string | null
           age?: number | null
           alcohol_consumption?: string | null
+          allergies?: string | null
+          chronic_conditions?: string | null
           created_at?: string
           current_health_issues?: string | null
+          current_medications?: string | null
           date_of_birth?: string | null
+          dietary_restrictions?: string | null
           email?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
+          emergency_contact_relation?: string | null
+          exercise_frequency?: string | null
+          family_history?: string | null
           full_name?: string | null
           gender?: string | null
           health_goals?: string | null
           height?: number | null
           id?: string
+          insurance_info?: string | null
+          last_checkup_date?: string | null
           lifestyle?: string | null
           medical_history?: string | null
+          mental_health_history?: string | null
+          preferred_doctor?: string | null
+          previous_surgeries?: string | null
+          reproductive_health?: string | null
+          sleep_patterns?: string | null
           smoking_status?: string | null
+          stress_levels?: string | null
           updated_at?: string
+          vaccination_history?: string | null
           weight?: number | null
         }
         Relationships: []
