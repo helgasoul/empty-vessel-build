@@ -9,6 +9,7 @@ import Subscription from './pages/Subscription';
 import Index from './pages/Index';
 import Dashboard from './pages/Dashboard';
 import Auth from './pages/Auth';
+import About from './pages/About';
 import RiskAssessment from './pages/RiskAssessment';
 import WomensHealth from './pages/WomensHealth';
 import HealthAnalytics from './pages/HealthAnalytics';
@@ -40,6 +41,7 @@ function App() {
                 <Route path="/subscription" element={<Subscription />} />
                 <Route path="/dashboard" element={<Dashboard />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/about" element={<About />} />
                 <Route path="/risk-assessment" element={<RiskAssessment />} />
                 <Route path="/womens-health" element={<WomensHealth />} />
                 <Route path="/health-analytics" element={<HealthAnalytics />} />

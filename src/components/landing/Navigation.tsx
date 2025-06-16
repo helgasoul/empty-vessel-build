@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Shield } from "lucide-react";
+import { Shield, Info } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -26,6 +26,16 @@ const Navigation = () => {
         </div>
         
         <div className="flex items-center space-x-2 md:space-x-4">
+          {!isMobile && (
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/about')}
+              className="flex items-center gap-2 hover:bg-primary/10 transition-all duration-200 font-medium text-sm md:text-base"
+            >
+              <Info className="w-4 h-4" />
+              О нас
+            </Button>
+          )}
           <ThemeToggle />
           <Button 
             variant="outline" 
