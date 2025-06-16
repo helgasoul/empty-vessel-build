@@ -12,7 +12,8 @@ import {
   Target,
   Stethoscope,
   Leaf,
-  Users
+  Users,
+  ExternalLink
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -61,6 +62,13 @@ const QuickActions = () => {
       icon: Leaf,
       color: "bg-emerald-500 hover:bg-emerald-600",
       action: () => navigate('/environmental-health')
+    },
+    {
+      title: "Внешние интеграции",
+      description: "Магазины, фитнес, питание",
+      icon: ExternalLink,
+      color: "bg-orange-500 hover:bg-orange-600",
+      action: () => navigate('/external-integrations')
     }
   ];
 
