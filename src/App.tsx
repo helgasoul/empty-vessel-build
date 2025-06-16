@@ -11,7 +11,15 @@ import Dashboard from "./pages/Dashboard";
 import RiskAssessment from "./pages/RiskAssessment";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+// Создаем QueryClient один раз за пределами компонента
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5, // 5 минут
+      cacheTime: 1000 * 60 * 10, // 10 минут
+    },
+  },
+});
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
