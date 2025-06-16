@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -57,7 +56,7 @@ const About = () => {
             </div>
             
             <h2 className="text-4xl md:text-5xl font-montserrat font-bold text-gray-900 mb-6">
-              Революционизируем <span className="prevent-gradient-primary bg-clip-text text-transparent">женское здоровье</span>
+              Делаем здоровье <span className="prevent-gradient-primary bg-clip-text text-transparent">доступным каждой женщине</span>
             </h2>
             
             <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-roboto mb-12">
