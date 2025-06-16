@@ -7,24 +7,11 @@ import { useFounderInfo } from '@/hooks/useFounderInfo';
 import FounderEditForm from './FounderEditForm';
 
 const FounderSection = () => {
-  const { data: founderInfo, isLoading } = useFounderInfo();
+  const { data: founderInfo, isLoading, error } = useFounderInfo();
 
-  if (isLoading) {
-    return (
-      <section className="py-20">
-        <div className="text-center">
-          <div className="animate-pulse">
-            <div className="h-8 bg-gray-200 rounded-full max-w-md mx-auto mb-4"></div>
-            <div className="h-16 bg-gray-200 rounded max-w-2xl mx-auto mb-8"></div>
-            <div className="h-96 bg-gray-200 rounded-xl max-w-4xl mx-auto"></div>
-          </div>
-        </div>
-      </section>
-    );
-  }
-
-  // Используем данные из базы данных или обновленные данные по умолчанию
+  // Всегда показываем секцию основателя, даже если данные загружаются
   const founder = founderInfo || {
+    id: 'default',
     name: 'Др. Ольга Пучкова',
     title: 'Врач-онколог, маммолог • Основатель и CEO PREVENT',
     description: 'Врач-онколог с 20-летним опытом работы в области женского здоровья и превентивной медицины. Специалист по ранней диагностике онкологических заболеваний, эксперт в области маммологии и ультразвуковой диагностики. Ольга посвятила свою карьеру созданию персонализированного подхода к профилактике заболеваний, объединяя глубокие медицинские знания с современными технологиями для заботы о здоровье каждой женщины.',
@@ -46,6 +33,41 @@ const FounderSection = () => {
     quote: 'Моя миссия — дать каждой женщине уверенность в завтрашнем дне через знания, заботу и современные технологии диагностики. Превентивная медицина — это не просто выявление рисков, это путь к гармонии между телом и душой.',
     image_url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
   };
+
+  if (isLoading) {
+    return (
+      <section className="py-20 relative">
+        <div className="text-center mb-16">
+          <div className="inline-flex items-center space-x-2 bg-accent/20 text-accent-foreground px-4 py-2 rounded-full text-sm font-medium mb-8">
+            <Sparkles className="w-4 h-4" />
+            <span>Основатель проекта</span>
+          </div>
+          
+          <h2 className="text-4xl font-montserrat font-bold text-gray-900 dark:text-white mb-4">
+            Кто стоит за <span className="prevent-gradient-primary bg-clip-text text-transparent">PREVENT</span>
+          </h2>
+          
+          <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-roboto">
+            Встречайте врача, которая посвятила свою жизнь женскому здоровью
+          </p>
+        </div>
+
+        <Card className="max-w-4xl mx-auto overflow-hidden shadow-xl border-0 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm">
+          <CardContent className="p-0">
+            <div className="grid md:grid-cols-2 gap-0">
+              <div className="relative h-96 md:h-full bg-gray-200 animate-pulse"></div>
+              <div className="p-8 md:p-12 flex flex-col justify-center space-y-4">
+                <div className="h-8 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-6 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+                <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </section>
+    );
+  }
 
   return (
     <section className="py-20 relative">
@@ -73,6 +95,11 @@ const FounderSection = () => {
                 src={founder.image_url}
                 alt={`${founder.name} - Основатель PREVENT`}
                 className="w-full h-full object-cover"
+                onError={(e) => {
+                  // Фоллбэк изображение в случае ошибки загрузки
+                  const target = e.target as HTMLImageElement;
+                  target.src = 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+                }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
             </div>
