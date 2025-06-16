@@ -6,7 +6,7 @@ import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { 
   Heart, 
-  Lungs, 
+  Wind, 
   Eye, 
   AlertTriangle, 
   Activity, 
@@ -167,7 +167,7 @@ const EnvironmentalImpactAnalysis: React.FC<EnvironmentalImpactAnalysisProps> = 
       symptoms.push({
         symptom: 'Кашель и одышка',
         probability: Math.min((airQualityData.pm25 / 50) * 80, 90),
-        icon: Lungs
+        icon: Wind
       });
     }
 
@@ -230,7 +230,7 @@ const EnvironmentalImpactAnalysis: React.FC<EnvironmentalImpactAnalysisProps> = 
                 <div className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <Lungs className="w-4 h-4 text-blue-500" />
+                      <Wind className="w-4 h-4 text-blue-500" />
                       <span className="font-medium">Дыхательная система</span>
                     </div>
                     <Badge variant={getRiskLevel(healthRisks.respiratory).variant}>
