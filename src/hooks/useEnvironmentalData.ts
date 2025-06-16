@@ -34,53 +34,12 @@ const useEnvironmentalData = () => {
   const [isRequestingLocation, setIsRequestingLocation] = useState(false);
 
   const requestGeolocation = useCallback(() => {
+    console.log('Запрос геолокации начался');
     setIsRequestingLocation(true);
     setLocationError(null);
     
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          setLocation({
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          });
-          setLocationError(null);
-          setIsRequestingLocation(false);
-        },
-        (error) => {
-          console.error('Geolocation error:', error);
-          let errorMessage = 'Не удалось получить местоположение';
-          
-          switch (error.code) {
-            case error.PERMISSION_DENIED:
-              errorMessage = 'Доступ к геолокации запрещен';
-              break;
-            case error.POSITION_UNAVAILABLE:
-              errorMessage = 'Информация о местоположении недоступна';
-              break;
-            case error.TIMEOUT:
-              errorMessage = 'Время ожидания геолокации истекло';
-              break;
-          }
-          
-          setLocationError(errorMessage);
-          setIsRequestingLocation(false);
-          
-          // Fallback to Moscow coordinates
-          setLocation({
-            latitude: 55.7558,
-            longitude: 37.6173,
-            city: 'Москва',
-            country: 'Россия'
-          });
-        },
-        {
-          enableHighAccuracy: true,
-          timeout: 10000,
-          maximumAge: 300000 // 5 minutes
-        }
-      );
-    } else {
+    if (!navigator.geolocation) {
+      console.error('Геолокация не поддерживается браузером');
       setLocationError('Геолокация не поддерживается браузером');
       setIsRequestingLocation(false);
       // Fallback to Moscow coordinates
@@ -90,11 +49,68 @@ const useEnvironmentalData = () => {
         city: 'Москва',
         country: 'Россия'
       });
+      return;
     }
+
+    const options = {
+      enableHighAccuracy: true,
+      timeout: 15000, // Увеличили таймаут до 15 секунд
+      maximumAge: 300000 // 5 minutes
+    };
+
+    console.log('Вызов getCurrentPosition с опциями:', options);
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        console.log('Геолокация получена успешно:', position);
+        setLocation({
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        });
+        setLocationError(null);
+        setIsRequestingLocation(false);
+      },
+      (error) => {
+        console.error('Ошибка геолокации:', error);
+        let errorMessage = 'Не удалось получить местоположение';
+        
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorMessage = 'Доступ к геолокации запрещен. Разрешите доступ в настройках браузера.';
+            console.error('Доступ к геолокации запрещен пользователем');
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorMessage = 'Информация о местоположении недоступна';
+            console.error('Информация о местоположении недоступна');
+            break;
+          case error.TIMEOUT:
+            errorMessage = 'Время ожидания геолокации истекло. Попробуйте еще раз.';
+            console.error('Время ожидания геолокации истекло');
+            break;
+          default:
+            console.error('Неизвестная ошибка геолокации:', error);
+            break;
+        }
+        
+        setLocationError(errorMessage);
+        setIsRequestingLocation(false);
+        
+        // Fallback to Moscow coordinates
+        console.log('Установка fallback координат для Москвы');
+        setLocation({
+          latitude: 55.7558,
+          longitude: 37.6173,
+          city: 'Москва',
+          country: 'Россия'
+        });
+      },
+      options
+    );
   }, []);
 
   // Auto-request geolocation on mount
   useEffect(() => {
+    console.log('Компонент монтируется, запускаем автоматический запрос геолокации');
     requestGeolocation();
   }, [requestGeolocation]);
 
@@ -103,6 +119,8 @@ const useEnvironmentalData = () => {
     queryKey: ['airQuality', location?.latitude, location?.longitude],
     queryFn: async (): Promise<AirQualityData | null> => {
       if (!location) return null;
+
+      console.log('Запрос данных о качестве воздуха для координат:', location);
 
       const response = await fetch(
         `https://air-quality-api.open-meteo.com/v1/air-quality?latitude=${location.latitude}&longitude=${location.longitude}&current=pm10,pm2_5,ozone,nitrogen_dioxide,sulphur_dioxide,carbon_monoxide&timezone=auto`
@@ -160,6 +178,8 @@ const useEnvironmentalData = () => {
     queryKey: ['weather', location?.latitude, location?.longitude],
     queryFn: async (): Promise<WeatherData | null> => {
       if (!location) return null;
+
+      console.log('Запрос погодных данных для координат:', location);
 
       const response = await fetch(
         `https://api.open-meteo.com/v1/forecast?latitude=${location.latitude}&longitude=${location.longitude}&current=temperature_2m,relative_humidity_2m,wind_speed_10m,uv_index,surface_pressure&timezone=auto`

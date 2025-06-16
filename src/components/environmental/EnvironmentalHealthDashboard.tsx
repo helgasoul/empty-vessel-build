@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle } from "lucide-react";
+import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2 } from "lucide-react";
 import AirQualityMonitor from './AirQualityMonitor';
 import EnvironmentalImpactAnalysis from './EnvironmentalImpactAnalysis';
 import ProtectionRecommendations from './ProtectionRecommendations';
@@ -23,7 +23,12 @@ const EnvironmentalHealthDashboard = () => {
     requestGeolocation 
   } = useEnvironmentalData();
 
-  if (isLoading) {
+  const handleGeolocationRequest = () => {
+    console.log('Кнопка "Поделиться геолокацией" нажата');
+    requestGeolocation();
+  };
+
+  if (isLoading && !location) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
@@ -68,23 +73,32 @@ const EnvironmentalHealthDashboard = () => {
           <AlertDescription>
             <div className="flex items-center justify-between">
               <div>
-                <div className="font-medium">Ошибка загрузки данных: {locationError}</div>
+                <div className="font-medium">Ошибка получения местоположения: {locationError}</div>
                 <div className="text-sm mt-1">
                   {locationError.includes('запрещен') 
-                    ? 'Разрешите доступ к геолокации для получения точных данных о качестве воздуха в вашем регионе'
-                    : 'Попробуйте разрешить доступ к геолокации или обновить страницу'
+                    ? 'Для получения точных данных о качестве воздуха разрешите доступ к геолокации в настройках браузера'
+                    : 'Попробуйте нажать кнопку еще раз или обновить страницу'
                   }
                 </div>
               </div>
               <Button 
                 variant="outline" 
                 size="sm" 
-                onClick={requestGeolocation}
+                onClick={handleGeolocationRequest}
                 disabled={isRequestingLocation}
                 className="ml-4 bg-white hover:bg-gray-50"
               >
-                <Navigation className="w-4 h-4 mr-2" />
-                {isRequestingLocation ? 'Получение...' : 'Поделиться геолокацией'}
+                {isRequestingLocation ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Получение...
+                  </>
+                ) : (
+                  <>
+                    <Navigation className="w-4 h-4 mr-2" />
+                    Повторить
+                  </>
+                )}
               </Button>
             </div>
           </AlertDescription>
