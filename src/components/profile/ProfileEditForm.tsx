@@ -9,17 +9,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { BMIDisplay } from "@/components/ui/bmi-display";
 import { toast } from "@/hooks/use-toast";
-import { User, Save, X } from "lucide-react";
+import { User, Save } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
 
 type Profile = Tables<'profiles'>;
 
-interface ProfileEditFormProps {
-  onCancel: () => void;
-  onSave: () => void;
-}
-
-const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) => {
+const ProfileEditForm: React.FC = () => {
   const { user } = useAuth();
   const [loading, setLoading] = useState(false);
   const [profile, setProfile] = useState<Partial<Profile>>({
@@ -161,7 +156,6 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
         description: "Профиль обновлен и сохранен"
       });
       
-      onSave();
     } catch (error) {
       console.error('Error updating profile:', error);
       
@@ -480,7 +474,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
             </div>
           </div>
 
-          {/* Специализированная медицинская информация */}
+          {/* Дополнительная медицинская информация */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Дополнительная медицинская информация</h3>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -564,7 +558,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
             </div>
           </div>
 
-          {/* Общие поля */}
+          {/* Общая информация */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Общая информация</h3>
             <div className="space-y-4">
@@ -623,16 +617,6 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
             >
               <Save className="w-4 h-4 mr-2" />
               {loading ? 'Сохранение...' : 'Сохранить профиль'}
-            </Button>
-            <Button 
-              type="button" 
-              variant="outline" 
-              onClick={onCancel}
-              className="flex-1"
-              disabled={loading}
-            >
-              <X className="w-4 h-4 mr-2" />
-              Отмена
             </Button>
           </div>
         </form>
