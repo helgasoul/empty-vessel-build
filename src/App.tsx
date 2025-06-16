@@ -30,11 +30,10 @@ const queryClient = new QueryClient();
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+      <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+        <AuthProvider>
           <Router>
             <div className="min-h-screen bg-background">
-              <Toaster />
               <Routes>
                 <Route path="/" element={<Index />} />
                 <Route path="/subscription" element={<Subscription />} />
@@ -56,10 +55,11 @@ function App() {
                 <Route path="/research-files" element={<ResearchFiles />} />
                 <Route path="*" element={<NotFound />} />
               </Routes>
+              <Toaster />
             </div>
           </Router>
-        </ThemeProvider>
-      </AuthProvider>
+        </AuthProvider>
+      </ThemeProvider>
     </QueryClientProvider>
   );
 }
