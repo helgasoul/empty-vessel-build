@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Heart, ArrowLeft } from 'lucide-react';
+import { Shield, ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from '@/hooks/use-toast';
 
@@ -42,7 +42,7 @@ const Auth = () => {
       });
     } else {
       toast({
-        title: "Добро пожаловать!",
+        title: "Добро пожаловать в PREVENT!",
         description: "Вы успешно вошли в систему"
       });
     }
@@ -71,7 +71,7 @@ const Auth = () => {
       });
     } else {
       toast({
-        title: "Регистрация успешна!",
+        title: "Добро пожаловать в PREVENT!",
         description: "Проверьте почту для подтверждения аккаунта"
       });
     }
@@ -80,63 +80,68 @@ const Auth = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
+    <div className="min-h-screen prevent-gradient-bg flex items-center justify-center p-4">
+      <div className="w-full max-w-md animate-fade-in">
         <div className="flex items-center justify-center mb-8">
           <Button
             variant="ghost"
             onClick={() => navigate('/')}
-            className="absolute left-4 top-4"
+            className="absolute left-4 top-4 hover:bg-white/80"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             Назад
           </Button>
-          <div className="flex items-center space-x-2">
-            <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <Heart className="w-5 h-5 text-white" />
+          <div className="flex items-center space-x-3">
+            <div className="w-10 h-10 prevent-gradient-primary rounded-xl flex items-center justify-center">
+              <Shield className="w-6 h-6 text-white" />
             </div>
-            <span className="text-2xl font-bold text-gray-900">YTime</span>
+            <div>
+              <span className="text-2xl font-montserrat font-bold text-gray-900">PREVENT</span>
+              <p className="text-xs text-gray-600 font-roboto">Персонализированная медицина</p>
+            </div>
           </div>
         </div>
 
-        <Card className="w-full">
+        <Card className="prevent-card">
           <CardHeader className="text-center">
-            <CardTitle className="text-2xl">Добро пожаловать в YTime</CardTitle>
-            <CardDescription>
-              Ваша персональная платформа здоровья
+            <CardTitle className="text-2xl font-montserrat">Добро пожаловать в PREVENT</CardTitle>
+            <CardDescription className="font-roboto">
+              Ваша персональная платформа превентивной медицины
             </CardDescription>
           </CardHeader>
           <CardContent>
             <Tabs defaultValue="signin" className="w-full">
               <TabsList className="grid w-full grid-cols-2">
-                <TabsTrigger value="signin">Вход</TabsTrigger>
-                <TabsTrigger value="signup">Регистрация</TabsTrigger>
+                <TabsTrigger value="signin" className="font-medium">Вход</TabsTrigger>
+                <TabsTrigger value="signup" className="font-medium">Регистрация</TabsTrigger>
               </TabsList>
 
               <TabsContent value="signin" className="space-y-4">
                 <form onSubmit={handleSignIn} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signin-email">Email</Label>
+                    <Label htmlFor="signin-email" className="font-roboto">Email</Label>
                     <Input
                       id="signin-email"
                       name="email"
                       type="email"
                       placeholder="your@email.com"
                       required
+                      className="font-roboto"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signin-password">Пароль</Label>
+                    <Label htmlFor="signin-password" className="font-roboto">Пароль</Label>
                     <Input
                       id="signin-password"
                       name="password"
                       type="password"
                       required
+                      className="font-roboto"
                     />
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                    className="w-full prevent-button-primary"
                     disabled={isLoading}
                   >
                     {isLoading ? "Вход..." : "Войти"}
@@ -147,41 +152,44 @@ const Auth = () => {
               <TabsContent value="signup" className="space-y-4">
                 <form onSubmit={handleSignUp} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="signup-name">Полное имя</Label>
+                    <Label htmlFor="signup-name" className="font-roboto">Полное имя</Label>
                     <Input
                       id="signup-name"
                       name="fullName"
                       type="text"
                       placeholder="Анна Иванова"
                       required
+                      className="font-roboto"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-email">Email</Label>
+                    <Label htmlFor="signup-email" className="font-roboto">Email</Label>
                     <Input
                       id="signup-email"
                       name="email"
                       type="email"
                       placeholder="your@email.com"
                       required
+                      className="font-roboto"
                     />
                   </div>
                   <div className="space-y-2">
-                    <Label htmlFor="signup-password">Пароль</Label>
+                    <Label htmlFor="signup-password" className="font-roboto">Пароль</Label>
                     <Input
                       id="signup-password"
                       name="password"
                       type="password"
                       minLength={6}
                       required
+                      className="font-roboto"
                     />
                   </div>
                   <Button
                     type="submit"
-                    className="w-full bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700"
+                    className="w-full prevent-button-primary"
                     disabled={isLoading}
                   >
-                    {isLoading ? "Регистрация..." : "Зарегистрироваться"}
+                    {isLoading ? "Регистрация..." : "Создать аккаунт"}
                   </Button>
                 </form>
               </TabsContent>
@@ -189,8 +197,8 @@ const Auth = () => {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-gray-600 mt-4">
-          Регистрируясь, вы соглашаетесь с нашими условиями использования и политикой конфиденциальности
+        <p className="text-center text-sm text-gray-600 mt-6 font-roboto">
+          Регистрируясь, вы соглашаетесь с нашими условиями использования и политикой конфиденциальности PREVENT
         </p>
       </div>
     </div>

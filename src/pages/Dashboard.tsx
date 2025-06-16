@@ -3,17 +3,17 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
 import { 
-  Heart, 
+  Shield, 
   Activity, 
   User, 
   Smartphone, 
   TrendingUp, 
   Calendar,
-  FileText,
   Settings,
-  Bell
+  Bell,
+  Brain,
+  Heart
 } from "lucide-react";
 import ProfileSection from '@/components/dashboard/ProfileSection';
 import DeviceIntegration from '@/components/dashboard/DeviceIntegration';
@@ -24,32 +24,32 @@ const Dashboard = () => {
   const { user, signOut } = useAuth();
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50">
+    <div className="min-h-screen prevent-gradient-bg">
       {/* Header */}
-      <header className="bg-white border-b border-gray-200">
+      <header className="bg-white/90 backdrop-blur-md border-b border-gray-200/50">
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <div className="w-8 h-8 bg-gradient-to-r from-pink-500 to-purple-600 rounded-lg flex items-center justify-center">
-                <Heart className="w-5 h-5 text-white" />
+              <div className="w-10 h-10 prevent-gradient-primary rounded-xl flex items-center justify-center">
+                <Shield className="w-6 h-6 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">YTime</h1>
-                <p className="text-sm text-gray-600">Панель управления здоровьем</p>
+                <h1 className="text-2xl font-montserrat font-bold text-gray-900">PREVENT</h1>
+                <p className="text-sm text-gray-600 font-roboto">Панель управления здоровьем</p>
               </div>
             </div>
             
             <div className="flex items-center space-x-4">
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:bg-primary/10">
                 <Bell className="w-5 h-5" />
               </Button>
-              <Button variant="ghost" size="icon">
+              <Button variant="ghost" size="icon" className="hover:bg-primary/10">
                 <Settings className="w-5 h-5" />
               </Button>
               <Button 
                 variant="outline" 
                 onClick={signOut}
-                className="hover:bg-red-50 hover:border-red-200 transition-colors"
+                className="hover:bg-red-50 hover:border-red-200 transition-colors font-medium"
               >
                 Выйти
               </Button>
@@ -61,13 +61,72 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-6 py-8">
         {/* Welcome Section */}
-        <div className="mb-8">
-          <h2 className="text-3xl font-bold text-gray-900 mb-2">
+        <div className="mb-8 animate-fade-in">
+          <h2 className="text-4xl font-montserrat font-bold text-gray-900 mb-3">
             Добро пожаловать, {user?.user_metadata?.full_name || 'пользователь'}!
           </h2>
-          <p className="text-gray-600">
+          <p className="text-gray-600 text-lg font-roboto">
             Управляйте своим здоровьем с помощью персонализированных рекомендаций и анализа данных.
           </p>
+        </div>
+
+        {/* Stats Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8 animate-slide-up">
+          <Card className="prevent-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-roboto text-gray-600">Общий риск</p>
+                  <p className="text-2xl font-montserrat font-bold text-green-600">Низкий</p>
+                </div>
+                <div className="prevent-icon-container bg-green-100">
+                  <Shield className="w-6 h-6 text-green-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="prevent-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-roboto text-gray-600">Устройства</p>
+                  <p className="text-2xl font-montserrat font-bold text-blue-600">3</p>
+                </div>
+                <div className="prevent-icon-container bg-blue-100">
+                  <Smartphone className="w-6 h-6 text-blue-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="prevent-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-roboto text-gray-600">Оценки</p>
+                  <p className="text-2xl font-montserrat font-bold text-purple-600">8</p>
+                </div>
+                <div className="prevent-icon-container bg-purple-100">
+                  <Brain className="w-6 h-6 text-purple-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Card className="prevent-card">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-sm font-roboto text-gray-600">Активность</p>
+                  <p className="text-2xl font-montserrat font-bold text-pink-600">92%</p>
+                </div>
+                <div className="prevent-icon-container bg-pink-100">
+                  <Activity className="w-6 h-6 text-pink-600" />
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
         {/* Main Grid */}
@@ -87,29 +146,29 @@ const Dashboard = () => {
 
         {/* Bottom Section - Recent Activity */}
         <div className="mt-8">
-          <Card>
+          <Card className="prevent-card">
             <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Activity className="w-5 h-5 text-pink-600" />
+              <CardTitle className="flex items-center space-x-2 font-montserrat">
+                <Activity className="w-5 h-5 text-primary" />
                 <span>Последняя активность</span>
               </CardTitle>
-              <CardDescription>
+              <CardDescription className="font-roboto">
                 Ваши недавние действия и обновления данных
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg">
-                  <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Apple Watch синхронизирован - 2 часа назад</span>
+                <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-xl">
+                  <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse-slow"></div>
+                  <span className="text-sm text-gray-700 font-roboto">Apple Watch синхронизирован - 2 часа назад</span>
                 </div>
-                <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-xl">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Профиль обновлен - вчера</span>
+                  <span className="text-sm text-gray-700 font-roboto">QRISK3 оценка завершена - вчера</span>
                 </div>
-                <div className="flex items-center space-x-3 p-3 bg-purple-50 rounded-lg">
+                <div className="flex items-center space-x-3 p-4 bg-purple-50 rounded-xl">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700">Оценка рисков проведена - 3 дня назад</span>
+                  <span className="text-sm text-gray-700 font-roboto">Профиль обновлен - 3 дня назад</span>
                 </div>
               </div>
             </CardContent>
