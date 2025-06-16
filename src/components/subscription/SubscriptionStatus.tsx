@@ -3,28 +3,26 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Crown, Star, Calendar, CreditCard, Users } from "lucide-react";
+import { Crown, Star, Calendar, CreditCard, Users, Loader2 } from "lucide-react";
 import { useAuth } from '@/contexts/AuthContext';
+import { useSubscription } from '@/hooks/useSubscription';
 
 const SubscriptionStatus = () => {
   const { user } = useAuth();
+  const { subscription, loading, isSubscribed, isPremium, subscriptionEnd } = useSubscription();
   
-  // Временные данные - позже интегрируем с реальными данными подписки
-  const subscriptionData = {
-    isSubscribed: false,
-    tier: 'free',
-    endDate: null,
-    autoRenew: false
-  };
-
   const handleUpgrade = () => {
-    // Логика для перехода к планам подписки
-    window.location.href = '/subscription-plans';
+    // Переключение на вкладку планов
+    const plansTab = document.querySelector('[value="plans"]') as HTMLButtonElement;
+    if (plansTab) {
+      plansTab.click();
+    }
   };
 
   const handleManageSubscription = () => {
     // Логика для управления подпиской через Stripe Customer Portal
     console.log('Opening Stripe Customer Portal...');
+    // Здесь будет интеграция с Stripe Customer Portal
   };
 
   if (!user) {
@@ -43,36 +41,49 @@ const SubscriptionStatus = () => {
     );
   }
 
+  if (loading) {
+    return (
+      <Card>
+        <CardContent className="pt-6">
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 mx-auto animate-spin text-primary mb-4" />
+            <p className="text-gray-600">Загрузка данных подписки...</p>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <Card>
       <CardHeader>
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
-            {subscriptionData.tier === 'premium' ? (
+            {isPremium ? (
               <Crown className="w-6 h-6 text-yellow-500" />
             ) : (
               <Star className="w-6 h-6 text-gray-400" />
             )}
             <div>
               <CardTitle className="text-xl">
-                {subscriptionData.tier === 'premium' ? 'Премиум план' : 'Базовый план'}
+                {isPremium ? 'Премиум план' : 'Базовый план'}
               </CardTitle>
               <CardDescription>
-                {subscriptionData.tier === 'premium' 
+                {isPremium 
                   ? 'У вас есть доступ ко всем функциям' 
                   : 'Обновитесь для получения полного доступа'
                 }
               </CardDescription>
             </div>
           </div>
-          <Badge variant={subscriptionData.tier === 'premium' ? 'default' : 'secondary'}>
-            {subscriptionData.tier === 'premium' ? 'Активна' : 'Бесплатно'}
+          <Badge variant={isPremium ? 'default' : 'secondary'}>
+            {isPremium ? 'Активна' : 'Бесплатно'}
           </Badge>
         </div>
       </CardHeader>
 
       <CardContent className="space-y-4">
-        {subscriptionData.tier === 'premium' ? (
+        {isPremium && subscriptionEnd ? (
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
               <div className="flex items-center space-x-2">
@@ -80,7 +91,7 @@ const SubscriptionStatus = () => {
                 <span className="text-sm">Продление:</span>
               </div>
               <span className="text-sm font-medium">
-                {subscriptionData.endDate || '15 января 2025'}
+                {subscriptionEnd.toLocaleDateString('ru-RU')}
               </span>
             </div>
 
@@ -90,7 +101,7 @@ const SubscriptionStatus = () => {
                 <span className="text-sm">Автоплатеж:</span>
               </div>
               <span className="text-sm font-medium">
-                {subscriptionData.autoRenew ? 'Включен' : 'Отключен'}
+                {subscription?.stripe_customer_id ? 'Включен' : 'Отключен'}
               </span>
             </div>
 
@@ -106,7 +117,7 @@ const SubscriptionStatus = () => {
           <div className="space-y-3">
             <div className="p-4 bg-gradient-to-r from-primary/10 to-purple-500/10 rounded-lg">
               <h4 className="font-semibold mb-2">Преимущества Премиум плана:</h4>
-              <ul className="text-sm space-y-1 text-gray-600">
+              <ul className="text-sm space-y-1 text-gray-600 dark:text-gray-300">
                 <li>• Неограниченные оценки рисков с ИИ-анализом</li>
                 <li>• Персонализированные планы питания и фитнеса</li>
                 <li>• Консультации с экспертами</li>

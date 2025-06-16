@@ -1632,6 +1632,45 @@ export type Database = {
         }
         Relationships: []
       }
+      privacy_policy: {
+        Row: {
+          content: string
+          created_at: string
+          created_by: string | null
+          effective_date: string
+          id: string
+          is_active: boolean
+          title: string
+          updated_at: string
+          updated_by: string | null
+          version: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string
+          id?: string
+          is_active?: boolean
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          created_by?: string | null
+          effective_date?: string
+          id?: string
+          is_active?: boolean
+          title?: string
+          updated_at?: string
+          updated_by?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
       profiles: {
         Row: {
           activity_level: string | null

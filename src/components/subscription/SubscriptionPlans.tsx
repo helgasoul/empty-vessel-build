@@ -3,8 +3,9 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { CheckCircle, Star, Crown, Zap } from "lucide-react";
-import { toast } from "sonner";
+import { CheckCircle, Star, Crown, Zap, Loader2 } from "lucide-react";
+import { useSubscription } from '@/hooks/useSubscription';
+import { useAuth } from '@/contexts/AuthContext';
 
 interface PlanFeature {
   name: string;
@@ -25,6 +26,9 @@ interface SubscriptionPlan {
 }
 
 const SubscriptionPlans = () => {
+  const { user } = useAuth();
+  const { createCheckoutSession, isPremium, loading } = useSubscription();
+
   const plans: SubscriptionPlan[] = [
     {
       id: 'free',
@@ -74,23 +78,49 @@ const SubscriptionPlans = () => {
   ];
 
   const handleSubscribe = async (planId: string) => {
-    if (planId === 'free') {
-      toast.success('Вы уже используете базовый план!');
+    if (!user) {
+      window.location.href = '/auth';
       return;
     }
 
-    try {
-      // Здесь будет логика для создания Stripe checkout session
-      toast.info('Перенаправление на страницу оплаты...');
-      
-      // Временная заглушка - позже интегрируем с реальным Stripe
-      setTimeout(() => {
-        toast.success('Подписка успешно оформлена!');
-      }, 2000);
-    } catch (error) {
-      console.error('Payment error:', error);
-      toast.error('Ошибка при оформлении подписки');
+    if (planId === 'free') {
+      // Базовый план уже активен по умолчанию
+      return;
     }
+
+    if (planId === 'premium') {
+      if (isPremium) {
+        return; // Уже подписан
+      }
+
+      // Создаем сессию оплаты для премиум плана
+      const session = await createCheckoutSession('price_premium_monthly');
+      if (session?.url) {
+        window.location.href = session.url;
+      }
+    }
+  };
+
+  const getButtonText = (planId: string) => {
+    if (planId === 'free') {
+      return 'Текущий план';
+    }
+    
+    if (planId === 'premium') {
+      if (isPremium) {
+        return 'Активный план';
+      }
+      return 'Выбрать план';
+    }
+    
+    return 'Выбрать план';
+  };
+
+  const isButtonDisabled = (planId: string) => {
+    if (loading) return true;
+    if (planId === 'free') return true;
+    if (planId === 'premium' && isPremium) return true;
+    return false;
   };
 
   return (
@@ -148,8 +178,16 @@ const SubscriptionPlans = () => {
                 onClick={() => handleSubscribe(plan.id)}
                 className={`w-full ${plan.popular ? 'bg-primary hover:bg-primary/90' : ''}`}
                 variant={plan.popular ? 'default' : 'outline'}
+                disabled={isButtonDisabled(plan.id)}
               >
-                {plan.price === 0 ? 'Текущий план' : 'Выбрать план'}
+                {loading && plan.id === 'premium' ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Обработка...
+                  </>
+                ) : (
+                  getButtonText(plan.id)
+                )}
               </Button>
             </CardContent>
           </Card>
