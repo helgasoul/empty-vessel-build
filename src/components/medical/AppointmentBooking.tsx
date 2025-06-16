@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,7 +22,7 @@ const AppointmentBooking = () => {
     createAppointment 
   } = useMedicalAppointments();
 
-  // Статические клиники-партнеры
+  // Обновленные клиники-партнеры
   const staticProviders = [
     {
       id: 'chaika-clinic',
@@ -43,6 +44,17 @@ const AppointmentBooking = () => {
       website: 'https://ilinskaya-hospital.ru',
       rating: 4.9,
       specializations: ['Многопрофильная больница', 'Хирургия', 'Кардиология'],
+      is_active: true
+    },
+    {
+      id: 'dnkom-lab',
+      name: 'Лаборатория ДНКом',
+      provider_type: 'laboratory',
+      address: 'ул. Новый Арбат, 36/9, Москва',
+      phone: '+7 (495) 108-62-62',
+      website: 'https://dnkom.ru',
+      rating: 4.7,
+      specializations: ['Лабораторная диагностика', 'Генетические тесты', 'Анализы крови'],
       is_active: true
     }
   ];

@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -53,6 +54,24 @@ const PharmacyPartners = () => {
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
       specialty: 'Многопрофильная больница'
+    },
+    {
+      id: 'dnkom-lab',
+      name: 'Лаборатория ДНКом',
+      address: 'ул. Новый Арбат, 36/9, Москва',
+      phone: '+7 (495) 108-62-62',
+      website: 'https://dnkom.ru',
+      delivery_available: true,
+      working_hours: {
+        'пн-пт': '7:30-20:00',
+        'сб-вс': '8:00-17:00'
+      },
+      delivery_zones: ['Москва', 'МО'],
+      is_active: true,
+      rating: 4.7,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      specialty: 'Лабораторная диагностика'
     }
   ];
 
