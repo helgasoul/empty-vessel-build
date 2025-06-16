@@ -3,6 +3,13 @@ import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 
+interface FileAttachment {
+  name: string;
+  url: string;
+  size: number;
+  type: string;
+}
+
 export interface MedicalRecord {
   id: string;
   user_id: string;
@@ -13,12 +20,7 @@ export interface MedicalRecord {
   clinic_name?: string;
   record_date: string;
   attachments?: any[];
-  file_attachments?: Array<{
-    name: string;
-    url: string;
-    size: number;
-    type: string;
-  }>;
+  file_attachments?: FileAttachment[];
   metadata?: Record<string, any>;
   is_active: boolean;
   created_at: string;
@@ -43,12 +45,14 @@ export const useMedicalRecords = () => {
 
       if (error) throw error;
       
-      // Transform the data to match our interface
+      // Transform the data to match our interface with proper type conversion
       const transformedRecords: MedicalRecord[] = (data || []).map(record => ({
         ...record,
         record_type: record.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(record.attachments) ? record.attachments : [],
-        file_attachments: Array.isArray(record.file_attachments) ? record.file_attachments : [],
+        file_attachments: Array.isArray(record.file_attachments) 
+          ? (record.file_attachments as FileAttachment[])
+          : [],
         metadata: (record.metadata as Record<string, any>) || {}
       }));
       
@@ -93,12 +97,7 @@ export const useMedicalRecords = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Пользователь не авторизован');
 
-      let fileAttachments: Array<{
-        name: string;
-        url: string;
-        size: number;
-        type: string;
-      }> = [];
+      let fileAttachments: FileAttachment[] = [];
 
       // Upload files if provided
       if (files && files.length > 0) {
@@ -141,7 +140,9 @@ export const useMedicalRecords = () => {
         ...data,
         record_type: data.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(data.attachments) ? data.attachments : [],
-        file_attachments: Array.isArray(data.file_attachments) ? data.file_attachments : [],
+        file_attachments: Array.isArray(data.file_attachments) 
+          ? (data.file_attachments as FileAttachment[])
+          : [],
         metadata: (data.metadata as Record<string, any>) || {}
       };
 
@@ -200,7 +201,9 @@ export const useMedicalRecords = () => {
         ...data,
         record_type: data.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(data.attachments) ? data.attachments : [],
-        file_attachments: Array.isArray(data.file_attachments) ? data.file_attachments : [],
+        file_attachments: Array.isArray(data.file_attachments) 
+          ? (data.file_attachments as FileAttachment[])
+          : [],
         metadata: (data.metadata as Record<string, any>) || {}
       };
 

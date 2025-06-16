@@ -9,6 +9,7 @@ import Dashboard from './pages/Dashboard';
 import WomensHealth from './pages/WomensHealth';
 import MedicalIntegrations from './pages/MedicalIntegrations';
 import AIHealth from './pages/AIHealth';
+import Auth from './pages/Auth';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
             <div className="min-h-screen bg-background">
               <Routes>
                 <Route path="/" element={<Dashboard />} />
+                <Route path="/auth" element={<Auth />} />
                 <Route path="/womens-health" element={<WomensHealth />} />
                 <Route path="/medical-integrations" element={<MedicalIntegrations />} />
                 <Route path="/ai-health" element={<AIHealth />} />
