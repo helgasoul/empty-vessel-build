@@ -56,7 +56,22 @@ export const useHealthData = () => {
         .order('recorded_at', { ascending: false });
 
       if (error) throw error;
-      setHealthData(data || []);
+      
+      // Type-safe conversion from Supabase data
+      const healthDataPoints = (data || []).map((item): HealthDataPoint => ({
+        id: item.id,
+        user_id: item.user_id,
+        device_id: item.device_id,
+        data_type: item.data_type,
+        data_value: item.data_value,
+        data_unit: item.data_unit,
+        data_details: (item.data_details as Record<string, any>) || {},
+        recorded_at: item.recorded_at,
+        synced_at: item.synced_at,
+        created_at: item.created_at,
+      }));
+      
+      setHealthData(healthDataPoints);
     } catch (error) {
       console.error('Ошибка при загрузке данных о здоровье:', error);
       toast.error('Не удалось загрузить данные о здоровье');
@@ -74,7 +89,30 @@ export const useHealthData = () => {
         .single();
 
       if (error && error.code !== 'PGRST116') throw error;
-      setDailySummary(data);
+      
+      if (data) {
+        // Type-safe conversion
+        const summary: DailyHealthSummary = {
+          id: data.id,
+          user_id: data.user_id,
+          summary_date: data.summary_date,
+          total_steps: data.total_steps,
+          avg_heart_rate: data.avg_heart_rate,
+          max_heart_rate: data.max_heart_rate,
+          min_heart_rate: data.min_heart_rate,
+          sleep_hours: data.sleep_hours,
+          sleep_quality: data.sleep_quality,
+          calories_burned: data.calories_burned,
+          distance_km: data.distance_km,
+          active_minutes: data.active_minutes,
+          glucose_avg: data.glucose_avg,
+          glucose_readings_count: data.glucose_readings_count,
+          additional_metrics: (data.additional_metrics as Record<string, any>) || {},
+          created_at: data.created_at,
+          updated_at: data.updated_at,
+        };
+        setDailySummary(summary);
+      }
     } catch (error) {
       console.error('Ошибка при загрузке дневной сводки:', error);
     }
@@ -134,7 +172,28 @@ export const useHealthData = () => {
 
       if (upsertError) throw upsertError;
 
-      setDailySummary(summary);
+      // Type-safe conversion
+      const newSummary: DailyHealthSummary = {
+        id: summary.id,
+        user_id: summary.user_id,
+        summary_date: summary.summary_date,
+        total_steps: summary.total_steps,
+        avg_heart_rate: summary.avg_heart_rate,
+        max_heart_rate: summary.max_heart_rate,
+        min_heart_rate: summary.min_heart_rate,
+        sleep_hours: summary.sleep_hours,
+        sleep_quality: summary.sleep_quality,
+        calories_burned: summary.calories_burned,
+        distance_km: summary.distance_km,
+        active_minutes: summary.active_minutes,
+        glucose_avg: summary.glucose_avg,
+        glucose_readings_count: summary.glucose_readings_count,
+        additional_metrics: (summary.additional_metrics as Record<string, any>) || {},
+        created_at: summary.created_at,
+        updated_at: summary.updated_at,
+      };
+
+      setDailySummary(newSummary);
       toast.success('Дневная сводка обновлена');
     } catch (error) {
       console.error('Ошибка при генерации дневной сводки:', error);

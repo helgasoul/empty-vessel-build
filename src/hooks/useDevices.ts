@@ -31,7 +31,25 @@ export const useDevices = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setDevices(data || []);
+      
+      // Type-safe conversion from Supabase data to our Device interface
+      const deviceData = (data || []).map((item): Device => ({
+        id: item.id,
+        user_id: item.user_id,
+        device_type: item.device_type as Device['device_type'],
+        device_name: item.device_name,
+        is_connected: item.is_connected,
+        connection_status: item.connection_status as Device['connection_status'],
+        last_sync_at: item.last_sync_at,
+        access_token: item.access_token,
+        refresh_token: item.refresh_token,
+        token_expires_at: item.token_expires_at,
+        device_settings: (item.device_settings as Record<string, any>) || {},
+        created_at: item.created_at,
+        updated_at: item.updated_at,
+      }));
+      
+      setDevices(deviceData);
     } catch (error) {
       console.error('Ошибка при загрузке устройств:', error);
       toast.error('Не удалось загрузить устройства');
@@ -59,13 +77,30 @@ export const useDevices = () => {
 
       if (error) throw error;
 
-      setDevices(prev => [data, ...prev]);
+      // Type-safe conversion
+      const newDevice: Device = {
+        id: data.id,
+        user_id: data.user_id,
+        device_type: data.device_type as Device['device_type'],
+        device_name: data.device_name,
+        is_connected: data.is_connected,
+        connection_status: data.connection_status as Device['connection_status'],
+        last_sync_at: data.last_sync_at,
+        access_token: data.access_token,
+        refresh_token: data.refresh_token,
+        token_expires_at: data.token_expires_at,
+        device_settings: (data.device_settings as Record<string, any>) || {},
+        created_at: data.created_at,
+        updated_at: data.updated_at,
+      };
+
+      setDevices(prev => [newDevice, ...prev]);
       toast.success(`Устройство ${deviceName} добавлено`);
       
       // Здесь можно добавить логику для реального подключения к API устройства
       await simulateDeviceConnection(data.id);
       
-      return data;
+      return newDevice;
     } catch (error) {
       console.error('Ошибка при подключении устройства:', error);
       toast.error('Не удалось подключить устройство');
