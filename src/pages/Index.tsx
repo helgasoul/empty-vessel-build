@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
@@ -78,8 +77,7 @@ const Index = () => {
           </h1>
           
           <p className="text-xl text-gray-600 max-w-3xl mx-auto mb-10 leading-relaxed font-roboto">
-            Революционная платформа персонализированной медицины с анализом генетических рисков, 
-            интеграцией носимых устройств и научно обоснованными рекомендациями для женского здоровья.
+            Ваш персональный помощник в мире женского здоровья. Мы здесь чтобы поддержать вас на каждом этапе жизни.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-6 justify-center">
