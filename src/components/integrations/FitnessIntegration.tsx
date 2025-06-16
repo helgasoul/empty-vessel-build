@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Dumbbell, 
   Play, 
@@ -55,7 +55,6 @@ interface FitnessProgram {
 const FitnessIntegration = () => {
   const [activeTab, setActiveTab] = useState<'workouts' | 'programs'>('workouts');
   const [currentVideo, setCurrentVideo] = useState<Workout | null>(null);
-  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const todayWorkouts: Workout[] = [
     {
@@ -154,8 +153,9 @@ const FitnessIntegration = () => {
     }
   };
 
-  // Обновленный обработчик для показа видео тренировки
   const handleWorkoutAction = (workout: Workout) => {
+    console.log('Начинаем тренировку:', workout.title, 'Есть видео:', !!workout.video_url);
+    
     if (workout.completed) {
       toast.success(`Повторяем тренировку "${workout.title}"`, {
         description: `Переходим к ${workout.type} с ${workout.instructor} • ${workout.duration} мин`
@@ -170,12 +170,15 @@ const FitnessIntegration = () => {
       });
     }
     
-    // Открываем видео в модальном окне
-    setCurrentVideo(workout);
-    setIsVideoPlaying(true);
+    // Открываем видео если оно есть
+    if (workout.video_url) {
+      setCurrentVideo(workout);
+      console.log('Видео должно открыться для:', workout.title);
+    } else {
+      toast.info('Видео для этой тренировки пока недоступно');
+    }
   };
 
-  // Handler for program enrollment/continuation
   const handleProgramAction = (program: FitnessProgram) => {
     if (program.enrolled) {
       toast.info(`Продолжаем программу "${program.name}"`, {
@@ -189,8 +192,8 @@ const FitnessIntegration = () => {
   };
 
   const closeVideo = () => {
+    console.log('Закрываем видео');
     setCurrentVideo(null);
-    setIsVideoPlaying(false);
   };
 
   const WorkoutCard = ({ workout }: { workout: Workout }) => (
@@ -431,23 +434,16 @@ const FitnessIntegration = () => {
       </Card>
 
       {/* Video Modal */}
-      <Dialog open={!!currentVideo} onOpenChange={closeVideo}>
+      <Dialog open={!!currentVideo} onOpenChange={(open) => !open && closeVideo()}>
         <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Video className="w-5 h-5" />
-                <span>{currentVideo?.title}</span>
-              </div>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={closeVideo}
-                className="h-6 w-6"
-              >
-                <X className="w-4 h-4" />
-              </Button>
+            <DialogTitle className="flex items-center space-x-2">
+              <Video className="w-5 h-5" />
+              <span>{currentVideo?.title}</span>
             </DialogTitle>
+            <DialogDescription>
+              Тренировка {currentVideo?.type} с {currentVideo?.instructor}
+            </DialogDescription>
           </DialogHeader>
           
           {currentVideo && (
