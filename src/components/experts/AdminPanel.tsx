@@ -13,7 +13,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const AdminPanel = () => {
   const [newUserEmail, setNewUserEmail] = useState('');
-  const [selectedRole, setSelectedRole] = useState<AppRole>('user');
+  const [selectedRole, setSelectedRole] = useState<AppRole>('patient');
   const [userIdForRole, setUserIdForRole] = useState('');
   const [copiedUserId, setCopiedUserId] = useState(false);
   const { user } = useAuth();
@@ -44,7 +44,7 @@ const AdminPanel = () => {
 
       setNewUserEmail('');
       setUserIdForRole('');
-      setSelectedRole('user');
+      setSelectedRole('patient');
     } catch (error) {
       toast({
         title: "Ошибка",
@@ -164,8 +164,8 @@ const AdminPanel = () => {
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="user">Пользователь</SelectItem>
-                  <SelectItem value="moderator">Модератор</SelectItem>
+                  <SelectItem value="patient">Пациент</SelectItem>
+                  <SelectItem value="doctor">Врач</SelectItem>
                   <SelectItem value="admin">Администратор</SelectItem>
                 </SelectContent>
               </Select>
@@ -192,11 +192,11 @@ const AdminPanel = () => {
             <Card>
               <CardContent className="pt-4">
                 <div className="flex items-center space-x-2 mb-2">
-                  <Badge variant="outline">user</Badge>
-                  <span className="text-sm font-medium">Пользователь</span>
+                  <Badge variant="outline">patient</Badge>
+                  <span className="text-sm font-medium">Пациент</span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Базовые права: просмотр экспертов, консультации
+                  Может записываться на консультации, просматривать экспертов
                 </p>
               </CardContent>
             </Card>
@@ -204,11 +204,11 @@ const AdminPanel = () => {
             <Card>
               <CardContent className="pt-4">
                 <div className="flex items-center space-x-2 mb-2">
-                  <Badge variant="secondary">moderator</Badge>
-                  <span className="text-sm font-medium">Модератор</span>
+                  <Badge variant="secondary">doctor</Badge>
+                  <span className="text-sm font-medium">Врач</span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Модерация контента, управление сообществом
+                  Может управлять расписанием, проводить консультации
                 </p>
               </CardContent>
             </Card>
@@ -220,7 +220,7 @@ const AdminPanel = () => {
                   <span className="text-sm font-medium">Администратор</span>
                 </div>
                 <p className="text-sm text-gray-600">
-                  Полные права: управление экспертами, пользователями
+                  Полные права: управление системой, пользователями, врачами
                 </p>
               </CardContent>
             </Card>

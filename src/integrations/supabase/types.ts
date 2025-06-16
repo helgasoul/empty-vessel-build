@@ -155,6 +155,75 @@ export type Database = {
           },
         ]
       }
+      consultation_bookings: {
+        Row: {
+          booking_date: string
+          booking_time: string
+          consultation_type: string | null
+          created_at: string
+          doctor_id: string
+          id: string
+          meeting_link: string | null
+          notes: string | null
+          patient_id: string
+          payment_amount: number | null
+          payment_status: string | null
+          reason: string | null
+          schedule_id: string
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_date: string
+          booking_time: string
+          consultation_type?: string | null
+          created_at?: string
+          doctor_id: string
+          id?: string
+          meeting_link?: string | null
+          notes?: string | null
+          patient_id: string
+          payment_amount?: number | null
+          payment_status?: string | null
+          reason?: string | null
+          schedule_id: string
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_date?: string
+          booking_time?: string
+          consultation_type?: string | null
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          meeting_link?: string | null
+          notes?: string | null
+          patient_id?: string
+          payment_amount?: number | null
+          payment_status?: string | null
+          reason?: string | null
+          schedule_id?: string
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultation_bookings_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultation_bookings_schedule_id_fkey"
+            columns: ["schedule_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_schedules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       crc_pro_assessments: {
         Row: {
           age: number
@@ -315,6 +384,101 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      doctor_profiles: {
+        Row: {
+          bio: string | null
+          consultation_fee: number | null
+          created_at: string
+          experience_years: number | null
+          full_name: string
+          id: string
+          is_available: boolean | null
+          photo_url: string | null
+          qualification: string | null
+          specialization: string
+          updated_at: string
+          user_id: string
+          working_hours: Json | null
+        }
+        Insert: {
+          bio?: string | null
+          consultation_fee?: number | null
+          created_at?: string
+          experience_years?: number | null
+          full_name: string
+          id?: string
+          is_available?: boolean | null
+          photo_url?: string | null
+          qualification?: string | null
+          specialization: string
+          updated_at?: string
+          user_id: string
+          working_hours?: Json | null
+        }
+        Update: {
+          bio?: string | null
+          consultation_fee?: number | null
+          created_at?: string
+          experience_years?: number | null
+          full_name?: string
+          id?: string
+          is_available?: boolean | null
+          photo_url?: string | null
+          qualification?: string | null
+          specialization?: string
+          updated_at?: string
+          user_id?: string
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
+      doctor_schedules: {
+        Row: {
+          consultation_type: string | null
+          created_at: string
+          date: string
+          doctor_id: string
+          end_time: string
+          id: string
+          is_available: boolean | null
+          notes: string | null
+          start_time: string
+          updated_at: string
+        }
+        Insert: {
+          consultation_type?: string | null
+          created_at?: string
+          date: string
+          doctor_id: string
+          end_time: string
+          id?: string
+          is_available?: boolean | null
+          notes?: string | null
+          start_time: string
+          updated_at?: string
+        }
+        Update: {
+          consultation_type?: string | null
+          created_at?: string
+          date?: string
+          doctor_id?: string
+          end_time?: string
+          id?: string
+          is_available?: boolean | null
+          notes?: string | null
+          start_time?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_schedules_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       experts: {
         Row: {
@@ -2376,7 +2540,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "moderator" | "user"
+      app_role: "admin" | "doctor" | "patient"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -2492,7 +2656,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "moderator", "user"],
+      app_role: ["admin", "doctor", "patient"],
     },
   },
 } as const

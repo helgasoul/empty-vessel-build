@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Calendar, FileText, Video, Pill, Building, Settings } from 'lucide-react';
+import { Calendar, FileText, Video, Pill, Building, Settings, Stethoscope } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AppointmentBooking from '@/components/medical/AppointmentBooking';
 import MedicalRecords from '@/components/medical/MedicalRecords';
 import TelemedicineConsultations from '@/components/medical/TelemedicineConsultations';
 import PharmacyPartners from '@/components/medical/PharmacyPartners';
 import MedicalProcedures from '@/components/medical/MedicalProcedures';
+import DoctorConsultationBooking from '@/components/medical/DoctorConsultationBooking';
 
 const MedicalIntegrations = () => {
   const navigate = useNavigate();
@@ -35,8 +36,12 @@ const MedicalIntegrations = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="appointments" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5">
+        <Tabs defaultValue="consultations" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-6">
+            <TabsTrigger value="consultations" className="flex items-center gap-2">
+              <Stethoscope className="w-4 h-4" />
+              Консультации
+            </TabsTrigger>
             <TabsTrigger value="appointments" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
               Записи
@@ -58,6 +63,10 @@ const MedicalIntegrations = () => {
               Медкарта
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="consultations">
+            <DoctorConsultationBooking />
+          </TabsContent>
 
           <TabsContent value="appointments">
             <AppointmentBooking />

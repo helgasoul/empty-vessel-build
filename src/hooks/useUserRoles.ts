@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 
-export type AppRole = 'admin' | 'moderator' | 'user';
+export type AppRole = 'admin' | 'doctor' | 'patient';
 
 export interface UserRole {
   id: string;
@@ -47,6 +47,14 @@ export const useHasRole = (role: AppRole) => {
 
 export const useIsAdmin = () => {
   return useHasRole('admin');
+};
+
+export const useIsDoctor = () => {
+  return useHasRole('doctor');
+};
+
+export const useIsPatient = () => {
+  return useHasRole('patient');
 };
 
 export const useCreateUserRole = () => {
