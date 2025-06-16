@@ -1,4 +1,3 @@
-
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useState } from 'react';
@@ -211,8 +210,8 @@ export const useFraminghamRisk = (onComplete?: () => void) => {
         .insert({
           user_id: user.id,
           assessment_type: 'framingham_alzheimer',
-          assessment_data: data,
-          results_data: result,
+          assessment_data: data as any,
+          results_data: result as any,
           risk_percentage: result.tenYearRisk,
           risk_level: result.riskLevel,
           recommendations: result.recommendations,
