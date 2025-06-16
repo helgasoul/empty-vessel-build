@@ -10,7 +10,8 @@ import {
   BarChart3,
   Smartphone,
   Target,
-  Stethoscope
+  Stethoscope,
+  Leaf
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -45,6 +46,13 @@ const QuickActions = () => {
       icon: BarChart3,
       color: "bg-purple-500 hover:bg-purple-600",
       action: () => navigate('/health-analytics')
+    },
+    {
+      title: "Экологическое здоровье",
+      description: "Качество воздуха и экология",
+      icon: Leaf,
+      color: "bg-emerald-500 hover:bg-emerald-600",
+      action: () => navigate('/environmental-health')
     }
   ];
 
@@ -60,7 +68,7 @@ const QuickActions = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {actions.map((action, index) => (
             <Button
               key={index}

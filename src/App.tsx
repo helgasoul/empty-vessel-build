@@ -13,6 +13,7 @@ import RiskAssessment from "./pages/RiskAssessment";
 import WomensHealth from "./pages/WomensHealth";
 import MedicalIntegrations from "./pages/MedicalIntegrations";
 import HealthAnalytics from "./pages/HealthAnalytics";
+import EnvironmentalHealth from "./pages/EnvironmentalHealth";
 import NotFound from "./pages/NotFound";
 
 // Создаем QueryClient один раз за пределами компонента
@@ -40,6 +41,7 @@ const App: React.FC = () => {
                 <Route path="/womens-health" element={<WomensHealth />} />
                 <Route path="/medical-integrations" element={<MedicalIntegrations />} />
                 <Route path="/health-analytics" element={<HealthAnalytics />} />
+                <Route path="/environmental-health" element={<EnvironmentalHealth />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
