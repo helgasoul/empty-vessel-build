@@ -3,13 +3,14 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield, FlaskConical, BarChart3, Target } from "lucide-react";
+import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield, FlaskConical, BarChart3, Target, CalendarCheck } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import RiskVisualization from "@/components/risk/RiskVisualization";
+import AnnualCheckupRecommendations from "@/components/risk/AnnualCheckupRecommendations";
 
 interface RiskAssessmentData {
   id: string;
@@ -26,10 +27,13 @@ const RiskAssessment = () => {
   const [assessments, setAssessments] = useState<RiskAssessmentData[]>([]);
   const [loading, setLoading] = useState(true);
   const [showVisualization, setShowVisualization] = useState(false);
+  const [showCheckupRecommendations, setShowCheckupRecommendations] = useState(false);
+  const [userProfile, setUserProfile] = useState<any>(null);
 
   useEffect(() => {
     if (user) {
       loadLatestAssessments();
+      loadUserProfile();
     }
   }, [user]);
 
@@ -48,6 +52,32 @@ const RiskAssessment = () => {
     } finally {
       setLoading(false);
     }
+  };
+
+  const loadUserProfile = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('age, gender, date_of_birth')
+        .eq('id', user?.id)
+        .maybeSingle();
+
+      if (!error && data) {
+        setUserProfile(data);
+      }
+    } catch (error) {
+      console.error('Error loading profile:', error);
+    }
+  };
+
+  const calculateUserAge = () => {
+    if (userProfile?.age) return userProfile.age;
+    if (userProfile?.date_of_birth) {
+      const birthDate = new Date(userProfile.date_of_birth);
+      const today = new Date();
+      return today.getFullYear() - birthDate.getFullYear();
+    }
+    return 30;
   };
 
   const getRiskColor = (level: string) => {
@@ -186,14 +216,24 @@ const RiskAssessment = () => {
           </div>
           <div className="flex space-x-2">
             {assessments.length > 0 && (
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={() => setShowVisualization(!showVisualization)}
-              >
-                <BarChart3 className="w-4 h-4 mr-2" />
-                {showVisualization ? 'Скрыть графики' : 'Показать графики'}
-              </Button>
+              <>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowVisualization(!showVisualization)}
+                >
+                  <BarChart3 className="w-4 h-4 mr-2" />
+                  {showVisualization ? 'Скрыть графики' : 'Показать графики'}
+                </Button>
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={() => setShowCheckupRecommendations(!showCheckupRecommendations)}
+                >
+                  <CalendarCheck className="w-4 h-4 mr-2" />
+                  {showCheckupRecommendations ? 'Скрыть обследования' : 'План обследований'}
+                </Button>
+              </>
             )}
             <Button variant="outline" size="sm" onClick={() => navigate('/risk-assessment')}>
               <Calculator className="w-4 h-4 mr-2" />
@@ -224,8 +264,18 @@ const RiskAssessment = () => {
                 <RiskVisualization riskData={assessments} />
               </div>
             )}
+
+            {showCheckupRecommendations && (
+              <div className="mb-6">
+                <AnnualCheckupRecommendations 
+                  riskAssessments={assessments}
+                  userAge={calculateUserAge()}
+                  userGender={userProfile?.gender || 'female'}
+                />
+              </div>
+            )}
             
-            {!showVisualization && (
+            {!showVisualization && !showCheckupRecommendations && (
               <>
                 {assessments.map((assessment, index) => {
                   const IconComponent = getCategoryIcon(assessment.assessment_type);
