@@ -66,6 +66,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
     if (!user) return;
 
     try {
+      console.log('Fetching profile for user:', user.id);
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -73,11 +74,15 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
         .single();
 
       if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching profile:', error);
         throw error;
       }
 
       if (data) {
+        console.log('Profile data loaded:', data);
         setProfile(data);
+      } else {
+        console.log('No existing profile found, using defaults');
       }
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -89,34 +94,85 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
     }
   };
 
+  const validateForm = () => {
+    const errors: string[] = [];
+    
+    if (profile.age && (profile.age < 0 || profile.age > 150)) {
+      errors.push('Возраст должен быть от 0 до 150 лет');
+    }
+    
+    if (profile.height && (profile.height < 50 || profile.height > 250)) {
+      errors.push('Рост должен быть от 50 до 250 см');
+    }
+    
+    if (profile.weight && (profile.weight < 20 || profile.weight > 500)) {
+      errors.push('Вес должен быть от 20 до 500 кг');
+    }
+
+    if (profile.emergency_contact_phone && !/^[\+]?[0-9\(\)\-\s]+$/.test(profile.emergency_contact_phone)) {
+      errors.push('Некорректный формат телефона экстренного контакта');
+    }
+
+    return errors;
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
+    // Валидация данных
+    const validationErrors = validateForm();
+    if (validationErrors.length > 0) {
+      toast({
+        title: "Ошибка валидации",
+        description: validationErrors.join('; '),
+        variant: "destructive"
+      });
+      return;
+    }
+
     setLoading(true);
 
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .upsert({
-          id: user.id,
-          ...profile,
-          updated_at: new Date().toISOString()
-        });
+      console.log('Saving profile data:', profile);
+      
+      // Подготавливаем данные для сохранения
+      const profileData = {
+        id: user.id,
+        ...profile,
+        updated_at: new Date().toISOString()
+      };
 
-      if (error) throw error;
+      const { data, error } = await supabase
+        .from('profiles')
+        .upsert(profileData)
+        .select()
+        .single();
+
+      if (error) {
+        console.error('Supabase error saving profile:', error);
+        throw new Error(`Ошибка сохранения: ${error.message}`);
+      }
+
+      console.log('Profile saved successfully:', data);
 
       toast({
         title: "Успешно",
-        description: "Профиль обновлен"
+        description: "Профиль обновлен и сохранен"
       });
       
       onSave();
     } catch (error) {
       console.error('Error updating profile:', error);
+      
+      let errorMessage = 'Не удалось обновить профиль';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
       toast({
         title: "Ошибка",
-        description: "Не удалось обновить профиль",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -125,6 +181,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
   };
 
   const handleInputChange = (field: keyof Profile, value: any) => {
+    console.log(`Updating field ${field} with value:`, value);
     setProfile(prev => ({ ...prev, [field]: value }));
   };
 
@@ -563,6 +620,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
               variant="outline" 
               onClick={onCancel}
               className="flex-1"
+              disabled={loading}
             >
               <X className="w-4 h-4 mr-2" />
               Отмена

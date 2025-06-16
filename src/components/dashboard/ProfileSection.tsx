@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { User, Edit, Calendar, Ruler, Weight, Heart, Phone, Shield } from "lucide-react";
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
+import DataSaveVerifier from '@/components/debug/DataSaveVerifier';
 import type { Tables } from '@/integrations/supabase/types';
 
 type Profile = Tables<'profiles'>;
@@ -29,6 +29,8 @@ const ProfileSection = () => {
 
     try {
       setLoading(true);
+      console.log('Fetching profile for user:', user.id);
+      
       const { data, error } = await supabase
         .from('profiles')
         .select('*')
@@ -36,9 +38,11 @@ const ProfileSection = () => {
         .single();
 
       if (error && error.code !== 'PGRST116') {
+        console.error('Error fetching profile:', error);
         throw error;
       }
 
+      console.log('Profile data loaded:', data);
       setProfile(data);
     } catch (error) {
       console.error('Error fetching profile:', error);
@@ -313,6 +317,9 @@ const ProfileSection = () => {
           )}
         </CardContent>
       </Card>
+      
+      {/* Добавляем компонент проверки данных в development mode */}
+      {process.env.NODE_ENV === 'development' && <DataSaveVerifier />}
     </div>
   );
 };

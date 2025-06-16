@@ -75,10 +75,13 @@ export const useCancerRisk = (onComplete?: () => void) => {
       await saveCancerRiskAssessment(user.id, data, result);
       console.log('Cancer risk assessment saved successfully');
 
+      // Исправляем проверку riskLevel - используем правильные значения
+      const riskLevelText = result.overallRisk.riskLevel === 'low' ? 'Низкий' : 
+                           result.overallRisk.riskLevel === 'moderate' ? 'Средний' : 
+                           result.overallRisk.riskLevel === 'high' ? 'Высокий' : 'Очень высокий';
+
       toast.success('Оценка онкологических рисков завершена!', {
-        description: `Уровень риска: ${result.overallRisk.riskLevel === 'low' ? 'Низкий' : 
-                      result.overallRisk.riskLevel === 'medium' ? 'Средний' : 
-                      result.overallRisk.riskLevel === 'high' ? 'Высокий' : 'Очень высокий'}`
+        description: `Уровень риска: ${riskLevelText}`
       });
       
       onComplete?.();
