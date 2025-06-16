@@ -3,12 +3,15 @@ import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, TrendingUp, Brain, Target, Sparkles, Zap } from "lucide-react";
+import { BarChart3, TrendingUp, Brain, Target, Sparkles, Zap, CalendarDays, FileText } from "lucide-react";
 import HealthTrends from './HealthTrends';
 import PersonalizedInsights from './PersonalizedInsights';
 import InteractiveDashboard from './InteractiveDashboard';
 import PredictiveTrends from './PredictiveTrends';
 import AgeGroupComparison from './AgeGroupComparison';
+import CorrelationAnalysis from './CorrelationAnalysis';
+import LongTermTrends from './LongTermTrends';
+import MedicalDataExport from './MedicalDataExport';
 import { useHealthData } from '@/hooks/useHealthData';
 import { useAuth } from '@/contexts/AuthContext';
 
@@ -144,7 +147,7 @@ const AdvancedHealthAnalytics = () => {
                 </Badge>
               </CardTitle>
               <CardDescription>
-                ИИ-анализ, прогнозирование трендов, персонализированные рекомендации и интеллектуальные инсайты
+                ИИ-анализ, прогнозирование трендов, корреляционный анализ, долгосрочные тренды и медицинский экспорт
               </CardDescription>
             </div>
             <div className="hidden md:flex items-center space-x-4">
@@ -178,27 +181,37 @@ const AdvancedHealthAnalytics = () => {
         </Card>
       ) : (
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-5 bg-white/80 backdrop-blur-sm">
-            <TabsTrigger value="dashboard" className="flex items-center space-x-2">
+          <TabsList className="grid w-full grid-cols-7 bg-white/80 backdrop-blur-sm">
+            <TabsTrigger value="dashboard" className="flex items-center space-x-1">
               <BarChart3 className="w-4 h-4" />
-              <span>Дашборд</span>
+              <span className="hidden sm:inline">Дашборд</span>
             </TabsTrigger>
-            <TabsTrigger value="ai-analysis" className="flex items-center space-x-2">
+            <TabsTrigger value="correlations" className="flex items-center space-x-1">
               <Brain className="w-4 h-4" />
-              <span>ИИ-Анализ</span>
-              <Badge variant="secondary" className="ml-1 bg-purple-100 text-purple-800">Новое</Badge>
+              <span className="hidden sm:inline">Корреляции</span>
+              <Badge variant="secondary" className="ml-1 bg-green-100 text-green-800 hidden lg:inline">Новое</Badge>
             </TabsTrigger>
-            <TabsTrigger value="trends" className="flex items-center space-x-2">
-              <TrendingUp className="w-4 h-4" />
-              <span>Тренды</span>
+            <TabsTrigger value="long-term" className="flex items-center space-x-1">
+              <CalendarDays className="w-4 h-4" />
+              <span className="hidden sm:inline">Тренды</span>
+              <Badge variant="secondary" className="ml-1 bg-blue-100 text-blue-800 hidden lg:inline">Новое</Badge>
             </TabsTrigger>
-            <TabsTrigger value="comparison" className="flex items-center space-x-2">
+            <TabsTrigger value="ai-analysis" className="flex items-center space-x-1">
+              <Sparkles className="w-4 h-4" />
+              <span className="hidden sm:inline">ИИ-Анализ</span>
+            </TabsTrigger>
+            <TabsTrigger value="comparison" className="flex items-center space-x-1">
               <Target className="w-4 h-4" />
-              <span>Сравнение</span>
+              <span className="hidden sm:inline">Сравнение</span>
             </TabsTrigger>
-            <TabsTrigger value="insights" className="flex items-center space-x-2">
+            <TabsTrigger value="insights" className="flex items-center space-x-1">
               <Zap className="w-4 h-4" />
-              <span>Инсайты</span>
+              <span className="hidden sm:inline">Инсайты</span>
+            </TabsTrigger>
+            <TabsTrigger value="export" className="flex items-center space-x-1">
+              <FileText className="w-4 h-4" />
+              <span className="hidden sm:inline">Экспорт</span>
+              <Badge variant="secondary" className="ml-1 bg-red-100 text-red-800 hidden lg:inline">Новое</Badge>
             </TabsTrigger>
           </TabsList>
 
@@ -209,17 +222,18 @@ const AdvancedHealthAnalytics = () => {
             />
           </TabsContent>
 
+          <TabsContent value="correlations">
+            <CorrelationAnalysis />
+          </TabsContent>
+
+          <TabsContent value="long-term">
+            <LongTermTrends />
+          </TabsContent>
+
           <TabsContent value="ai-analysis">
             <PredictiveTrends 
               historicalData={analyticsData} 
               userProfile={userProfile}
-            />
-          </TabsContent>
-
-          <TabsContent value="trends">
-            <HealthTrends 
-              data={analyticsData} 
-              timeRange="30d"
             />
           </TabsContent>
 
@@ -237,6 +251,10 @@ const AdvancedHealthAnalytics = () => {
               historicalData={analyticsData}
               userProfile={userProfile}
             />
+          </TabsContent>
+
+          <TabsContent value="export">
+            <MedicalDataExport />
           </TabsContent>
         </Tabs>
       )}
