@@ -1,5 +1,4 @@
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
@@ -12,22 +11,34 @@ import {
   TrendingUp,
   Thermometer,
   Stethoscope,
-  ClipboardList
+  ClipboardList,
+  Brain
 } from 'lucide-react';
 import MenstrualCycleTracker from './MenstrualCycleTracker';
 import PregnancyPlanningTracker from './PregnancyPlanningTracker';
 import HormonalHealthTracker from './HormonalHealthTracker';
+import SymptomMoodLogger from './SymptomMoodLogger';
 import { useMenstrualCycle } from '@/hooks/useMenstrualCycle';
 import { usePregnancyPlanning } from '@/hooks/usePregnancyPlanning';
 import { useHormonalHealth } from '@/hooks/useHormonalHealth';
 import { format, differenceInDays, addDays } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
-const WomensHealthDashboard = () => {
-  const [activeTab, setActiveTab] = useState('overview');
+interface WomensHealthDashboardProps {
+  initialTab?: string;
+}
+
+const WomensHealthDashboard = ({ initialTab = 'overview' }: WomensHealthDashboardProps) => {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const { cycles } = useMenstrualCycle();
   const { plans } = usePregnancyPlanning();
   const { records } = useHormonalHealth();
+
+  useEffect(() => {
+    if (initialTab) {
+      setActiveTab(initialTab);
+    }
+  }, [initialTab]);
 
   // Аналитика и инсайты
   const getLastCycle = () => {
@@ -76,10 +87,14 @@ const WomensHealthDashboard = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="overview" className="flex items-center gap-2">
             <TrendingUp className="w-4 h-4" />
             Обзор
+          </TabsTrigger>
+          <TabsTrigger value="symptoms" className="flex items-center gap-2">
+            <Brain className="w-4 h-4" />
+            Симптомы
           </TabsTrigger>
           <TabsTrigger value="menstrual" className="flex items-center gap-2">
             <Calendar className="w-4 h-4" />
@@ -333,6 +348,10 @@ const WomensHealthDashboard = () => {
               </CardContent>
             </Card>
           )}
+        </TabsContent>
+
+        <TabsContent value="symptoms">
+          <SymptomMoodLogger />
         </TabsContent>
 
         <TabsContent value="menstrual">

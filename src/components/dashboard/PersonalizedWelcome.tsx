@@ -133,7 +133,7 @@ const PersonalizedWelcome = () => {
             variant="ghost" 
             size="sm" 
             className="bg-green-500 hover:bg-green-600 text-white border border-green-600 font-medium transition-all duration-200 hover:shadow-md"
-            onClick={() => navigate('/womens-health')}
+            onClick={() => navigate('/womens-health?tab=symptoms')}
           >
             Записать симптомы
           </Button>
