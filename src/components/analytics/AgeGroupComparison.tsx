@@ -1,4 +1,3 @@
-
 import React, { useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
@@ -16,7 +15,7 @@ interface AgeGroupData {
 
 interface UserMetrics {
   avgSteps: number;
-  avgSleep: number;
+  avgSleepHours: number; // Changed from avgSleep to avgSleepHours
   avgHeartRate: number;
   avgActiveMinutes: number;
 }
@@ -65,7 +64,7 @@ const AgeGroupComparison: React.FC<AgeGroupComparisonProps> = ({ userMetrics, us
       },
       {
         metric: 'Сон',
-        user: normalizeValue(userMetrics.avgSleep, currentAgeGroupNorm.avgSleep, 10),
+        user: normalizeValue(userMetrics.avgSleepHours, currentAgeGroupNorm.avgSleep, 10), // Use avgSleepHours here
         norm: normalizeValue(currentAgeGroupNorm.avgSleep, currentAgeGroupNorm.avgSleep, 10),
         fullMark: 100
       },
@@ -96,7 +95,7 @@ const AgeGroupComparison: React.FC<AgeGroupComparisonProps> = ({ userMetrics, us
       },
       {
         metric: 'Сон',
-        userValue: userMetrics.avgSleep,
+        userValue: userMetrics.avgSleepHours, // Use avgSleepHours here
         normValue: currentAgeGroupNorm.avgSleep,
         unit: 'ч',
         icon: Target
