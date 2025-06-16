@@ -44,7 +44,8 @@ export const useFitnessPrograms = () => {
       instructor: 'Анна Стародубцева',
       level: 'Сложный',
       thumbnail: 'https://images.unsplash.com/photo-1571388208497-71bedc76b3de?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-      enrolled: false,
+      enrolled: true,
+      progress: 60,
       website_url: 'https://fitness-live.ru/programs/strength-grace',
       partner_type: 'online_platform'
     }
@@ -52,12 +53,20 @@ export const useFitnessPrograms = () => {
 
   const handleProgramAction = (program: FitnessProgram) => {
     if (program.enrolled) {
-      // Для уже записанных программ продолжаем тренировку
+      // Для уже записанных программ НЕ перенаправляем на сайт, а показываем интерфейс продолжения
       toast.info(`Продолжаем программу "${program.name}"`, {
         description: `Прогресс: ${program.progress}% • ${program.duration_weeks} недель • ${program.workouts_per_week}x в неделю`
       });
+      
+      // Здесь может быть логика открытия интерфейса тренировки
+      console.log('Продолжаем программу:', {
+        programName: program.name,
+        progress: program.progress,
+        instructor: program.instructor
+      });
+      
     } else {
-      // Для новых программ перенаправляем на сайт партнера
+      // Для новых программ перенаправляем на сайт партнера для записи
       if (program.website_url) {
         console.log('Переход к программе:', {
           programName: program.name,
@@ -69,7 +78,7 @@ export const useFitnessPrograms = () => {
           description: `${program.duration_weeks} недель тренировок с ${program.instructor}. Откроется сайт партнера для записи.`
         });
         
-        // Открываем сайт партнера в новой вкладке
+        // Открываем сайт партнера в новой вкладке только для незаписанных программ
         window.open(program.website_url, '_blank');
         
         // Локально отмечаем как записанного (имитация успешной записи)
