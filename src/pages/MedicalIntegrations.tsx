@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Calendar, FileText, Video, Pill, Building, Settings, Stethoscope } from 'lucide-react';
+import { Calendar, FileText, Video, Pill, Building, Settings, Stethoscope, CalendarDays } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AppointmentBooking from '@/components/medical/AppointmentBooking';
 import MedicalRecords from '@/components/medical/MedicalRecords';
@@ -10,6 +10,7 @@ import TelemedicineConsultations from '@/components/medical/TelemedicineConsulta
 import PharmacyPartners from '@/components/medical/PharmacyPartners';
 import MedicalProcedures from '@/components/medical/MedicalProcedures';
 import DoctorConsultationBooking from '@/components/medical/DoctorConsultationBooking';
+import MedicalCalendar from '@/components/medical/MedicalCalendar';
 
 const MedicalIntegrations = () => {
   const navigate = useNavigate();
@@ -36,8 +37,12 @@ const MedicalIntegrations = () => {
           </Button>
         </div>
 
-        <Tabs defaultValue="consultations" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-6">
+        <Tabs defaultValue="calendar" className="space-y-6">
+          <TabsList className="grid w-full grid-cols-7">
+            <TabsTrigger value="calendar" className="flex items-center gap-2">
+              <CalendarDays className="w-4 h-4" />
+              Календарь
+            </TabsTrigger>
             <TabsTrigger value="consultations" className="flex items-center gap-2">
               <Stethoscope className="w-4 h-4" />
               Консультации
@@ -63,6 +68,10 @@ const MedicalIntegrations = () => {
               Медкарта
             </TabsTrigger>
           </TabsList>
+
+          <TabsContent value="calendar">
+            <MedicalCalendar />
+          </TabsContent>
 
           <TabsContent value="consultations">
             <DoctorConsultationBooking />

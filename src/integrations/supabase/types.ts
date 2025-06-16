@@ -1108,6 +1108,63 @@ export type Database = {
           },
         ]
       }
+      medical_calendar_events: {
+        Row: {
+          clinic_name: string | null
+          created_at: string
+          description: string | null
+          doctor_name: string | null
+          duration_minutes: number | null
+          event_date: string
+          event_time: string | null
+          event_type: string
+          id: string
+          is_completed: boolean | null
+          location: string | null
+          notes: string | null
+          reminder_minutes: number | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          clinic_name?: string | null
+          created_at?: string
+          description?: string | null
+          doctor_name?: string | null
+          duration_minutes?: number | null
+          event_date: string
+          event_time?: string | null
+          event_type: string
+          id?: string
+          is_completed?: boolean | null
+          location?: string | null
+          notes?: string | null
+          reminder_minutes?: number | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          clinic_name?: string | null
+          created_at?: string
+          description?: string | null
+          doctor_name?: string | null
+          duration_minutes?: number | null
+          event_date?: string
+          event_time?: string | null
+          event_type?: string
+          id?: string
+          is_completed?: boolean | null
+          location?: string | null
+          notes?: string | null
+          reminder_minutes?: number | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       medical_procedures: {
         Row: {
           clinic_name: string | null
