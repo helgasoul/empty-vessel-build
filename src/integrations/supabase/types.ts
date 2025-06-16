@@ -110,6 +110,66 @@ export type Database = {
           },
         ]
       }
+      daily_health_summary: {
+        Row: {
+          active_minutes: number | null
+          additional_metrics: Json | null
+          avg_heart_rate: number | null
+          calories_burned: number | null
+          created_at: string
+          distance_km: number | null
+          glucose_avg: number | null
+          glucose_readings_count: number | null
+          id: string
+          max_heart_rate: number | null
+          min_heart_rate: number | null
+          sleep_hours: number | null
+          sleep_quality: string | null
+          summary_date: string
+          total_steps: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          active_minutes?: number | null
+          additional_metrics?: Json | null
+          avg_heart_rate?: number | null
+          calories_burned?: number | null
+          created_at?: string
+          distance_km?: number | null
+          glucose_avg?: number | null
+          glucose_readings_count?: number | null
+          id?: string
+          max_heart_rate?: number | null
+          min_heart_rate?: number | null
+          sleep_hours?: number | null
+          sleep_quality?: string | null
+          summary_date: string
+          total_steps?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          active_minutes?: number | null
+          additional_metrics?: Json | null
+          avg_heart_rate?: number | null
+          calories_burned?: number | null
+          created_at?: string
+          distance_km?: number | null
+          glucose_avg?: number | null
+          glucose_readings_count?: number | null
+          id?: string
+          max_heart_rate?: number | null
+          min_heart_rate?: number | null
+          sleep_hours?: number | null
+          sleep_quality?: string | null
+          summary_date?: string
+          total_steps?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       genetic_data: {
         Row: {
           created_at: string
@@ -145,6 +205,53 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      health_device_data: {
+        Row: {
+          created_at: string
+          data_details: Json | null
+          data_type: string
+          data_unit: string | null
+          data_value: number | null
+          device_id: string
+          id: string
+          recorded_at: string
+          synced_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_details?: Json | null
+          data_type: string
+          data_unit?: string | null
+          data_value?: number | null
+          device_id: string
+          id?: string
+          recorded_at: string
+          synced_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_details?: Json | null
+          data_type?: string
+          data_unit?: string | null
+          data_value?: number | null
+          device_id?: string
+          id?: string
+          recorded_at?: string
+          synced_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_device_data_device_id_fkey"
+            columns: ["device_id"]
+            isOneToOne: false
+            referencedRelation: "user_devices"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       health_recommendations: {
         Row: {
@@ -335,6 +442,54 @@ export type Database = {
           results_data?: Json
           risk_level?: string
           risk_percentage?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_devices: {
+        Row: {
+          access_token: string | null
+          connection_status: string | null
+          created_at: string
+          device_name: string
+          device_settings: Json | null
+          device_type: string
+          id: string
+          is_connected: boolean | null
+          last_sync_at: string | null
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          connection_status?: string | null
+          created_at?: string
+          device_name: string
+          device_settings?: Json | null
+          device_type: string
+          id?: string
+          is_connected?: boolean | null
+          last_sync_at?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          connection_status?: string | null
+          created_at?: string
+          device_name?: string
+          device_settings?: Json | null
+          device_type?: string
+          id?: string
+          is_connected?: boolean | null
+          last_sync_at?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
           updated_at?: string
           user_id?: string
         }

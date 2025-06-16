@@ -19,9 +19,17 @@ import ProfileSection from '@/components/dashboard/ProfileSection';
 import DeviceIntegration from '@/components/dashboard/DeviceIntegration';
 import RiskAssessment from '@/components/dashboard/RiskAssessment';
 import QuickActions from '@/components/dashboard/QuickActions';
+import HealthDataDashboard from '@/components/health/HealthDataDashboard';
+import { useDevices } from '@/hooks/useDevices';
+import { useHealthData } from '@/hooks/useHealthData';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
+  const { devices } = useDevices();
+  const { getHealthMetrics } = useHealthData();
+
+  const metrics = getHealthMetrics();
+  const connectedDevices = devices.filter(d => d.is_connected).length;
 
   return (
     <div className="min-h-screen prevent-gradient-bg">
@@ -91,7 +99,7 @@ const Dashboard = () => {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm font-roboto text-gray-600">Устройства</p>
-                  <p className="text-2xl font-montserrat font-bold text-blue-600">3</p>
+                  <p className="text-2xl font-montserrat font-bold text-blue-600">{connectedDevices}</p>
                 </div>
                 <div className="prevent-icon-container bg-blue-100">
                   <Smartphone className="w-6 h-6 text-blue-600" />
@@ -104,8 +112,10 @@ const Dashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-roboto text-gray-600">Оценки</p>
-                  <p className="text-2xl font-montserrat font-bold text-purple-600">8</p>
+                  <p className="text-sm font-roboto text-gray-600">Шаги сегодня</p>
+                  <p className="text-2xl font-montserrat font-bold text-purple-600">
+                    {new Intl.NumberFormat('ru-RU').format(metrics.steps)}
+                  </p>
                 </div>
                 <div className="prevent-icon-container bg-purple-100">
                   <Brain className="w-6 h-6 text-purple-600" />
@@ -118,15 +128,23 @@ const Dashboard = () => {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm font-roboto text-gray-600">Активность</p>
-                  <p className="text-2xl font-montserrat font-bold text-pink-600">92%</p>
+                  <p className="text-sm font-roboto text-gray-600">Пульс</p>
+                  <p className="text-2xl font-montserrat font-bold text-pink-600">
+                    {metrics.avgHeartRate || '--'}
+                    {metrics.avgHeartRate && <span className="text-sm text-gray-500 ml-1">bpm</span>}
+                  </p>
                 </div>
                 <div className="prevent-icon-container bg-pink-100">
-                  <Activity className="w-6 h-6 text-pink-600" />
+                  <Heart className="w-6 h-6 text-pink-600" />
                 </div>
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Health Data Dashboard */}
+        <div className="mb-8">
+          <HealthDataDashboard />
         </div>
 
         {/* Main Grid */}
@@ -160,11 +178,21 @@ const Dashboard = () => {
               <div className="space-y-4">
                 <div className="flex items-center space-x-3 p-4 bg-green-50 rounded-xl">
                   <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse-slow"></div>
-                  <span className="text-sm text-gray-700 font-roboto">Apple Watch синхронизирован - 2 часа назад</span>
+                  <span className="text-sm text-gray-700 font-roboto">
+                    {connectedDevices > 0 
+                      ? `${connectedDevices} устройств синхронизировано` 
+                      : 'Нет подключенных устройств'
+                    } - {new Date().toLocaleTimeString('ru-RU')}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3 p-4 bg-blue-50 rounded-xl">
                   <div className="w-2 h-2 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm text-gray-700 font-roboto">QRISK3 оценка завершена - вчера</span>
+                  <span className="text-sm text-gray-700 font-roboto">
+                    {metrics.steps > 0 
+                      ? `Пройдено ${new Intl.NumberFormat('ru-RU').format(metrics.steps)} шагов` 
+                      : 'Данные о шагах отсутствуют'
+                    } - сегодня
+                  </span>
                 </div>
                 <div className="flex items-center space-x-3 p-4 bg-purple-50 rounded-xl">
                   <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
