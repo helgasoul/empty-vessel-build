@@ -3,7 +3,6 @@ import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
 import { 
-  Shield, 
   Settings,
   BookOpen
 } from "lucide-react";
@@ -22,6 +21,7 @@ import { DataSync } from '@/components/sync/DataSync';
 import { ActivityMonitor } from '@/components/activity/ActivityMonitor';
 import HealthMetricsCards from '@/components/dashboard/HealthMetricsCards';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Logo } from '@/components/ui/logo';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
@@ -39,20 +39,12 @@ const Dashboard = () => {
   return (
     <div className="min-h-screen prevent-gradient-bg">
       {/* Header с улучшенной навигацией */}
-      <header className="bg-white/90 backdrop-blur-md border-b border-gray-200/50">
+      <header className="bg-white/95 backdrop-blur-md border-b border-purple-200/30">
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
               <MobileNavigation />
-              <div className="w-10 h-10 prevent-gradient-primary rounded-xl flex items-center justify-center">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="text-xl md:text-2xl font-montserrat font-bold text-gray-900">PREVENT</h1>
-                <p className="text-xs md:text-sm text-gray-600 font-roboto">
-                  Персонализированная медицина для женщин
-                </p>
-              </div>
+              <Logo size={isMobile ? 'sm' : 'md'} />
             </div>
             
             <div className="flex items-center space-x-2 md:space-x-4">
@@ -63,26 +55,26 @@ const Dashboard = () => {
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="hover:bg-primary/10"
+                    className="hover:bg-purple-100/50"
                     onClick={handleRecommendationsClick}
                     title="Персонализированные рекомендации"
                   >
-                    <BookOpen className="w-5 h-5" />
+                    <BookOpen className="w-5 h-5 text-gray-600" />
                   </Button>
                   <Button 
                     variant="ghost" 
                     size="icon" 
-                    className="hover:bg-primary/10"
+                    className="hover:bg-purple-100/50"
                     onClick={handleSettingsClick}
                   >
-                    <Settings className="w-5 h-5" />
+                    <Settings className="w-5 h-5 text-gray-600" />
                   </Button>
                 </>
               )}
               <Button 
                 variant="outline" 
                 onClick={signOut}
-                className="hover:bg-red-50 hover:border-red-200 transition-colors font-medium text-sm"
+                className="hover:bg-red-50 hover:border-red-200 transition-colors font-medium text-sm border-purple-200"
               >
                 Выйти
               </Button>
