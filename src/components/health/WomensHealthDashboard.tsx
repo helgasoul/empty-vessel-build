@@ -82,7 +82,7 @@ const WomensHealthDashboard = ({ initialTab = 'overview' }: WomensHealthDashboar
           <p className="text-gray-600 mt-2">Комплексный мониторинг и планирование</p>
         </div>
         <Badge className="bg-pink-100 text-pink-800">
-          YTime Health
+          PREVENT
         </Badge>
       </div>
 
