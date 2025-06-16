@@ -1,4 +1,3 @@
-
 import { RaisRiskFormData, RaisRiskResult, ChemicalRiskResult } from './types';
 
 // Справочные данные по токсикологическим параметрам химических веществ
@@ -102,6 +101,7 @@ const CHEMICAL_DATA: Record<string, {
 
 const DEFAULT_CHEMICAL_DATA = {
   name: 'Неизвестное вещество',
+  cancerSlopeFactor: undefined,
   referenceInhalationDose: 0.1,
   referenceDermalDose: 0.01,
   referenceOralDose: 0.01,
@@ -170,7 +170,7 @@ function calculateChemicalRisk(
   let primaryRoute = 'inhalation';
 
   // Расчет канцерогенного риска
-  if (chemicalData.cancerSlopeFactor) {
+  if (chemicalData.cancerSlopeFactor && chemicalData.cancerSlopeFactor > 0) {
     const totalDose = doses.inhalationDose + doses.dermalDose + doses.oralDose;
     cancerRisk = totalDose * chemicalData.cancerSlopeFactor;
   }
