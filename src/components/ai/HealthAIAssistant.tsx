@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -41,7 +40,41 @@ const HealthAIAssistant = () => {
   const { user } = useAuth();
   const { cycles } = useMenstrualCycle();
   const { logs } = useSymptomMoodLog();
-  const { getHealthMetrics } = useHealthData();
+  const { healthData } = useHealthData();
+
+  // Функция для получения метрик здоровья
+  const getHealthMetrics = () => {
+    if (!healthData || healthData.length === 0) {
+      return { steps: 0, sleep: 0, heartRate: 0 };
+    }
+
+    const recentData = healthData.slice(0, 7); // последние 7 записей
+    let totalSteps = 0;
+    let totalSleep = 0;
+    let totalHeartRate = 0;
+    let stepsCount = 0;
+    let sleepCount = 0;
+    let heartRateCount = 0;
+
+    recentData.forEach(item => {
+      if (item.data_type === 'steps') {
+        totalSteps += item.data_value;
+        stepsCount++;
+      } else if (item.data_type === 'sleep') {
+        totalSleep += item.data_value;
+        sleepCount++;
+      } else if (item.data_type === 'heart_rate') {
+        totalHeartRate += item.data_value;
+        heartRateCount++;
+      }
+    });
+
+    return {
+      steps: stepsCount > 0 ? Math.round(totalSteps / stepsCount) : 0,
+      sleep: sleepCount > 0 ? Math.round(totalSleep / sleepCount) : 0,
+      heartRate: heartRateCount > 0 ? Math.round(totalHeartRate / heartRateCount) : 0
+    };
+  };
 
   // Инициализация контекста здоровья
   useEffect(() => {
@@ -75,7 +108,7 @@ const HealthAIAssistant = () => {
         healthMetrics
       });
     }
-  }, [cycles, logs]);
+  }, [cycles, logs, healthData]);
 
   // Приветственное сообщение
   useEffect(() => {
