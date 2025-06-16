@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -7,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
-import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap } from "lucide-react";
+import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -77,6 +76,30 @@ const RiskAssessment = () => {
                       <li>Артериальное давление, холестерин</li>
                       <li>Курение, ИМТ</li>
                       <li>Семейная история, сопутствующие заболевания</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Shield className="w-5 h-5 text-red-600" />
+                    <span>Cancer Risk Calculator</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Комплексная оценка риска развития различных типов рака на основе 
+                    научных данных Cancer Council Queensland.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Оценивает риски:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Рак легких, молочной железы, простаты</li>
+                      <li>Колоректальный рак, меланома</li>
+                      <li>Рак шейки матки и другие типы</li>
+                      <li>Учитывает семейную историю и образ жизни</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -208,6 +231,15 @@ const RiskAssessment = () => {
                         <span className="font-medium">Высокий риск</span>
                         <p className="text-sm text-gray-600">
                           Интенсивное наблюдение и профилактика
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <div className="w-4 h-4 bg-red-600 rounded"></div>
+                      <div>
+                        <span className="font-medium">Очень высокий риск</span>
+                        <p className="text-sm text-gray-600">
+                          Немедленная консультация специалиста
                         </p>
                       </div>
                     </div>

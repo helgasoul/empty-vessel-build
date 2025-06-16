@@ -1,10 +1,9 @@
-
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator } from "lucide-react";
+import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -55,9 +54,12 @@ const RiskAssessment = () => {
         return 'text-green-700 bg-green-100';
       case 'intermediate':
       case 'medium':
+      case 'moderate':
         return 'text-yellow-700 bg-yellow-100';
       case 'high':
         return 'text-red-700 bg-red-100';
+      case 'very_high':
+        return 'text-red-800 bg-red-200';
       default:
         return 'text-gray-700 bg-gray-100';
     }
@@ -69,9 +71,12 @@ const RiskAssessment = () => {
         return 'bg-green-500';
       case 'intermediate':
       case 'medium':
+      case 'moderate':
         return 'bg-yellow-500';
       case 'high':
         return 'bg-red-500';
+      case 'very_high':
+        return 'bg-red-600';
       default:
         return 'bg-gray-500';
     }
@@ -83,9 +88,12 @@ const RiskAssessment = () => {
         return 'Низкий';
       case 'intermediate':
       case 'medium':
+      case 'moderate':
         return 'Средний';
       case 'high':
         return 'Высокий';
+      case 'very_high':
+        return 'Очень высокий';
       default:
         return 'Неизвестно';
     }
@@ -100,6 +108,8 @@ const RiskAssessment = () => {
         return Brain;
       case 'demport':
         return Zap;
+      case 'cancer_risk':
+        return Shield;
       case 'bcsc':
       case 'brca':
       case 'gail':
@@ -117,6 +127,8 @@ const RiskAssessment = () => {
         return 'Framingham (Альцгеймер)';
       case 'demport':
         return 'DemPoRT';
+      case 'cancer_risk':
+        return 'Cancer Risk Calculator';
       case 'bcsc':
         return 'BCSC v3';
       case 'brca':
