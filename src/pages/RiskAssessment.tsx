@@ -8,7 +8,7 @@ import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
 import RiskAlgorithmTest from "@/components/risk/RiskAlgorithmTest";
-import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield, FlaskConical, Beaker } from "lucide-react";
+import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield, FlaskConical, Beaker, Target } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -82,6 +82,30 @@ const RiskAssessment = () => {
                       <li>Артериальное давление, холестерин</li>
                       <li>Курение, ИМТ</li>
                       <li>Семейная история, сопутствующие заболевания</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Target className="w-5 h-5 text-purple-600" />
+                    <span>CRC-PRO</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    CRC-PRO - комплексный калькулятор риска колоректального рака, 
+                    учитывающий множество персональных и семейных факторов.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Факторы риска:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Возраст, семейная и личная история</li>
+                      <li>Полипы и воспалительные заболевания</li>
+                      <li>Образ жизни и диетические привычки</li>
+                      <li>Скрининговые обследования</li>
                     </ul>
                   </div>
                 </CardContent>

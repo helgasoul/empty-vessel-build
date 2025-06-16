@@ -9,6 +9,107 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      crc_pro_assessments: {
+        Row: {
+          age: number
+          alcohol_consumption: string | null
+          assessment_id: string | null
+          calcium_supplements: boolean | null
+          created_at: string
+          diabetes_type2: boolean | null
+          family_history_crc: boolean | null
+          family_history_ibd: boolean | null
+          family_history_polyps: boolean | null
+          fiber_intake: string | null
+          gender: string
+          height_cm: number | null
+          id: string
+          last_colonoscopy_date: string | null
+          multivitamin_use: boolean | null
+          nsaid_use: boolean | null
+          number_affected_relatives: number | null
+          personal_history_ibd: boolean | null
+          personal_history_polyps: boolean | null
+          physical_activity: string | null
+          previous_colonoscopy: boolean | null
+          processed_meat_consumption: string | null
+          red_meat_consumption: string | null
+          smoking_status: string | null
+          updated_at: string
+          user_id: string
+          vegetable_intake: string | null
+          weight_kg: number | null
+        }
+        Insert: {
+          age: number
+          alcohol_consumption?: string | null
+          assessment_id?: string | null
+          calcium_supplements?: boolean | null
+          created_at?: string
+          diabetes_type2?: boolean | null
+          family_history_crc?: boolean | null
+          family_history_ibd?: boolean | null
+          family_history_polyps?: boolean | null
+          fiber_intake?: string | null
+          gender: string
+          height_cm?: number | null
+          id?: string
+          last_colonoscopy_date?: string | null
+          multivitamin_use?: boolean | null
+          nsaid_use?: boolean | null
+          number_affected_relatives?: number | null
+          personal_history_ibd?: boolean | null
+          personal_history_polyps?: boolean | null
+          physical_activity?: string | null
+          previous_colonoscopy?: boolean | null
+          processed_meat_consumption?: string | null
+          red_meat_consumption?: string | null
+          smoking_status?: string | null
+          updated_at?: string
+          user_id: string
+          vegetable_intake?: string | null
+          weight_kg?: number | null
+        }
+        Update: {
+          age?: number
+          alcohol_consumption?: string | null
+          assessment_id?: string | null
+          calcium_supplements?: boolean | null
+          created_at?: string
+          diabetes_type2?: boolean | null
+          family_history_crc?: boolean | null
+          family_history_ibd?: boolean | null
+          family_history_polyps?: boolean | null
+          fiber_intake?: string | null
+          gender?: string
+          height_cm?: number | null
+          id?: string
+          last_colonoscopy_date?: string | null
+          multivitamin_use?: boolean | null
+          nsaid_use?: boolean | null
+          number_affected_relatives?: number | null
+          personal_history_ibd?: boolean | null
+          personal_history_polyps?: boolean | null
+          physical_activity?: string | null
+          previous_colonoscopy?: boolean | null
+          processed_meat_consumption?: string | null
+          red_meat_consumption?: string | null
+          smoking_status?: string | null
+          updated_at?: string
+          user_id?: string
+          vegetable_intake?: string | null
+          weight_kg?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "crc_pro_assessments_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "risk_assessments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       genetic_data: {
         Row: {
           created_at: string
