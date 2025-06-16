@@ -18,6 +18,8 @@ import {
 } from "lucide-react";
 import { toast } from "sonner";
 import RecipeModal from './nutrition/RecipeModal';
+import MealPlanCard from './nutrition/MealPlanCard';
+import RecipeCard from './nutrition/RecipeCard';
 import { Recipe, NutritionGoal, MealPlan } from './nutrition/types';
 
 const NutritionIntegration = () => {
@@ -322,7 +324,11 @@ const NutritionIntegration = () => {
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {featuredRecipes.map(recipe => (
-                  <RecipeCard key={recipe.id} recipe={recipe} />
+                  <RecipeCard 
+                    key={recipe.id} 
+                    recipe={recipe}
+                    onOpenRecipe={handleOpenRecipe}
+                  />
                 ))}
               </div>
             </div>
