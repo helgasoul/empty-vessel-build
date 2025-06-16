@@ -30,6 +30,8 @@ interface Product {
   recommendation_reason: string;
   partner_url?: string;
   partner_name?: string;
+  // Добавляем прямую ссылку на товар
+  direct_product_url?: string;
 }
 
 const ShoppingRecommendations = () => {
@@ -51,7 +53,8 @@ const ShoppingRecommendations = () => {
       fastDelivery: true,
       recommendation_reason: 'Рекомендовано на основе вашего анализа крови',
       partner_url: 'https://www.ozon.ru/category/vitaminy-10738/',
-      partner_name: 'Ozon'
+      partner_name: 'Ozon',
+      direct_product_url: 'https://www.ozon.ru/product/vitamin-d3-2000-me-natures-bounty-150-kapsul-486847234/'
     },
     {
       id: '2',
@@ -67,7 +70,8 @@ const ShoppingRecommendations = () => {
       fastDelivery: false,
       recommendation_reason: 'Подходит для вашего плана питания',
       partner_url: 'https://market.yandex.ru/search?text=омега%203',
-      partner_name: 'Яндекс Маркет'
+      partner_name: 'Яндекс Маркет',
+      direct_product_url: 'https://market.yandex.ru/product--omega-3-epa-dha-norvezhskij/1725036517'
     },
     {
       id: '3',
@@ -83,7 +87,8 @@ const ShoppingRecommendations = () => {
       fastDelivery: true,
       recommendation_reason: 'Идеально для ваших тренировок',
       partner_url: 'https://www.wildberries.ru/catalog/pitanie/sportivnoe-pitanie',
-      partner_name: 'Wildberries'
+      partner_name: 'Wildberries',
+      direct_product_url: 'https://www.wildberries.ru/catalog/103515226/detail.aspx'
     },
     {
       id: '4',
@@ -100,7 +105,8 @@ const ShoppingRecommendations = () => {
       fastDelivery: false,
       recommendation_reason: 'Поможет с детоксом организма',
       partner_url: 'https://www.ozon.ru/category/chaj-10792/',
-      partner_name: 'Ozon'
+      partner_name: 'Ozon',
+      direct_product_url: 'https://www.ozon.ru/product/zelenyy-chay-matcha-organicheskiy-poroshok-premium-100g-758291653/'
     }
   ];
 
@@ -112,20 +118,29 @@ const ShoppingRecommendations = () => {
     );
   };
 
-  // Handler for adding product to cart (redirecting to partner)
+  // Улучшенный обработчик для добавления товара в корзину
   const handleAddToCart = (product: Product) => {
     if (!product.inStock) {
       toast.error(`Товар "${product.name}" сейчас недоступен`);
       return;
     }
 
-    if (product.partner_url) {
-      toast.success(`Переходим к партнеру для заказа "${product.name}"`, {
-        description: `Вы будете перенаправлены на ${product.partner_name} для оформления заказа`
-      });
+    // Приоритет: прямая ссылка на товар > общая ссылка партнера
+    const targetUrl = product.direct_product_url || product.partner_url;
+
+    if (targetUrl) {
+      if (product.direct_product_url) {
+        toast.success(`Открываем страницу товара "${product.name}"`, {
+          description: `Переходим на ${product.partner_name} к конкретному товару`
+        });
+      } else {
+        toast.info(`Переходим к разделу на ${product.partner_name}`, {
+          description: `Ищите "${product.name}" в категории ${product.category}`
+        });
+      }
       
-      // Открываем ссылку партнера в новой вкладке
-      window.open(product.partner_url, '_blank', 'noopener,noreferrer');
+      // Открываем ссылку в новой вкладке
+      window.open(targetUrl, '_blank', 'noopener,noreferrer');
     } else {
       toast.info(`Товар "${product.name}" добавлен в корзину`, {
         description: 'Функция корзины будет доступна в следующем обновлении'
@@ -160,6 +175,12 @@ const ShoppingRecommendations = () => {
             <Badge className="absolute top-2 left-2 bg-red-500">
               <Gift className="w-3 h-3 mr-1" />
               -{Math.round((1 - product.price / product.oldPrice) * 100)}%
+            </Badge>
+          )}
+          {/* Индикатор прямой ссылки на товар */}
+          {product.direct_product_url && (
+            <Badge className="absolute bottom-2 left-2 bg-green-500 text-xs">
+              Прямая ссылка
             </Badge>
           )}
         </div>
