@@ -11,31 +11,61 @@ export type Database = {
     Tables: {
       profiles: {
         Row: {
+          activity_level: string | null
           age: number | null
+          alcohol_consumption: string | null
           created_at: string
+          current_health_issues: string | null
+          date_of_birth: string | null
           email: string | null
           full_name: string | null
           gender: string | null
+          health_goals: string | null
+          height: number | null
           id: string
+          lifestyle: string | null
+          medical_history: string | null
+          smoking_status: string | null
           updated_at: string
+          weight: number | null
         }
         Insert: {
+          activity_level?: string | null
           age?: number | null
+          alcohol_consumption?: string | null
           created_at?: string
+          current_health_issues?: string | null
+          date_of_birth?: string | null
           email?: string | null
           full_name?: string | null
           gender?: string | null
+          health_goals?: string | null
+          height?: number | null
           id: string
+          lifestyle?: string | null
+          medical_history?: string | null
+          smoking_status?: string | null
           updated_at?: string
+          weight?: number | null
         }
         Update: {
+          activity_level?: string | null
           age?: number | null
+          alcohol_consumption?: string | null
           created_at?: string
+          current_health_issues?: string | null
+          date_of_birth?: string | null
           email?: string | null
           full_name?: string | null
           gender?: string | null
+          health_goals?: string | null
+          height?: number | null
           id?: string
+          lifestyle?: string | null
+          medical_history?: string | null
+          smoking_status?: string | null
           updated_at?: string
+          weight?: number | null
         }
         Relationships: []
       }
