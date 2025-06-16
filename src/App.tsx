@@ -28,7 +28,15 @@ import GamificationPage from "./pages/GamificationPage";
 import ResearchFiles from "./pages/ResearchFiles";
 import NotFound from "./pages/NotFound";
 
-const queryClient = new QueryClient();
+// Create QueryClient outside of the component to prevent recreation on every render
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 1,
+      refetchOnWindowFocus: false,
+    },
+  },
+});
 
 function App() {
   return (
