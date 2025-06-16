@@ -7,13 +7,15 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { FileText, Plus, Calendar, User, Building, Trash2, Edit } from 'lucide-react';
+import { FileText, Plus, Calendar, User, Building, Trash2, Edit, Paperclip } from 'lucide-react';
 import { useMedicalRecords } from '@/hooks/useMedicalRecords';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
+import FileUpload from './FileUpload';
+import AttachedFiles from './AttachedFiles';
 
 const MedicalRecords = () => {
-  const { records, loading, createRecord, updateRecord, deleteRecord } = useMedicalRecords();
+  const { records, loading, createRecord, updateRecord, deleteRecord, deleteFile } = useMedicalRecords();
   
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [editingRecord, setEditingRecord] = useState<any>(null);
@@ -23,6 +25,7 @@ const MedicalRecords = () => {
   const [doctorName, setDoctorName] = useState('');
   const [clinicName, setClinicName] = useState('');
   const [recordDate, setRecordDate] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const resetForm = () => {
@@ -32,6 +35,7 @@ const MedicalRecords = () => {
     setDoctorName('');
     setClinicName('');
     setRecordDate('');
+    setSelectedFiles([]);
     setEditingRecord(null);
   };
 
@@ -51,9 +55,9 @@ const MedicalRecords = () => {
       };
 
       if (editingRecord) {
-        await updateRecord(editingRecord.id, recordData);
+        await updateRecord(editingRecord.id, recordData, selectedFiles);
       } else {
-        await createRecord(recordData);
+        await createRecord(recordData, selectedFiles);
       }
 
       resetForm();
@@ -71,12 +75,19 @@ const MedicalRecords = () => {
     setDoctorName(record.doctor_name || '');
     setClinicName(record.clinic_name || '');
     setRecordDate(record.record_date);
+    setSelectedFiles([]);
     setIsDialogOpen(true);
   };
 
   const handleDelete = async (id: string) => {
     if (window.confirm('Вы уверены, что хотите удалить эту запись?')) {
       await deleteRecord(id);
+    }
+  };
+
+  const handleDeleteFile = async (recordId: string, fileUrl: string) => {
+    if (window.confirm('Вы уверены, что хотите удалить этот файл?')) {
+      await deleteFile(recordId, fileUrl);
     }
   };
 
@@ -115,21 +126,21 @@ const MedicalRecords = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-#F0A1C0">Медицинские записи</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Медицинские записи</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-#F0A1C0 hover:bg-#F0A1C0/90" onClick={resetForm}>
+            <Button className="bg-[#F0A1C0] hover:bg-[#F0A1C0]/90" onClick={resetForm}>
               <Plus className="w-4 h-4 mr-2" />
               Добавить запись
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md">
+          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
                 {editingRecord ? 'Редактировать запись' : 'Новая медицинская запись'}
               </DialogTitle>
               <DialogDescription>
-                Добавьте информацию о вашем медицинском документе
+                Добавьте информацию о вашем медицинском документе и прикрепите файлы
               </DialogDescription>
             </DialogHeader>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -199,10 +210,30 @@ const MedicalRecords = () => {
                 />
               </div>
 
+              <div>
+                <Label>Файлы</Label>
+                <FileUpload
+                  files={selectedFiles}
+                  onFilesChange={setSelectedFiles}
+                  maxFiles={5}
+                />
+              </div>
+
+              {editingRecord && editingRecord.file_attachments && editingRecord.file_attachments.length > 0 && (
+                <div>
+                  <Label>Уже прикрепленные файлы</Label>
+                  <AttachedFiles
+                    files={editingRecord.file_attachments}
+                    onDeleteFile={(fileUrl) => handleDeleteFile(editingRecord.id, fileUrl)}
+                    canDelete={true}
+                  />
+                </div>
+              )}
+
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !recordType || !title || !recordDate}
-                className="w-full bg-#F0A1C0 hover:bg-#F0A1C0/90"
+                className="w-full bg-[#F0A1C0] hover:bg-[#F0A1C0]/90"
               >
                 {isSubmitting ? 'Сохранение...' : editingRecord ? 'Сохранить изменения' : 'Добавить запись'}
               </Button>
@@ -221,94 +252,11 @@ const MedicalRecords = () => {
             </p>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-#F0A1C0 hover:bg-#F0A1C0/90" onClick={resetForm}>
+                <Button className="bg-[#F0A1C0] hover:bg-[#F0A1C0]/90" onClick={resetForm}>
                   <Plus className="w-4 h-4 mr-2" />
                   Добавить первую запись
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Новая медицинская запись</DialogTitle>
-                  <DialogDescription>
-                    Добавьте информацию о вашем медицинском документе
-                  </DialogDescription>
-                </DialogHeader>
-                <form onSubmit={handleSubmit} className="space-y-4">
-                  <div>
-                    <Label htmlFor="recordType">Тип записи</Label>
-                    <Select value={recordType} onValueChange={setRecordType}>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Выберите тип записи" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="diagnosis">Диагноз</SelectItem>
-                        <SelectItem value="prescription">Рецепт</SelectItem>
-                        <SelectItem value="lab_result">Результат анализа</SelectItem>
-                        <SelectItem value="imaging">Обследование</SelectItem>
-                        <SelectItem value="vaccination">Вакцинация</SelectItem>
-                        <SelectItem value="allergy">Аллергия</SelectItem>
-                        <SelectItem value="surgery">Операция</SelectItem>
-                        <SelectItem value="consultation">Консультация</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="title">Название</Label>
-                    <Input
-                      placeholder="Краткое название записи"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="description">Описание</Label>
-                    <Textarea
-                      placeholder="Подробное описание"
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="doctorName">Врач</Label>
-                    <Input
-                      placeholder="ФИО врача"
-                      value={doctorName}
-                      onChange={(e) => setDoctorName(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="clinicName">Клиника</Label>
-                    <Input
-                      placeholder="Название клиники"
-                      value={clinicName}
-                      onChange={(e) => setClinicName(e.target.value)}
-                    />
-                  </div>
-
-                  <div>
-                    <Label htmlFor="recordDate">Дата</Label>
-                    <Input
-                      type="date"
-                      value={recordDate}
-                      onChange={(e) => setRecordDate(e.target.value)}
-                      required
-                    />
-                  </div>
-
-                  <Button
-                    type="submit"
-                    disabled={isSubmitting || !recordType || !title || !recordDate}
-                    className="w-full bg-#F0A1C0 hover:bg-#F0A1C0/90"
-                  >
-                    {isSubmitting ? 'Сохранение...' : editingRecord ? 'Сохранить изменения' : 'Добавить запись'}
-                  </Button>
-                </form>
-              </DialogContent>
             </Dialog>
           </CardContent>
         </Card>
@@ -339,13 +287,19 @@ const MedicalRecords = () => {
                   </div>
                 </div>
                 <CardTitle className="text-lg">{record.title}</CardTitle>
+                {record.file_attachments && record.file_attachments.length > 0 && (
+                  <div className="flex items-center gap-1 text-sm text-gray-600">
+                    <Paperclip className="w-4 h-4" />
+                    <span>{record.file_attachments.length} файлов</span>
+                  </div>
+                )}
               </CardHeader>
               <CardContent>
                 {record.description && (
                   <p className="text-sm text-gray-600 mb-3">{record.description}</p>
                 )}
                 
-                <div className="space-y-2 text-sm">
+                <div className="space-y-2 text-sm mb-3">
                   <div className="flex items-center gap-2 text-gray-600">
                     <Calendar className="w-4 h-4" />
                     {format(new Date(record.record_date), 'dd MMMM yyyy', { locale: ru })}
@@ -365,6 +319,14 @@ const MedicalRecords = () => {
                     </div>
                   )}
                 </div>
+
+                {record.file_attachments && record.file_attachments.length > 0 && (
+                  <AttachedFiles
+                    files={record.file_attachments}
+                    onDeleteFile={(fileUrl) => handleDeleteFile(record.id, fileUrl)}
+                    canDelete={true}
+                  />
+                )}
               </CardContent>
             </Card>
           ))}

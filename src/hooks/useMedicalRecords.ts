@@ -13,6 +13,12 @@ export interface MedicalRecord {
   clinic_name?: string;
   record_date: string;
   attachments?: any[];
+  file_attachments?: Array<{
+    name: string;
+    url: string;
+    size: number;
+    type: string;
+  }>;
   metadata?: Record<string, any>;
   is_active: boolean;
   created_at: string;
@@ -42,6 +48,7 @@ export const useMedicalRecords = () => {
         ...record,
         record_type: record.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(record.attachments) ? record.attachments : [],
+        file_attachments: Array.isArray(record.file_attachments) ? record.file_attachments : [],
         metadata: (record.metadata as Record<string, any>) || {}
       }));
       
@@ -54,10 +61,61 @@ export const useMedicalRecords = () => {
     }
   };
 
-  const createRecord = async (recordData: Partial<MedicalRecord>) => {
+  const uploadFile = async (file: File, recordId?: string): Promise<string> => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Пользователь не авторизован');
+
+      const fileExt = file.name.split('.').pop();
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`;
+      const filePath = `${user.id}/${fileName}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from('medical-records')
+        .upload(filePath, file);
+
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('medical-records')
+        .getPublicUrl(filePath);
+
+      return publicUrl;
+    } catch (error) {
+      console.error('Ошибка при загрузке файла:', error);
+      toast.error('Не удалось загрузить файл');
+      throw error;
+    }
+  };
+
+  const createRecord = async (recordData: Partial<MedicalRecord>, files?: File[]) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) throw new Error('Пользователь не авторизован');
+
+      let fileAttachments: Array<{
+        name: string;
+        url: string;
+        size: number;
+        type: string;
+      }> = [];
+
+      // Upload files if provided
+      if (files && files.length > 0) {
+        for (const file of files) {
+          try {
+            const url = await uploadFile(file);
+            fileAttachments.push({
+              name: file.name,
+              url,
+              size: file.size,
+              type: file.type
+            });
+          } catch (error) {
+            console.error(`Ошибка при загрузке файла ${file.name}:`, error);
+          }
+        }
+      }
 
       const { data, error } = await supabase
         .from('medical_records')
@@ -70,6 +128,7 @@ export const useMedicalRecords = () => {
           clinic_name: recordData.clinic_name,
           record_date: recordData.record_date!,
           attachments: recordData.attachments || [],
+          file_attachments: fileAttachments,
           metadata: recordData.metadata || {}
         })
         .select()
@@ -82,6 +141,7 @@ export const useMedicalRecords = () => {
         ...data,
         record_type: data.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(data.attachments) ? data.attachments : [],
+        file_attachments: Array.isArray(data.file_attachments) ? data.file_attachments : [],
         metadata: (data.metadata as Record<string, any>) || {}
       };
 
@@ -95,8 +155,27 @@ export const useMedicalRecords = () => {
     }
   };
 
-  const updateRecord = async (id: string, updates: Partial<MedicalRecord>) => {
+  const updateRecord = async (id: string, updates: Partial<MedicalRecord>, newFiles?: File[]) => {
     try {
+      let fileAttachments = updates.file_attachments || [];
+
+      // Upload new files if provided
+      if (newFiles && newFiles.length > 0) {
+        for (const file of newFiles) {
+          try {
+            const url = await uploadFile(file, id);
+            fileAttachments.push({
+              name: file.name,
+              url,
+              size: file.size,
+              type: file.type
+            });
+          } catch (error) {
+            console.error(`Ошибка при загрузке файла ${file.name}:`, error);
+          }
+        }
+      }
+
       const { data, error } = await supabase
         .from('medical_records')
         .update({
@@ -107,6 +186,7 @@ export const useMedicalRecords = () => {
           clinic_name: updates.clinic_name,
           record_date: updates.record_date,
           attachments: updates.attachments,
+          file_attachments: fileAttachments,
           metadata: updates.metadata
         })
         .eq('id', id)
@@ -120,6 +200,7 @@ export const useMedicalRecords = () => {
         ...data,
         record_type: data.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(data.attachments) ? data.attachments : [],
+        file_attachments: Array.isArray(data.file_attachments) ? data.file_attachments : [],
         metadata: (data.metadata as Record<string, any>) || {}
       };
 
@@ -152,6 +233,36 @@ export const useMedicalRecords = () => {
     }
   };
 
+  const deleteFile = async (recordId: string, fileUrl: string) => {
+    try {
+      const record = records.find(r => r.id === recordId);
+      if (!record) return;
+
+      const updatedFiles = record.file_attachments?.filter(file => file.url !== fileUrl) || [];
+      
+      await updateRecord(recordId, { 
+        ...record, 
+        file_attachments: updatedFiles 
+      });
+
+      // Extract file path from URL and delete from storage
+      const urlParts = fileUrl.split('/');
+      const fileName = urlParts[urlParts.length - 1];
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const filePath = `${user.id}/${fileName}`;
+        await supabase.storage
+          .from('medical-records')
+          .remove([filePath]);
+      }
+
+      toast.success('Файл удален');
+    } catch (error) {
+      console.error('Ошибка при удалении файла:', error);
+      toast.error('Не удалось удалить файл');
+    }
+  };
+
   useEffect(() => {
     fetchRecords();
   }, []);
@@ -162,6 +273,8 @@ export const useMedicalRecords = () => {
     fetchRecords,
     createRecord,
     updateRecord,
-    deleteRecord
+    deleteRecord,
+    uploadFile,
+    deleteFile
   };
 };

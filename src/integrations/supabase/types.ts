@@ -972,6 +972,7 @@ export type Database = {
           created_at: string
           description: string | null
           doctor_name: string | null
+          file_attachments: Json | null
           id: string
           is_active: boolean
           metadata: Json | null
@@ -987,6 +988,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           doctor_name?: string | null
+          file_attachments?: Json | null
           id?: string
           is_active?: boolean
           metadata?: Json | null
@@ -1002,6 +1004,7 @@ export type Database = {
           created_at?: string
           description?: string | null
           doctor_name?: string | null
+          file_attachments?: Json | null
           id?: string
           is_active?: boolean
           metadata?: Json | null
