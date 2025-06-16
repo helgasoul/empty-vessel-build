@@ -6,9 +6,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Shield, ArrowLeft } from 'lucide-react';
+import { Shield, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from '@/hooks/use-toast';
+import { toast } from 'sonner';
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -26,57 +26,99 @@ const Auth = () => {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
+    try {
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
 
-    const { error } = await signIn(email, password);
+      console.log('Попытка входа для:', email);
 
-    if (error) {
-      toast({
-        title: "Ошибка входа",
-        description: error.message === 'Invalid login credentials' 
-          ? "Неверный email или пароль" 
-          : error.message,
-        variant: "destructive"
-      });
-    } else {
-      toast({
-        title: "Добро пожаловать в PREVENT!",
-        description: "Вы успешно вошли в систему"
-      });
+      if (!email || !password) {
+        toast.error('Пожалуйста, заполните все поля');
+        setIsLoading(false);
+        return;
+      }
+
+      const { error } = await signIn(email, password);
+
+      if (error) {
+        console.error('Ошибка входа:', error);
+        let errorMessage = 'Произошла ошибка при входе';
+        
+        if (error.message === 'Invalid login credentials') {
+          errorMessage = 'Неверный email или пароль';
+        } else if (error.message.includes('Email not confirmed')) {
+          errorMessage = 'Пожалуйста, подтвердите ваш email адрес';
+        } else if (error.message.includes('Too many requests')) {
+          errorMessage = 'Слишком много попыток входа. Попробуйте позже';
+        } else {
+          errorMessage = error.message;
+        }
+        
+        toast.error(errorMessage);
+      } else {
+        toast.success('Добро пожаловать в PREVENT!');
+        console.log('Успешный вход в систему');
+      }
+    } catch (err) {
+      console.error('Неожиданная ошибка:', err);
+      toast.error('Произошла неожиданная ошибка');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
 
-    const formData = new FormData(e.currentTarget);
-    const email = formData.get('email') as string;
-    const password = formData.get('password') as string;
-    const fullName = formData.get('fullName') as string;
+    try {
+      const formData = new FormData(e.currentTarget);
+      const email = formData.get('email') as string;
+      const password = formData.get('password') as string;
+      const fullName = formData.get('fullName') as string;
 
-    const { error } = await signUp(email, password, fullName);
+      console.log('Попытка регистрации для:', email);
 
-    if (error) {
-      toast({
-        title: "Ошибка регистрации",
-        description: error.message === 'User already registered' 
-          ? "Пользователь с таким email уже зарегистрирован" 
-          : error.message,
-        variant: "destructive"
-      });
-    } else {
-      toast({
-        title: "Добро пожаловать в PREVENT!",
-        description: "Проверьте почту для подтверждения аккаунта"
-      });
+      if (!email || !password || !fullName) {
+        toast.error('Пожалуйста, заполните все поля');
+        setIsLoading(false);
+        return;
+      }
+
+      if (password.length < 6) {
+        toast.error('Пароль должен содержать минимум 6 символов');
+        setIsLoading(false);
+        return;
+      }
+
+      const { error } = await signUp(email, password, fullName);
+
+      if (error) {
+        console.error('Ошибка регистрации:', error);
+        let errorMessage = 'Произошла ошибка при регистрации';
+        
+        if (error.message === 'User already registered') {
+          errorMessage = 'Пользователь с таким email уже зарегистрирован';
+        } else if (error.message.includes('Password should be at least')) {
+          errorMessage = 'Пароль должен содержать минимум 6 символов';
+        } else if (error.message.includes('Invalid email')) {
+          errorMessage = 'Пожалуйста, введите корректный email адрес';
+        } else {
+          errorMessage = error.message;
+        }
+        
+        toast.error(errorMessage);
+      } else {
+        toast.success('Регистрация успешна! Проверьте почту для подтверждения аккаунта');
+        console.log('Успешная регистрация');
+      }
+    } catch (err) {
+      console.error('Неожиданная ошибка:', err);
+      toast.error('Произошла неожиданная ошибка');
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
 
   return (
@@ -127,6 +169,7 @@ const Auth = () => {
                       placeholder="your@email.com"
                       required
                       className="font-roboto"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
@@ -137,6 +180,7 @@ const Auth = () => {
                       type="password"
                       required
                       className="font-roboto"
+                      disabled={isLoading}
                     />
                   </div>
                   <Button
@@ -160,6 +204,7 @@ const Auth = () => {
                       placeholder="Анна Иванова"
                       required
                       className="font-roboto"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
@@ -171,6 +216,7 @@ const Auth = () => {
                       placeholder="your@email.com"
                       required
                       className="font-roboto"
+                      disabled={isLoading}
                     />
                   </div>
                   <div className="space-y-2">
@@ -182,6 +228,7 @@ const Auth = () => {
                       minLength={6}
                       required
                       className="font-roboto"
+                      disabled={isLoading}
                     />
                   </div>
                   <Button
@@ -197,9 +244,21 @@ const Auth = () => {
           </CardContent>
         </Card>
 
-        <p className="text-center text-sm text-gray-600 mt-6 font-roboto">
-          Регистрируясь, вы соглашаетесь с нашими условиями использования и политикой конфиденциальности PREVENT
-        </p>
+        <div className="mt-6 space-y-2">
+          <p className="text-center text-sm text-gray-600 font-roboto">
+            Регистрируясь, вы соглашаетесь с нашими условиями использования и политикой конфиденциальности PREVENT
+          </p>
+          
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
+            <div className="flex items-start space-x-2">
+              <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
+              <div className="text-xs text-blue-800">
+                <p className="font-medium mb-1">Информация для тестирования:</p>
+                <p>Если у вас проблемы с входом, убедитесь что email и пароль введены корректно. При возникновении ошибок проверьте консоль браузера для получения детальной информации.</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

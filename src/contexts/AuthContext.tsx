@@ -28,9 +28,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    console.log('AuthProvider: Инициализация...');
+    
     // Настраиваем слушатель изменений состояния аутентификации
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
+        console.log('AuthProvider: Auth state change:', event, session?.user?.email);
         setSession(session);
         setUser(session?.user ?? null);
         setLoading(false);
@@ -38,7 +41,12 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     );
 
     // Проверяем существующую сессию
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      if (error) {
+        console.error('AuthProvider: Ошибка при получении сессии:', error);
+      } else {
+        console.log('AuthProvider: Существующая сессия:', session?.user?.email || 'нет');
+      }
       setSession(session);
       setUser(session?.user ?? null);
       setLoading(false);
@@ -48,33 +56,69 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const signUp = async (email: string, password: string, fullName: string) => {
-    const redirectUrl = `${window.location.origin}/`;
-    
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: redirectUrl,
-        data: {
-          full_name: fullName
+    try {
+      console.log('AuthProvider: Попытка регистрации для:', email);
+      
+      const redirectUrl = `${window.location.origin}/`;
+      
+      const { data, error } = await supabase.auth.signUp({
+        email,
+        password,
+        options: {
+          emailRedirectTo: redirectUrl,
+          data: {
+            full_name: fullName
+          }
         }
+      });
+      
+      if (error) {
+        console.error('AuthProvider: Ошибка регистрации:', error);
+      } else {
+        console.log('AuthProvider: Регистрация успешна:', data.user?.email);
       }
-    });
-    
-    return { error };
+      
+      return { error };
+    } catch (err) {
+      console.error('AuthProvider: Неожиданная ошибка при регистрации:', err);
+      return { error: new Error('Произошла неожиданная ошибка') };
+    }
   };
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password
-    });
-    
-    return { error };
+    try {
+      console.log('AuthProvider: Попытка входа для:', email);
+      
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+      
+      if (error) {
+        console.error('AuthProvider: Ошибка входа:', error);
+      } else {
+        console.log('AuthProvider: Вход успешен:', data.user?.email);
+      }
+      
+      return { error };
+    } catch (err) {
+      console.error('AuthProvider: Неожиданная ошибка при входе:', err);
+      return { error: new Error('Произошла неожиданная ошибка') };
+    }
   };
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      console.log('AuthProvider: Выход из системы...');
+      const { error } = await supabase.auth.signOut();
+      if (error) {
+        console.error('AuthProvider: Ошибка при выходе:', error);
+      } else {
+        console.log('AuthProvider: Выход успешен');
+      }
+    } catch (err) {
+      console.error('AuthProvider: Неожиданная ошибка при выходе:', err);
+    }
   };
 
   const value = {
@@ -85,6 +129,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signIn,
     signOut
   };
+
+  console.log('AuthProvider: Текущее состояние - loading:', loading, ', user:', user?.email || 'нет');
 
   return (
     <AuthContext.Provider value={value}>
