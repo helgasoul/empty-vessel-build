@@ -57,6 +57,48 @@ export type Database = {
         }
         Relationships: []
       }
+      calendar_integrations: {
+        Row: {
+          access_token: string | null
+          calendar_id: string | null
+          calendar_type: string
+          created_at: string
+          id: string
+          integration_status: string | null
+          refresh_token: string | null
+          sync_settings: Json | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          calendar_id?: string | null
+          calendar_type: string
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          refresh_token?: string | null
+          sync_settings?: Json | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          calendar_id?: string | null
+          calendar_type?: string
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          refresh_token?: string | null
+          sync_settings?: Json | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           anonymous_name: string
@@ -1889,6 +1931,9 @@ export type Database = {
       telemedicine_sessions: {
         Row: {
           appointment_id: string
+          calendar_event_id: string | null
+          calendar_platform: string | null
+          conference_platform: string | null
           created_at: string
           doctor_id: string
           duration_minutes: number | null
@@ -1907,9 +1952,13 @@ export type Database = {
           started_at: string | null
           updated_at: string
           user_id: string
+          video_conference_id: string | null
         }
         Insert: {
           appointment_id: string
+          calendar_event_id?: string | null
+          calendar_platform?: string | null
+          conference_platform?: string | null
           created_at?: string
           doctor_id: string
           duration_minutes?: number | null
@@ -1928,9 +1977,13 @@ export type Database = {
           started_at?: string | null
           updated_at?: string
           user_id: string
+          video_conference_id?: string | null
         }
         Update: {
           appointment_id?: string
+          calendar_event_id?: string | null
+          calendar_platform?: string | null
+          conference_platform?: string | null
           created_at?: string
           doctor_id?: string
           duration_minutes?: number | null
@@ -1949,6 +2002,7 @@ export type Database = {
           started_at?: string | null
           updated_at?: string
           user_id?: string
+          video_conference_id?: string | null
         }
         Relationships: [
           {
@@ -2123,6 +2177,48 @@ export type Database = {
           id?: string
           points_to_next_level?: number | null
           total_points?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      video_conference_integrations: {
+        Row: {
+          access_token: string | null
+          created_at: string
+          id: string
+          integration_status: string | null
+          platform_settings: Json | null
+          platform_type: string
+          platform_user_id: string | null
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          platform_settings?: Json | null
+          platform_type: string
+          platform_user_id?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          platform_settings?: Json | null
+          platform_type?: string
+          platform_user_id?: string | null
+          refresh_token?: string | null
+          token_expires_at?: string | null
           updated_at?: string
           user_id?: string
         }
