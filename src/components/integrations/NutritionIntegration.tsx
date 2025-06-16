@@ -14,7 +14,8 @@ import {
   Plus,
   ChefHat,
   BookOpen,
-  Zap
+  Zap,
+  CreditCard
 } from "lucide-react";
 import { toast } from "sonner";
 import RecipeModal from './nutrition/RecipeModal';
@@ -26,6 +27,7 @@ const NutritionIntegration = () => {
   const [activeTab, setActiveTab] = useState<'today' | 'plans' | 'recipes'>('today');
   const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
   const [waterCount, setWaterCount] = useState(6);
+  const [userMealPlans, setUserMealPlans] = useState<MealPlan[]>([]);
 
   const dailyGoals: NutritionGoal[] = [
     { name: 'Калории', current: 1680, target: 2000, unit: 'ккал', color: 'bg-blue-500' },
@@ -63,6 +65,7 @@ const NutritionIntegration = () => {
       benefits: ['Синхронизация с циклом', 'Легкость', 'Иммунитет', 'Настроение'],
       difficulty: 'Средний',
       thumbnail: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+      price: 3500,
       aiPersonalized: true,
       matchScore: 89
     },
@@ -156,11 +159,54 @@ const NutritionIntegration = () => {
     );
   };
 
-  // Handler for meal plan selection
-  const handleSelectMealPlan = (plan: MealPlan) => {
-    toast.success(`План "${plan.name}" выбран!`, {
-      description: `Персонализированный план питания на ${plan.duration_days} дней начинается завтра. Вы получите уведомление с первым меню.`
+  // Симуляция процесса оплаты
+  const simulatePayment = async (plan: MealPlan): Promise<boolean> => {
+    return new Promise((resolve) => {
+      setTimeout(() => {
+        // Симулируем успешную оплату (90% успеха)
+        const success = Math.random() > 0.1;
+        resolve(success);
+      }, 2000);
     });
+  };
+
+  // Handler for meal plan selection with payment simulation
+  const handleSelectMealPlan = async (plan: MealPlan) => {
+    if (!plan.price) {
+      // Бесплатный план
+      setUserMealPlans(prev => [...prev, plan]);
+      toast.success(`План "${plan.name}" добавлен!`, {
+        description: `Бесплатный план питания на ${plan.duration_days} дней добавлен в ваши индивидуальные планы.`
+      });
+      return;
+    }
+
+    // Платный план - показываем процесс оплаты
+    toast.info(`Обработка оплаты для плана "${plan.name}"...`, {
+      description: `Сумма к оплате: ${plan.price} ₽`,
+      icon: <CreditCard className="w-4 h-4" />
+    });
+
+    try {
+      const paymentSuccess = await simulatePayment(plan);
+      
+      if (paymentSuccess) {
+        // Успешная оплата - добавляем план
+        setUserMealPlans(prev => [...prev, plan]);
+        toast.success(`Оплата прошла успешно! 🎉`, {
+          description: `План "${plan.name}" добавлен в ваши индивидуальные планы питания. Начните следовать плану уже сегодня!`
+        });
+      } else {
+        // Неудачная оплата
+        toast.error(`Ошибка оплаты`, {
+          description: `Не удалось обработать платеж для плана "${plan.name}". Попробуйте еще раз.`
+        });
+      }
+    } catch (error) {
+      toast.error(`Ошибка при обработке платежа`, {
+        description: `Произошла техническая ошибка. Пожалуйста, попробуйте позже.`
+      });
+    }
   };
 
   // Handler for recipe opening
@@ -326,10 +372,51 @@ const NutritionIntegration = () => {
                   Улучшено ИИ
                 </Badge>
               </div>
+
+              {/* Показываем активные планы пользователя */}
+              {userMealPlans.length > 0 && (
+                <div className="mb-6">
+                  <h4 className="text-md font-semibold mb-3 text-green-600">
+                    Ваши активные планы питания
+                  </h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-4">
+                    {userMealPlans.map(plan => (
+                      <Card key={`active-${plan.id}`} className="border-green-200 bg-green-50">
+                        <CardHeader className="pb-2">
+                          <CardTitle className="text-md flex items-center space-x-2">
+                            <Badge className="bg-green-500">Активен</Badge>
+                            <span>{plan.name}</span>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-600 mb-2">{plan.description}</p>
+                          <div className="text-sm">
+                            <div>📅 {plan.duration_days} дней</div>
+                            <div>🍽️ {plan.meals_per_day} приемов пищи</div>
+                            <div>⚡ {plan.calories_per_day} ккал/день</div>
+                          </div>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                  <div className="border-t pt-4">
+                    <h4 className="text-md font-semibold mb-3">
+                      Доступные планы для покупки
+                    </h4>
+                  </div>
+                </div>
+              )}
+
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {mealPlans.map(plan => (
-                  <MealPlanCard key={plan.id} plan={plan} />
-                ))}
+                {mealPlans
+                  .filter(plan => !userMealPlans.some(userPlan => userPlan.id === plan.id))
+                  .map(plan => (
+                    <MealPlanCard 
+                      key={plan.id} 
+                      plan={plan} 
+                      onSelectPlan={handleSelectMealPlan}
+                    />
+                  ))}
               </div>
             </div>
           )}

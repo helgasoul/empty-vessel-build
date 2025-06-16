@@ -16,13 +16,19 @@ import { toast } from "sonner";
 
 interface MealPlanCardProps {
   plan: MealPlan;
+  onSelectPlan?: (plan: MealPlan) => void;
 }
 
-const MealPlanCard = ({ plan }: MealPlanCardProps) => {
+const MealPlanCard = ({ plan, onSelectPlan }: MealPlanCardProps) => {
   const handleSelectMealPlan = () => {
-    toast.success(`План "${plan.name}" выбран!`, {
-      description: `Персонализированный план питания на ${plan.duration_days} дней начинается завтра. Вы получите уведомление с первым меню.`
-    });
+    if (onSelectPlan) {
+      onSelectPlan(plan);
+    } else {
+      // Fallback toast for backwards compatibility
+      toast.success(`План "${plan.name}" выбран!`, {
+        description: `Персонализированный план питания на ${plan.duration_days} дней начинается завтра. Вы получите уведомление с первым меню.`
+      });
+    }
   };
 
   return (
@@ -97,19 +103,22 @@ const MealPlanCard = ({ plan }: MealPlanCardProps) => {
         </div>
 
         <div className="flex items-center justify-between pt-2">
-          {plan.price && (
+          {plan.price ? (
             <div className="flex items-center space-x-1">
               <DollarSign className="w-4 h-4 text-gray-500" />
               <span className="font-semibold">{plan.price} ₽</span>
             </div>
+          ) : (
+            <span className="text-sm text-green-600 font-medium">Бесплатно</span>
           )}
-          <Button 
-            onClick={handleSelectMealPlan}
-            className="w-full"
-          >
-            Выбрать план
-          </Button>
         </div>
+        
+        <Button 
+          onClick={handleSelectMealPlan}
+          className="w-full"
+        >
+          Выбрать план
+        </Button>
       </CardContent>
     </Card>
   );
