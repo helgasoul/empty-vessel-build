@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -144,6 +143,14 @@ const PersonalizedWelcome = () => {
             onClick={() => navigate('/health-analytics')}
           >
             Посмотреть статистику
+          </Button>
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="bg-emerald-500 hover:bg-emerald-600 text-white border border-emerald-600 font-medium transition-all duration-200 hover:shadow-md"
+            onClick={() => navigate('/environmental-health')}
+          >
+            Экологическое здоровье
           </Button>
         </div>
       </CardContent>

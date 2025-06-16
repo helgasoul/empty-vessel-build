@@ -7,6 +7,7 @@ import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import Dashboard from './pages/Dashboard';
 import WomensHealth from './pages/WomensHealth';
+import EnvironmentalHealth from './pages/EnvironmentalHealth';
 import MedicalIntegrations from './pages/MedicalIntegrations';
 import AIHealth from './pages/AIHealth';
 import Auth from './pages/Auth';
@@ -23,6 +24,7 @@ function App() {
                 <Route path="/" element={<Dashboard />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/womens-health" element={<WomensHealth />} />
+                <Route path="/environmental-health" element={<EnvironmentalHealth />} />
                 <Route path="/medical-integrations" element={<MedicalIntegrations />} />
                 <Route path="/telemedicine-integrations" element={<TelemedicineIntegrations />} />
                 <Route path="/ai-health" element={<AIHealth />} />
