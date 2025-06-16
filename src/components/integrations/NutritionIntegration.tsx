@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,49 +17,12 @@ import {
   Zap
 } from "lucide-react";
 import { toast } from "sonner";
-
-interface NutritionGoal {
-  name: string;
-  current: number;
-  target: number;
-  unit: string;
-  color: string;
-}
-
-interface MealPlan {
-  id: string;
-  name: string;
-  description: string;
-  calories_per_day: number;
-  duration_days: number;
-  meals_per_day: number;
-  dietary_restrictions: string[];
-  benefits: string[];
-  difficulty: string;
-  thumbnail: string;
-  price?: number;
-  aiPersonalized?: boolean;
-  matchScore?: number;
-}
-
-interface Recipe {
-  id: string;
-  name: string;
-  description: string;
-  prep_time: number;
-  cook_time: number;
-  calories: number;
-  servings: number;
-  difficulty: string;
-  dietary_tags: string[];
-  ingredients_count: number;
-  thumbnail: string;
-  health_score: number;
-  cyclePhase?: string;
-}
+import RecipeModal from './nutrition/RecipeModal';
+import { Recipe, NutritionGoal, MealPlan } from './nutrition/types';
 
 const NutritionIntegration = () => {
   const [activeTab, setActiveTab] = useState<'today' | 'plans' | 'recipes'>('today');
+  const [selectedRecipe, setSelectedRecipe] = useState<Recipe | null>(null);
 
   const dailyGoals: NutritionGoal[] = [
     { name: 'Калории', current: 1680, target: 2000, unit: 'ккал', color: 'bg-blue-500' },
@@ -200,197 +162,20 @@ const NutritionIntegration = () => {
 
   // Handler for recipe opening
   const handleOpenRecipe = (recipe: Recipe) => {
-    toast.info(`Открывается рецепт "${recipe.name}"`, {
-      description: `Время приготовления: ${recipe.prep_time + recipe.cook_time} мин • ${recipe.calories} ккал • ${recipe.servings} порции`
-    });
+    setSelectedRecipe(recipe);
   };
 
-  const MealPlanCard = ({ plan }: { plan: MealPlan }) => (
-    <Card className="prevent-card relative">
-      {plan.aiPersonalized && (
-        <div className="absolute top-4 right-4 z-10">
-          <Badge className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
-            <Zap className="w-3 h-3 mr-1" />
-            ИИ {plan.matchScore}%
-          </Badge>
-        </div>
-      )}
-      
-      <CardHeader className="p-4">
-        <div className="relative">
-          <img 
-            src={plan.thumbnail} 
-            alt={plan.name}
-            className="w-full h-32 object-cover rounded-lg mb-3"
-          />
-          <Badge className="absolute bottom-2 left-2 bg-white/90 text-gray-800">
-            {plan.difficulty}
-          </Badge>
-        </div>
-        <CardTitle className="text-lg font-montserrat">{plan.name}</CardTitle>
-        <CardDescription className="font-roboto">
-          {plan.description}
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="p-4 pt-0">
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center space-x-1">
-              <Target className="w-4 h-4" />
-              <span>{plan.calories_per_day} ккал/день</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
-              <span>{plan.duration_days} дней</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Utensils className="w-4 h-4" />
-              <span>{plan.meals_per_day} приема пищи</span>
-            </div>
-            {plan.price && (
-              <div className="flex items-center space-x-1 font-medium text-primary">
-                <span>{plan.price}₽</span>
-              </div>
-            )}
-          </div>
-
-          <div>
-            <p className="text-sm font-medium mb-1">Особенности:</p>
-            <div className="flex flex-wrap gap-1">
-              {plan.dietary_restrictions.map((restriction, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {restriction}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          <div>
-            <p className="text-sm font-medium mb-1">Преимущества:</p>
-            <div className="flex flex-wrap gap-1">
-              {plan.benefits.map((benefit, index) => (
-                <Badge key={index} variant="secondary" className="text-xs">
-                  {benefit}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {plan.aiPersonalized && (
-            <div className="p-2 bg-purple-50 rounded-lg">
-              <p className="text-xs text-purple-700">
-                <Zap className="w-3 h-3 inline mr-1" />
-                Персонализировано ИИ на основе вашего цикла и симптомов
-              </p>
-            </div>
-          )}
-
-          <Button 
-            className="w-full"
-            onClick={() => handleSelectMealPlan(plan)}
-          >
-            <ChefHat className="w-4 h-4 mr-2" />
-            Выбрать план
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  const RecipeCard = ({ recipe }: { recipe: Recipe }) => (
-    <Card className="prevent-card relative">
-      <CardHeader className="p-4">
-        <div className="relative">
-          <img 
-            src={recipe.thumbnail} 
-            alt={recipe.name}
-            className="w-full h-32 object-cover rounded-lg mb-3"
-          />
-          <Badge className="absolute top-2 right-2 bg-green-500">
-            {recipe.health_score}/100
-          </Badge>
-          {recipe.cyclePhase && (
-            <Badge className="absolute bottom-2 right-2 bg-pink-500 text-white">
-              {recipe.cyclePhase === 'menstrual' ? 'Месячные' :
-               recipe.cyclePhase === 'follicular' ? 'Фолликулярная' :
-               recipe.cyclePhase === 'ovulatory' ? 'Овуляторная' : 'Лютеиновая'}
-            </Badge>
-          )}
-        </div>
-        <CardTitle className="text-lg font-montserrat line-clamp-2">
-          {recipe.name}
-        </CardTitle>
-        <CardDescription className="font-roboto">
-          {recipe.description}
-        </CardDescription>
-      </CardHeader>
-
-      <CardContent className="p-4 pt-0">
-        <div className="space-y-3">
-          <div className="grid grid-cols-2 gap-2 text-sm">
-            <div className="flex items-center space-x-1">
-              <Clock className="w-4 h-4" />
-              <span>{recipe.prep_time + recipe.cook_time} мин</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Target className="w-4 h-4" />
-              <span>{recipe.calories} ккал</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Utensils className="w-4 h-4" />
-              <span>{recipe.servings} порции</span>
-            </div>
-            <div className="flex items-center space-x-1">
-              <Apple className="w-4 h-4" />
-              <span>{recipe.ingredients_count} ингр.</span>
-            </div>
-          </div>
-
-          <div>
-            <div className="flex flex-wrap gap-1">
-              {recipe.dietary_tags.map((tag, index) => (
-                <Badge key={index} variant="outline" className="text-xs">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
-          </div>
-
-          {recipe.cyclePhase && (
-            <div className="p-2 bg-pink-50 rounded-lg">
-              <p className="text-xs text-pink-700">
-                ✨ Идеально для вашей текущей фазы цикла
-              </p>
-            </div>
-          )}
-
-          <Button 
-            className="w-full"
-            onClick={() => handleOpenRecipe(recipe)}
-          >
-            <BookOpen className="w-4 h-4 mr-2" />
-            Открыть рецепт
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
-  );
-
-  // Handlers for quick input buttons
+  // Handler for quick input buttons
   const handlePhotoFood = () => {
     toast.success("Функция фотографирования еды будет доступна в следующем обновлении!");
-    // В будущем здесь будет интеграция с камерой
   };
 
   const handleAddProduct = () => {
     toast.info("Открывается форма добавления продукта...");
-    // В будущем здесь будет открываться модальное окно с формой добавления продукта
   };
 
   const handleLogWater = () => {
     toast.success("Стакан воды записан! 💧");
-    // В будущем здесь будет обновляться счетчик воды в dailyGoals
   };
 
   return (
@@ -544,6 +329,13 @@ const NutritionIntegration = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Recipe Modal */}
+      <RecipeModal
+        recipe={selectedRecipe}
+        isOpen={!!selectedRecipe}
+        onClose={() => setSelectedRecipe(null)}
+      />
     </div>
   );
 };
