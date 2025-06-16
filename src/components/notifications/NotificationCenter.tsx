@@ -8,6 +8,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Bell, Check, X, Clock, Heart, Activity, Brain } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSmartNotifications } from "@/hooks/useSmartNotifications";
 
 interface Notification {
   id: string;
@@ -23,6 +24,7 @@ interface Notification {
 const NotificationCenter = () => {
   const { user } = useAuth();
   const [open, setOpen] = useState(false);
+  const { notifications: smartNotifications, markAsRead: markSmartAsRead } = useSmartNotifications();
   
   // Mock notifications - в реальном приложении это будет из Supabase
   const mockNotifications: Notification[] = [
@@ -66,9 +68,37 @@ const NotificationCenter = () => {
     enabled: !!user?.id,
   });
 
-  const unreadCount = notifications.filter(n => !n.isRead).length;
+  // Объединяем обычные и умные уведомления
+  const allNotifications = [
+    ...smartNotifications.map(smart => ({
+      id: smart.id,
+      title: smart.title,
+      message: smart.message,
+      type: smart.type as 'reminder' | 'achievement' | 'health' | 'appointment',
+      isRead: false,
+      timestamp: smart.scheduledFor,
+      actionLabel: smart.actionLabel,
+      actionUrl: smart.actionUrl,
+      isSmart: true,
+      priority: smart.priority,
+      category: smart.category
+    })),
+    ...notifications.map(notif => ({ ...notif, isSmart: false }))
+  ].sort((a, b) => b.timestamp.getTime() - a.timestamp.getTime());
 
-  const getIcon = (type: string) => {
+  const unreadCount = allNotifications.filter(n => !n.isRead).length;
+
+  const getIcon = (type: string, isSmart = false, category?: string) => {
+    if (isSmart) {
+      if (category === 'menstrual' || category === 'fertility') {
+        return <Heart className="w-4 h-4 text-pink-500" />;
+      }
+      if (category === 'wellness') {
+        return <Activity className="w-4 h-4 text-green-500" />;
+      }
+      return <Brain className="w-4 h-4 text-purple-500" />;
+    }
+
     switch (type) {
       case 'reminder':
         return <Clock className="w-4 h-4 text-blue-500" />;
@@ -83,7 +113,9 @@ const NotificationCenter = () => {
     }
   };
 
-  const getTypeLabel = (type: string) => {
+  const getTypeLabel = (type: string, isSmart = false) => {
+    if (isSmart) return 'ИИ-уведомление';
+    
     switch (type) {
       case 'reminder':
         return 'Напоминание';
@@ -108,6 +140,14 @@ const NotificationCenter = () => {
       return `${Math.floor(diffInMinutes / 60)} ч назад`;
     } else {
       return `${Math.floor(diffInMinutes / 1440)} дн назад`;
+    }
+  };
+
+  const handleMarkAsRead = (notificationId: string, isSmart: boolean) => {
+    if (isSmart) {
+      markSmartAsRead(notificationId);
+    } else {
+      // Здесь будет логика для обычных уведомлений
     }
   };
 
@@ -140,58 +180,75 @@ const NotificationCenter = () => {
           </CardHeader>
           <CardContent className="p-0">
             <ScrollArea className="max-h-96">
-              {notifications.length === 0 ? (
+              {allNotifications.length === 0 ? (
                 <div className="p-6 text-center text-gray-500">
                   <Bell className="w-8 h-8 mx-auto mb-2 opacity-50" />
                   <p className="font-roboto">Нет новых уведомлений</p>
                 </div>
               ) : (
                 <div className="space-y-1">
-                  {notifications.map((notification) => (
+                  {allNotifications.map((notification: any) => (
                     <div
                       key={notification.id}
                       className={`p-4 border-b last:border-b-0 hover:bg-gray-50 transition-colors ${
                         !notification.isRead ? 'bg-blue-50/50' : ''
-                      }`}
+                      } ${notification.isSmart ? 'bg-purple-50/30' : ''}`}
                     >
                       <div className="flex items-start space-x-3">
                         <div className="flex-shrink-0 mt-0.5">
-                          {getIcon(notification.type)}
+                          {getIcon(notification.type, notification.isSmart, notification.category)}
                         </div>
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center justify-between mb-1">
                             <p className="text-sm font-medium text-gray-900 font-montserrat">
                               {notification.title}
                             </p>
-                            {!notification.isRead && (
-                              <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
-                            )}
+                            <div className="flex items-center space-x-1">
+                              {notification.isSmart && (
+                                <Badge variant="outline" className="text-xs bg-purple-50 border-purple-200 text-purple-700">
+                                  ИИ
+                                </Badge>
+                              )}
+                              {!notification.isRead && (
+                                <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
+                              )}
+                            </div>
                           </div>
                           <p className="text-sm text-gray-600 font-roboto mb-2">
                             {notification.message}
                           </p>
                           <div className="flex items-center justify-between">
                             <Badge variant="outline" className="text-xs">
-                              {getTypeLabel(notification.type)}
+                              {getTypeLabel(notification.type, notification.isSmart)}
                             </Badge>
                             <span className="text-xs text-gray-500">
                               {formatTime(notification.timestamp)}
                             </span>
                           </div>
                           {notification.actionLabel && (
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="mt-2 h-7 text-xs"
-                              onClick={() => {
-                                if (notification.actionUrl) {
-                                  window.location.href = notification.actionUrl;
-                                }
-                                setOpen(false);
-                              }}
-                            >
-                              {notification.actionLabel}
-                            </Button>
+                            <div className="flex items-center justify-between mt-2">
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-7 text-xs"
+                                onClick={() => {
+                                  if (notification.actionUrl) {
+                                    window.location.href = notification.actionUrl;
+                                  }
+                                  setOpen(false);
+                                }}
+                              >
+                                {notification.actionLabel}
+                              </Button>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                className="h-7 w-7 p-0"
+                                onClick={() => handleMarkAsRead(notification.id, notification.isSmart)}
+                              >
+                                {notification.isRead ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}
+                              </Button>
+                            </div>
                           )}
                         </div>
                       </div>

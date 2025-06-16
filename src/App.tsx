@@ -1,70 +1,54 @@
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
+import { AuthProvider } from './contexts/AuthContext';
+import { ThemeProvider } from './contexts/ThemeContext';
+import Dashboard from './pages/Dashboard';
+import WomenHealth from './pages/WomenHealth';
+import SymptomMoodTracker from './pages/SymptomMoodTracker';
+import FertilityTracker from './pages/FertilityTracker';
+import HormonalHealthTracker from './pages/HormonalHealthTracker';
+import MedicalIntegrations from './pages/MedicalIntegrations';
+import Settings from './pages/Settings';
+import Gamification from './pages/Gamification';
+import Login from './pages/Login';
+import Signup from './pages/Signup';
+import ForgotPassword from './pages/ForgotPassword';
+import ResetPassword from './pages/ResetPassword';
+import HealthData from './pages/HealthData';
+import AIHealth from './pages/AIHealth';
 
-import React from "react";
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import Index from "./pages/Index";
-import Auth from "./pages/Auth";
-import Dashboard from "./pages/Dashboard";
-import RiskAssessment from "./pages/RiskAssessment";
-import WomensHealth from "./pages/WomensHealth";
-import MedicalIntegrations from "./pages/MedicalIntegrations";
-import HealthAnalytics from "./pages/HealthAnalytics";
-import EnvironmentalHealth from "./pages/EnvironmentalHealth";
-import Community from "./pages/Community";
-import Experts from "./pages/Experts";
-import ExpertBlogPage from "./pages/ExpertBlogPage";
-import ExpertManagement from "./pages/ExpertManagement";
-import ExternalIntegrations from "./pages/ExternalIntegrations";
-import GamificationPage from "./pages/GamificationPage";
-import NotFound from "./pages/NotFound";
-
-// Создаем QueryClient один раз за пределами компонента
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, // 5 минут
-      gcTime: 1000 * 60 * 10, // 10 минут (renamed from cacheTime)
-    },
-  },
-});
-
-const App: React.FC = () => {
+function App() {
   return (
-    <React.StrictMode>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <AuthProvider>
-            <TooltipProvider>
+    <Router>
+      <QueryClientProvider client={new QueryClient()}>
+        <AuthProvider>
+          <ThemeProvider>
+            <div className="min-h-screen bg-background">
               <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-                <Route path="/risk-assessment" element={<RiskAssessment />} />
-                <Route path="/womens-health" element={<WomensHealth />} />
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/womens-health" element={<WomenHealth />} />
+                <Route path="/symptom-mood-tracker" element={<SymptomMoodTracker />} />
+                <Route path="/fertility-tracker" element={<FertilityTracker />} />
+                <Route path="/hormonal-health-tracker" element={<HormonalHealthTracker />} />
                 <Route path="/medical-integrations" element={<MedicalIntegrations />} />
-                <Route path="/health-analytics" element={<HealthAnalytics />} />
-                <Route path="/environmental-health" element={<EnvironmentalHealth />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/experts" element={<Experts />} />
-                <Route path="/experts/manage" element={<ExpertManagement />} />
-                <Route path="/experts/:expertId/blog" element={<ExpertBlogPage />} />
-                <Route path="/external-integrations" element={<ExternalIntegrations />} />
-                <Route path="/gamification" element={<GamificationPage />} />
-                {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-                <Route path="*" element={<NotFound />} />
+                <Route path="/health-data" element={<HealthData />} />
+                <Route path="/settings" element={<Settings />} />
+                <Route path="/gamification" element={<Gamification />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+                <Route path="/forgot-password" element={<ForgotPassword />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route path="/ai-health" element={<AIHealth />} />
               </Routes>
               <Toaster />
-              <Sonner />
-            </TooltipProvider>
-          </AuthProvider>
-        </BrowserRouter>
+            </div>
+          </ThemeProvider>
+        </AuthProvider>
       </QueryClientProvider>
-    </React.StrictMode>
+    </Router>
   );
-};
+}
 
 export default App;
