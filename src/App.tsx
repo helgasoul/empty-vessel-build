@@ -21,6 +21,7 @@ import TelemedicineIntegrations from './pages/TelemedicineIntegrations';
 import EnvironmentalHealth from './pages/EnvironmentalHealth';
 import GamificationPage from './pages/GamificationPage';
 import ExpertManagement from './pages/ExpertManagement';
+import AdminDashboard from './pages/AdminDashboard';
 import ExpertBlogPage from './pages/ExpertBlogPage';
 import ResearchFiles from './pages/ResearchFiles';
 import NotFound from './pages/NotFound';
@@ -51,6 +52,7 @@ function App() {
                 <Route path="/environmental-health" element={<EnvironmentalHealth />} />
                 <Route path="/gamification" element={<GamificationPage />} />
                 <Route path="/expert-management" element={<ExpertManagement />} />
+                <Route path="/admin" element={<AdminDashboard />} />
                 <Route path="/expert-blog" element={<ExpertBlogPage />} />
                 <Route path="/research-files" element={<ResearchFiles />} />
                 <Route path="*" element={<NotFound />} />
