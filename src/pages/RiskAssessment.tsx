@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -6,7 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
-import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield, FlaskConical } from "lucide-react";
+import RiskAlgorithmTest from "@/components/risk/RiskAlgorithmTest";
+import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield, FlaskConical, Beaker } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -40,7 +42,7 @@ const RiskAssessment = () => {
         </div>
 
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="info" className="flex items-center space-x-2">
               <Info className="w-4 h-4" />
               <span>Информация</span>
@@ -52,6 +54,10 @@ const RiskAssessment = () => {
             <TabsTrigger value="history" className="flex items-center space-x-2">
               <History className="w-4 h-4" />
               <span>История</span>
+            </TabsTrigger>
+            <TabsTrigger value="testing" className="flex items-center space-x-2">
+              <Beaker className="w-4 h-4" />
+              <span>Тестирование</span>
             </TabsTrigger>
           </TabsList>
 
@@ -287,6 +293,10 @@ const RiskAssessment = () => {
 
           <TabsContent value="history">
             <RiskAssessmentHistory />
+          </TabsContent>
+
+          <TabsContent value="testing">
+            <RiskAlgorithmTest />
           </TabsContent>
         </Tabs>
       </div>

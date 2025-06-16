@@ -3,12 +3,13 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield, FlaskConical } from "lucide-react";
+import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield, FlaskConical, BarChart3 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { ru } from "date-fns/locale";
+import RiskVisualization from "@/components/risk/RiskVisualization";
 
 interface RiskAssessmentData {
   id: string;
@@ -24,6 +25,7 @@ const RiskAssessment = () => {
   const navigate = useNavigate();
   const [assessments, setAssessments] = useState<RiskAssessmentData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showVisualization, setShowVisualization] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -178,10 +180,22 @@ const RiskAssessment = () => {
               Персонализированный анализ рисков здоровья
             </CardDescription>
           </div>
-          <Button variant="outline" size="sm" onClick={() => navigate('/risk-assessment')}>
-            <Calculator className="w-4 h-4 mr-2" />
-            Новая оценка
-          </Button>
+          <div className="flex space-x-2">
+            {assessments.length > 0 && (
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => setShowVisualization(!showVisualization)}
+              >
+                <BarChart3 className="w-4 h-4 mr-2" />
+                {showVisualization ? 'Скрыть графики' : 'Показать графики'}
+              </Button>
+            )}
+            <Button variant="outline" size="sm" onClick={() => navigate('/risk-assessment')}>
+              <Calculator className="w-4 h-4 mr-2" />
+              Новая оценка
+            </Button>
+          </div>
         </div>
       </CardHeader>
       <CardContent className="space-y-6">
@@ -201,68 +215,78 @@ const RiskAssessment = () => {
           </div>
         ) : (
           <>
-            {assessments.map((assessment, index) => {
-              const IconComponent = getCategoryIcon(assessment.assessment_type);
-              return (
-                <div key={assessment.id} className="space-y-3">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <div className="p-2 bg-gray-100 rounded-lg">
-                        <IconComponent className="w-5 h-5 text-gray-600" />
-                      </div>
-                      <div>
-                        <h4 className="font-medium text-gray-900">
-                          {getAssessmentName(assessment.assessment_type)}
-                        </h4>
-                        <p className="text-sm text-gray-600">
-                          {assessment.recommendations?.length || 0} рекомендаций
-                        </p>
-                      </div>
-                    </div>
-                    <Badge className={getRiskColor(assessment.risk_level)}>
-                      {getRiskLevelText(assessment.risk_level)} риск
-                    </Badge>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <div className="flex justify-between text-sm">
-                      <span className="text-gray-600">
-                        Риск: {assessment.risk_percentage}%
-                      </span>
-                      <span className="text-gray-900 font-medium">
-                        {assessment.risk_percentage}/100
-                      </span>
-                    </div>
-                    <div className="relative">
-                      <Progress value={assessment.risk_percentage} className="h-2" />
-                      <div 
-                        className={`absolute top-0 left-0 h-2 rounded-full transition-all ${getProgressColor(assessment.risk_level)}`}
-                        style={{ width: `${assessment.risk_percentage}%` }}
-                      />
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-
-            <div className="pt-4 border-t">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Последнее обновление:</span>
-                <span className="text-gray-900">
-                  {assessments.length > 0 
-                    ? format(new Date(assessments[0].created_at), 'dd.MM.yyyy', { locale: ru })
-                    : 'Нет данных'
-                  }
-                </span>
+            {showVisualization && (
+              <div className="mb-6">
+                <RiskVisualization riskData={assessments} />
               </div>
-              <Button 
-                className="w-full mt-4" 
-                variant="outline"
-                onClick={() => navigate('/risk-assessment')}
-              >
-                Посмотреть детальный анализ
-              </Button>
-            </div>
+            )}
+            
+            {!showVisualization && (
+              <>
+                {assessments.map((assessment, index) => {
+                  const IconComponent = getCategoryIcon(assessment.assessment_type);
+                  return (
+                    <div key={assessment.id} className="space-y-3">
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center space-x-3">
+                          <div className="p-2 bg-gray-100 rounded-lg">
+                            <IconComponent className="w-5 h-5 text-gray-600" />
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-gray-900">
+                              {getAssessmentName(assessment.assessment_type)}
+                            </h4>
+                            <p className="text-sm text-gray-600">
+                              {assessment.recommendations?.length || 0} рекомендаций
+                            </p>
+                          </div>
+                        </div>
+                        <Badge className={getRiskColor(assessment.risk_level)}>
+                          {getRiskLevelText(assessment.risk_level)} риск
+                        </Badge>
+                      </div>
+                      
+                      <div className="space-y-2">
+                        <div className="flex justify-between text-sm">
+                          <span className="text-gray-600">
+                            Риск: {assessment.risk_percentage}%
+                          </span>
+                          <span className="text-gray-900 font-medium">
+                            {assessment.risk_percentage}/100
+                          </span>
+                        </div>
+                        <div className="relative">
+                          <Progress value={assessment.risk_percentage} className="h-2" />
+                          <div 
+                            className={`absolute top-0 left-0 h-2 rounded-full transition-all ${getProgressColor(assessment.risk_level)}`}
+                            style={{ width: `${assessment.risk_percentage}%` }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+
+                <div className="pt-4 border-t">
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-gray-600">Последнее обновление:</span>
+                    <span className="text-gray-900">
+                      {assessments.length > 0 
+                        ? format(new Date(assessments[0].created_at), 'dd.MM.yyyy', { locale: ru })
+                        : 'Нет данных'
+                      }
+                    </span>
+                  </div>
+                  <Button 
+                    className="w-full mt-4" 
+                    variant="outline"
+                    onClick={() => navigate('/risk-assessment')}
+                  >
+                    Посмотреть детальный анализ
+                  </Button>
+                </div>
+              </>
+            )}
           </>
         )}
       </CardContent>
