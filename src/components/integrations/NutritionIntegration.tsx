@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -190,6 +191,20 @@ const NutritionIntegration = () => {
     );
   };
 
+  // Handler for meal plan selection
+  const handleSelectMealPlan = (plan: MealPlan) => {
+    toast.success(`План "${plan.name}" выбран!`, {
+      description: `Персонализированный план питания на ${plan.duration_days} дней начинается завтра. Вы получите уведомление с первым меню.`
+    });
+  };
+
+  // Handler for recipe opening
+  const handleOpenRecipe = (recipe: Recipe) => {
+    toast.info(`Открывается рецепт "${recipe.name}"`, {
+      description: `Время приготовления: ${recipe.prep_time + recipe.cook_time} мин • ${recipe.calories} ккал • ${recipe.servings} порции`
+    });
+  };
+
   const MealPlanCard = ({ plan }: { plan: MealPlan }) => (
     <Card className="prevent-card relative">
       {plan.aiPersonalized && (
@@ -271,7 +286,10 @@ const NutritionIntegration = () => {
             </div>
           )}
 
-          <Button className="w-full">
+          <Button 
+            className="w-full"
+            onClick={() => handleSelectMealPlan(plan)}
+          >
             <ChefHat className="w-4 h-4 mr-2" />
             Выбрать план
           </Button>
@@ -347,7 +365,10 @@ const NutritionIntegration = () => {
             </div>
           )}
 
-          <Button className="w-full">
+          <Button 
+            className="w-full"
+            onClick={() => handleOpenRecipe(recipe)}
+          >
             <BookOpen className="w-4 h-4 mr-2" />
             Открыть рецепт
           </Button>
