@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
@@ -72,8 +71,8 @@ const Index = () => {
           </h1>
           
           <p className="text-xl text-gray-600 max-w-2xl mx-auto mb-8 leading-relaxed">
-            YTime помогает женщинам управлять своим здоровьем через персонализированные рекомендации, 
-            анализ рисков и интеграцию с современными медицинскими сервисами.
+            YTime — Ваш персональный помощник в мире женского здоровья. 
+            Мы здесь, чтобы поддержать вас на каждом этапе жизни.
           </p>
           
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
