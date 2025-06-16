@@ -578,6 +578,220 @@ export type Database = {
           },
         ]
       }
+      family_documents: {
+        Row: {
+          created_at: string
+          description: string | null
+          document_date: string | null
+          document_type: string
+          family_group_id: string
+          family_member_id: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          is_shared: boolean | null
+          tags: string[] | null
+          title: string
+          updated_at: string
+          uploaded_by: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          document_date?: string | null
+          document_type: string
+          family_group_id: string
+          family_member_id?: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          is_shared?: boolean | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          uploaded_by: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          document_date?: string | null
+          document_type?: string
+          family_group_id?: string
+          family_member_id?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          is_shared?: boolean | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_documents_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_documents_family_member_id_fkey"
+            columns: ["family_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_groups: {
+        Row: {
+          created_at: string
+          created_by: string
+          description: string | null
+          family_name: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          description?: string | null
+          family_name: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          family_name?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      family_medical_history: {
+        Row: {
+          age_at_diagnosis: number | null
+          condition_name: string
+          condition_type: string
+          created_at: string
+          created_by: string
+          diagnosis_date: string | null
+          doctor_name: string | null
+          family_member_id: string
+          id: string
+          notes: string | null
+          outcome: string | null
+          severity: string | null
+          treatment: string | null
+          updated_at: string
+          verified_by_doctor: boolean | null
+        }
+        Insert: {
+          age_at_diagnosis?: number | null
+          condition_name: string
+          condition_type: string
+          created_at?: string
+          created_by: string
+          diagnosis_date?: string | null
+          doctor_name?: string | null
+          family_member_id: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+          severity?: string | null
+          treatment?: string | null
+          updated_at?: string
+          verified_by_doctor?: boolean | null
+        }
+        Update: {
+          age_at_diagnosis?: number | null
+          condition_name?: string
+          condition_type?: string
+          created_at?: string
+          created_by?: string
+          diagnosis_date?: string | null
+          doctor_name?: string | null
+          family_member_id?: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+          severity?: string | null
+          treatment?: string | null
+          updated_at?: string
+          verified_by_doctor?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_medical_history_family_member_id_fkey"
+            columns: ["family_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_members: {
+        Row: {
+          created_at: string
+          created_by: string
+          date_of_birth: string | null
+          family_group_id: string
+          gender: string | null
+          id: string
+          is_alive: boolean | null
+          name: string
+          notes: string | null
+          relationship: string
+          updated_at: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          date_of_birth?: string | null
+          family_group_id: string
+          gender?: string | null
+          id?: string
+          is_alive?: boolean | null
+          name: string
+          notes?: string | null
+          relationship: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          date_of_birth?: string | null
+          family_group_id?: string
+          gender?: string | null
+          id?: string
+          is_alive?: boolean | null
+          name?: string
+          notes?: string | null
+          relationship?: string
+          updated_at?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_members_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       fertility_tracking: {
         Row: {
           basal_body_temperature: number | null
