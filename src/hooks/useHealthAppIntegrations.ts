@@ -43,7 +43,16 @@ export const useHealthAppIntegrations = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setIntegrations(data || []);
+      
+      // Type assertion для корректного преобразования данных из Supabase
+      const typedData = (data || []).map(item => ({
+        ...item,
+        app_name: item.app_name as 'flo' | 'maam' | 'clue' | 'period_tracker',
+        integration_status: item.integration_status as 'pending' | 'connected' | 'disconnected' | 'error',
+        sync_settings: item.sync_settings as Record<string, any>
+      }));
+      
+      setIntegrations(typedData);
     } catch (error) {
       console.error('Ошибка при загрузке интеграций:', error);
       toast.error('Не удалось загрузить интеграции');
@@ -66,7 +75,14 @@ export const useHealthAppIntegrations = () => {
       const { data, error } = await query;
 
       if (error) throw error;
-      setExternalData(data || []);
+      
+      // Type assertion для корректного преобразования данных из Supabase
+      const typedData = (data || []).map(item => ({
+        ...item,
+        data_payload: item.data_payload as Record<string, any>
+      }));
+      
+      setExternalData(typedData);
     } catch (error) {
       console.error('Ошибка при загрузке внешних данных:', error);
       toast.error('Не удалось загрузить данные из внешних приложений');
@@ -90,9 +106,17 @@ export const useHealthAppIntegrations = () => {
 
       if (error) throw error;
 
-      setIntegrations(prev => [data, ...prev]);
+      // Type assertion для добавления в state
+      const typedData = {
+        ...data,
+        app_name: data.app_name as 'flo' | 'maam' | 'clue' | 'period_tracker',
+        integration_status: data.integration_status as 'pending' | 'connected' | 'disconnected' | 'error',
+        sync_settings: data.sync_settings as Record<string, any>
+      };
+
+      setIntegrations(prev => [typedData, ...prev]);
       toast.success(`Интеграция с ${appName.toUpperCase()} создана`);
-      return data;
+      return typedData;
     } catch (error) {
       console.error('Ошибка при создании интеграции:', error);
       toast.error('Не удалось создать интеграцию');
@@ -111,11 +135,19 @@ export const useHealthAppIntegrations = () => {
 
       if (error) throw error;
 
+      // Type assertion для обновления в state
+      const typedData = {
+        ...data,
+        app_name: data.app_name as 'flo' | 'maam' | 'clue' | 'period_tracker',
+        integration_status: data.integration_status as 'pending' | 'connected' | 'disconnected' | 'error',
+        sync_settings: data.sync_settings as Record<string, any>
+      };
+
       setIntegrations(prev => prev.map(integration => 
-        integration.id === id ? data : integration
+        integration.id === id ? typedData : integration
       ));
       toast.success('Интеграция обновлена');
-      return data;
+      return typedData;
     } catch (error) {
       console.error('Ошибка при обновлении интеграции:', error);
       toast.error('Не удалось обновить интеграцию');
@@ -175,9 +207,15 @@ export const useHealthAppIntegrations = () => {
         last_sync_at: new Date().toISOString()
       });
 
-      setExternalData(prev => [data, ...prev]);
+      // Type assertion для добавления в state
+      const typedData = {
+        ...data,
+        data_payload: data.data_payload as Record<string, any>
+      };
+
+      setExternalData(prev => [typedData, ...prev]);
       toast.success('Данные синхронизированы');
-      return data;
+      return typedData;
     } catch (error) {
       console.error('Ошибка при синхронизации данных:', error);
       toast.error('Не удалось синхронизировать данные');

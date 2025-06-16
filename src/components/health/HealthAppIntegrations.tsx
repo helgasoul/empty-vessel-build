@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Smartphone, Sync, Trash2, Plus, CheckCircle, AlertCircle, Clock, XCircle } from 'lucide-react';
+import { Smartphone, RefreshCw, Trash2, Plus, CheckCircle, AlertCircle, Clock, XCircle } from 'lucide-react';
 import { useHealthAppIntegrations } from '@/hooks/useHealthAppIntegrations';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -189,7 +189,7 @@ const HealthAppIntegrations = () => {
                         disabled={syncing === integration.id}
                         className="flex items-center gap-1"
                       >
-                        <Sync className={`w-4 h-4 ${syncing === integration.id ? 'animate-spin' : ''}`} />
+                        <RefreshCw className={`w-4 h-4 ${syncing === integration.id ? 'animate-spin' : ''}`} />
                         {syncing === integration.id ? 'Синхронизация...' : 'Синхронизировать'}
                       </Button>
                       <Button
