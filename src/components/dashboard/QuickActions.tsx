@@ -11,7 +11,8 @@ import {
   Smartphone,
   Target,
   Stethoscope,
-  Leaf
+  Leaf,
+  Users
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -34,6 +35,13 @@ const QuickActions = () => {
       action: () => navigate('/womens-health')
     },
     {
+      title: "Сообщество",
+      description: "Анонимное общение и поддержка",
+      icon: Users,
+      color: "bg-purple-500 hover:bg-purple-600",
+      action: () => navigate('/community')
+    },
+    {
       title: "Медицинские записи",
       description: "Управление медкартой и записями",
       icon: FileText,
@@ -44,7 +52,7 @@ const QuickActions = () => {
       title: "Аналитика здоровья",
       description: "Детальный анализ и тренды",
       icon: BarChart3,
-      color: "bg-purple-500 hover:bg-purple-600",
+      color: "bg-indigo-500 hover:bg-indigo-600",
       action: () => navigate('/health-analytics')
     },
     {
