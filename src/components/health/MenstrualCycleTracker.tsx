@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -36,9 +35,12 @@ const MenstrualCycleTracker = () => {
     
     try {
       const cycleData = {
-        ...formData,
+        cycle_start_date: formData.cycle_start_date,
+        cycle_end_date: formData.cycle_end_date || undefined,
         period_length: formData.period_length ? parseInt(formData.period_length) : undefined,
-        cycle_end_date: formData.cycle_end_date || undefined
+        flow_intensity: formData.flow_intensity || undefined, // Convert empty string to undefined
+        symptoms: formData.symptoms,
+        notes: formData.notes
       };
 
       if (editingId) {

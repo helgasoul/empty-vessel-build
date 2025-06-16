@@ -30,7 +30,14 @@ export const useMenstrualCycle = () => {
         .order('cycle_start_date', { ascending: false });
 
       if (error) throw error;
-      setCycles(data || []);
+      
+      // Type cast the data to ensure flow_intensity matches our interface
+      const typedData = (data || []).map(cycle => ({
+        ...cycle,
+        flow_intensity: cycle.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined
+      }));
+      
+      setCycles(typedData);
     } catch (error) {
       console.error('Ошибка при загрузке циклов:', error);
       toast.error('Не удалось загрузить данные о циклах');
@@ -55,9 +62,15 @@ export const useMenstrualCycle = () => {
 
       if (error) throw error;
 
-      setCycles(prev => [data, ...prev]);
+      // Type cast the returned data
+      const typedData = {
+        ...data,
+        flow_intensity: data.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined
+      };
+
+      setCycles(prev => [typedData, ...prev]);
       toast.success('Цикл добавлен');
-      return data;
+      return typedData;
     } catch (error) {
       console.error('Ошибка при добавлении цикла:', error);
       toast.error('Не удалось добавить цикл');
@@ -76,11 +89,17 @@ export const useMenstrualCycle = () => {
 
       if (error) throw error;
 
+      // Type cast the returned data
+      const typedData = {
+        ...data,
+        flow_intensity: data.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined
+      };
+
       setCycles(prev => prev.map(cycle => 
-        cycle.id === id ? data : cycle
+        cycle.id === id ? typedData : cycle
       ));
       toast.success('Цикл обновлен');
-      return data;
+      return typedData;
     } catch (error) {
       console.error('Ошибка при обновлении цикла:', error);
       toast.error('Не удалось обновить цикл');
