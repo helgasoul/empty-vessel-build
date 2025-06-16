@@ -166,8 +166,25 @@ const AppointmentBooking = () => {
     return <div className="flex justify-center p-8">Загрузка...</div>;
   }
 
-  // Объединяем провайдеров из базы данных со статическими
-  const allProviders = [...staticProviders, ...providers];
+  // Фильтруем провайдеров из базы данных, исключая нежелательных
+  const excludedProviderNames = [
+    'Клиника Здоровье',
+    'Клиника "Здоровье+"',
+    'Диагностический центр "Точность"',
+    'Диагностический центр точность',
+    'Лаборатория "МедТест"',
+    'Лаборатория МедТест'
+  ];
+
+  const filteredProviders = providers.filter(provider => 
+    !excludedProviderNames.some(excludedName => 
+      provider.name.toLowerCase().includes(excludedName.toLowerCase()) ||
+      excludedName.toLowerCase().includes(provider.name.toLowerCase())
+    )
+  );
+
+  // Объединяем статических провайдеров с отфильтрованными из базы данных
+  const allProviders = [...staticProviders, ...filteredProviders];
 
   return (
     <div className="space-y-6">
