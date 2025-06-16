@@ -5,7 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Shield, Users, FileText, Settings } from "lucide-react";
 import AdminProtectedRoute from '@/components/experts/AdminProtectedRoute';
 import AdminPanel from '@/components/experts/AdminPanel';
-import ExpertManagement from './ExpertManagement';
+import ExpertManagementContent from '@/components/experts/ExpertManagementContent';
 
 const AdminDashboard = () => {
   return (
@@ -55,10 +55,7 @@ const AdminDashboard = () => {
             </TabsContent>
 
             <TabsContent value="experts">
-              <div className="space-y-6">
-                {/* Здесь будет компонент управления экспертами без AdminProtectedRoute обертки */}
-                <div>Expert management will be rendered here</div>
-              </div>
+              <ExpertManagementContent />
             </TabsContent>
 
             <TabsContent value="content">

@@ -6,46 +6,83 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { Shield, UserPlus, Trash2 } from "lucide-react";
+import { Shield, UserPlus, AlertTriangle, Copy, CheckCircle } from "lucide-react";
 import { useCreateUserRole, useDeleteUserRole, AppRole } from '@/hooks/useUserRoles';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/contexts/AuthContext';
 
 const AdminPanel = () => {
   const [newUserEmail, setNewUserEmail] = useState('');
   const [selectedRole, setSelectedRole] = useState<AppRole>('user');
+  const [userIdForRole, setUserIdForRole] = useState('');
+  const [copiedUserId, setCopiedUserId] = useState(false);
+  const { user } = useAuth();
   const createUserRole = useCreateUserRole();
   const deleteUserRole = useDeleteUserRole();
   const { toast } = useToast();
 
   const handleCreateRole = async () => {
-    if (!newUserEmail.trim()) {
+    if (!userIdForRole.trim()) {
       toast({
         title: "Ошибка",
-        description: "Введите email пользователя",
+        description: "Введите User ID пользователя",
         variant: "destructive",
       });
       return;
     }
 
     try {
-      // В реальном приложении здесь нужно было бы найти пользователя по email
-      // Для демонстрации используем заглушку
       await createUserRole.mutateAsync({
-        userId: 'user-id-placeholder', // Здесь должен быть реальный user_id
+        userId: userIdForRole.trim(),
         role: selectedRole
       });
 
       toast({
         title: "Роль назначена",
-        description: `Роль ${selectedRole} назначена пользователю ${newUserEmail}`,
+        description: `Роль ${selectedRole} назначена пользователю`,
       });
 
       setNewUserEmail('');
+      setUserIdForRole('');
       setSelectedRole('user');
     } catch (error) {
       toast({
         title: "Ошибка",
         description: "Не удалось назначить роль пользователю",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const copyUserId = () => {
+    if (user?.id) {
+      navigator.clipboard.writeText(user.id);
+      setCopiedUserId(true);
+      setTimeout(() => setCopiedUserId(false), 2000);
+      toast({
+        title: "Скопировано",
+        description: "User ID скопирован в буфер обмена",
+      });
+    }
+  };
+
+  const assignAdminToSelf = async () => {
+    if (!user?.id) return;
+    
+    try {
+      await createUserRole.mutateAsync({
+        userId: user.id,
+        role: 'admin'
+      });
+
+      toast({
+        title: "Роль администратора назначена",
+        description: "Вам успешно назначена роль администратора",
+      });
+    } catch (error) {
+      toast({
+        title: "Ошибка",
+        description: "Не удалось назначить роль администратора",
         variant: "destructive",
       });
     }
@@ -63,20 +100,61 @@ const AdminPanel = () => {
         </CardDescription>
       </CardHeader>
       <CardContent className="space-y-6">
+        {/* Первоначальная настройка администратора */}
+        {user && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+            <div className="flex items-start space-x-2">
+              <Shield className="w-5 h-5 text-blue-600 mt-0.5" />
+              <div className="flex-1">
+                <h4 className="text-sm font-medium text-blue-800">Первоначальная настройка</h4>
+                <p className="text-sm text-blue-700 mt-1 mb-3">
+                  Если вы первый администратор, назначьте себе роль администратора:
+                </p>
+                <div className="flex items-center space-x-2">
+                  <div className="flex-1">
+                    <Label className="text-sm">Ваш User ID:</Label>
+                    <div className="flex items-center space-x-2 mt-1">
+                      <Input value={user.id} readOnly className="font-mono text-xs" />
+                      <Button 
+                        onClick={copyUserId} 
+                        variant="outline" 
+                        size="sm"
+                        className="shrink-0"
+                      >
+                        {copiedUserId ? <CheckCircle className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+                      </Button>
+                    </div>
+                  </div>
+                  <Button 
+                    onClick={assignAdminToSelf}
+                    disabled={createUserRole.isPending}
+                    className="shrink-0"
+                  >
+                    Стать администратором
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Назначение ролей */}
         <div className="space-y-4">
           <h3 className="text-lg font-semibold">Назначение ролей</h3>
           
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
             <div>
-              <Label htmlFor="userEmail">Email пользователя</Label>
+              <Label htmlFor="userIdForRole">User ID пользователя</Label>
               <Input
-                id="userEmail"
-                type="email"
-                placeholder="user@example.com"
-                value={newUserEmail}
-                onChange={(e) => setNewUserEmail(e.target.value)}
+                id="userIdForRole"
+                placeholder="Введите User ID..."
+                value={userIdForRole}
+                onChange={(e) => setUserIdForRole(e.target.value)}
+                className="font-mono text-sm"
               />
+              <p className="text-xs text-gray-500 mt-1">
+                User ID можно найти в таблице auth.users
+              </p>
             </div>
             
             <div>
@@ -152,11 +230,12 @@ const AdminPanel = () => {
         {/* Предупреждение */}
         <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
           <div className="flex items-start space-x-2">
-            <Shield className="w-5 h-5 text-amber-600 mt-0.5" />
+            <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5" />
             <div>
               <h4 className="text-sm font-medium text-amber-800">Важно</h4>
               <p className="text-sm text-amber-700 mt-1">
                 Права администратора дают полный доступ к системе. Назначайте их только доверенным пользователям.
+                User ID можно найти в Supabase Dashboard → Authentication → Users.
               </p>
             </div>
           </div>
