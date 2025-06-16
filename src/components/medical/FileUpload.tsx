@@ -18,7 +18,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
   files,
   onFilesChange,
   maxFiles = 5,
-  maxSizeBytes = 10 * 1024 * 1024, // 10MB
+  maxSizeBytes = 50 * 1024 * 1024, // 50MB вместо 10MB
   acceptedFileTypes = ['image/*', 'application/pdf', '.doc', '.docx', '.txt']
 }) => {
   const onDrop = useCallback((acceptedFiles: File[], rejectedFiles: any[]) => {
@@ -26,7 +26,7 @@ const FileUpload: React.FC<FileUploadProps> = ({
       rejectedFiles.forEach(({ file, errors }) => {
         errors.forEach((error: any) => {
           if (error.code === 'file-too-large') {
-            toast.error(`Файл ${file.name} слишком большой`);
+            toast.error(`Файл ${file.name} слишком большой. Максимальный размер: 50MB`);
           } else if (error.code === 'file-invalid-type') {
             toast.error(`Неподдерживаемый тип файла: ${file.name}`);
           } else if (error.code === 'too-many-files') {
