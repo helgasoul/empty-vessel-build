@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { 
   Dumbbell, 
   Play, 
@@ -12,7 +13,12 @@ import {
   Calendar,
   Trophy,
   Users,
-  Video
+  Video,
+  X,
+  Pause,
+  SkipForward,
+  SkipBack,
+  Volume2
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -29,6 +35,7 @@ interface Workout {
   thumbnail: string;
   completed?: boolean;
   progress?: number;
+  video_url?: string;
 }
 
 interface FitnessProgram {
@@ -47,6 +54,8 @@ interface FitnessProgram {
 
 const FitnessIntegration = () => {
   const [activeTab, setActiveTab] = useState<'workouts' | 'programs'>('workouts');
+  const [currentVideo, setCurrentVideo] = useState<Workout | null>(null);
+  const [isVideoPlaying, setIsVideoPlaying] = useState(false);
 
   const todayWorkouts: Workout[] = [
     {
@@ -61,7 +70,8 @@ const FitnessIntegration = () => {
       description: 'Мягкая практика для пробуждения тела и гармонизации энергии',
       thumbnail: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       completed: false,
-      progress: 0
+      progress: 0,
+      video_url: 'https://www.youtube.com/embed/v7AYKMP6rOE'
     },
     {
       id: '2',
@@ -75,7 +85,8 @@ const FitnessIntegration = () => {
       description: 'Интенсивная тренировка для быстрого сжигания калорий',
       thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       completed: true,
-      progress: 100
+      progress: 100,
+      video_url: 'https://www.youtube.com/embed/20Nw7obrGQs'
     },
     {
       id: '3',
@@ -89,7 +100,8 @@ const FitnessIntegration = () => {
       description: 'Укрепление мышц кора и улучшение осанки',
       thumbnail: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       completed: false,
-      progress: 60
+      progress: 60,
+      video_url: 'https://www.youtube.com/embed/K56Z12V9NP8'
     }
   ];
 
@@ -142,7 +154,7 @@ const FitnessIntegration = () => {
     }
   };
 
-  // Handler for starting/continuing workouts
+  // Обновленный обработчик для показа видео тренировки
   const handleWorkoutAction = (workout: Workout) => {
     if (workout.completed) {
       toast.success(`Повторяем тренировку "${workout.title}"`, {
@@ -157,7 +169,10 @@ const FitnessIntegration = () => {
         description: `${workout.type} с ${workout.instructor} • ${workout.duration} мин • ${workout.calories} ккал`
       });
     }
-    // В будущем здесь будет переход на страницу тренировки
+    
+    // Открываем видео в модальном окне
+    setCurrentVideo(workout);
+    setIsVideoPlaying(true);
   };
 
   // Handler for program enrollment/continuation
@@ -171,7 +186,11 @@ const FitnessIntegration = () => {
         description: `${program.duration_weeks} недель тренировок с ${program.instructor}. Начинаем завтра!`
       });
     }
-    // В будущем здесь будет переход на страницу программы
+  };
+
+  const closeVideo = () => {
+    setCurrentVideo(null);
+    setIsVideoPlaying(false);
   };
 
   const WorkoutCard = ({ workout }: { workout: Workout }) => (
@@ -192,6 +211,13 @@ const FitnessIntegration = () => {
                 <Trophy className="w-3 h-3 mr-1" />
                 Завершено
               </Badge>
+            </div>
+          )}
+          {/* Индикатор наличия видео */}
+          {workout.video_url && (
+            <div className="absolute bottom-2 left-2 bg-black/60 text-white px-2 py-1 rounded text-xs flex items-center">
+              <Video className="w-3 h-3 mr-1" />
+              Видео
             </div>
           )}
         </div>
@@ -403,6 +429,114 @@ const FitnessIntegration = () => {
           )}
         </CardContent>
       </Card>
+
+      {/* Video Modal */}
+      <Dialog open={!!currentVideo} onOpenChange={closeVideo}>
+        <DialogContent className="max-w-4xl w-full max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Video className="w-5 h-5" />
+                <span>{currentVideo?.title}</span>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={closeVideo}
+                className="h-6 w-6"
+              >
+                <X className="w-4 h-4" />
+              </Button>
+            </DialogTitle>
+          </DialogHeader>
+          
+          {currentVideo && (
+            <div className="space-y-4">
+              {/* Video Player */}
+              <div className="relative w-full h-0 pb-[56.25%] bg-black rounded-lg overflow-hidden">
+                <iframe
+                  src={currentVideo.video_url}
+                  title={currentVideo.title}
+                  className="absolute top-0 left-0 w-full h-full"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                  allowFullScreen
+                />
+              </div>
+
+              {/* Video Info */}
+              <div className="flex flex-col md:flex-row gap-4">
+                <div className="flex-1">
+                  <div className="flex items-center space-x-2 mb-2">
+                    <Badge className={getDifficultyColor(currentVideo.difficulty)}>
+                      {currentVideo.difficulty}
+                    </Badge>
+                    <Badge variant="secondary">{currentVideo.type}</Badge>
+                  </div>
+                  
+                  <h3 className="text-xl font-montserrat font-semibold mb-1">
+                    {currentVideo.title}
+                  </h3>
+                  <p className="text-gray-600 dark:text-gray-300 mb-2">
+                    с {currentVideo.instructor}
+                  </p>
+                  <p className="text-sm text-gray-600 dark:text-gray-300 mb-4">
+                    {currentVideo.description}
+                  </p>
+
+                  <div className="flex items-center space-x-4 text-sm mb-4">
+                    <span className="flex items-center space-x-1">
+                      <Clock className="w-4 h-4" />
+                      <span>{currentVideo.duration} мин</span>
+                    </span>
+                    <span className="flex items-center space-x-1">
+                      <Flame className="w-4 h-4 text-red-500" />
+                      <span>{currentVideo.calories} ккал</span>
+                    </span>
+                  </div>
+
+                  {currentVideo.equipment.length > 0 && (
+                    <div>
+                      <p className="font-medium mb-2">Оборудование:</p>
+                      <div className="flex flex-wrap gap-1">
+                        {currentVideo.equipment.map((item, index) => (
+                          <Badge key={index} variant="outline" className="text-xs">
+                            {item}
+                          </Badge>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Video Controls & Progress */}
+                <div className="md:w-64 space-y-4">
+                  {currentVideo.progress !== undefined && currentVideo.progress > 0 && (
+                    <div className="space-y-2">
+                      <div className="flex justify-between text-sm">
+                        <span>Прогресс</span>
+                        <span>{currentVideo.progress}%</span>
+                      </div>
+                      <Progress value={currentVideo.progress} className="h-2" />
+                    </div>
+                  )}
+
+                  <div className="space-y-2">
+                    <Button className="w-full" size="sm">
+                      <Play className="w-4 h-4 mr-2" />
+                      Воспроизвести
+                    </Button>
+                    <Button variant="outline" className="w-full" size="sm">
+                      <Heart className="w-4 h-4 mr-2" />
+                      В избранное
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
