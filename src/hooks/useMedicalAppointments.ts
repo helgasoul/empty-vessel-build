@@ -70,7 +70,16 @@ export const useMedicalAppointments = () => {
         .order('name');
 
       if (error) throw error;
-      setProviders(data || []);
+      
+      // Transform the data to match our interface
+      const transformedProviders: PartnerProvider[] = (data || []).map(provider => ({
+        ...provider,
+        provider_type: provider.provider_type as PartnerProvider['provider_type'],
+        specializations: provider.specializations || [],
+        working_hours: (provider.working_hours as Record<string, string>) || {}
+      }));
+      
+      setProviders(transformedProviders);
     } catch (error) {
       console.error('Ошибка при загрузке провайдеров:', error);
       toast.error('Не удалось загрузить список клиник и лабораторий');
@@ -92,7 +101,14 @@ export const useMedicalAppointments = () => {
       const { data, error } = await query;
 
       if (error) throw error;
-      setDoctors(data || []);
+      
+      // Transform the data to match our interface
+      const transformedDoctors: PartnerDoctor[] = (data || []).map(doctor => ({
+        ...doctor,
+        available_slots: Array.isArray(doctor.available_slots) ? doctor.available_slots : []
+      }));
+      
+      setDoctors(transformedDoctors);
     } catch (error) {
       console.error('Ошибка при загрузке врачей:', error);
       toast.error('Не удалось загрузить список врачей');
@@ -111,7 +127,16 @@ export const useMedicalAppointments = () => {
         .order('appointment_date', { ascending: false });
 
       if (error) throw error;
-      setAppointments(data || []);
+      
+      // Transform the data to match our interface
+      const transformedAppointments: MedicalAppointment[] = (data || []).map(appointment => ({
+        ...appointment,
+        appointment_type: appointment.appointment_type as MedicalAppointment['appointment_type'],
+        status: appointment.status as MedicalAppointment['status'],
+        payment_status: appointment.payment_status as MedicalAppointment['payment_status']
+      }));
+      
+      setAppointments(transformedAppointments);
     } catch (error) {
       console.error('Ошибка при загрузке записей:', error);
       toast.error('Не удалось загрузить ваши записи');
@@ -128,17 +153,36 @@ export const useMedicalAppointments = () => {
       const { data, error } = await supabase
         .from('medical_appointments')
         .insert({
-          ...appointmentData,
-          user_id: user.id
+          user_id: user.id,
+          provider_id: appointmentData.provider_id!,
+          doctor_id: appointmentData.doctor_id,
+          appointment_type: appointmentData.appointment_type!,
+          appointment_date: appointmentData.appointment_date!,
+          appointment_time: appointmentData.appointment_time!,
+          duration_minutes: appointmentData.duration_minutes,
+          status: appointmentData.status || 'scheduled',
+          reason: appointmentData.reason,
+          notes: appointmentData.notes,
+          cost: appointmentData.cost,
+          payment_status: appointmentData.payment_status || 'pending',
+          reminder_sent: false
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      setAppointments(prev => [data, ...prev]);
+      // Transform the returned data to match our interface
+      const transformedAppointment: MedicalAppointment = {
+        ...data,
+        appointment_type: data.appointment_type as MedicalAppointment['appointment_type'],
+        status: data.status as MedicalAppointment['status'],
+        payment_status: data.payment_status as MedicalAppointment['payment_status']
+      };
+
+      setAppointments(prev => [transformedAppointment, ...prev]);
       toast.success('Запись успешно создана');
-      return data;
+      return transformedAppointment;
     } catch (error) {
       console.error('Ошибка при создании записи:', error);
       toast.error('Не удалось создать запись');
@@ -157,11 +201,19 @@ export const useMedicalAppointments = () => {
 
       if (error) throw error;
 
+      // Transform the returned data to match our interface
+      const transformedAppointment: MedicalAppointment = {
+        ...data,
+        appointment_type: data.appointment_type as MedicalAppointment['appointment_type'],
+        status: data.status as MedicalAppointment['status'],
+        payment_status: data.payment_status as MedicalAppointment['payment_status']
+      };
+
       setAppointments(prev => prev.map(appointment => 
-        appointment.id === id ? data : appointment
+        appointment.id === id ? transformedAppointment : appointment
       ));
       toast.success('Запись обновлена');
-      return data;
+      return transformedAppointment;
     } catch (error) {
       console.error('Ошибка при обновлении записи:', error);
       toast.error('Не удалось обновить запись');
