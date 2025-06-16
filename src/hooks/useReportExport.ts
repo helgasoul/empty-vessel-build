@@ -43,7 +43,7 @@ export const useReportExport = () => {
       const csvContent = generateCSV(data, reportType);
       
       // Создаем и скачиваем файл
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
       const link = document.createElement('a');
       
       if (link.download !== undefined) {
@@ -54,6 +54,7 @@ export const useReportExport = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
       }
       
       toast.success('Excel отчет скачан');
@@ -80,6 +81,7 @@ export const useReportExport = () => {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
+        URL.revokeObjectURL(url);
       }
       
       toast.success('JSON отчет скачан');
@@ -104,30 +106,104 @@ const generateHTMLReport = (data: any, reportType: string): string => {
   
   return `
     <!DOCTYPE html>
-    <html>
+    <html lang="ru">
     <head>
       <meta charset="utf-8">
-      <title>Отчет YTime - ${reportType}</title>
+      <title>Отчет PREVENT - ${reportType}</title>
       <style>
-        body { font-family: Arial, sans-serif; margin: 20px; color: #333; }
-        .header { text-align: center; margin-bottom: 30px; border-bottom: 2px solid #4A90E2; padding-bottom: 20px; }
-        .logo { font-size: 24px; font-weight: bold; color: #4A90E2; margin-bottom: 10px; }
-        .date { font-size: 14px; color: #666; }
-        .section { margin-bottom: 30px; }
-        .section-title { font-size: 18px; font-weight: bold; margin-bottom: 15px; color: #4A90E2; }
-        .metrics-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .metric-card { border: 1px solid #ddd; padding: 15px; border-radius: 8px; }
-        .metric-value { font-size: 24px; font-weight: bold; color: #2c3e50; }
-        .metric-label { font-size: 12px; color: #666; margin-top: 5px; }
-        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
-        th { background-color: #f5f5f5; font-weight: bold; }
-        .footer { margin-top: 40px; text-align: center; font-size: 12px; color: #666; }
+        body { 
+          font-family: 'Arial', sans-serif; 
+          margin: 20px; 
+          color: #333; 
+          line-height: 1.6;
+        }
+        .header { 
+          text-align: center; 
+          margin-bottom: 30px; 
+          border-bottom: 2px solid #4A90E2; 
+          padding-bottom: 20px; 
+        }
+        .logo { 
+          font-size: 28px; 
+          font-weight: bold; 
+          color: #4A90E2; 
+          margin-bottom: 10px; 
+        }
+        .subtitle { 
+          font-size: 14px; 
+          color: #666; 
+          margin-bottom: 5px; 
+        }
+        .date { 
+          font-size: 14px; 
+          color: #666; 
+        }
+        .section { 
+          margin-bottom: 30px; 
+          page-break-inside: avoid; 
+        }
+        .section-title { 
+          font-size: 18px; 
+          font-weight: bold; 
+          margin-bottom: 15px; 
+          color: #4A90E2; 
+          border-left: 4px solid #4A90E2; 
+          padding-left: 10px; 
+        }
+        .metrics-grid { 
+          display: grid; 
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); 
+          gap: 15px; 
+          margin-bottom: 20px; 
+        }
+        .metric-card { 
+          border: 1px solid #ddd; 
+          padding: 15px; 
+          border-radius: 8px; 
+          background: #f9f9f9; 
+        }
+        .metric-value { 
+          font-size: 24px; 
+          font-weight: bold; 
+          color: #2c3e50; 
+        }
+        .metric-label { 
+          font-size: 12px; 
+          color: #666; 
+          margin-top: 5px; 
+        }
+        table { 
+          width: 100%; 
+          border-collapse: collapse; 
+          margin-top: 15px; 
+        }
+        th, td { 
+          border: 1px solid #ddd; 
+          padding: 8px; 
+          text-align: left; 
+        }
+        th { 
+          background-color: #f5f5f5; 
+          font-weight: bold; 
+        }
+        .footer { 
+          margin-top: 40px; 
+          text-align: center; 
+          font-size: 12px; 
+          color: #666; 
+          border-top: 1px solid #ddd; 
+          padding-top: 20px; 
+        }
+        @media print {
+          body { margin: 0; }
+          .header { page-break-after: avoid; }
+        }
       </style>
     </head>
     <body>
       <div class="header">
-        <div class="logo">YTime Health Analytics</div>
+        <div class="logo">PREVENT</div>
+        <div class="subtitle">Персонализированная превентивная медицина</div>
         <div class="date">Отчет сгенерирован: ${currentDate}</div>
       </div>
       
@@ -144,7 +220,8 @@ const generateHTMLReport = (data: any, reportType: string): string => {
       </div>
       
       <div class="footer">
-        <p>Отчет создан платформой YTime - Персонализированное здоровье для женщин</p>
+        <p>Отчет создан платформой PREVENT - Персонализированное здоровье для женщин</p>
+        <p>Данный отчет носит информационный характер и не заменяет консультацию врача</p>
       </div>
     </body>
     </html>
@@ -176,7 +253,7 @@ const generateMetricsHTML = (data: any): string => {
 };
 
 const generateTableHTML = (data: any): string => {
-  if (data.data && Array.isArray(data.data)) {
+  if (data.data && Array.isArray(data.data) && data.data.length > 0) {
     const headers = Object.keys(data.data[0] || {});
     const headerRow = headers.map(h => `<th>${h}</th>`).join('');
     const dataRows = data.data.map(row => 
@@ -208,7 +285,7 @@ const generateCSV = (data: any[], reportType: string): string => {
       if (typeof value === 'string' && (value.includes(',') || value.includes('"'))) {
         return `"${value.replace(/"/g, '""')}"`;
       }
-      return value;
+      return value ?? '';
     }).join(',')
   );
 

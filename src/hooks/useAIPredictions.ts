@@ -33,7 +33,7 @@ export const useAIPredictions = () => {
 
       setPredictions(futurePredictions);
       setInsights(healthInsights);
-      toast.success('Прогнозы ИИ обновлены');
+      toast.success('Прогнозы ИИ успешно обновлены');
     } catch (error) {
       console.error('Ошибка генерации прогнозов:', error);
       toast.error('Не удалось сгенерировать прогнозы');
@@ -58,15 +58,15 @@ const analyzeTrends = (data: any[]) => {
   const previous = data.slice(-14, -7);
 
   const recentAvg = {
-    steps: recent.reduce((sum, d) => sum + d.steps, 0) / recent.length,
-    heartRate: recent.reduce((sum, d) => sum + d.heartRate, 0) / recent.length,
-    sleep: recent.reduce((sum, d) => sum + d.sleepHours, 0) / recent.length
+    steps: recent.reduce((sum, d) => sum + (d.steps || 0), 0) / recent.length,
+    heartRate: recent.reduce((sum, d) => sum + (d.heartRate || 0), 0) / recent.length,
+    sleep: recent.reduce((sum, d) => sum + (d.sleepHours || 0), 0) / recent.length
   };
 
   const previousAvg = {
-    steps: previous.reduce((sum, d) => sum + d.steps, 0) / previous.length,
-    heartRate: previous.reduce((sum, d) => sum + d.heartRate, 0) / previous.length,
-    sleep: previous.reduce((sum, d) => sum + d.sleepHours, 0) / previous.length
+    steps: previous.length > 0 ? previous.reduce((sum, d) => sum + (d.steps || 0), 0) / previous.length : recentAvg.steps,
+    heartRate: previous.length > 0 ? previous.reduce((sum, d) => sum + (d.heartRate || 0), 0) / previous.length : recentAvg.heartRate,
+    sleep: previous.length > 0 ? previous.reduce((sum, d) => sum + (d.sleepHours || 0), 0) / previous.length : recentAvg.sleep
   };
 
   return {
@@ -144,6 +144,17 @@ const generateHealthInsights = (data: any[], trends: any): HealthInsight[] => {
       description: 'Средний пульс покоя увеличился',
       recommendation: 'Рекомендуем проконсультироваться с врачом и снизить уровень стресса',
       priority: 'medium'
+    });
+  }
+
+  // Общие рекомендации
+  if (insights.length === 0) {
+    insights.push({
+      type: 'maintenance',
+      title: 'Поддерживайте текущий режим',
+      description: 'Ваши показатели здоровья стабильны',
+      recommendation: 'Продолжайте следовать здоровому образу жизни',
+      priority: 'low'
     });
   }
 
