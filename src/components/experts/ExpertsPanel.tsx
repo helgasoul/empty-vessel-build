@@ -3,130 +3,53 @@ import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Search, Users, Brain, Heart, Baby, Sparkles } from "lucide-react";
-import ExpertCard, { Expert } from './ExpertCard';
+import ExpertCard from './ExpertCard';
+import { useExperts } from '@/hooks/useExperts';
 
 const ExpertsPanel = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedSpecialization, setSelectedSpecialization] = useState('all');
-
-  // Данные экспертов (в реальном приложении будут из API)
-  const experts: Expert[] = [
-    {
-      id: '1',
-      name: 'Др. Анна Петрова',
-      specialization: 'Гинекология',
-      title: 'Врач-гинеколог высшей категории',
-      experience: 15,
-      avatar: '/placeholder.svg',
-      rating: 4.9,
-      description: 'Специализируется на превентивной гинекологии, планировании беременности и лечении гормональных нарушений. Автор более 50 научных публикаций.',
-      education: [
-        'РНИМУ им. Н.И. Пирогова, лечебный факультет',
-        'Ординатура по акушерству и гинекологии',
-        'Повышение квалификации по репродуктологии'
-      ],
-      certifications: [
-        'Сертификат специалиста по гинекологии',
-        'Международный сертификат по УЗИ диагностике'
-      ],
-      blogPostsCount: 23,
-      consultation: {
-        available: true,
-        price: 3500
-      }
-    },
-    {
-      id: '2',
-      name: 'Др. Мария Соколова',
-      specialization: 'Маммология',
-      title: 'Врач-маммолог, онколог',
-      experience: 12,
-      avatar: '/placeholder.svg',
-      rating: 4.8,
-      description: 'Ведущий специалист по диагностике и лечению заболеваний молочной железы. Специализируется на раннем выявлении онкологических заболеваний.',
-      education: [
-        'МГМУ им. И.М. Сеченова',
-        'Ординатура по онкологии',
-        'Специализация по маммологии'
-      ],
-      certifications: [
-        'Сертификат онколога-маммолога',
-        'Европейский сертификат по маммографии'
-      ],
-      blogPostsCount: 18,
-      consultation: {
-        available: true,
-        price: 4000
-      }
-    },
-    {
-      id: '3',
-      name: 'Др. Елена Козлова',
-      specialization: 'Психология',
-      title: 'Клинический психолог, психотерапевт',
-      experience: 10,
-      avatar: '/placeholder.svg',
-      rating: 4.9,
-      description: 'Специализируется на женской психологии, работе с тревожными расстройствами и поддержке в период планирования беременности.',
-      education: [
-        'МГУ им. М.В. Ломоносова, факультет психологии',
-        'Магистратура по клинической психологии',
-        'Обучение гештальт-терапии'
-      ],
-      certifications: [
-        'Сертификат клинического психолога',
-        'Диплом по когнитивно-поведенческой терапии'
-      ],
-      blogPostsCount: 31,
-      consultation: {
-        available: true,
-        price: 2800
-      }
-    },
-    {
-      id: '4',
-      name: 'Др. Ольга Волкова',
-      specialization: 'Неврология',
-      title: 'Врач-невролог, специалист по головным болям',
-      experience: 14,
-      avatar: '/placeholder.svg',
-      rating: 4.7,
-      description: 'Эксперт по диагностике и лечению мигрени, головных болей напряжения и других неврологических расстройств у женщин.',
-      education: [
-        'СПбГМУ им. И.П. Павлова',
-        'Ординатура по неврологии',
-        'Стажировка в Европейском центре головной боли'
-      ],
-      certifications: [
-        'Сертификат невролога',
-        'Специализация по цефалгиям'
-      ],
-      blogPostsCount: 16,
-      consultation: {
-        available: true,
-        price: 3200
-      }
-    }
-  ];
+  const { data: experts, isLoading } = useExperts();
 
   const specializations = [
-    { id: 'all', name: 'Все специальности', icon: Users, count: experts.length },
-    { id: 'Гинекология', name: 'Гинекология', icon: Baby, count: experts.filter(e => e.specialization === 'Гинекология').length },
-    { id: 'Маммология', name: 'Маммология', icon: Heart, count: experts.filter(e => e.specialization === 'Маммология').length },
-    { id: 'Психология', name: 'Психология', icon: Brain, count: experts.filter(e => e.specialization === 'Психология').length },
-    { id: 'Неврология', name: 'Неврология', icon: Sparkles, count: experts.filter(e => e.specialization === 'Неврология').length }
+    { id: 'all', name: 'Все специальности', icon: Users, count: experts?.length || 0 },
+    { id: 'Гинекология', name: 'Гинекология', icon: Baby, count: experts?.filter(e => e.specialization === 'Гинекология').length || 0 },
+    { id: 'Маммология', name: 'Маммология', icon: Heart, count: experts?.filter(e => e.specialization === 'Маммология').length || 0 },
+    { id: 'Психология', name: 'Психология', icon: Brain, count: experts?.filter(e => e.specialization === 'Психология').length || 0 },
+    { id: 'Неврология', name: 'Неврология', icon: Sparkles, count: experts?.filter(e => e.specialization === 'Неврология').length || 0 }
   ];
 
-  const filteredExperts = experts.filter(expert => {
+  const filteredExperts = experts?.filter(expert => {
     const matchesSearch = expert.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
                          expert.specialization.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         expert.description.toLowerCase().includes(searchTerm.toLowerCase());
+                         expert.description?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesSpecialization = selectedSpecialization === 'all' || expert.specialization === selectedSpecialization;
     return matchesSearch && matchesSpecialization;
-  });
+  }) || [];
+
+  if (isLoading) {
+    return (
+      <div className="space-y-6">
+        <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <Users className="w-6 h-6 text-purple-600" />
+              <span>Панель экспертов YTime</span>
+            </CardTitle>
+            <CardDescription>
+              Ведущие специалисты в области превентивной медицины, гинекологии, маммологии, психологии и неврологии
+            </CardDescription>
+          </CardHeader>
+        </Card>
+        
+        <div className="flex justify-center items-center h-64">
+          <div className="text-lg">Загрузка экспертов...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -178,7 +101,26 @@ const ExpertsPanel = () => {
               <TabsContent key={spec.id} value={spec.id} className="mt-6">
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                   {filteredExperts.map((expert) => (
-                    <ExpertCard key={expert.id} expert={expert} />
+                    <ExpertCard 
+                      key={expert.id} 
+                      expert={{
+                        id: expert.id,
+                        name: expert.name,
+                        specialization: expert.specialization,
+                        title: expert.title,
+                        experience: expert.experience,
+                        avatar: expert.avatar_url || '/placeholder.svg',
+                        rating: expert.rating || 0,
+                        description: expert.description || '',
+                        education: expert.education || [],
+                        certifications: expert.certifications || [],
+                        blogPostsCount: expert.blog_posts_count || 0,
+                        consultation: {
+                          available: expert.consultation_available || false,
+                          price: expert.consultation_price || 0
+                        }
+                      }} 
+                    />
                   ))}
                 </div>
               </TabsContent>

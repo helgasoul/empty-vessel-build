@@ -17,6 +17,7 @@ import EnvironmentalHealth from "./pages/EnvironmentalHealth";
 import Community from "./pages/Community";
 import Experts from "./pages/Experts";
 import ExpertBlogPage from "./pages/ExpertBlogPage";
+import ExpertManagement from "./pages/ExpertManagement";
 import NotFound from "./pages/NotFound";
 
 // Создаем QueryClient один раз за пределами компонента
@@ -47,6 +48,7 @@ const App: React.FC = () => {
                 <Route path="/environmental-health" element={<EnvironmentalHealth />} />
                 <Route path="/community" element={<Community />} />
                 <Route path="/experts" element={<Experts />} />
+                <Route path="/experts/manage" element={<ExpertManagement />} />
                 <Route path="/experts/:expertId/blog" element={<ExpertBlogPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />

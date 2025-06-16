@@ -226,6 +226,60 @@ export type Database = {
         }
         Relationships: []
       }
+      experts: {
+        Row: {
+          avatar_url: string | null
+          blog_posts_count: number | null
+          certifications: string[] | null
+          consultation_available: boolean | null
+          consultation_price: number | null
+          created_at: string
+          description: string | null
+          education: string[] | null
+          experience: number
+          id: string
+          name: string
+          rating: number | null
+          specialization: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          avatar_url?: string | null
+          blog_posts_count?: number | null
+          certifications?: string[] | null
+          consultation_available?: boolean | null
+          consultation_price?: number | null
+          created_at?: string
+          description?: string | null
+          education?: string[] | null
+          experience?: number
+          id?: string
+          name: string
+          rating?: number | null
+          specialization: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          avatar_url?: string | null
+          blog_posts_count?: number | null
+          certifications?: string[] | null
+          consultation_available?: boolean | null
+          consultation_price?: number | null
+          created_at?: string
+          description?: string | null
+          education?: string[] | null
+          experience?: number
+          id?: string
+          name?: string
+          rating?: number | null
+          specialization?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       external_health_data: {
         Row: {
           created_at: string
