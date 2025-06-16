@@ -7,7 +7,11 @@ import { Progress } from "@/components/ui/progress";
 import { 
   Calendar,
   Dumbbell,
-  Video
+  Video,
+  ExternalLink,
+  Building2,
+  Globe,
+  Heart
 } from "lucide-react";
 import { FitnessProgram } from './types';
 
@@ -15,6 +19,32 @@ interface ProgramCardProps {
   program: FitnessProgram;
   onAction: (program: FitnessProgram) => void;
 }
+
+const getPartnerIcon = (type?: string) => {
+  switch (type) {
+    case 'fitness_club':
+      return <Building2 className="w-3 h-3" />;
+    case 'yoga_studio':
+      return <Heart className="w-3 h-3" />;
+    case 'online_platform':
+      return <Globe className="w-3 h-3" />;
+    default:
+      return <Building2 className="w-3 h-3" />;
+  }
+};
+
+const getPartnerTypeText = (type?: string) => {
+  switch (type) {
+    case 'fitness_club':
+      return 'Фитнес-клуб';
+    case 'yoga_studio':
+      return 'Йога-студия';
+    case 'online_platform':
+      return 'Онлайн-платформа';
+    default:
+      return 'Партнер';
+  }
+};
 
 const ProgramCard = ({ program, onAction }: ProgramCardProps) => (
   <Card className="prevent-card">
@@ -28,6 +58,12 @@ const ProgramCard = ({ program, onAction }: ProgramCardProps) => (
         {program.enrolled && (
           <Badge className="absolute top-2 right-2 bg-primary">
             Записан
+          </Badge>
+        )}
+        {program.partner_type && (
+          <Badge variant="outline" className="absolute top-2 left-2 bg-white/90 text-xs">
+            {getPartnerIcon(program.partner_type)}
+            <span className="ml-1">{getPartnerTypeText(program.partner_type)}</span>
           </Badge>
         )}
       </div>
@@ -88,8 +124,17 @@ const ProgramCard = ({ program, onAction }: ProgramCardProps) => (
           variant={program.enrolled ? "outline" : "default"}
           onClick={() => onAction(program)}
         >
-          <Video className="w-4 h-4 mr-2" />
-          {program.enrolled ? 'Продолжить' : 'Записаться'}
+          {program.enrolled ? (
+            <>
+              <Video className="w-4 h-4 mr-2" />
+              Продолжить
+            </>
+          ) : (
+            <>
+              <ExternalLink className="w-4 h-4 mr-2" />
+              Записаться
+            </>
+          )}
         </Button>
       </div>
     </CardContent>

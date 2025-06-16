@@ -27,4 +27,6 @@ export interface FitnessProgram {
   thumbnail: string;
   enrolled?: boolean;
   progress?: number;
+  website_url?: string;
+  partner_type?: 'fitness_club' | 'online_platform' | 'yoga_studio';
 }
