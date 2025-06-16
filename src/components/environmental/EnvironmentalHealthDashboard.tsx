@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2 } from "lucide-react";
+import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2, RefreshCw } from "lucide-react";
 import AirQualityMonitor from './AirQualityMonitor';
 import EnvironmentalImpactAnalysis from './EnvironmentalImpactAnalysis';
 import ProtectionRecommendations from './ProtectionRecommendations';
@@ -20,21 +20,33 @@ const EnvironmentalHealthDashboard = () => {
     error, 
     locationError,
     isRequestingLocation,
+    geolocationSupported,
     requestGeolocation 
   } = useEnvironmentalData();
 
   const handleGeolocationRequest = () => {
-    console.log('Кнопка "Поделиться геолокацией" нажата');
+    console.log('🔄 Пользователь нажал кнопку повторного запроса геолокации');
     requestGeolocation();
   };
 
+  // Показываем загрузку только если нет локации
   if (isLoading && !location) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-        <span className="ml-2">
-          {isRequestingLocation ? 'Получение местоположения...' : 'Загрузка экологических данных...'}
-        </span>
+        <div className="text-center space-y-4">
+          <Loader2 className="animate-spin h-8 w-8 mx-auto text-green-600" />
+          <div className="space-y-2">
+            <p className="font-medium">
+              {isRequestingLocation ? 'Получение местоположения...' : 'Загрузка экологических данных...'}
+            </p>
+            <p className="text-sm text-gray-600">
+              {isRequestingLocation 
+                ? 'Разрешите доступ к геолокации в браузере'
+                : 'Загружаем информацию о качестве воздуха и погоде'
+              }
+            </p>
+          </div>
+        </div>
       </div>
     );
   }
@@ -54,31 +66,64 @@ const EnvironmentalHealthDashboard = () => {
                 Мониторинг качества воздуха и анализ влияния экологии на здоровье
               </CardDescription>
             </div>
-            {location && (
-              <div className="flex items-center space-x-2 text-sm text-gray-600">
-                <MapPin className="w-4 h-4" />
-                <span>
-                  {location.city || `${location.latitude.toFixed(2)}, ${location.longitude.toFixed(2)}`}
-                </span>
-              </div>
-            )}
+            <div className="flex items-center space-x-4">
+              {location && (
+                <div className="flex items-center space-x-2 text-sm text-gray-600">
+                  <MapPin className="w-4 h-4" />
+                  <span>
+                    {location.city || `${location.latitude.toFixed(2)}, ${location.longitude.toFixed(2)}`}
+                  </span>
+                </div>
+              )}
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={handleGeolocationRequest}
+                disabled={isRequestingLocation}
+              >
+                {isRequestingLocation ? (
+                  <>
+                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                    Обновление...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Обновить локацию
+                  </>
+                )}
+              </Button>
+            </div>
           </div>
         </CardHeader>
       </Card>
 
-      {/* Location Error Alert */}
-      {locationError && (
+      {/* Геолокация не поддерживается */}
+      {!geolocationSupported && (
+        <Alert>
+          <AlertTriangle className="h-4 w-4" />
+          <AlertDescription>
+            <div className="space-y-2">
+              <div className="font-medium">Геолокация не поддерживается</div>
+              <div className="text-sm">
+                Ваш браузер не поддерживает геолокацию. Используются данные для Москвы.
+              </div>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Ошибка геолокации */}
+      {locationError && geolocationSupported && (
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
             <div className="flex items-center justify-between">
-              <div>
-                <div className="font-medium">Ошибка получения местоположения: {locationError}</div>
-                <div className="text-sm mt-1">
-                  {locationError.includes('запрещен') 
-                    ? 'Для получения точных данных о качестве воздуха разрешите доступ к геолокации в настройках браузера'
-                    : 'Попробуйте нажать кнопку еще раз или обновить страницу'
-                  }
+              <div className="flex-1">
+                <div className="font-medium">Проблема с геолокацией</div>
+                <div className="text-sm mt-1">{locationError}</div>
+                <div className="text-sm mt-2 text-gray-600">
+                  Используются данные для Москвы как альтернатива.
                 </div>
               </div>
               <Button 
@@ -91,7 +136,7 @@ const EnvironmentalHealthDashboard = () => {
                 {isRequestingLocation ? (
                   <>
                     <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Получение...
+                    Повтор...
                   </>
                 ) : (
                   <>
@@ -105,7 +150,7 @@ const EnvironmentalHealthDashboard = () => {
         </Alert>
       )}
 
-      {/* Current Conditions Overview */}
+      {/* Текущие условия */}
       {(airQualityData || weatherData) && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
           {airQualityData && (
@@ -176,13 +221,14 @@ const EnvironmentalHealthDashboard = () => {
         </div>
       )}
 
-      {/* API Error Alert */}
+      {/* Ошибка API */}
       {error && !locationError && (
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
             <div className="text-center py-4">
-              <p className="text-red-600">Ошибка загрузки данных: {error.toString()}</p>
+              <p className="text-red-600 font-medium">Ошибка загрузки данных</p>
+              <p className="text-sm mt-1">{error.toString()}</p>
               <p className="text-gray-600 text-sm mt-2">
                 Проверьте подключение к интернету и попробуйте обновить страницу
               </p>
@@ -191,7 +237,17 @@ const EnvironmentalHealthDashboard = () => {
         </Alert>
       )}
 
-      {/* Main Content Tabs */}
+      {/* Индикатор загрузки данных */}
+      {isLoading && location && (
+        <Alert>
+          <Loader2 className="h-4 w-4 animate-spin" />
+          <AlertDescription>
+            Загружаем экологические данные для вашего местоположения...
+          </AlertDescription>
+        </Alert>
+      )}
+
+      {/* Основной контент */}
       <Tabs defaultValue="monitor" className="space-y-6">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="monitor" className="flex items-center space-x-2">
