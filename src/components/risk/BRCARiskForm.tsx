@@ -144,26 +144,21 @@ const BRCARiskForm: React.FC<BRCARiskFormProps> = ({ onComplete }) => {
       // Сохраняем генетические данные, если есть мутации
       if (data.brca1_mutation || data.brca2_mutation) {
         try {
-          // Используем прямой SQL запрос, так как таблица genetic_data еще не в типах
-          const { error: geneticError } = await supabase.rpc('execute_sql', {
-            query: `
-              INSERT INTO genetic_data (user_id, test_type, gene_variants, results)
-              VALUES ($1, $2, $3, $4)
-            `,
-            params: [
-              user.id,
-              'BRCA',
-              JSON.stringify({
+          const { error: geneticError } = await supabase
+            .from('genetic_data')
+            .insert({
+              user_id: user.id,
+              test_type: 'BRCA',
+              gene_variants: {
                 BRCA1: data.brca1_mutation ? 'pathogenic' : 'normal',
                 BRCA2: data.brca2_mutation ? 'pathogenic' : 'normal',
-              }),
-              JSON.stringify({
+              },
+              results: {
                 brca1_positive: data.brca1_mutation,
                 brca2_positive: data.brca2_mutation,
                 risk_assessment: results,
-              })
-            ]
-          });
+              }
+            });
 
           if (geneticError) {
             console.warn('Could not save genetic data:', geneticError);
