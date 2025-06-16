@@ -31,7 +31,7 @@ const MedicalIntegrations = () => {
           </div>
           
           <Button 
-            onClick={() => navigate('/telemedicine-integrations')}
+            onClick={() => navigate('/telemedicine-settings')}
             className="flex items-center gap-2"
           >
             <Settings className="w-4 h-4" />
