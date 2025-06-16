@@ -144,7 +144,7 @@ const EnhancedHealthAIAssistant = () => {
     // Анализ трендов здоровья
     const stepsData = healthData.filter(d => d.data_type === 'steps').slice(0, 14);
     const stepsValues = stepsData.map(d => d.data_value);
-    const stepstrend = analyzeTrend(stepsValues);
+    const stepstrend = analyzeStepsTrend(stepsValues);
 
     const sleepData = healthData.filter(d => d.data_type === 'sleep').slice(0, 14);
     const sleepValues = sleepData.map(d => d.data_value);
@@ -230,6 +230,19 @@ const EnhancedHealthAIAssistant = () => {
     const threshold = Math.abs(firstAvg) * 0.1;
     if (secondAvg > firstAvg + threshold) return 'improving';
     if (secondAvg < firstAvg - threshold) return 'declining';
+    return 'stable';
+  };
+
+  const analyzeStepsTrend = (values: number[]): 'increasing' | 'stable' | 'decreasing' => {
+    if (values.length < 3) return 'stable';
+    const firstHalf = values.slice(0, Math.ceil(values.length / 2));
+    const secondHalf = values.slice(Math.ceil(values.length / 2));
+    const firstAvg = firstHalf.reduce((sum, val) => sum + val, 0) / firstHalf.length;
+    const secondAvg = secondHalf.reduce((sum, val) => sum + val, 0) / secondHalf.length;
+    
+    const threshold = Math.abs(firstAvg) * 0.1;
+    if (secondAvg > firstAvg + threshold) return 'increasing';
+    if (secondAvg < firstAvg - threshold) return 'decreasing';
     return 'stable';
   };
 
@@ -457,7 +470,7 @@ ${context.cyclePhase === 'follicular' ? '• Отличное время для 
 📊 **Ваши показатели**: 
 • Средняя активность: ${context.healthMetrics?.steps || 'н/д'} шагов
 • Уровень энергии: ${context.moodAnalysis?.energyLevel || 'н/д'}/10
-• Тренд активности: ${context.healthMetrics?.stepstrend === 'improving' ? '📈 Растет' : context.healthMetrics?.stepstrend === 'declining' ? '📉 Снижается' : '➡️ Стабильно'}`,
+• Тренд активности: ${context.healthMetrics?.stepstrend === 'increasing' ? '📈 Растет' : context.healthMetrics?.stepstrend === 'decreasing' ? '📉 Снижается' : '➡️ Стабильно'}`,
         context: 'health',
         attachments: [{
           type: 'recommendation' as const,
@@ -496,9 +509,9 @@ ${context.moodAnalysis?.stressLevel && context.moodAnalysis.stressLevel > 6 ? '\
 ${correlations.map(corr => `• ${corr.symptom}: влияние ${corr.impact.toFixed(1)}/10`).join('\n') || '• Анализируем закономерности...'}
 
 📊 **Текущее состояние**:
-• Настроение: ${context.moodAnalysis?.currentRating || 'н/д'}/10
-• Стресс: ${context.moodAnalysis?.stressLevel || 'н/д'}/10  
-• Энергия: ${context.moodAnalysis?.energyLevel || 'н/д'}/10
+• Настроение: ${healthContext.moodAnalysis?.currentRating || 'н/д'}/10
+• Стресс: ${healthContext.moodAnalysis?.stressLevel || 'н/д'}/10  
+• Энергия: ${healthContext.moodAnalysis?.energyLevel || 'н/д'}/10
 
 💡 **Рекомендации**:
 ${context.moodAnalysis?.stressLevel && context.moodAnalysis.stressLevel > 6 ? 
@@ -536,17 +549,7 @@ ${context.predictions?.optimalWorkoutDays?.map(day => `• День ${day} ци�
 
     // Общий ответ
     return {
-      content: `Привет! Я анализирую ваши данные и готова помочь с:
-
-🔍 **Анализом** вашего здоровья и циклов
-🏃‍♀️ **Тренировками** под ваши фазы цикла  
-🍎 **Питанием** с персонализацией
-🩺 **Симптомами** и их влиянием
-🔮 **Прогнозами** на основе ваших паттернов
-
-У меня есть данные за ${logs.length} дней, включая ${cycles.length} циклов и ${healthData.length} записей здоровья.
-
-Что именно вас интересует?`,
+      content: `Привет! Я анализирую ваши данные и готов дать персонализированные рекомендации по тренировкам, питанию, симптомам и прогнозам. Что вас интересует?`,
       context: 'general'
     };
   };
@@ -859,8 +862,8 @@ ${context.predictions?.optimalWorkoutDays?.map(day => `• День ${day} ци�
                           <h4 className="font-medium">Активность</h4>
                           <p className="text-2xl font-bold">{healthContext.healthMetrics.steps}</p>
                           <p className="text-sm text-gray-600">
-                            {healthContext.healthMetrics.stepstrend === 'improving' ? '📈 Растет' :
-                             healthContext.healthMetrics.stepstrend === 'declining' ? '📉 Снижается' : '➡️ Стабильно'}
+                            {healthContext.healthMetrics.stepstrend === 'increasing' ? '📈 Растет' :
+                             healthContext.healthMetrics.stepstrend === 'decreasing' ? '📉 Снижается' : '➡️ Стабильно'}
                           </p>
                         </div>
                         
