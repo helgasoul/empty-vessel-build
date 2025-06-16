@@ -15,6 +15,7 @@ export interface PharmacyPartner {
   delivery_zones?: string[];
   is_active: boolean;
   rating?: number;
+  specialty?: string;
   created_at: string;
   updated_at: string;
 }
