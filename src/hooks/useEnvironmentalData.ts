@@ -1,6 +1,6 @@
 
 import { useQuery } from '@tanstack/react-query';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 interface AirQualityData {
   pm25: number;
@@ -31,9 +31,12 @@ interface LocationData {
 const useEnvironmentalData = () => {
   const [location, setLocation] = useState<LocationData | null>(null);
   const [locationError, setLocationError] = useState<string | null>(null);
+  const [isRequestingLocation, setIsRequestingLocation] = useState(false);
 
-  // Get user's geolocation
-  useEffect(() => {
+  const requestGeolocation = useCallback(() => {
+    setIsRequestingLocation(true);
+    setLocationError(null);
+    
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
@@ -41,10 +44,28 @@ const useEnvironmentalData = () => {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude
           });
+          setLocationError(null);
+          setIsRequestingLocation(false);
         },
         (error) => {
           console.error('Geolocation error:', error);
-          setLocationError('Не удалось получить местоположение');
+          let errorMessage = 'Не удалось получить местоположение';
+          
+          switch (error.code) {
+            case error.PERMISSION_DENIED:
+              errorMessage = 'Доступ к геолокации запрещен';
+              break;
+            case error.POSITION_UNAVAILABLE:
+              errorMessage = 'Информация о местоположении недоступна';
+              break;
+            case error.TIMEOUT:
+              errorMessage = 'Время ожидания геолокации истекло';
+              break;
+          }
+          
+          setLocationError(errorMessage);
+          setIsRequestingLocation(false);
+          
           // Fallback to Moscow coordinates
           setLocation({
             latitude: 55.7558,
@@ -52,10 +73,16 @@ const useEnvironmentalData = () => {
             city: 'Москва',
             country: 'Россия'
           });
+        },
+        {
+          enableHighAccuracy: true,
+          timeout: 10000,
+          maximumAge: 300000 // 5 minutes
         }
       );
     } else {
-      setLocationError('Геолокация не поддерживается');
+      setLocationError('Геолокация не поддерживается браузером');
+      setIsRequestingLocation(false);
       // Fallback to Moscow coordinates
       setLocation({
         latitude: 55.7558,
@@ -65,6 +92,11 @@ const useEnvironmentalData = () => {
       });
     }
   }, []);
+
+  // Auto-request geolocation on mount
+  useEffect(() => {
+    requestGeolocation();
+  }, [requestGeolocation]);
 
   // Fetch air quality data from Open-Meteo API
   const { data: airQualityData, isLoading: airQualityLoading, error: airQualityError } = useQuery({
@@ -152,8 +184,8 @@ const useEnvironmentalData = () => {
     staleTime: 1000 * 60 * 15, // 15 minutes
   });
 
-  const isLoading = airQualityLoading || weatherLoading;
-  const error = airQualityError || weatherError || locationError;
+  const isLoading = airQualityLoading || weatherLoading || isRequestingLocation;
+  const error = airQualityError || weatherError;
 
   return {
     location,
@@ -161,7 +193,9 @@ const useEnvironmentalData = () => {
     weatherData,
     isLoading,
     error,
-    locationError
+    locationError,
+    isRequestingLocation,
+    requestGeolocation
   };
 };
 
