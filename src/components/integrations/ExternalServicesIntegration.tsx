@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,8 @@ import {
   Calendar,
   Utensils
 } from "lucide-react";
+import { useHealthAppIntegrations } from '@/hooks/useHealthAppIntegrations';
+import { toast } from 'sonner';
 
 interface ServiceIntegration {
   id: string;
@@ -27,9 +29,12 @@ interface ServiceIntegration {
   icon: React.ReactNode;
   features: string[];
   recommendations?: any[];
+  appName?: 'flo' | 'maam' | 'clue' | 'period_tracker';
 }
 
 const ExternalServicesIntegration = () => {
+  const { integrations, createIntegration, updateIntegration, deleteIntegration, loading } = useHealthAppIntegrations();
+  
   const [services, setServices] = useState<ServiceIntegration[]>([
     {
       id: 'ozon-health',
@@ -69,14 +74,15 @@ const ExternalServicesIntegration = () => {
       name: 'FitStars',
       description: 'Персональные тренировки и программы от звездных тренеров',
       category: 'fitness',
-      isConnected: true,
+      isConnected: false,
       icon: <Dumbbell className="w-6 h-6" />,
       features: [
         'Персональные программы',
         'Тренировки с тренерами',
         'Йога и растяжка',
         'Отслеживание прогресса'
-      ]
+      ],
+      appName: 'flo'
     },
     {
       id: 'yoga-go',
@@ -90,7 +96,8 @@ const ExternalServicesIntegration = () => {
         'Медитации',
         'Дыхательные практики',
         'Гормональная йога'
-      ]
+      ],
+      appName: 'maam'
     },
     {
       id: 'yazio',
@@ -104,30 +111,83 @@ const ExternalServicesIntegration = () => {
         'Планы питания',
         'Рецепты',
         'Водный баланс'
-      ]
+      ],
+      appName: 'clue'
     },
     {
       id: 'myfitnesspal',
       name: 'MyFitnessPal',
       description: 'Дневник питания с большой базой продуктов',
       category: 'nutrition',
-      isConnected: true,
+      isConnected: false,
       icon: <Utensils className="w-6 h-6" />,
       features: [
         'База из 14М продуктов',
         'Макронутриенты',
         'Синхронизация с устройствами',
         'Сообщество'
-      ]
+      ],
+      appName: 'period_tracker'
     }
   ]);
 
-  const handleConnect = (serviceId: string) => {
-    setServices(prev => prev.map(service => 
-      service.id === serviceId 
-        ? { ...service, isConnected: !service.isConnected }
-        : service
-    ));
+  // Синхронизируем состояние сервисов с данными из базы
+  useEffect(() => {
+    if (!loading && integrations.length > 0) {
+      setServices(prevServices => 
+        prevServices.map(service => {
+          const integration = integrations.find(int => 
+            int.app_name === service.appName
+          );
+          
+          return {
+            ...service,
+            isConnected: integration ? integration.integration_status === 'connected' : false
+          };
+        })
+      );
+    }
+  }, [integrations, loading]);
+
+  const handleConnect = async (serviceId: string) => {
+    const service = services.find(s => s.id === serviceId);
+    if (!service || !service.appName) {
+      toast.error('Сервис не поддерживает интеграцию');
+      return;
+    }
+
+    try {
+      // Находим существующую интеграцию
+      const existingIntegration = integrations.find(int => int.app_name === service.appName);
+      
+      if (existingIntegration) {
+        // Обновляем статус существующей интеграции
+        const newStatus = existingIntegration.integration_status === 'connected' ? 'disconnected' : 'connected';
+        await updateIntegration(existingIntegration.id, {
+          integration_status: newStatus
+        });
+        
+        // Обновляем локальное состояние
+        setServices(prev => prev.map(s => 
+          s.id === serviceId ? { ...s, isConnected: newStatus === 'connected' } : s
+        ));
+        
+        toast.success(`Сервис ${service.name} ${newStatus === 'connected' ? 'подключен' : 'отключен'}`);
+      } else {
+        // Создаем новую интеграцию
+        await createIntegration(service.appName);
+        
+        // Обновляем локальное состояние
+        setServices(prev => prev.map(s => 
+          s.id === serviceId ? { ...s, isConnected: true } : s
+        ));
+        
+        toast.success(`Сервис ${service.name} подключен`);
+      }
+    } catch (error) {
+      console.error('Ошибка при подключении сервиса:', error);
+      toast.error('Не удалось изменить статус подключения');
+    }
   };
 
   const marketplaceServices = services.filter(s => s.category === 'marketplace');
@@ -206,6 +266,7 @@ const ExternalServicesIntegration = () => {
             onClick={() => handleConnect(service.id)}
             className="w-full"
             variant={service.isConnected ? "outline" : "default"}
+            disabled={loading || !service.appName}
           >
             {service.isConnected ? 'Отключить' : 'Подключить'}
           </Button>
