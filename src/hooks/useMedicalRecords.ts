@@ -51,7 +51,7 @@ export const useMedicalRecords = () => {
         record_type: record.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(record.attachments) ? record.attachments : [],
         file_attachments: Array.isArray(record.file_attachments) 
-          ? (record.file_attachments as FileAttachment[])
+          ? (record.file_attachments as unknown as FileAttachment[])
           : [],
         metadata: (record.metadata as Record<string, any>) || {}
       }));
@@ -127,7 +127,7 @@ export const useMedicalRecords = () => {
           clinic_name: recordData.clinic_name,
           record_date: recordData.record_date!,
           attachments: recordData.attachments || [],
-          file_attachments: fileAttachments,
+          file_attachments: fileAttachments as any,
           metadata: recordData.metadata || {}
         })
         .select()
@@ -141,7 +141,7 @@ export const useMedicalRecords = () => {
         record_type: data.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(data.attachments) ? data.attachments : [],
         file_attachments: Array.isArray(data.file_attachments) 
-          ? (data.file_attachments as FileAttachment[])
+          ? (data.file_attachments as unknown as FileAttachment[])
           : [],
         metadata: (data.metadata as Record<string, any>) || {}
       };
@@ -187,7 +187,7 @@ export const useMedicalRecords = () => {
           clinic_name: updates.clinic_name,
           record_date: updates.record_date,
           attachments: updates.attachments,
-          file_attachments: fileAttachments,
+          file_attachments: fileAttachments as any,
           metadata: updates.metadata
         })
         .eq('id', id)
@@ -202,7 +202,7 @@ export const useMedicalRecords = () => {
         record_type: data.record_type as MedicalRecord['record_type'],
         attachments: Array.isArray(data.attachments) ? data.attachments : [],
         file_attachments: Array.isArray(data.file_attachments) 
-          ? (data.file_attachments as FileAttachment[])
+          ? (data.file_attachments as unknown as FileAttachment[])
           : [],
         metadata: (data.metadata as Record<string, any>) || {}
       };
