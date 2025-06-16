@@ -13,6 +13,7 @@ import {
   Settings,
   Heart
 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 import ProfileSection from '@/components/dashboard/ProfileSection';
 import DeviceIntegration from '@/components/dashboard/DeviceIntegration';
 import RiskAssessment from '@/components/dashboard/RiskAssessment';
@@ -31,12 +32,17 @@ import { useIsMobile } from '@/hooks/use-mobile';
 
 const Dashboard = () => {
   const { user, signOut } = useAuth();
+  const navigate = useNavigate();
   const { devices } = useDevices();
   const { getHealthMetrics } = useHealthData();
   const isMobile = useIsMobile();
 
   const metrics = getHealthMetrics();
   const connectedDevices = devices.filter(d => d.is_connected).length;
+
+  const handleSettingsClick = () => {
+    navigate('/medical-integrations');
+  };
 
   return (
     <div className="min-h-screen prevent-gradient-bg">
@@ -61,7 +67,12 @@ const Dashboard = () => {
               <ThemeToggle />
               <NotificationCenter />
               {!isMobile && (
-                <Button variant="ghost" size="icon" className="hover:bg-primary/10">
+                <Button 
+                  variant="ghost" 
+                  size="icon" 
+                  className="hover:bg-primary/10"
+                  onClick={handleSettingsClick}
+                >
                   <Settings className="w-5 h-5" />
                 </Button>
               )}
