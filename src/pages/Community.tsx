@@ -28,8 +28,8 @@ const Community = () => {
   const [isCreateGroupOpen, setIsCreateGroupOpen] = useState(false);
   const [isCreatePostOpen, setIsCreatePostOpen] = useState(false);
 
-  const { supportGroups, isLoading: groupsLoading } = useSupportGroups();
-  const { posts, isLoading: postsLoading } = useCommunityPosts();
+  const { data: supportGroups, isLoading: groupsLoading } = useSupportGroups();
+  const { data: posts, isLoading: postsLoading } = useCommunityPosts();
 
   const categories = [
     { id: 'all', name: 'Все', icon: Users },
