@@ -13,6 +13,7 @@ import AIHealth from './pages/AIHealth';
 import Auth from './pages/Auth';
 import TelemedicineIntegrations from './pages/TelemedicineIntegrations';
 import HealthAnalytics from './pages/HealthAnalytics';
+import GamificationPage from './pages/GamificationPage';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
                 <Route path="/telemedicine-integrations" element={<TelemedicineIntegrations />} />
                 <Route path="/ai-health" element={<AIHealth />} />
                 <Route path="/health-analytics" element={<HealthAnalytics />} />
+                <Route path="/gamification" element={<GamificationPage />} />
               </Routes>
               <Toaster />
             </div>
