@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -121,11 +120,18 @@ const MedicalCalendar = () => {
       if (!user) throw new Error('Пользователь не авторизован');
 
       const eventData = {
-        ...data,
-        user_id: user.id,
+        title: data.title,
+        description: data.description || null,
+        event_type: data.event_type,
+        event_date: data.event_date,
         event_time: data.event_time || null,
         duration_minutes: data.duration_minutes || 60,
+        location: data.location || null,
+        doctor_name: data.doctor_name || null,
+        clinic_name: data.clinic_name || null,
         reminder_minutes: data.reminder_minutes || 15,
+        notes: data.notes || null,
+        user_id: user.id,
       };
 
       if (editingEvent) {

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Calendar, FileText, Video, Pill, Building, Settings, Stethoscope, CalendarDays } from 'lucide-react';
+import { Calendar, FileText, Video, Pill, Building, Settings, Stethoscope, CalendarDays, TestTube, MapPin } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import AppointmentBooking from '@/components/medical/AppointmentBooking';
 import MedicalRecords from '@/components/medical/MedicalRecords';
@@ -11,6 +11,8 @@ import PharmacyPartners from '@/components/medical/PharmacyPartners';
 import MedicalProcedures from '@/components/medical/MedicalProcedures';
 import DoctorConsultationBooking from '@/components/medical/DoctorConsultationBooking';
 import MedicalCalendar from '@/components/medical/MedicalCalendar';
+import LabIntegrations from '@/components/medical/LabIntegrations';
+import PartnerMap from '@/components/medical/PartnerMap';
 
 const MedicalIntegrations = () => {
   const navigate = useNavigate();
@@ -38,7 +40,7 @@ const MedicalIntegrations = () => {
         </div>
 
         <Tabs defaultValue="calendar" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-7">
+          <TabsList className="grid w-full grid-cols-9">
             <TabsTrigger value="calendar" className="flex items-center gap-2">
               <CalendarDays className="w-4 h-4" />
               Календарь
@@ -66,6 +68,14 @@ const MedicalIntegrations = () => {
             <TabsTrigger value="records" className="flex items-center gap-2">
               <FileText className="w-4 h-4" />
               Медкарта
+            </TabsTrigger>
+            <TabsTrigger value="labs" className="flex items-center gap-2">
+              <TestTube className="w-4 h-4" />
+              Лаборатории
+            </TabsTrigger>
+            <TabsTrigger value="map" className="flex items-center gap-2">
+              <MapPin className="w-4 h-4" />
+              Карта клиник
             </TabsTrigger>
           </TabsList>
 
@@ -95,6 +105,14 @@ const MedicalIntegrations = () => {
 
           <TabsContent value="records">
             <MedicalRecords />
+          </TabsContent>
+
+          <TabsContent value="labs">
+            <LabIntegrations />
+          </TabsContent>
+
+          <TabsContent value="map">
+            <PartnerMap />
           </TabsContent>
         </Tabs>
       </div>
