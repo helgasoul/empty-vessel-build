@@ -36,7 +36,16 @@ export const useMedicalRecords = () => {
         .order('record_date', { ascending: false });
 
       if (error) throw error;
-      setRecords(data || []);
+      
+      // Transform the data to match our interface
+      const transformedRecords: MedicalRecord[] = (data || []).map(record => ({
+        ...record,
+        record_type: record.record_type as MedicalRecord['record_type'],
+        attachments: Array.isArray(record.attachments) ? record.attachments : [],
+        metadata: (record.metadata as Record<string, any>) || {}
+      }));
+      
+      setRecords(transformedRecords);
     } catch (error) {
       console.error('Ошибка при загрузке медицинских записей:', error);
       toast.error('Не удалось загрузить медицинские записи');
@@ -53,17 +62,32 @@ export const useMedicalRecords = () => {
       const { data, error } = await supabase
         .from('medical_records')
         .insert({
-          ...recordData,
-          user_id: user.id
+          user_id: user.id,
+          record_type: recordData.record_type!,
+          title: recordData.title!,
+          description: recordData.description,
+          doctor_name: recordData.doctor_name,
+          clinic_name: recordData.clinic_name,
+          record_date: recordData.record_date!,
+          attachments: recordData.attachments || [],
+          metadata: recordData.metadata || {}
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      setRecords(prev => [data, ...prev]);
+      // Transform the returned data to match our interface
+      const transformedRecord: MedicalRecord = {
+        ...data,
+        record_type: data.record_type as MedicalRecord['record_type'],
+        attachments: Array.isArray(data.attachments) ? data.attachments : [],
+        metadata: (data.metadata as Record<string, any>) || {}
+      };
+
+      setRecords(prev => [transformedRecord, ...prev]);
       toast.success('Медицинская запись добавлена');
-      return data;
+      return transformedRecord;
     } catch (error) {
       console.error('Ошибка при создании записи:', error);
       toast.error('Не удалось создать медицинскую запись');
@@ -75,18 +99,35 @@ export const useMedicalRecords = () => {
     try {
       const { data, error } = await supabase
         .from('medical_records')
-        .update(updates)
+        .update({
+          record_type: updates.record_type,
+          title: updates.title,
+          description: updates.description,
+          doctor_name: updates.doctor_name,
+          clinic_name: updates.clinic_name,
+          record_date: updates.record_date,
+          attachments: updates.attachments,
+          metadata: updates.metadata
+        })
         .eq('id', id)
         .select()
         .single();
 
       if (error) throw error;
 
+      // Transform the returned data to match our interface
+      const transformedRecord: MedicalRecord = {
+        ...data,
+        record_type: data.record_type as MedicalRecord['record_type'],
+        attachments: Array.isArray(data.attachments) ? data.attachments : [],
+        metadata: (data.metadata as Record<string, any>) || {}
+      };
+
       setRecords(prev => prev.map(record => 
-        record.id === id ? data : record
+        record.id === id ? transformedRecord : record
       ));
       toast.success('Запись обновлена');
-      return data;
+      return transformedRecord;
     } catch (error) {
       console.error('Ошибка при обновлении записи:', error);
       toast.error('Не удалось обновить запись');
