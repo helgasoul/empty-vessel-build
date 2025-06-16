@@ -40,7 +40,7 @@ export const useResearchFiles = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setFiles(data || []);
+      setFiles((data as ResearchFile[]) || []);
     } catch (error) {
       console.error('Error fetching research files:', error);
       toast.error('Не удалось загрузить файлы исследований');
@@ -112,9 +112,9 @@ export const useResearchFiles = () => {
 
       if (dbError) throw dbError;
 
-      setFiles(prev => [data, ...prev]);
+      setFiles(prev => [data as ResearchFile, ...prev]);
       toast.success('Файл успешно загружен');
-      return data;
+      return data as ResearchFile;
     } catch (error) {
       console.error('Error uploading file:', error);
       toast.error('Ошибка при загрузке файла');
@@ -176,9 +176,9 @@ export const useResearchFiles = () => {
 
       if (error) throw error;
 
-      setFiles(prev => prev.map(f => f.id === fileId ? data : f));
+      setFiles(prev => prev.map(f => f.id === fileId ? data as ResearchFile : f));
       toast.success('Файл обновлен');
-      return data;
+      return data as ResearchFile;
     } catch (error) {
       console.error('Error updating file:', error);
       toast.error('Ошибка при обновлении файла');

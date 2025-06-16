@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -126,10 +125,10 @@ const ResearchFileUpload = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-#F0A1C0">Файлы исследований</h2>
+        <h2 className="text-2xl font-bold text-pink-400">Файлы исследований</h2>
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
-            <Button className="bg-#F0A1C0 hover:bg-#F0A1C0/90" onClick={resetForm}>
+            <Button className="bg-pink-400 hover:bg-pink-500 text-white" onClick={resetForm}>
               <Upload className="w-4 h-4 mr-2" />
               Загрузить файл
             </Button>
@@ -255,7 +254,7 @@ const ResearchFileUpload = () => {
               <Button 
                 type="submit" 
                 disabled={uploading || !selectedFile || !title || !researchDate}
-                className="w-full bg-#F0A1C0 hover:bg-#F0A1C0/90"
+                className="w-full bg-pink-400 hover:bg-pink-500 text-white"
               >
                 {uploading ? 'Загрузка...' : 'Загрузить файл'}
               </Button>
@@ -274,7 +273,7 @@ const ResearchFileUpload = () => {
             </p>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
-                <Button className="bg-#F0A1C0 hover:bg-#F0A1C0/90" onClick={resetForm}>
+                <Button className="bg-pink-400 hover:bg-pink-500 text-white" onClick={resetForm}>
                   <Upload className="w-4 h-4 mr-2" />
                   Загрузить первый файл
                 </Button>
@@ -400,7 +399,7 @@ const ResearchFileUpload = () => {
                   <Button 
                     type="submit" 
                     disabled={uploading || !selectedFile || !title || !researchDate}
-                    className="w-full bg-#F0A1C0 hover:bg-#F0A1C0/90"
+                    className="w-full bg-pink-400 hover:bg-pink-500 text-white"
                   >
                     {uploading ? 'Загрузка...' : 'Загрузить файл'}
                   </Button>

@@ -1294,6 +1294,63 @@ export type Database = {
         }
         Relationships: []
       }
+      research_files: {
+        Row: {
+          created_at: string
+          description: string | null
+          doctor_name: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          is_shared: boolean
+          lab_name: string | null
+          research_date: string
+          research_type: string
+          tags: string[] | null
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          doctor_name?: string | null
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          is_shared?: boolean
+          lab_name?: string | null
+          research_date: string
+          research_type: string
+          tags?: string[] | null
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          doctor_name?: string | null
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          is_shared?: boolean
+          lab_name?: string | null
+          research_date?: string
+          research_type?: string
+          tags?: string[] | null
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       risk_assessments: {
         Row: {
           assessment_data: Json
