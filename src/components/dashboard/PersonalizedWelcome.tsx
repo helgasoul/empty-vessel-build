@@ -4,9 +4,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Sparkles, Sun, Moon, Coffee, Sunset } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
+import { useNavigate } from 'react-router-dom';
 
 const PersonalizedWelcome = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
 
   const getTimeOfDay = () => {
     const hour = new Date().getHours();
@@ -122,21 +124,24 @@ const PersonalizedWelcome = () => {
           <Button 
             variant="ghost" 
             size="sm" 
-            className="bg-white/40 hover:bg-white/60 text-gray-700 border border-white/30"
+            className="bg-blue-500 hover:bg-blue-600 text-white border border-blue-600 font-medium transition-all duration-200 hover:shadow-md"
+            onClick={() => navigate('/risk-assessment')}
           >
             Быстрая оценка рисков
           </Button>
           <Button 
             variant="ghost" 
             size="sm" 
-            className="bg-white/40 hover:bg-white/60 text-gray-700 border border-white/30"
+            className="bg-green-500 hover:bg-green-600 text-white border border-green-600 font-medium transition-all duration-200 hover:shadow-md"
+            onClick={() => navigate('/womens-health')}
           >
             Записать симптомы
           </Button>
           <Button 
             variant="ghost" 
             size="sm" 
-            className="bg-white/40 hover:bg-white/60 text-gray-700 border border-white/30"
+            className="bg-purple-500 hover:bg-purple-600 text-white border border-purple-600 font-medium transition-all duration-200 hover:shadow-md"
+            onClick={() => navigate('/health-analytics')}
           >
             Посмотреть статистику
           </Button>
