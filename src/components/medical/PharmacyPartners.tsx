@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,69 +8,52 @@ import {
   Phone, 
   Globe, 
   Clock, 
-  Truck,
+  Building,
   Star,
   ExternalLink,
-  Leaf
+  Calendar
 } from "lucide-react";
 import { usePharmacyPartners } from "@/hooks/usePharmacyPartners";
 
 const PharmacyPartners = () => {
   const { partners, loading } = usePharmacyPartners();
 
-  // Временные партнеры до полной интеграции
+  // Новые клиники-партнеры
   const staticPartners = [
     {
-      id: 'ecoherbs-1',
-      name: 'EcoHerbs',
-      address: 'ул. Эко, 12, Москва',
-      phone: '+7 (495) 555-01-23',
-      email: 'info@ecoherbs.org',
-      website: 'https://ecoherbs.org',
-      delivery_available: true,
+      id: 'chaika-clinic',
+      name: 'Клиника Чайка',
+      address: 'Литовский бульвар, 1А, Москва',
+      phone: '+7 (495) 104-80-03',
+      website: 'https://chaika.com',
+      delivery_available: false,
       working_hours: {
-        'пн-пт': '9:00-21:00',
-        'сб-вс': '10:00-20:00'
+        'пн-пт': '8:00-21:00',
+        'сб-вс': '9:00-20:00'
       },
-      delivery_zones: ['Центральный АО', 'Северный АО', 'Западный АО'],
+      delivery_zones: [],
+      is_active: true,
+      rating: 4.8,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      specialty: 'Многопрофильная клиника'
+    },
+    {
+      id: 'ilinskaya-hospital',
+      name: 'Ильинская больница',
+      address: 'пос. Отрадное, ул. Красногорская, д. 15, стр. 1',
+      phone: '+7 (495) 620-84-30',
+      website: 'https://ilinskaya-hospital.ru',
+      delivery_available: false,
+      working_hours: {
+        'пн-вс': '24/7'
+      },
+      delivery_zones: [],
       is_active: true,
       rating: 4.9,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
-      specialty: 'Натуральные препараты и травы'
-    },
-    {
-      id: '366-apteka',
-      name: '36.6 Аптека',
-      address: 'пр-т Мира, 45, Москва',
-      phone: '+7 (495) 234-56-78',
-      website: 'https://366.ru',
-      delivery_available: true,
-      working_hours: {
-        'пн-пт': '8:00-22:00',
-        'сб-вс': '9:00-21:00'
-      },
-      delivery_zones: ['Центральный АО', 'Восточный АО'],
-      is_active: true,
-      rating: 4.6,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    },
-    {
-      id: 'rigla-apteka',
-      name: 'Аптека Ригла',
-      address: 'ул. Тверская, 15, Москва',
-      phone: '+7 (495) 123-45-67',
-      website: 'https://rigla.ru',
-      delivery_available: true,
-      working_hours: {
-        'пн-вс': '24/7'
-      },
-      delivery_zones: ['Центральный АО', 'Северный АО'],
-      is_active: true,
-      rating: 4.7,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      specialty: 'Многопрофильная больница'
     }
   ];
 
@@ -83,25 +67,22 @@ const PharmacyPartners = () => {
     ));
   };
 
-  const handleOrderRedirect = (partner: any) => {
+  const handleAppointmentRedirect = (partner: any) => {
     if (partner.website) {
       window.open(partner.website, '_blank', 'noopener,noreferrer');
     }
   };
 
   const getPartnerIcon = (partnerName: string) => {
-    if (partnerName.toLowerCase().includes('ecoherbs')) {
-      return <Leaf className="w-5 h-5 text-green-600" />;
-    }
-    return <Truck className="w-5 h-5 text-blue-600" />;
+    return <Building className="w-5 h-5 text-blue-600" />;
   };
 
   if (loading) {
     return (
       <div className="flex items-center justify-center p-8">
         <div className="text-center">
-          <Truck className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-          <p className="text-gray-600">Загрузка аптек-партнеров...</p>
+          <Building className="w-8 h-8 text-gray-400 mx-auto mb-2" />
+          <p className="text-gray-600">Загрузка клиник-партнеров...</p>
         </div>
       </div>
     );
@@ -114,10 +95,10 @@ const PharmacyPartners = () => {
     <div className="space-y-6">
       <div className="text-center">
         <h2 className="text-2xl font-bold text-gray-900 mb-2">
-          Аптеки-партнеры
+          Клиники-партнеры
         </h2>
         <p className="text-gray-600">
-          Заказывайте лекарства в проверенных аптеках с доставкой
+          Записывайтесь на прием в проверенные медицинские учреждения
         </p>
       </div>
 
@@ -139,14 +120,12 @@ const PharmacyPartners = () => {
               </div>
               
               <div className="flex flex-wrap gap-2">
-                {partner.delivery_available && (
-                  <Badge variant="secondary" className="w-fit">
-                    <Truck className="w-3 h-3 mr-1" />
-                    Доставка
-                  </Badge>
-                )}
+                <Badge variant="secondary" className="w-fit">
+                  <Calendar className="w-3 h-3 mr-1" />
+                  Запись на прием
+                </Badge>
                 {partner.specialty && (
-                  <Badge variant="outline" className="w-fit text-green-700 border-green-300">
+                  <Badge variant="outline" className="w-fit text-blue-700 border-blue-300">
                     {partner.specialty}
                   </Badge>
                 )}
@@ -182,27 +161,14 @@ const PharmacyPartners = () => {
                 </div>
               )}
 
-              {partner.delivery_zones && partner.delivery_zones.length > 0 && (
-                <div>
-                  <h4 className="font-medium text-sm mb-2">Зоны доставки:</h4>
-                  <div className="flex flex-wrap gap-1">
-                    {partner.delivery_zones.map((zone, index) => (
-                      <Badge key={index} variant="outline" className="text-xs">
-                        {zone}
-                      </Badge>
-                    ))}
-                  </div>
-                </div>
-              )}
-
               <div className="flex flex-col space-y-2 pt-4">
                 <Button 
                   className="w-full"
-                  onClick={() => handleOrderRedirect(partner)}
+                  onClick={() => handleAppointmentRedirect(partner)}
                   disabled={!partner.website}
                 >
-                  <ExternalLink className="w-4 h-4 mr-2" />
-                  Заказать лекарства
+                  <Calendar className="w-4 h-4 mr-2" />
+                  Записаться на прием
                 </Button>
                 
                 {partner.website && (
@@ -213,7 +179,7 @@ const PharmacyPartners = () => {
                     className="flex items-center space-x-2"
                   >
                     <Globe className="w-3 h-3" />
-                    <span>Сайт аптеки</span>
+                    <span>Сайт клиники</span>
                     <ExternalLink className="w-3 h-3" />
                   </Button>
                 )}
@@ -226,10 +192,10 @@ const PharmacyPartners = () => {
       {allPartners.length === 0 && (
         <Card>
           <CardContent className="p-8 text-center">
-            <Truck className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-semibold mb-2">Аптеки не найдены</h3>
+            <Building className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+            <h3 className="text-lg font-semibold mb-2">Клиники не найдены</h3>
             <p className="text-gray-600">
-              В данный момент нет доступных аптек-партнеров в вашем регионе
+              В данный момент нет доступных клиник-партнеров в вашем регионе
             </p>
           </CardContent>
         </Card>
@@ -239,10 +205,10 @@ const PharmacyPartners = () => {
         <div className="flex items-start space-x-2">
           <ExternalLink className="w-5 h-5 text-blue-600 mt-0.5" />
           <div>
-            <h4 className="font-medium text-blue-800 mb-1">Временное перенаправление</h4>
+            <h4 className="font-medium text-blue-800 mb-1">Переход на сайт клиники</h4>
             <p className="text-sm text-blue-700">
-              До завершения интеграции вы будете перенаправлены на сайт партнера для оформления заказа. 
-              В будущем заказ будет оформляться прямо в нашем приложении.
+              При нажатии на кнопку "Записаться на прием" вы будете перенаправлены на официальный сайт клиники 
+              для записи на консультацию к врачу.
             </p>
           </div>
         </div>
