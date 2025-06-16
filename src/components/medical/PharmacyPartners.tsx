@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -18,7 +17,7 @@ import { usePharmacyPartners } from "@/hooks/usePharmacyPartners";
 const PharmacyPartners = () => {
   const { partners, loading } = usePharmacyPartners();
 
-  // Новые клиники-партнеры
+  // Обновленные клиники-партнеры
   const staticPartners = [
     {
       id: 'chaika-clinic',
