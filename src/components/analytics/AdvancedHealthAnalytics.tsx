@@ -2,10 +2,8 @@
 import React, { useState, useMemo } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Button } from "@/components/ui/button";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, TrendingUp, Brain, Target, Calendar, Download, Sparkles } from "lucide-react";
+import { BarChart3, TrendingUp, Brain, Target, Sparkles, Zap } from "lucide-react";
 import HealthTrends from './HealthTrends';
 import PersonalizedInsights from './PersonalizedInsights';
 import InteractiveDashboard from './InteractiveDashboard';
@@ -13,15 +11,28 @@ import PredictiveTrends from './PredictiveTrends';
 import AgeGroupComparison from './AgeGroupComparison';
 import { useHealthData } from '@/hooks/useHealthData';
 import { useAuth } from '@/contexts/AuthContext';
-import { toast } from 'sonner';
 
 const AdvancedHealthAnalytics = () => {
   const { user } = useAuth();
-  const { healthData, dailySummary, loading } = useHealthData();
+  const { healthData, loading } = useHealthData();
   const [activeTab, setActiveTab] = useState('dashboard');
   
   // Получаем возраст пользователя (в реальном приложении это должно быть из профиля)
   const userAge = 30; // Здесь должны быть данные из профиля пользователя
+
+  // Создаем профиль пользователя для ИИ-анализа
+  const userProfile = useMemo(() => ({
+    age: userAge,
+    goals: {
+      dailySteps: 10000,
+      sleepHours: 8,
+      activeMinutes: 30
+    },
+    preferences: {
+      fitnessLevel: 'moderate',
+      healthFocus: ['cardiovascular', 'sleep', 'weight_management']
+    }
+  }), [userAge]);
 
   // Process health data for analytics
   const analyticsData = useMemo(() => {
@@ -120,21 +131,31 @@ const AdvancedHealthAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header with new features highlight */}
-      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
+      {/* Header with AI features highlight */}
+      <Card className="bg-gradient-to-r from-purple-50 to-blue-50 border-purple-200">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center space-x-2">
                 <Sparkles className="w-6 h-6 text-purple-600" />
-                <span>Новая расширенная аналитика</span>
+                <span>Расширенная аналитика с ИИ</span>
                 <Badge variant="secondary" className="bg-purple-100 text-purple-800">
-                  ИИ-прогнозы
+                  Персонализированно
                 </Badge>
               </CardTitle>
               <CardDescription>
-                Интерактивные дашборды, прогнозирование трендов, сравнение с возрастными нормами и экспорт отчетов
+                ИИ-анализ, прогнозирование трендов, персонализированные рекомендации и интеллектуальные инсайты
               </CardDescription>
+            </div>
+            <div className="hidden md:flex items-center space-x-4">
+              <div className="text-center">
+                <div className="text-2xl font-bold text-purple-600">{analyticsData.length}</div>
+                <div className="text-xs text-gray-600">дней данных</div>
+              </div>
+              <div className="text-center">
+                <div className="text-2xl font-bold text-blue-600">{healthMetrics.consistencyScore}%</div>
+                <div className="text-xs text-gray-600">постоянство</div>
+              </div>
             </div>
           </div>
         </CardHeader>
@@ -150,7 +171,7 @@ const AdvancedHealthAnalytics = () => {
                 Недостаточно данных для аналитики
               </h3>
               <p className="text-gray-600">
-                Подключите устройства и начните отслеживать активность для получения детальной аналитики
+                Подключите устройства и начните отслеживать активность для получения детальной аналитики и ИИ-рекомендаций
               </p>
             </div>
           </CardContent>
@@ -162,21 +183,22 @@ const AdvancedHealthAnalytics = () => {
               <BarChart3 className="w-4 h-4" />
               <span>Дашборд</span>
             </TabsTrigger>
+            <TabsTrigger value="ai-analysis" className="flex items-center space-x-2">
+              <Brain className="w-4 h-4" />
+              <span>ИИ-Анализ</span>
+              <Badge variant="secondary" className="ml-1 bg-purple-100 text-purple-800">Новое</Badge>
+            </TabsTrigger>
             <TabsTrigger value="trends" className="flex items-center space-x-2">
               <TrendingUp className="w-4 h-4" />
               <span>Тренды</span>
-            </TabsTrigger>
-            <TabsTrigger value="predictions" className="flex items-center space-x-2">
-              <Brain className="w-4 h-4" />
-              <span>ИИ-прогнозы</span>
             </TabsTrigger>
             <TabsTrigger value="comparison" className="flex items-center space-x-2">
               <Target className="w-4 h-4" />
               <span>Сравнение</span>
             </TabsTrigger>
-            <TabsTrigger value="goals" className="flex items-center space-x-2">
-              <Target className="w-4 h-4" />
-              <span>Цели</span>
+            <TabsTrigger value="insights" className="flex items-center space-x-2">
+              <Zap className="w-4 h-4" />
+              <span>Инсайты</span>
             </TabsTrigger>
           </TabsList>
 
@@ -187,15 +209,18 @@ const AdvancedHealthAnalytics = () => {
             />
           </TabsContent>
 
+          <TabsContent value="ai-analysis">
+            <PredictiveTrends 
+              historicalData={analyticsData} 
+              userProfile={userProfile}
+            />
+          </TabsContent>
+
           <TabsContent value="trends">
             <HealthTrends 
               data={analyticsData} 
               timeRange="30d"
             />
-          </TabsContent>
-
-          <TabsContent value="predictions">
-            <PredictiveTrends historicalData={analyticsData} />
           </TabsContent>
 
           <TabsContent value="comparison">
@@ -205,96 +230,13 @@ const AdvancedHealthAnalytics = () => {
             />
           </TabsContent>
 
-          <TabsContent value="goals">
-            <div className="space-y-6">
-              {/* Goals Progress */}
-              <Card>
-                <CardHeader>
-                  <CardTitle>Прогресс по целям</CardTitle>
-                  <CardDescription>
-                    Ваши достижения за последний месяц
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-6">
-                    {/* Steps Goal */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Ежедневные шаги</span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-600">
-                            {healthMetrics.avgSteps.toLocaleString()} / {userGoals.dailySteps.toLocaleString()}
-                          </span>
-                          <Badge variant={healthMetrics.avgSteps >= userGoals.dailySteps ? "default" : "secondary"}>
-                            {Math.round((healthMetrics.avgSteps / userGoals.dailySteps) * 100)}%
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-blue-600 h-2 rounded-full transition-all duration-300"
-                          style={{ 
-                            width: `${Math.min((healthMetrics.avgSteps / userGoals.dailySteps) * 100, 100)}%`
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    {/* Sleep Goal */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Сон</span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-600">
-                            {healthMetrics.avgSleepHours}ч / {userGoals.sleepHours}ч
-                          </span>
-                          <Badge variant={healthMetrics.avgSleepHours >= userGoals.sleepHours ? "default" : "secondary"}>
-                            {Math.round((healthMetrics.avgSleepHours / userGoals.sleepHours) * 100)}%
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-purple-600 h-2 rounded-full transition-all duration-300"
-                          style={{ 
-                            width: `${Math.min((healthMetrics.avgSleepHours / userGoals.sleepHours) * 100, 100)}%`
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-
-                    {/* Active Minutes Goal */}
-                    <div className="space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="font-medium">Активные минуты</span>
-                        <div className="flex items-center space-x-2">
-                          <span className="text-sm text-gray-600">
-                            {healthMetrics.avgActiveMinutes}мин / {userGoals.activeMinutes}мин
-                          </span>
-                          <Badge variant={healthMetrics.avgActiveMinutes >= userGoals.activeMinutes ? "default" : "secondary"}>
-                            {Math.round((healthMetrics.avgActiveMinutes / userGoals.activeMinutes) * 100)}%
-                          </Badge>
-                        </div>
-                      </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div 
-                          className="bg-green-600 h-2 rounded-full transition-all duration-300"
-                          style={{ 
-                            width: `${Math.min((healthMetrics.avgActiveMinutes / userGoals.activeMinutes) * 100, 100)}%`
-                          }}
-                        ></div>
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Personalized Insights */}
-              <PersonalizedInsights 
-                metrics={healthMetrics} 
-                userGoals={userGoals}
-              />
-            </div>
+          <TabsContent value="insights">
+            <PersonalizedInsights 
+              metrics={healthMetrics} 
+              userGoals={userGoals}
+              historicalData={analyticsData}
+              userProfile={userProfile}
+            />
           </TabsContent>
         </Tabs>
       )}
