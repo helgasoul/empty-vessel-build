@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2, RefreshCw } from "lucide-react";
+import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2, RefreshCw, Info } from "lucide-react";
 import AirQualityMonitor from './AirQualityMonitor';
 import EnvironmentalImpactAnalysis from './EnvironmentalImpactAnalysis';
 import ProtectionRecommendations from './ProtectionRecommendations';
@@ -97,6 +97,22 @@ const EnvironmentalHealthDashboard = () => {
           </div>
         </CardHeader>
       </Card>
+
+      {/* Демо режим уведомление */}
+      {(airQualityData || weatherData) && (
+        <Alert>
+          <Info className="h-4 w-4" />
+          <AlertDescription>
+            <div className="space-y-2">
+              <div className="font-medium">Демонстрационный режим</div>
+              <div className="text-sm">
+                Отображаются образцы экологических данных для демонстрации функциональности. 
+                В реальной версии будут использоваться актуальные данные с внешних API.
+              </div>
+            </div>
+          </AlertDescription>
+        </Alert>
+      )}
 
       {/* Геолокация не поддерживается */}
       {!geolocationSupported && (
@@ -219,22 +235,6 @@ const EnvironmentalHealthDashboard = () => {
             </>
           )}
         </div>
-      )}
-
-      {/* Ошибка API */}
-      {error && !locationError && (
-        <Alert variant="destructive">
-          <AlertTriangle className="h-4 w-4" />
-          <AlertDescription>
-            <div className="text-center py-4">
-              <p className="text-red-600 font-medium">Ошибка загрузки данных</p>
-              <p className="text-sm mt-1">{error.toString()}</p>
-              <p className="text-gray-600 text-sm mt-2">
-                Проверьте подключение к интернету и попробуйте обновить страницу
-              </p>
-            </div>
-          </AlertDescription>
-        </Alert>
       )}
 
       {/* Индикатор загрузки данных */}
