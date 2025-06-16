@@ -1,0 +1,124 @@
+
+import React from 'react';
+import { Card, CardContent } from "@/components/ui/card";
+import { Shield, Smartphone, Activity, Heart, Ruler, TrendingUp } from "lucide-react";
+import { useDevices } from '@/hooks/useDevices';
+import { useHealthData } from '@/hooks/useHealthData';
+import { useAuth } from '@/contexts/AuthContext';
+import { supabase } from '@/integrations/supabase/client';
+
+const HealthMetricsCards = () => {
+  const { user } = useAuth();
+  const { devices } = useDevices();
+  const { getHealthMetrics } = useHealthData();
+  const [profile, setProfile] = React.useState<any>(null);
+
+  React.useEffect(() => {
+    const fetchProfile = async () => {
+      if (!user) return;
+      
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('height, weight')
+        .eq('id', user.id)
+        .single();
+
+      if (!error && data) {
+        setProfile(data);
+      }
+    };
+
+    fetchProfile();
+  }, [user]);
+
+  const metrics = getHealthMetrics();
+  const connectedDevices = devices.filter(d => d.is_connected).length;
+
+  const formatNumber = (num: number) => {
+    return new Intl.NumberFormat('ru-RU').format(num);
+  };
+
+  return (
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6 md:mb-8 animate-slide-up">
+      <Card className="prevent-card hover:shadow-lg transition-all duration-200">
+        <CardContent className="p-4 md:p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs md:text-sm font-roboto text-gray-600">Общий риск</p>
+              <p className="text-lg md:text-2xl font-montserrat font-bold text-green-600">Низкий</p>
+              <div className="flex items-center space-x-1 mt-1">
+                <TrendingUp className="w-3 h-3 text-green-500" />
+                <span className="text-xs text-green-500">Улучшается</span>
+              </div>
+            </div>
+            <div className="prevent-icon-container bg-green-100 w-8 h-8 md:w-12 md:h-12">
+              <Shield className="w-4 h-4 md:w-6 md:h-6 text-green-600" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="prevent-card hover:shadow-lg transition-all duration-200">
+        <CardContent className="p-4 md:p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs md:text-sm font-roboto text-gray-600">Устройства</p>
+              <p className="text-lg md:text-2xl font-montserrat font-bold text-blue-600">{connectedDevices}</p>
+              <div className="flex items-center space-x-1 mt-1">
+                <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                <span className="text-xs text-gray-500">Активно</span>
+              </div>
+            </div>
+            <div className="prevent-icon-container bg-blue-100 w-8 h-8 md:w-12 md:h-12">
+              <Smartphone className="w-4 h-4 md:w-6 md:h-6 text-blue-600" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="prevent-card hover:shadow-lg transition-all duration-200">
+        <CardContent className="p-4 md:p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs md:text-sm font-roboto text-gray-600">Рост</p>
+              <p className="text-lg md:text-2xl font-montserrat font-bold text-purple-600">
+                {profile?.height || '--'}
+                {profile?.height && <span className="text-xs md:text-sm text-gray-500 ml-1">см</span>}
+              </p>
+              <div className="flex items-center space-x-1 mt-1">
+                <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
+                <span className="text-xs text-gray-500">Данные профиля</span>
+              </div>
+            </div>
+            <div className="prevent-icon-container bg-purple-100 w-8 h-8 md:w-12 md:h-12">
+              <Ruler className="w-4 h-4 md:w-6 md:h-6 text-purple-600" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card className="prevent-card hover:shadow-lg transition-all duration-200">
+        <CardContent className="p-4 md:p-6">
+          <div className="flex items-center justify-between">
+            <div>
+              <p className="text-xs md:text-sm font-roboto text-gray-600">Пульс</p>
+              <p className="text-lg md:text-2xl font-montserrat font-bold text-pink-600">
+                {metrics.avgHeartRate || '--'}
+                {metrics.avgHeartRate && <span className="text-xs md:text-sm text-gray-500 ml-1">bpm</span>}
+              </p>
+              <div className="flex items-center space-x-1 mt-1">
+                <div className="w-2 h-2 bg-pink-500 rounded-full animate-pulse"></div>
+                <span className="text-xs text-gray-500">В норме</span>
+              </div>
+            </div>
+            <div className="prevent-icon-container bg-pink-100 w-8 h-8 md:w-12 md:h-12">
+              <Heart className="w-4 h-4 md:w-6 md:h-6 text-pink-600" />
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+};
+
+export default HealthMetricsCards;
