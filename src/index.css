@@ -135,7 +135,7 @@
   }
 
   .prevent-card {
-    @apply bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm border-0 shadow-lg hover:shadow-xl transition-all duration-300 rounded-xl;
+    @apply bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm border border-gray-200/60 dark:border-gray-700/60 shadow-sm hover:shadow-lg transition-all duration-300 rounded-xl;
   }
 
   .prevent-button-primary {
@@ -160,6 +160,25 @@
 
   .prevent-icon-container {
     @apply w-12 h-12 rounded-xl flex items-center justify-center transition-all duration-200 hover:scale-110;
+  }
+
+  /* Улучшенные карточки с микро-анимациями */
+  .prevent-card-hover {
+    @apply prevent-card hover:shadow-xl hover:-translate-y-1 transform transition-all duration-300;
+  }
+
+  /* Индикаторы прогресса */
+  .prevent-progress-container {
+    @apply relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden;
+  }
+
+  .prevent-progress-bar {
+    @apply h-full bg-gradient-to-r from-blue-500 to-purple-500 transition-all duration-500 rounded-full;
+  }
+
+  /* Уведомления */
+  .prevent-notification-dot {
+    @apply absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full border-2 border-white dark:border-gray-800 animate-pulse;
   }
 
   /* Компактный режим */
@@ -194,6 +213,10 @@
     animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
+  .animate-bounce-gentle {
+    animation: bounceGentle 2s infinite;
+  }
+
   /* Мобильные утилиты */
   .mobile-padding {
     @apply px-4 md:px-6;
@@ -205,6 +228,15 @@
 
   .mobile-title {
     @apply text-xl md:text-2xl;
+  }
+
+  /* Статус индикаторы */
+  .status-online {
+    @apply w-2 h-2 bg-green-500 rounded-full animate-pulse;
+  }
+
+  .status-offline {
+    @apply w-2 h-2 bg-gray-400 rounded-full;
   }
 }
 
@@ -230,6 +262,18 @@
   }
 }
 
+@keyframes bounceGentle {
+  0%, 20%, 50%, 80%, 100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-10px);
+  }
+  60% {
+    transform: translateY(-5px);
+  }
+}
+
 /* Улучшенная поддержка мобильных устройств */
 @media (max-width: 768px) {
   .prevent-card {
@@ -243,6 +287,15 @@
   .grid-cols-2 {
     gap: 1rem;
   }
+
+  /* Оптимизация для touch-устройств */
+  .prevent-card {
+    @apply active:scale-[0.98] transition-transform;
+  }
+
+  button {
+    @apply min-h-[44px] min-w-[44px];
+  }
 }
 
 /* Улучшения для темной темы */
@@ -252,4 +305,62 @@
 
 .dark .prevent-gradient-accent {
   background: linear-gradient(135deg, #F0A1C0 0%, #4A90E2 100%);
+}
+
+/* Скроллбары для WebKit браузеров */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #475569;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Фокус для доступности */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply outline-none ring-2 ring-primary ring-offset-2 ring-offset-background;
+}
+
+/* Высокая контрастность для accessibility */
+@media (prefers-contrast: high) {
+  .prevent-card {
+    @apply border-2 border-gray-400;
+  }
+  
+  .text-gray-600 {
+    @apply text-gray-800;
+  }
+  
+  .text-gray-500 {
+    @apply text-gray-700;
+  }
+}
+
+/* Reduced motion для пользователей с ограниченными возможностями */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
