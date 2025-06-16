@@ -50,7 +50,18 @@ const DoctorAccessTokens: React.FC = () => {
         .order('created_at', { ascending: false });
 
       if (error) throw error;
-      setTokens(data || []);
+      
+      // Type assertion to handle Json type from Supabase
+      const typedTokens = (data || []).map(token => ({
+        ...token,
+        access_permissions: token.access_permissions as {
+          medical_records: boolean;
+          family_history: boolean;
+          health_data: boolean;
+        }
+      }));
+      
+      setTokens(typedTokens);
     } catch (error) {
       console.error('Error loading access tokens:', error);
       toast({
