@@ -902,6 +902,69 @@ export type Database = {
           },
         ]
       }
+      medical_procedures: {
+        Row: {
+          clinic_name: string | null
+          created_at: string
+          doctor_name: string | null
+          duration_minutes: number | null
+          id: string
+          is_recurring: boolean | null
+          location: string | null
+          notes: string | null
+          preparation_instructions: string | null
+          procedure_name: string
+          procedure_type: string
+          recurrence_pattern: Json | null
+          reminder_sent: boolean | null
+          scheduled_date: string
+          scheduled_time: string | null
+          status: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          clinic_name?: string | null
+          created_at?: string
+          doctor_name?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          notes?: string | null
+          preparation_instructions?: string | null
+          procedure_name: string
+          procedure_type: string
+          recurrence_pattern?: Json | null
+          reminder_sent?: boolean | null
+          scheduled_date: string
+          scheduled_time?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          clinic_name?: string | null
+          created_at?: string
+          doctor_name?: string | null
+          duration_minutes?: number | null
+          id?: string
+          is_recurring?: boolean | null
+          location?: string | null
+          notes?: string | null
+          preparation_instructions?: string | null
+          procedure_name?: string
+          procedure_type?: string
+          recurrence_pattern?: Json | null
+          reminder_sent?: boolean | null
+          scheduled_date?: string
+          scheduled_time?: string | null
+          status?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       medical_records: {
         Row: {
           attachments: Json | null
@@ -1294,6 +1357,54 @@ export type Database = {
           provider_type?: string
           rating?: number | null
           specializations?: string[] | null
+          updated_at?: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
+      pharmacy_partners: {
+        Row: {
+          address: string | null
+          created_at: string
+          delivery_available: boolean | null
+          delivery_zones: string[] | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          phone: string | null
+          rating: number | null
+          updated_at: string
+          website: string | null
+          working_hours: Json | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          delivery_available?: boolean | null
+          delivery_zones?: string[] | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          phone?: string | null
+          rating?: number | null
+          updated_at?: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          delivery_available?: boolean | null
+          delivery_zones?: string[] | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          phone?: string | null
+          rating?: number | null
           updated_at?: string
           website?: string | null
           working_hours?: Json | null
@@ -1781,9 +1892,13 @@ export type Database = {
           ended_at: string | null
           follow_up_required: boolean | null
           id: string
+          meeting_link: string | null
+          payment_amount: number | null
+          payment_status: string | null
           prescription_issued: boolean | null
           room_id: string | null
           session_notes: string | null
+          session_recording_url: string | null
           session_status: string
           session_token: string | null
           started_at: string | null
@@ -1798,9 +1913,13 @@ export type Database = {
           ended_at?: string | null
           follow_up_required?: boolean | null
           id?: string
+          meeting_link?: string | null
+          payment_amount?: number | null
+          payment_status?: string | null
           prescription_issued?: boolean | null
           room_id?: string | null
           session_notes?: string | null
+          session_recording_url?: string | null
           session_status?: string
           session_token?: string | null
           started_at?: string | null
@@ -1815,9 +1934,13 @@ export type Database = {
           ended_at?: string | null
           follow_up_required?: boolean | null
           id?: string
+          meeting_link?: string | null
+          payment_amount?: number | null
+          payment_status?: string | null
           prescription_issued?: boolean | null
           room_id?: string | null
           session_notes?: string | null
+          session_recording_url?: string | null
           session_status?: string
           session_token?: string | null
           started_at?: string | null

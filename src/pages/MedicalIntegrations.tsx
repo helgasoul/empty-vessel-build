@@ -1,9 +1,12 @@
 
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Calendar, FileText, Video } from 'lucide-react';
+import { Calendar, FileText, Video, Pill, Building } from 'lucide-react';
 import AppointmentBooking from '@/components/medical/AppointmentBooking';
 import MedicalRecords from '@/components/medical/MedicalRecords';
+import TelemedicineConsultations from '@/components/medical/TelemedicineConsultations';
+import PharmacyPartners from '@/components/medical/PharmacyPartners';
+import MedicalProcedures from '@/components/medical/MedicalProcedures';
 
 const MedicalIntegrations = () => {
   return (
@@ -14,23 +17,31 @@ const MedicalIntegrations = () => {
             Медицинские интеграции
           </h1>
           <p className="text-gray-600">
-            Управляйте вашими медицинскими записями, записывайтесь на приемы и консультации
+            Управляйте вашими медицинскими записями, консультациями и процедурами
           </p>
         </div>
 
         <Tabs defaultValue="appointments" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-5">
             <TabsTrigger value="appointments" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
-              Записи на прием
-            </TabsTrigger>
-            <TabsTrigger value="records" className="flex items-center gap-2">
-              <FileText className="w-4 h-4" />
-              Медкарта
+              Записи
             </TabsTrigger>
             <TabsTrigger value="telemedicine" className="flex items-center gap-2">
               <Video className="w-4 h-4" />
               Телемедицина
+            </TabsTrigger>
+            <TabsTrigger value="procedures" className="flex items-center gap-2">
+              <Building className="w-4 h-4" />
+              Процедуры
+            </TabsTrigger>
+            <TabsTrigger value="pharmacy" className="flex items-center gap-2">
+              <Pill className="w-4 h-4" />
+              Аптеки
+            </TabsTrigger>
+            <TabsTrigger value="records" className="flex items-center gap-2">
+              <FileText className="w-4 h-4" />
+              Медкарта
             </TabsTrigger>
           </TabsList>
 
@@ -38,18 +49,20 @@ const MedicalIntegrations = () => {
             <AppointmentBooking />
           </TabsContent>
 
-          <TabsContent value="records">
-            <MedicalRecords />
+          <TabsContent value="telemedicine">
+            <TelemedicineConsultations />
           </TabsContent>
 
-          <TabsContent value="telemedicine">
-            <div className="text-center p-12">
-              <Video className="w-16 h-16 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold mb-2">Телемедицина</h3>
-              <p className="text-gray-600">
-                Функциональность телемедицинских консультаций находится в разработке
-              </p>
-            </div>
+          <TabsContent value="procedures">
+            <MedicalProcedures />
+          </TabsContent>
+
+          <TabsContent value="pharmacy">
+            <PharmacyPartners />
+          </TabsContent>
+
+          <TabsContent value="records">
+            <MedicalRecords />
           </TabsContent>
         </Tabs>
       </div>
