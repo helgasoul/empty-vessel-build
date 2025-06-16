@@ -383,6 +383,126 @@ export type Database = {
           },
         ]
       }
+      medical_appointments: {
+        Row: {
+          appointment_date: string
+          appointment_time: string
+          appointment_type: string
+          cost: number | null
+          created_at: string
+          doctor_id: string | null
+          duration_minutes: number | null
+          id: string
+          notes: string | null
+          payment_status: string | null
+          provider_id: string
+          reason: string | null
+          reminder_sent: boolean | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appointment_date: string
+          appointment_time: string
+          appointment_type: string
+          cost?: number | null
+          created_at?: string
+          doctor_id?: string | null
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          payment_status?: string | null
+          provider_id: string
+          reason?: string | null
+          reminder_sent?: boolean | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appointment_date?: string
+          appointment_time?: string
+          appointment_type?: string
+          cost?: number | null
+          created_at?: string
+          doctor_id?: string | null
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          payment_status?: string | null
+          provider_id?: string
+          reason?: string | null
+          reminder_sent?: boolean | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_appointments_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "partner_doctors"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_appointments_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "partner_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      medical_records: {
+        Row: {
+          attachments: Json | null
+          clinic_name: string | null
+          created_at: string
+          description: string | null
+          doctor_name: string | null
+          id: string
+          is_active: boolean
+          metadata: Json | null
+          record_date: string
+          record_type: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          attachments?: Json | null
+          clinic_name?: string | null
+          created_at?: string
+          description?: string | null
+          doctor_name?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json | null
+          record_date: string
+          record_type: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          attachments?: Json | null
+          clinic_name?: string | null
+          created_at?: string
+          description?: string | null
+          doctor_name?: string | null
+          id?: string
+          is_active?: boolean
+          metadata?: Json | null
+          record_date?: string
+          record_type?: string
+          title?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       medication_logs: {
         Row: {
           created_at: string
@@ -563,6 +683,113 @@ export type Database = {
           symptoms?: string[] | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      partner_doctors: {
+        Row: {
+          available_slots: Json | null
+          bio: string | null
+          consultation_fee: number | null
+          created_at: string
+          experience_years: number | null
+          full_name: string
+          id: string
+          is_available: boolean
+          photo_url: string | null
+          provider_id: string
+          qualification: string | null
+          rating: number | null
+          specialization: string
+          updated_at: string
+        }
+        Insert: {
+          available_slots?: Json | null
+          bio?: string | null
+          consultation_fee?: number | null
+          created_at?: string
+          experience_years?: number | null
+          full_name: string
+          id?: string
+          is_available?: boolean
+          photo_url?: string | null
+          provider_id: string
+          qualification?: string | null
+          rating?: number | null
+          specialization: string
+          updated_at?: string
+        }
+        Update: {
+          available_slots?: Json | null
+          bio?: string | null
+          consultation_fee?: number | null
+          created_at?: string
+          experience_years?: number | null
+          full_name?: string
+          id?: string
+          is_available?: boolean
+          photo_url?: string | null
+          provider_id?: string
+          qualification?: string | null
+          rating?: number | null
+          specialization?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_doctors_provider_id_fkey"
+            columns: ["provider_id"]
+            isOneToOne: false
+            referencedRelation: "partner_providers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_providers: {
+        Row: {
+          address: string | null
+          created_at: string
+          email: string | null
+          id: string
+          is_active: boolean
+          name: string
+          phone: string | null
+          provider_type: string
+          rating: number | null
+          specializations: string[] | null
+          updated_at: string
+          website: string | null
+          working_hours: Json | null
+        }
+        Insert: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name: string
+          phone?: string | null
+          provider_type: string
+          rating?: number | null
+          specializations?: string[] | null
+          updated_at?: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Update: {
+          address?: string | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          is_active?: boolean
+          name?: string
+          phone?: string | null
+          provider_type?: string
+          rating?: number | null
+          specializations?: string[] | null
+          updated_at?: string
+          website?: string | null
+          working_hours?: Json | null
         }
         Relationships: []
       }
@@ -763,6 +990,75 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      telemedicine_sessions: {
+        Row: {
+          appointment_id: string
+          created_at: string
+          doctor_id: string
+          duration_minutes: number | null
+          ended_at: string | null
+          follow_up_required: boolean | null
+          id: string
+          prescription_issued: boolean | null
+          room_id: string | null
+          session_notes: string | null
+          session_status: string
+          session_token: string | null
+          started_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appointment_id: string
+          created_at?: string
+          doctor_id: string
+          duration_minutes?: number | null
+          ended_at?: string | null
+          follow_up_required?: boolean | null
+          id?: string
+          prescription_issued?: boolean | null
+          room_id?: string | null
+          session_notes?: string | null
+          session_status?: string
+          session_token?: string | null
+          started_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appointment_id?: string
+          created_at?: string
+          doctor_id?: string
+          duration_minutes?: number | null
+          ended_at?: string | null
+          follow_up_required?: boolean | null
+          id?: string
+          prescription_issued?: boolean | null
+          room_id?: string | null
+          session_notes?: string | null
+          session_status?: string
+          session_token?: string | null
+          started_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "telemedicine_sessions_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "medical_appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "telemedicine_sessions_doctor_id_fkey"
+            columns: ["doctor_id"]
+            isOneToOne: false
+            referencedRelation: "partner_doctors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       treatment_plans: {
         Row: {
