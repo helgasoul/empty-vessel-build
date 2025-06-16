@@ -10,10 +10,26 @@ const Index = () => {
   const { user, signOut, loading } = useAuth();
   const navigate = useNavigate();
 
+  // Перенаправляем авторизованных пользователей на дашборд
+  useEffect(() => {
+    if (user && !loading) {
+      navigate('/dashboard');
+    }
+  }, [user, loading, navigate]);
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
         <div className="text-lg">Загрузка...</div>
+      </div>
+    );
+  }
+
+  // Если пользователь авторизован, показываем загрузку пока происходит перенаправление
+  if (user) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex items-center justify-center">
+        <div className="text-lg">Перенаправление на панель управления...</div>
       </div>
     );
   }
@@ -30,28 +46,13 @@ const Index = () => {
             <span className="text-xl font-bold text-gray-900">YTime</span>
           </div>
           
-          {user ? (
-            <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-600">
-                Добро пожаловать, {user.user_metadata?.full_name || user.email}!
-              </span>
-              <Button 
-                variant="outline" 
-                onClick={signOut}
-                className="hover:bg-red-50 hover:border-red-200 transition-colors"
-              >
-                Выйти
-              </Button>
-            </div>
-          ) : (
-            <Button 
-              variant="outline" 
-              onClick={() => navigate('/auth')}
-              className="hover:bg-blue-50 transition-colors"
-            >
-              Войти
-            </Button>
-          )}
+          <Button 
+            variant="outline" 
+            onClick={() => navigate('/auth')}
+            className="hover:bg-blue-50 transition-colors"
+          >
+            Войти
+          </Button>
         </div>
       </nav>
 
