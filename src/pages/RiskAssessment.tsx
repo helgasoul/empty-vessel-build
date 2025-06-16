@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
-import { Heart, History, Calculator, Info } from "lucide-react";
+import { Heart, History, Calculator, Info, Activity, Dna } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -62,25 +62,69 @@ const RiskAssessment = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
                     <Heart className="w-5 h-5 text-red-500" />
-                    <span>Что такое QRISK3?</span>
+                    <span>QRISK3</span>
                   </CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <p className="text-gray-700">
-                    QRISK3 - это научно обоснованный калькулятор, который оценивает 
-                    ваш 10-летний риск развития сердечно-сосудистых заболеваний.
+                    QRISK3 - научно обоснованный калькулятор 10-летнего риска 
+                    сердечно-сосудистых заболеваний.
                   </p>
                   <div className="space-y-2">
-                    <h4 className="font-medium">Что учитывается в расчете:</h4>
+                    <h4 className="font-medium">Факторы риска:</h4>
                     <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
-                      <li>Возраст и пол</li>
+                      <li>Возраст, пол, этническая принадлежность</li>
+                      <li>Артериальное давление, холестерин</li>
+                      <li>Курение, ИМТ</li>
+                      <li>Семейная история, сопутствующие заболевания</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Activity className="w-5 h-5 text-pink-500" />
+                    <span>BCSC v3</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Breast Cancer Surveillance Consortium v3 - наиболее валидированная 
+                    модель оценки риска рака молочной железы.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Ключевые особенности:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Учитывает плотность молочной железы (BI-RADS)</li>
+                      <li>Семейная история и биопсии</li>
+                      <li>Репродуктивные факторы</li>
+                      <li>5-летний и пожизненный риск</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Dna className="w-5 h-5 text-purple-500" />
+                    <span>BRCA</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Оценка генетического риска наследственного рака молочной железы 
+                    и яичников.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Включает:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Мутации BRCA1 и BRCA2</li>
+                      <li>Семейная история онкологии</li>
                       <li>Этническая принадлежность</li>
-                      <li>Статус курения</li>
-                      <li>Артериальное давление</li>
-                      <li>Уровень холестерина</li>
-                      <li>Индекс массы тела</li>
-                      <li>Семейная история заболеваний</li>
-                      <li>Сопутствующие заболевания</li>
+                      <li>Возрастные факторы</li>
                     </ul>
                   </div>
                 </CardContent>
@@ -95,27 +139,27 @@ const RiskAssessment = () => {
                     <div className="flex items-center space-x-3">
                       <div className="w-4 h-4 bg-green-500 rounded"></div>
                       <div>
-                        <span className="font-medium">Низкий риск (&lt; 10%)</span>
+                        <span className="font-medium">Низкий риск</span>
                         <p className="text-sm text-gray-600">
-                          Продолжайте здоровый образ жизни
+                          Стандартные рекомендации по скринингу
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <div className="w-4 h-4 bg-yellow-500 rounded"></div>
                       <div>
-                        <span className="font-medium">Средний риск (10-20%)</span>
+                        <span className="font-medium">Средний риск</span>
                         <p className="text-sm text-gray-600">
-                          Рекомендуется изменение образа жизни
+                          Дополнительное наблюдение
                         </p>
                       </div>
                     </div>
                     <div className="flex items-center space-x-3">
                       <div className="w-4 h-4 bg-red-500 rounded"></div>
                       <div>
-                        <span className="font-medium">Высокий риск (&gt; 20%)</span>
+                        <span className="font-medium">Высокий риск</span>
                         <p className="text-sm text-gray-600">
-                          Требуется медицинское вмешательство
+                          Интенсивное наблюдение и профилактика
                         </p>
                       </div>
                     </div>
@@ -123,9 +167,9 @@ const RiskAssessment = () => {
                   
                   <div className="mt-4 p-3 bg-blue-50 rounded-lg">
                     <p className="text-sm text-blue-800">
-                      <strong>Важно:</strong> Этот калькулятор предоставляет оценку риска 
-                      для информационных целей. Всегда консультируйтесь с врачом для 
-                      получения персонализированных медицинских рекомендаций.
+                      <strong>Важно:</strong> Результаты носят информационный характер. 
+                      Всегда консультируйтесь с врачом для получения персонализированных 
+                      медицинских рекомендаций.
                     </p>
                   </div>
                 </CardContent>

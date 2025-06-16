@@ -6,8 +6,9 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import QRISK3Form from "./QRISK3Form";
 import BRCARiskForm from "./BRCARiskForm";
+import BCSCRiskForm from "./BCSCRiskForm";
 import GailRiskForm from "./GailRiskForm";
-import { Heart, Dna, Calculator, CheckCircle } from "lucide-react";
+import { Heart, Dna, Calculator, CheckCircle, Activity } from "lucide-react";
 import { toast } from "sonner";
 
 const RiskAssessmentForm = () => {
@@ -43,6 +44,13 @@ const RiskAssessmentForm = () => {
       component: <QRISK3Form onComplete={() => handleAssessmentComplete('QRISK3')} />
     },
     {
+      id: 'bcsc',
+      label: 'BCSC v3',
+      icon: Activity,
+      description: 'Риск рака молочной железы',
+      component: <BCSCRiskForm onComplete={() => handleAssessmentComplete('BCSC')} />
+    },
+    {
       id: 'brca',
       label: 'BRCA',
       icon: Dna,
@@ -70,7 +78,7 @@ const RiskAssessmentForm = () => {
       </Card>
 
       <Tabs defaultValue="qrisk3" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-4">
           {assessmentTabs.map((tab) => {
             const IconComponent = tab.icon;
             const isCompleted = completedAssessments.includes(tab.id.toUpperCase());
