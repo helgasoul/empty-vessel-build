@@ -14,6 +14,8 @@ import { useMenstrualCycle, MenstrualCycle } from '@/hooks/useMenstrualCycle';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
+type CervicalMucusType = 'dry' | 'sticky' | 'creamy' | 'egg_white' | 'watery' | '';
+
 const MenstrualCycleTracker = () => {
   const { cycles, loading, addCycle, updateCycle, deleteCycle } = useMenstrualCycle();
   const [isAdding, setIsAdding] = useState(false);
@@ -27,7 +29,7 @@ const MenstrualCycleTracker = () => {
     notes: '',
     // Новые поля
     basal_temperature: '',
-    cervical_mucus: '' as 'dry' | 'sticky' | 'creamy' | 'egg_white' | 'watery' | '',
+    cervical_mucus: '' as CervicalMucusType,
     ovulation_test_result: false,
     ovulation_date: '',
     mood_rating: [3] as number[],
@@ -110,7 +112,7 @@ const MenstrualCycleTracker = () => {
       symptoms: cycle.symptoms || [],
       notes: cycle.notes || '',
       basal_temperature: cycle.basal_temperature?.toString() || '',
-      cervical_mucus: cycle.cervical_mucus || '',
+      cervical_mucus: (cycle.cervical_mucus as CervicalMucusType) || '',
       ovulation_test_result: cycle.ovulation_test_result || false,
       ovulation_date: cycle.ovulation_date || '',
       mood_rating: [cycle.mood_rating || 3],
@@ -250,7 +252,7 @@ const MenstrualCycleTracker = () => {
                 <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="cervical-mucus">Цервикальная слизь</Label>
-                    <Select value={formData.cervical_mucus} onValueChange={(value) => setFormData(prev => ({ ...prev, cervical_mucus: value as any }))}>
+                    <Select value={formData.cervical_mucus} onValueChange={(value: CervicalMucusType) => setFormData(prev => ({ ...prev, cervical_mucus: value }))}>
                       <SelectTrigger>
                         <SelectValue placeholder="Тип слизи" />
                       </SelectTrigger>
@@ -281,7 +283,7 @@ const MenstrualCycleTracker = () => {
                     <Label>Настроение (1-5): {formData.mood_rating[0]}</Label>
                     <Slider
                       value={formData.mood_rating}
-                      onValueChange={setFormData.bind(null, {...formData, mood_rating: formData.mood_rating})}
+                      onValueChange={(value) => setFormData(prev => ({ ...prev, mood_rating: value }))}
                       max={5}
                       min={1}
                       step={1}
