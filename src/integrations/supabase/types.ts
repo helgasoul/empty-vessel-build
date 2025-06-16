@@ -385,6 +385,83 @@ export type Database = {
         }
         Relationships: []
       }
+      doctor_access_logs: {
+        Row: {
+          accessed_at: string
+          accessed_data_type: string
+          id: string
+          ip_address: string | null
+          token_id: string
+          user_agent: string | null
+        }
+        Insert: {
+          accessed_at?: string
+          accessed_data_type: string
+          id?: string
+          ip_address?: string | null
+          token_id: string
+          user_agent?: string | null
+        }
+        Update: {
+          accessed_at?: string
+          accessed_data_type?: string
+          id?: string
+          ip_address?: string | null
+          token_id?: string
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "doctor_access_logs_token_id_fkey"
+            columns: ["token_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_access_tokens"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      doctor_access_tokens: {
+        Row: {
+          access_permissions: Json
+          created_at: string
+          doctor_email: string | null
+          doctor_name: string | null
+          expires_at: string
+          id: string
+          is_used: boolean
+          token_code: string
+          updated_at: string
+          used_at: string | null
+          user_id: string
+        }
+        Insert: {
+          access_permissions?: Json
+          created_at?: string
+          doctor_email?: string | null
+          doctor_name?: string | null
+          expires_at: string
+          id?: string
+          is_used?: boolean
+          token_code: string
+          updated_at?: string
+          used_at?: string | null
+          user_id: string
+        }
+        Update: {
+          access_permissions?: Json
+          created_at?: string
+          doctor_email?: string | null
+          doctor_name?: string | null
+          expires_at?: string
+          id?: string
+          is_used?: boolean
+          token_code?: string
+          updated_at?: string
+          used_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       doctor_profiles: {
         Row: {
           bio: string | null
