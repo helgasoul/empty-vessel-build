@@ -1,7 +1,19 @@
-
 import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
+
+// Type declarations for WebKit iOS interface
+declare global {
+  interface Window {
+    webkit?: {
+      messageHandlers?: {
+        healthKit?: {
+          postMessage: (message: any) => void;
+        };
+      };
+    };
+  }
+}
 
 interface AppleWatchHealthData {
   currentHeartRate?: number;
