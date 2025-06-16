@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowRight, Sparkles, Activity, Shield, Heart, TrendingUp, Users, FlaskConical, Brain } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import FounderSection from '@/components/founder/FounderSection';
 
 const Index = () => {
   const { user, loading } = useAuth();
@@ -183,6 +184,9 @@ const Index = () => {
             </CardContent>
           </Card>
         </div>
+
+        {/* Founder Section */}
+        <FounderSection />
 
         {/* CTA Section */}
         <div className="text-center prevent-gradient-accent rounded-3xl p-16 text-white animate-fade-in">
