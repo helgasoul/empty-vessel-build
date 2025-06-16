@@ -270,6 +270,78 @@ export type Database = {
           },
         ]
       }
+      fertility_tracking: {
+        Row: {
+          basal_body_temperature: number | null
+          cervical_firmness: string | null
+          cervical_mucus_type: string | null
+          cervical_opening: string | null
+          cervical_position: string | null
+          created_at: string
+          exercise_intensity: string | null
+          fertile_window_end: string | null
+          fertile_window_start: string | null
+          fertility_symptoms: string[] | null
+          id: string
+          intercourse_timing: boolean | null
+          notes: string | null
+          ovulation_test_result: string | null
+          predicted_ovulation_date: string | null
+          sleep_quality: number | null
+          sperm_friendly_lubricant: boolean | null
+          stress_level: number | null
+          tracking_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          basal_body_temperature?: number | null
+          cervical_firmness?: string | null
+          cervical_mucus_type?: string | null
+          cervical_opening?: string | null
+          cervical_position?: string | null
+          created_at?: string
+          exercise_intensity?: string | null
+          fertile_window_end?: string | null
+          fertile_window_start?: string | null
+          fertility_symptoms?: string[] | null
+          id?: string
+          intercourse_timing?: boolean | null
+          notes?: string | null
+          ovulation_test_result?: string | null
+          predicted_ovulation_date?: string | null
+          sleep_quality?: number | null
+          sperm_friendly_lubricant?: boolean | null
+          stress_level?: number | null
+          tracking_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          basal_body_temperature?: number | null
+          cervical_firmness?: string | null
+          cervical_mucus_type?: string | null
+          cervical_opening?: string | null
+          cervical_position?: string | null
+          created_at?: string
+          exercise_intensity?: string | null
+          fertile_window_end?: string | null
+          fertile_window_start?: string | null
+          fertility_symptoms?: string[] | null
+          id?: string
+          intercourse_timing?: boolean | null
+          notes?: string | null
+          ovulation_test_result?: string | null
+          predicted_ovulation_date?: string | null
+          sleep_quality?: number | null
+          sperm_friendly_lubricant?: boolean | null
+          stress_level?: number | null
+          tracking_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       genetic_data: {
         Row: {
           created_at: string
@@ -476,6 +548,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      hormonal_health_tracking: {
+        Row: {
+          created_at: string
+          hormone_type: string
+          id: string
+          is_within_range: boolean | null
+          lab_name: string | null
+          level_unit: string | null
+          level_value: number | null
+          notes: string | null
+          prescribed_by: string | null
+          reference_range_max: number | null
+          reference_range_min: number | null
+          symptoms: string[] | null
+          test_type: string | null
+          tracking_date: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          hormone_type: string
+          id?: string
+          is_within_range?: boolean | null
+          lab_name?: string | null
+          level_unit?: string | null
+          level_value?: number | null
+          notes?: string | null
+          prescribed_by?: string | null
+          reference_range_max?: number | null
+          reference_range_min?: number | null
+          symptoms?: string[] | null
+          test_type?: string | null
+          tracking_date: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          hormone_type?: string
+          id?: string
+          is_within_range?: boolean | null
+          lab_name?: string | null
+          level_unit?: string | null
+          level_value?: number | null
+          notes?: string | null
+          prescribed_by?: string | null
+          reference_range_max?: number | null
+          reference_range_min?: number | null
+          symptoms?: string[] | null
+          test_type?: string | null
+          tracking_date?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       medical_appointments: {
         Row: {
@@ -737,13 +866,22 @@ export type Database = {
       }
       menstrual_cycles: {
         Row: {
+          basal_temperature: number | null
+          bloating: boolean | null
+          breast_tenderness: boolean | null
+          cervical_mucus: string | null
           created_at: string
           cycle_end_date: string | null
           cycle_length: number | null
           cycle_start_date: string
+          cycle_type: string | null
           flow_intensity: string | null
           id: string
+          mood_rating: number | null
           notes: string | null
+          ovulation_date: string | null
+          ovulation_test_result: boolean | null
+          pain_level: number | null
           period_length: number | null
           predicted_next_cycle: string | null
           symptoms: string[] | null
@@ -751,13 +889,22 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          basal_temperature?: number | null
+          bloating?: boolean | null
+          breast_tenderness?: boolean | null
+          cervical_mucus?: string | null
           created_at?: string
           cycle_end_date?: string | null
           cycle_length?: number | null
           cycle_start_date: string
+          cycle_type?: string | null
           flow_intensity?: string | null
           id?: string
+          mood_rating?: number | null
           notes?: string | null
+          ovulation_date?: string | null
+          ovulation_test_result?: boolean | null
+          pain_level?: number | null
           period_length?: number | null
           predicted_next_cycle?: string | null
           symptoms?: string[] | null
@@ -765,13 +912,22 @@ export type Database = {
           user_id: string
         }
         Update: {
+          basal_temperature?: number | null
+          bloating?: boolean | null
+          breast_tenderness?: boolean | null
+          cervical_mucus?: string | null
           created_at?: string
           cycle_end_date?: string | null
           cycle_length?: number | null
           cycle_start_date?: string
+          cycle_type?: string | null
           flow_intensity?: string | null
           id?: string
+          mood_rating?: number | null
           notes?: string | null
+          ovulation_date?: string | null
+          ovulation_test_result?: boolean | null
+          pain_level?: number | null
           period_length?: number | null
           predicted_next_cycle?: string | null
           symptoms?: string[] | null
@@ -969,6 +1125,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      pregnancy_planning: {
+        Row: {
+          created_at: string
+          fertility_tracking: boolean | null
+          folic_acid_intake: boolean | null
+          id: string
+          is_active: boolean | null
+          lifestyle_changes: string[] | null
+          medical_checkups: string[] | null
+          notes: string | null
+          ovulation_prediction: boolean | null
+          partner_health_check: boolean | null
+          planning_start_date: string
+          prenatal_vitamins: boolean | null
+          target_conception_date: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          fertility_tracking?: boolean | null
+          folic_acid_intake?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          lifestyle_changes?: string[] | null
+          medical_checkups?: string[] | null
+          notes?: string | null
+          ovulation_prediction?: boolean | null
+          partner_health_check?: boolean | null
+          planning_start_date: string
+          prenatal_vitamins?: boolean | null
+          target_conception_date?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          fertility_tracking?: boolean | null
+          folic_acid_intake?: boolean | null
+          id?: string
+          is_active?: boolean | null
+          lifestyle_changes?: string[] | null
+          medical_checkups?: string[] | null
+          notes?: string | null
+          ovulation_prediction?: boolean | null
+          partner_health_check?: boolean | null
+          planning_start_date?: string
+          prenatal_vitamins?: boolean | null
+          target_conception_date?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       profiles: {
         Row: {
