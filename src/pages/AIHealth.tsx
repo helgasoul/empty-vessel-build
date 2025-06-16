@@ -2,8 +2,10 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, Sparkles, TrendingUp, MessageCircle } from "lucide-react";
-import HealthAIAssistant from "@/components/ai/HealthAIAssistant";
+import { Brain, Sparkles, TrendingUp, MessageCircle, Apple, Dumbbell } from "lucide-react";
+import EnhancedHealthAIAssistant from "@/components/ai/EnhancedHealthAIAssistant";
+import PersonalizedNutritionPlans from "@/components/nutrition/PersonalizedNutritionPlans";
+import EnhancedFitnessPrograms from "@/components/fitness/EnhancedFitnessPrograms";
 import PredictiveSymptomAnalysis from "@/components/analytics/PredictiveSymptomAnalysis";
 import PredictiveTrends from "@/components/analytics/PredictiveTrends";
 import { useHealthData } from "@/hooks/useHealthData";
@@ -71,17 +73,17 @@ const AIHealth = () => {
           </div>
           <div>
             <h1 className="text-3xl font-bold font-montserrat text-gray-900">
-              ИИ-Помощник по здоровью
+              ИИ-Экосистема здоровья
             </h1>
             <p className="text-gray-600 font-roboto">
-              Персонализированная аналитика и рекомендации на основе ваших данных
+              Персонализированная аналитика, питание, фитнес и рекомендации на основе ваших данных
             </p>
           </div>
         </div>
       </div>
 
       {/* Статистика */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardContent className="pt-6">
             <div className="flex items-center space-x-3">
@@ -129,72 +131,59 @@ const AIHealth = () => {
             </div>
           </CardContent>
         </Card>
+
+        <Card>
+          <CardContent className="pt-6">
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-orange-100 rounded-lg flex items-center justify-center">
+                <Brain className="w-5 h-5 text-orange-600" />
+              </div>
+              <div>
+                <div className="text-2xl font-bold text-orange-600">
+                  95
+                </div>
+                <div className="text-sm text-gray-600">% точность ИИ</div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
       </div>
 
       {/* Основной контент */}
       <Tabs defaultValue="assistant" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-3">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="assistant" className="flex items-center space-x-2">
             <MessageCircle className="w-4 h-4" />
             <span>ИИ-Ассистент</span>
           </TabsTrigger>
+          <TabsTrigger value="nutrition" className="flex items-center space-x-2">
+            <Apple className="w-4 h-4" />
+            <span>Питание</span>
+          </TabsTrigger>
+          <TabsTrigger value="fitness" className="flex items-center space-x-2">
+            <Dumbbell className="w-4 h-4" />
+            <span>Фитнес</span>
+          </TabsTrigger>
           <TabsTrigger value="predictions" className="flex items-center space-x-2">
             <Brain className="w-4 h-4" />
-            <span>Прогнозы симптомов</span>
+            <span>Прогнозы</span>
           </TabsTrigger>
           <TabsTrigger value="trends" className="flex items-center space-x-2">
             <TrendingUp className="w-4 h-4" />
-            <span>Предиктивные тренды</span>
+            <span>Тренды</span>
           </TabsTrigger>
         </TabsList>
 
         <TabsContent value="assistant">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            <div className="lg:col-span-2">
-              <HealthAIAssistant />
-            </div>
-            <div className="space-y-4">
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Советы по использованию</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-3">
-                  <div className="text-sm">
-                    <h4 className="font-medium mb-1">Задавайте конкретные вопросы:</h4>
-                    <p className="text-gray-600">"Какие симптомы нормальны на 14 день цикла?"</p>
-                  </div>
-                  <div className="text-sm">
-                    <h4 className="font-medium mb-1">Описывайте симптомы:</h4>
-                    <p className="text-gray-600">"У меня болит голова и плохое настроение"</p>
-                  </div>
-                  <div className="text-sm">
-                    <h4 className="font-medium mb-1">Планирование:</h4>
-                    <p className="text-gray-600">"Когда лучше планировать важные дела?"</p>
-                  </div>
-                </CardContent>
-              </Card>
+          <EnhancedHealthAIAssistant />
+        </TabsContent>
 
-              <Card>
-                <CardHeader>
-                  <CardTitle className="text-base">Ваш профиль</CardTitle>
-                </CardHeader>
-                <CardContent className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span>Средний цикл:</span>
-                    <span className="font-medium">{userProfile.cycleLength} дней</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Данных собрано:</span>
-                    <span className="font-medium">{historicalData.length} дней</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span>Записей симптомов:</span>
-                    <span className="font-medium">{logs.length}</span>
-                  </div>
-                </CardContent>
-              </Card>
-            </div>
-          </div>
+        <TabsContent value="nutrition">
+          <PersonalizedNutritionPlans />
+        </TabsContent>
+
+        <TabsContent value="fitness">
+          <EnhancedFitnessPrograms />
         </TabsContent>
 
         <TabsContent value="predictions">

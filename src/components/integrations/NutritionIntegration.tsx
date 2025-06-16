@@ -14,7 +14,8 @@ import {
   Camera,
   Plus,
   ChefHat,
-  BookOpen
+  BookOpen,
+  Zap
 } from "lucide-react";
 
 interface NutritionGoal {
@@ -37,6 +38,8 @@ interface MealPlan {
   difficulty: string;
   thumbnail: string;
   price?: number;
+  aiPersonalized?: boolean;
+  matchScore?: number;
 }
 
 interface Recipe {
@@ -52,6 +55,7 @@ interface Recipe {
   ingredients_count: number;
   thumbnail: string;
   health_score: number;
+  cyclePhase?: string;
 }
 
 const NutritionIntegration = () => {
@@ -69,28 +73,32 @@ const NutritionIntegration = () => {
   const mealPlans: MealPlan[] = [
     {
       id: '1',
-      name: 'Здоровье женщины',
-      description: 'Сбалансированное питание для поддержания гормонального баланса',
-      calories_per_day: 1800,
+      name: 'ИИ: Гормональный баланс+',
+      description: 'Персонализированный план на основе анализа вашего цикла и симптомов',
+      calories_per_day: 1850,
       duration_days: 14,
       meals_per_day: 5,
-      dietary_restrictions: ['Без глютена', 'Низкий ГИ'],
-      benefits: ['Стабилизация цикла', 'Энергия', 'Красота кожи'],
+      dietary_restrictions: ['Без глютена', 'Низкий ГИ', 'Омега-3'],
+      benefits: ['Стабилизация цикла', 'Энергия', 'Красота кожи', 'Снижение ПМС'],
       difficulty: 'Средний',
       thumbnail: 'https://images.unsplash.com/photo-1490645935967-10de6ba17061?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-      price: 2500
+      price: 2500,
+      aiPersonalized: true,
+      matchScore: 94
     },
     {
       id: '2',
-      name: 'Детокс 7 дней',
-      description: 'Очищающая программа питания с акцентом на зеленые овощи',
-      calories_per_day: 1400,
-      duration_days: 7,
+      name: 'Адаптивное питание по фазам',
+      description: 'ИИ-план, меняющийся в зависимости от текущей фазы вашего цикла',
+      calories_per_day: 1800,
+      duration_days: 28,
       meals_per_day: 6,
-      dietary_restrictions: ['Веган', 'Без сахара', 'Органик'],
-      benefits: ['Очищение', 'Легкость', 'Иммунитет'],
-      difficulty: 'Сложный',
-      thumbnail: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80'
+      dietary_restrictions: ['Циклическое', 'Без сахара', 'Органик'],
+      benefits: ['Синхронизация с циклом', 'Легкость', 'Иммунитет', 'Настроение'],
+      difficulty: 'Средний',
+      thumbnail: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
+      aiPersonalized: true,
+      matchScore: 89
     },
     {
       id: '3',
@@ -103,15 +111,16 @@ const NutritionIntegration = () => {
       benefits: ['Энергия', 'Восстановление', 'Выносливость'],
       difficulty: 'Легкий',
       thumbnail: 'https://images.unsplash.com/photo-1511690743698-d9d85f2fbf38?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-      price: 3200
+      price: 3200,
+      matchScore: 72
     }
   ];
 
   const featuredRecipes: Recipe[] = [
     {
       id: '1',
-      name: 'Боул с киноа и авокадо',
-      description: 'Питательный завтрак, богатый омега-3 и антиоксидантами',
+      name: 'Боул с киноа для фолликулярной фазы',
+      description: 'Питательный завтрак с повышенным содержанием белка для роста энергии',
       prep_time: 15,
       cook_time: 0,
       calories: 420,
@@ -120,35 +129,38 @@ const NutritionIntegration = () => {
       dietary_tags: ['Веган', 'Без глютена', 'Суперфуды'],
       ingredients_count: 8,
       thumbnail: 'https://images.unsplash.com/photo-1512621776951-a57141f2eefd?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-      health_score: 95
+      health_score: 95,
+      cyclePhase: 'follicular'
     },
     {
       id: '2',
-      name: 'Лосось с брокколи на пару',
-      description: 'Идеальное сочетание белка и клетчатки для ужина',
+      name: 'Лосось с магнием (лютеиновая фаза)',
+      description: 'Противовоспалительное блюдо с магнием для снижения ПМС',
       prep_time: 10,
       cook_time: 20,
       calories: 380,
       servings: 2,
       difficulty: 'Средний',
-      dietary_tags: ['Кето', 'Палео', 'Омега-3'],
+      dietary_tags: ['Кето', 'Палео', 'Омега-3', 'Магний'],
       ingredients_count: 6,
       thumbnail: 'https://images.unsplash.com/photo-1467003909585-2f8a72700288?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-      health_score: 88
+      health_score: 88,
+      cyclePhase: 'luteal'
     },
     {
       id: '3',
-      name: 'Смузи с ягодами и протеином',
-      description: 'Восстанавливающий напиток после тренировки',
+      name: 'Восстанавливающий смузи с железом',
+      description: 'Напиток для менструальной фазы с высоким содержанием железа',
       prep_time: 5,
       cook_time: 0,
       calories: 280,
       servings: 1,
       difficulty: 'Легкий',
-      dietary_tags: ['Протеин', 'Антиоксиданты', 'Постпорт'],
+      dietary_tags: ['Железо', 'Антиоксиданты', 'Восстановление'],
       ingredients_count: 5,
       thumbnail: 'https://images.unsplash.com/photo-1553530979-909c6cedcc77?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
-      health_score: 82
+      health_score: 82,
+      cyclePhase: 'menstrual'
     }
   ];
 
@@ -179,7 +191,16 @@ const NutritionIntegration = () => {
   };
 
   const MealPlanCard = ({ plan }: { plan: MealPlan }) => (
-    <Card className="prevent-card">
+    <Card className="prevent-card relative">
+      {plan.aiPersonalized && (
+        <div className="absolute top-4 right-4 z-10">
+          <Badge className="bg-gradient-to-r from-purple-600 to-blue-600 text-white">
+            <Zap className="w-3 h-3 mr-1" />
+            ИИ {plan.matchScore}%
+          </Badge>
+        </div>
+      )}
+      
       <CardHeader className="p-4">
         <div className="relative">
           <img 
@@ -187,7 +208,7 @@ const NutritionIntegration = () => {
             alt={plan.name}
             className="w-full h-32 object-cover rounded-lg mb-3"
           />
-          <Badge className="absolute top-2 right-2 bg-white/90 text-gray-800">
+          <Badge className="absolute bottom-2 left-2 bg-white/90 text-gray-800">
             {plan.difficulty}
           </Badge>
         </div>
@@ -220,7 +241,7 @@ const NutritionIntegration = () => {
           </div>
 
           <div>
-            <p className="text-sm font-medium mb-1">Ограничения:</p>
+            <p className="text-sm font-medium mb-1">Особенности:</p>
             <div className="flex flex-wrap gap-1">
               {plan.dietary_restrictions.map((restriction, index) => (
                 <Badge key={index} variant="outline" className="text-xs">
@@ -241,6 +262,15 @@ const NutritionIntegration = () => {
             </div>
           </div>
 
+          {plan.aiPersonalized && (
+            <div className="p-2 bg-purple-50 rounded-lg">
+              <p className="text-xs text-purple-700">
+                <Zap className="w-3 h-3 inline mr-1" />
+                Персонализировано ИИ на основе вашего цикла и симптомов
+              </p>
+            </div>
+          )}
+
           <Button className="w-full">
             <ChefHat className="w-4 h-4 mr-2" />
             Выбрать план
@@ -251,7 +281,7 @@ const NutritionIntegration = () => {
   );
 
   const RecipeCard = ({ recipe }: { recipe: Recipe }) => (
-    <Card className="prevent-card">
+    <Card className="prevent-card relative">
       <CardHeader className="p-4">
         <div className="relative">
           <img 
@@ -262,6 +292,13 @@ const NutritionIntegration = () => {
           <Badge className="absolute top-2 right-2 bg-green-500">
             {recipe.health_score}/100
           </Badge>
+          {recipe.cyclePhase && (
+            <Badge className="absolute bottom-2 right-2 bg-pink-500 text-white">
+              {recipe.cyclePhase === 'menstrual' ? 'Месячные' :
+               recipe.cyclePhase === 'follicular' ? 'Фолликулярная' :
+               recipe.cyclePhase === 'ovulatory' ? 'Овуляторная' : 'Лютеиновая'}
+            </Badge>
+          )}
         </div>
         <CardTitle className="text-lg font-montserrat line-clamp-2">
           {recipe.name}
@@ -302,6 +339,14 @@ const NutritionIntegration = () => {
             </div>
           </div>
 
+          {recipe.cyclePhase && (
+            <div className="p-2 bg-pink-50 rounded-lg">
+              <p className="text-xs text-pink-700">
+                ✨ Идеально для вашей текущей фазы цикла
+              </p>
+            </div>
+          )}
+
           <Button className="w-full">
             <BookOpen className="w-4 h-4 mr-2" />
             Открыть рецепт
@@ -317,10 +362,10 @@ const NutritionIntegration = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2 font-montserrat">
             <Apple className="w-5 h-5 text-primary" />
-            <span>Питание и нутрициология</span>
+            <span>Умное питание с ИИ</span>
           </CardTitle>
           <CardDescription className="font-roboto">
-            Персонализированное питание для достижения ваших целей здоровья
+            Персонализированное питание с адаптацией под ваш цикл и потребности
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -339,7 +384,7 @@ const NutritionIntegration = () => {
               className="flex-1"
             >
               <ChefHat className="w-4 h-4 mr-2" />
-              Планы питания
+              ИИ-Планы
             </Button>
             <Button
               variant={activeTab === 'recipes' ? 'default' : 'ghost'}
@@ -414,9 +459,15 @@ const NutritionIntegration = () => {
 
           {activeTab === 'plans' && (
             <div>
-              <h3 className="text-lg font-montserrat font-semibold mb-4">
-                Планы питания
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-montserrat font-semibold">
+                  Персонализированные планы питания
+                </h3>
+                <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                  <Zap className="w-3 h-3 mr-1" />
+                  Улучшено ИИ
+                </Badge>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {mealPlans.map(plan => (
                   <MealPlanCard key={plan.id} plan={plan} />
@@ -427,9 +478,14 @@ const NutritionIntegration = () => {
 
           {activeTab === 'recipes' && (
             <div>
-              <h3 className="text-lg font-montserrat font-semibold mb-4">
-                Рекомендованные рецепты
-              </h3>
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-lg font-montserrat font-semibold">
+                  Рецепты под ваш цикл
+                </h3>
+                <Badge variant="secondary" className="bg-pink-100 text-pink-800">
+                  Адаптировано под фазу цикла
+                </Badge>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {featuredRecipes.map(recipe => (
                   <RecipeCard key={recipe.id} recipe={recipe} />
