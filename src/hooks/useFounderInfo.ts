@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -63,7 +62,7 @@ export const useFounderInfo = () => {
       }
     },
     staleTime: 5 * 60 * 1000, // 5 минут
-    cacheTime: 10 * 60 * 1000, // 10 минут
+    gcTime: 10 * 60 * 1000, // 10 минут (заменил cacheTime на gcTime)
   });
 };
 

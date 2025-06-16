@@ -36,7 +36,7 @@ const ExpertsPanel = () => {
           <CardHeader>
             <CardTitle className="flex items-center space-x-2">
               <Users className="w-6 h-6 text-purple-600" />
-              <span>Панель экспертов YTime</span>
+              <span>Панель экспертов PREVENT</span>
             </CardTitle>
             <CardDescription>
               Ведущие специалисты в области превентивной медицины, гинекологии, маммологии, психологии и неврологии
@@ -58,7 +58,7 @@ const ExpertsPanel = () => {
         <CardHeader>
           <CardTitle className="flex items-center space-x-2">
             <Users className="w-6 h-6 text-purple-600" />
-            <span>Панель экспертов YTime</span>
+            <span>Панель экспертов PREVENT</span>
           </CardTitle>
           <CardDescription>
             Ведущие специалисты в области превентивной медицины, гинекологии, маммологии, психологии и неврологии

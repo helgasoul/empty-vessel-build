@@ -25,7 +25,7 @@ const AdminDashboard = () => {
             <Shield className="w-8 h-8 text-blue-600" />
             <div>
               <h1 className="text-3xl font-bold text-gray-900">Панель администратора</h1>
-              <p className="text-gray-600 mt-1">Управление платформой YTime</p>
+              <p className="text-gray-600 mt-1">Управление платформой PREVENT</p>
             </div>
           </div>
 
