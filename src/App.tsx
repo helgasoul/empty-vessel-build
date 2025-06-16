@@ -15,6 +15,7 @@ import TelemedicineIntegrations from './pages/TelemedicineIntegrations';
 import HealthAnalytics from './pages/HealthAnalytics';
 import GamificationPage from './pages/GamificationPage';
 import Community from './pages/Community';
+import ExternalIntegrations from './pages/ExternalIntegrations';
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path="/health-analytics" element={<HealthAnalytics />} />
                 <Route path="/gamification" element={<GamificationPage />} />
                 <Route path="/community" element={<Community />} />
+                <Route path="/external-integrations" element={<ExternalIntegrations />} />
               </Routes>
               <Toaster />
             </div>
