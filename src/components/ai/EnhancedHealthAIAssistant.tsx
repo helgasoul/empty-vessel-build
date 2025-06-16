@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +6,7 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Brain, Send, Sparkles, RefreshCw, User, Bot, Activity, TrendingUp, Heart, Zap } from "lucide-react";
+import { Brain, Send, Sparkles, RefreshCw, User, Bot, Activity, TrendingUp, Heart, Zap, Moon } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useMenstrualCycle } from "@/hooks/useMenstrualCycle";
 import { useSymptomMoodLog } from "@/hooks/useSymptomMoodLog";
@@ -340,7 +339,7 @@ const EnhancedHealthAIAssistant = () => {
     }
 
     // Инсайт о здоровье
-    if (context.healthMetrics?.stepsAverage !== undefined) {
+    if (context.healthMetrics?.steps !== undefined) {
       const stepsGoal = 8000;
       const percentage = (context.healthMetrics.steps / stepsGoal) * 100;
       insights.push({
@@ -377,7 +376,7 @@ const EnhancedHealthAIAssistant = () => {
 Комплексный контекст здоровья:
 - День цикла: ${healthContext.currentCycleDay || 'неизвестно'} (${healthContext.cyclePhase} фаза)
 - Регулярность цикла: ${healthContext.cycleTrends?.regularityScore?.toFixed(0) || 'неизвестно'}%
-- Активность: ${healthContext.healthMetrics?.steps || 'нет данных'} шагов (тренд: ${healthContext.healthMetrics?.stepsТрend || 'стабильный'})
+- Активность: ${healthContext.healthMetrics?.steps || 'нет данных'} шагов (тренд: ${healthContext.healthMetrics?.stepstrend || 'стабильный'})
 - Сон: ${healthContext.healthMetrics?.sleep || 'нет данных'} часов (тренд: ${healthContext.healthMetrics?.sleepTrend || 'стабильный'})
 - Настроение: ${healthContext.moodAnalysis?.currentRating || 'неизвестно'}/10 (тренд: ${healthContext.moodAnalysis?.trend || 'стабильное'})
 - Стресс: ${healthContext.moodAnalysis?.stressLevel || 'неизвестно'}/10
@@ -401,7 +400,7 @@ const EnhancedHealthAIAssistant = () => {
         type: 'assistant',
         content: response.content,
         timestamp: new Date(),
-        context: response.context,
+        context: response.context as 'cycle' | 'symptoms' | 'health' | 'general' | 'analysis',
         attachments: response.attachments
       };
     } catch (error) {
@@ -436,7 +435,7 @@ ${context.recommendations?.immediate?.map(rec => `• ${rec}`).join('\n') || '�
 📈 **Прогноз**: Следующий цикл ожидается ${context.predictions?.nextCycleStart || 'через 28 дней'}`,
         context: 'analysis',
         attachments: [{
-          type: 'chart',
+          type: 'chart' as const,
           data: { type: 'health_overview', metrics: context.healthMetrics }
         }]
       };
@@ -458,10 +457,10 @@ ${context.cyclePhase === 'follicular' ? '• Отличное время для 
 📊 **Ваши показатели**: 
 • Средняя активность: ${context.healthMetrics?.steps || 'н/д'} шагов
 • Уровень энергии: ${context.moodAnalysis?.energyLevel || 'н/д'}/10
-• Тренд активности: ${context.healthMetrics?.stepsТrend === 'improving' ? '📈 Растет' : context.healthMetrics?.stepsТrend === 'declining' ? '📉 Снижается' : '➡️ Стабильно'}`,
+• Тренд активности: ${context.healthMetrics?.stepstrend === 'improving' ? '📈 Растет' : context.healthMetrics?.stepstrend === 'declining' ? '📉 Снижается' : '➡️ Стабильно'}`,
         context: 'health',
         attachments: [{
-          type: 'recommendation',
+          type: 'recommendation' as const,
           data: { type: 'workout_plan', phase: context.cyclePhase }
         }]
       };
@@ -860,8 +859,8 @@ ${context.predictions?.optimalWorkoutDays?.map(day => `• День ${day} ци�
                           <h4 className="font-medium">Активность</h4>
                           <p className="text-2xl font-bold">{healthContext.healthMetrics.steps}</p>
                           <p className="text-sm text-gray-600">
-                            {healthContext.healthMetrics.stepsТrend === 'improving' ? '📈 Растет' :
-                             healthContext.healthMetrics.stepsТrend === 'declining' ? '📉 Снижается' : '➡️ Стабильно'}
+                            {healthContext.healthMetrics.stepstrend === 'improving' ? '📈 Растет' :
+                             healthContext.healthMetrics.stepstrend === 'declining' ? '📉 Снижается' : '➡️ Стабильно'}
                           </p>
                         </div>
                         
