@@ -14,6 +14,16 @@ export interface MenstrualCycle {
   symptoms?: string[];
   notes?: string;
   predicted_next_cycle?: string;
+  // Новые поля из миграции
+  basal_temperature?: number;
+  cervical_mucus?: string;
+  ovulation_test_result?: boolean;
+  ovulation_date?: string;
+  mood_rating?: number;
+  pain_level?: number;
+  breast_tenderness?: boolean;
+  bloating?: boolean;
+  cycle_type?: 'regular' | 'irregular' | 'anovulatory';
   created_at: string;
   updated_at: string;
 }
@@ -34,7 +44,8 @@ export const useMenstrualCycle = () => {
       // Type cast the data to ensure flow_intensity matches our interface
       const typedData = (data || []).map(cycle => ({
         ...cycle,
-        flow_intensity: cycle.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined
+        flow_intensity: cycle.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined,
+        cycle_type: cycle.cycle_type as 'regular' | 'irregular' | 'anovulatory' | undefined
       }));
       
       setCycles(typedData);
@@ -65,7 +76,8 @@ export const useMenstrualCycle = () => {
       // Type cast the returned data
       const typedData = {
         ...data,
-        flow_intensity: data.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined
+        flow_intensity: data.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined,
+        cycle_type: data.cycle_type as 'regular' | 'irregular' | 'anovulatory' | undefined
       };
 
       setCycles(prev => [typedData, ...prev]);
@@ -92,7 +104,8 @@ export const useMenstrualCycle = () => {
       // Type cast the returned data
       const typedData = {
         ...data,
-        flow_intensity: data.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined
+        flow_intensity: data.flow_intensity as 'light' | 'moderate' | 'heavy' | undefined,
+        cycle_type: data.cycle_type as 'regular' | 'irregular' | 'anovulatory' | undefined
       };
 
       setCycles(prev => prev.map(cycle => 

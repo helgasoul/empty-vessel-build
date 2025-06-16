@@ -38,7 +38,15 @@ export const useHormonalHealth = () => {
         .order('tracking_date', { ascending: false });
 
       if (error) throw error;
-      setRecords(data || []);
+      
+      // Type cast the data to ensure enum types match our interface
+      const typedData = (data || []).map(record => ({
+        ...record,
+        hormone_type: record.hormone_type as HormonalHealthRecord['hormone_type'],
+        test_type: record.test_type as HormonalHealthRecord['test_type']
+      }));
+      
+      setRecords(typedData);
     } catch (error) {
       console.error('Error fetching hormonal health records:', error);
     } finally {
@@ -64,8 +72,16 @@ export const useHormonalHealth = () => {
         .single();
 
       if (error) throw error;
-      setRecords(prev => [data, ...prev]);
-      return data;
+      
+      // Type cast the returned data
+      const typedData = {
+        ...data,
+        hormone_type: data.hormone_type as HormonalHealthRecord['hormone_type'],
+        test_type: data.test_type as HormonalHealthRecord['test_type']
+      };
+      
+      setRecords(prev => [typedData, ...prev]);
+      return typedData;
     } catch (error) {
       console.error('Error adding hormonal health record:', error);
       throw error;
@@ -82,8 +98,16 @@ export const useHormonalHealth = () => {
         .single();
 
       if (error) throw error;
-      setRecords(prev => prev.map(record => record.id === id ? data : record));
-      return data;
+      
+      // Type cast the returned data
+      const typedData = {
+        ...data,
+        hormone_type: data.hormone_type as HormonalHealthRecord['hormone_type'],
+        test_type: data.test_type as HormonalHealthRecord['test_type']
+      };
+      
+      setRecords(prev => prev.map(record => record.id === id ? typedData : record));
+      return typedData;
     } catch (error) {
       console.error('Error updating hormonal health record:', error);
       throw error;

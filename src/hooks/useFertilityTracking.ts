@@ -43,7 +43,19 @@ export const useFertilityTracking = () => {
         .order('tracking_date', { ascending: false });
 
       if (error) throw error;
-      setRecords(data || []);
+      
+      // Type cast the data to ensure enum types match our interface
+      const typedData = (data || []).map(record => ({
+        ...record,
+        cervical_mucus_type: record.cervical_mucus_type as FertilityRecord['cervical_mucus_type'],
+        cervical_position: record.cervical_position as FertilityRecord['cervical_position'],
+        cervical_firmness: record.cervical_firmness as FertilityRecord['cervical_firmness'],
+        cervical_opening: record.cervical_opening as FertilityRecord['cervical_opening'],
+        ovulation_test_result: record.ovulation_test_result as FertilityRecord['ovulation_test_result'],
+        exercise_intensity: record.exercise_intensity as FertilityRecord['exercise_intensity']
+      }));
+      
+      setRecords(typedData);
     } catch (error) {
       console.error('Error fetching fertility records:', error);
     } finally {
@@ -69,8 +81,20 @@ export const useFertilityTracking = () => {
         .single();
 
       if (error) throw error;
-      setRecords(prev => [data, ...prev]);
-      return data;
+      
+      // Type cast the returned data
+      const typedData = {
+        ...data,
+        cervical_mucus_type: data.cervical_mucus_type as FertilityRecord['cervical_mucus_type'],
+        cervical_position: data.cervical_position as FertilityRecord['cervical_position'],
+        cervical_firmness: data.cervical_firmness as FertilityRecord['cervical_firmness'],
+        cervical_opening: data.cervical_opening as FertilityRecord['cervical_opening'],
+        ovulation_test_result: data.ovulation_test_result as FertilityRecord['ovulation_test_result'],
+        exercise_intensity: data.exercise_intensity as FertilityRecord['exercise_intensity']
+      };
+      
+      setRecords(prev => [typedData, ...prev]);
+      return typedData;
     } catch (error) {
       console.error('Error adding fertility record:', error);
       throw error;
@@ -87,8 +111,20 @@ export const useFertilityTracking = () => {
         .single();
 
       if (error) throw error;
-      setRecords(prev => prev.map(record => record.id === id ? data : record));
-      return data;
+      
+      // Type cast the returned data
+      const typedData = {
+        ...data,
+        cervical_mucus_type: data.cervical_mucus_type as FertilityRecord['cervical_mucus_type'],
+        cervical_position: data.cervical_position as FertilityRecord['cervical_position'],
+        cervical_firmness: data.cervical_firmness as FertilityRecord['cervical_firmness'],
+        cervical_opening: data.cervical_opening as FertilityRecord['cervical_opening'],
+        ovulation_test_result: data.ovulation_test_result as FertilityRecord['ovulation_test_result'],
+        exercise_intensity: data.exercise_intensity as FertilityRecord['exercise_intensity']
+      };
+      
+      setRecords(prev => prev.map(record => record.id === id ? typedData : record));
+      return typedData;
     } catch (error) {
       console.error('Error updating fertility record:', error);
       throw error;
