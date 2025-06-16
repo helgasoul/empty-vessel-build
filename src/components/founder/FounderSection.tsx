@@ -60,7 +60,7 @@ const FounderSection = () => {
         </h2>
         
         <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto leading-relaxed font-roboto">
-          Встречайте врача, которая посвятила свою жизнь созданию революционной платформы превентивной медицины
+          Встречайте врача, которая посвятила свою жизнь женскому здоровью
         </p>
       </div>
 
