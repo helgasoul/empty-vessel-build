@@ -14,7 +14,8 @@ import {
   Leaf,
   Users,
   ExternalLink,
-  Trophy
+  Trophy,
+  User
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -35,6 +36,13 @@ const QuickActions = () => {
       icon: Heart,
       color: "bg-pink-500 hover:bg-pink-600",
       action: () => navigate('/womens-health')
+    },
+    {
+      title: "Эксперты",
+      description: "Консультации со специалистами",
+      icon: User,
+      color: "bg-teal-500 hover:bg-teal-600",
+      action: () => navigate('/experts')
     },
     {
       title: "Достижения",
