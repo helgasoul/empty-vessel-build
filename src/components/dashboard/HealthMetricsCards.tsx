@@ -12,19 +12,39 @@ const HealthMetricsCards = () => {
   const { devices } = useDevices();
   const { getHealthMetrics } = useHealthData();
   const [profile, setProfile] = React.useState<any>(null);
+  const [loading, setLoading] = React.useState(true);
 
   React.useEffect(() => {
     const fetchProfile = async () => {
-      if (!user) return;
+      if (!user) {
+        setLoading(false);
+        return;
+      }
       
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('height, weight')
-        .eq('id', user.id)
-        .single();
+      try {
+        console.log('Fetching profile for user:', user.id);
+        
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('height, weight')
+          .eq('id', user.id)
+          .maybeSingle();
 
-      if (!error && data) {
-        setProfile(data);
+        console.log('Profile data received:', data);
+        console.log('Profile error:', error);
+
+        if (error) {
+          console.error('Error fetching profile:', error);
+        } else if (data) {
+          setProfile(data);
+          console.log('Profile height:', data.height);
+        } else {
+          console.log('No profile data found');
+        }
+      } catch (err) {
+        console.error('Exception fetching profile:', err);
+      } finally {
+        setLoading(false);
       }
     };
 
@@ -81,13 +101,25 @@ const HealthMetricsCards = () => {
           <div className="flex items-center justify-between">
             <div>
               <p className="text-xs md:text-sm font-roboto text-gray-600">Рост</p>
-              <p className="text-lg md:text-2xl font-montserrat font-bold text-purple-600">
-                {profile?.height || '--'}
-                {profile?.height && <span className="text-xs md:text-sm text-gray-500 ml-1">см</span>}
-              </p>
+              {loading ? (
+                <p className="text-lg md:text-2xl font-montserrat font-bold text-purple-600">...</p>
+              ) : (
+                <p className="text-lg md:text-2xl font-montserrat font-bold text-purple-600">
+                  {profile?.height ? (
+                    <>
+                      {profile.height}
+                      <span className="text-xs md:text-sm text-gray-500 ml-1">см</span>
+                    </>
+                  ) : (
+                    <span className="text-base text-gray-400">Не указан</span>
+                  )}
+                </p>
+              )}
               <div className="flex items-center space-x-1 mt-1">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
-                <span className="text-xs text-gray-500">Данные профиля</span>
+                <span className="text-xs text-gray-500">
+                  {profile?.height ? 'Данные профиля' : 'Заполните профиль'}
+                </span>
               </div>
             </div>
             <div className="prevent-icon-container bg-purple-100 w-8 h-8 md:w-12 md:h-12">
