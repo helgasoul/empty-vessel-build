@@ -23,6 +23,21 @@ import { useAdvancedDevices } from '@/hooks/useAdvancedDevices';
 import { format, parseISO, startOfWeek, endOfWeek, subDays } from 'date-fns';
 import { ru } from 'date-fns/locale';
 
+interface MetricStats {
+  avg: number;
+  trend: number;
+  improvement: number;
+}
+
+interface Statistics {
+  steps: MetricStats;
+  sleep: MetricStats;
+  heart_rate: MetricStats;
+  activity: MetricStats;
+  totalDays: number;
+  activeDays: number;
+}
+
 const DeviceTrendsAnalysis = () => {
   const { healthData, loading } = useHealthData();
   const { devices } = useAdvancedDevices();
@@ -112,10 +127,10 @@ const DeviceTrendsAnalysis = () => {
   }, [healthData, selectedPeriod]);
 
   // Вычисляем статистику и инсайты
-  const statistics = useMemo(() => {
+  const statistics: Statistics | null = useMemo(() => {
     if (trendsData.length === 0) return null;
 
-    const calculateStats = (values: number[]) => {
+    const calculateStats = (values: number[]): MetricStats => {
       const validValues = values.filter(v => v > 0);
       if (validValues.length === 0) return { avg: 0, trend: 0, improvement: 0 };
       
@@ -242,9 +257,10 @@ const DeviceTrendsAnalysis = () => {
       {/* Статистические карточки */}
       {statistics && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {Object.entries(statistics).slice(0, 4).map(([key, stats]) => {
+          {Object.entries(chartConfig).map(([key, config]) => {
+            const metricKey = key as keyof typeof chartConfig;
+            const stats = statistics[metricKey] as MetricStats;
             const Icon = getMetricIcon(key);
-            const config = chartConfig[key as keyof typeof chartConfig];
             
             return (
               <Card key={key} className="hover:shadow-md transition-shadow">
