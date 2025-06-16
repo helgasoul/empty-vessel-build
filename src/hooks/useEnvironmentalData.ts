@@ -53,11 +53,13 @@ const useEnvironmentalData = () => {
   const [locationError, setLocationError] = useState<string | null>(null);
   const [isRequestingLocation, setIsRequestingLocation] = useState(false);
   const [geolocationSupported, setGeolocationSupported] = useState(true);
+  const [hasUserDeniedPermission, setHasUserDeniedPermission] = useState(false);
 
   const requestGeolocation = useCallback(() => {
     console.log('🌍 Начинаем запрос геолокации...');
     setIsRequestingLocation(true);
     setLocationError(null);
+    setHasUserDeniedPermission(false);
     
     // Проверяем поддержку геолокации
     if (!navigator.geolocation) {
@@ -81,7 +83,7 @@ const useEnvironmentalData = () => {
 
     const options = {
       enableHighAccuracy: false,
-      timeout: 8000, // Уменьшили таймаут до 8 секунд
+      timeout: 10000, // Увеличили таймаут до 10 секунд
       maximumAge: 300000 // 5 минут
     };
 
@@ -102,6 +104,7 @@ const useEnvironmentalData = () => {
         });
         setLocationError(null);
         setIsRequestingLocation(false);
+        setHasUserDeniedPermission(false);
         
         console.log('✅ Состояние локации обновлено');
       },
@@ -109,27 +112,31 @@ const useEnvironmentalData = () => {
         console.error('❌ Ошибка получения геолокации:', error);
         
         let errorMessage = 'Не удалось получить местоположение';
+        let isDeniedPermission = false;
         
         switch (error.code) {
           case error.PERMISSION_DENIED:
-            errorMessage = 'Доступ к геолокации запрещен. Разрешите доступ в настройках браузера.';
+            errorMessage = 'Доступ к геолокации запрещен. Для получения точных данных о качестве воздуха в вашем районе, разрешите доступ к геолокации в настройках браузера.';
+            isDeniedPermission = true;
             console.error('🚫 Пользователь запретил доступ к геолокации');
             break;
           case error.POSITION_UNAVAILABLE:
-            errorMessage = 'Информация о местоположении недоступна. Проверьте подключение к интернету.';
+            errorMessage = 'Информация о местоположении недоступна. Проверьте подключение к интернету и настройки геолокации.';
             console.error('📡 Информация о местоположении недоступна');
             break;
           case error.TIMEOUT:
-            errorMessage = 'Превышено время ожидания. Попробуйте еще раз.';
+            errorMessage = 'Превышено время ожидания получения местоположения. Попробуйте еще раз.';
             console.error('⏰ Превышено время ожидания геолокации');
             break;
           default:
+            errorMessage = 'Произошла ошибка при получении местоположения. Попробуйте обновить страницу.';
             console.error('❓ Неизвестная ошибка геолокации:', error.message);
             break;
         }
         
         setLocationError(errorMessage);
         setIsRequestingLocation(false);
+        setHasUserDeniedPermission(isDeniedPermission);
         
         // В любом случае устанавливаем fallback координаты Москвы
         console.log('📍 Устанавливаем fallback координаты Москвы');
@@ -224,7 +231,7 @@ const useEnvironmentalData = () => {
     },
     enabled: !!location,
     staleTime: 1000 * 60 * 30, // 30 минут
-    retry: 1, // Уменьшили количество попыток
+    retry: 1,
   });
 
   // Запрос погодных данных
@@ -273,12 +280,11 @@ const useEnvironmentalData = () => {
     },
     enabled: !!location,
     staleTime: 1000 * 60 * 15, // 15 минут
-    retry: 1, // Уменьшили количество попыток
+    retry: 1,
   });
 
   const isLoading = airQualityLoading || weatherLoading || isRequestingLocation;
   
-  // Не показываем ошибки API, так как используем fallback данные
   const error = null;
 
   // Логируем текущее состояние
@@ -289,12 +295,13 @@ const useEnvironmentalData = () => {
       isRequestingLocation,
       locationError,
       geolocationSupported,
+      hasUserDeniedPermission,
       airQualityData: !!airQualityData,
       weatherData: !!weatherData,
       airQualityError: airQualityError?.message,
       weatherError: weatherError?.message
     });
-  }, [location, isLoading, isRequestingLocation, locationError, geolocationSupported, airQualityData, weatherData, airQualityError, weatherError]);
+  }, [location, isLoading, isRequestingLocation, locationError, geolocationSupported, hasUserDeniedPermission, airQualityData, weatherData, airQualityError, weatherError]);
 
   return {
     location,
@@ -305,6 +312,7 @@ const useEnvironmentalData = () => {
     locationError,
     isRequestingLocation,
     geolocationSupported,
+    hasUserDeniedPermission,
     requestGeolocation
   };
 };

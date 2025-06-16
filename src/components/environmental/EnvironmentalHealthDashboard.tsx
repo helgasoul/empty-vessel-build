@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2, RefreshCw, Info } from "lucide-react";
+import { Leaf, Wind, Thermometer, Droplets, Eye, MapPin, Navigation, AlertTriangle, Loader2, RefreshCw, Info, Settings, HelpCircle } from "lucide-react";
 import AirQualityMonitor from './AirQualityMonitor';
 import EnvironmentalImpactAnalysis from './EnvironmentalImpactAnalysis';
 import ProtectionRecommendations from './ProtectionRecommendations';
@@ -21,12 +21,26 @@ const EnvironmentalHealthDashboard = () => {
     locationError,
     isRequestingLocation,
     geolocationSupported,
+    hasUserDeniedPermission,
     requestGeolocation 
   } = useEnvironmentalData();
 
   const handleGeolocationRequest = () => {
     console.log('🔄 Пользователь нажал кнопку повторного запроса геолокации');
     requestGeolocation();
+  };
+
+  const openBrowserSettings = () => {
+    // Открываем общую страницу настроек браузера
+    if (navigator.userAgent.includes('Chrome')) {
+      window.open('chrome://settings/content/location', '_blank');
+    } else if (navigator.userAgent.includes('Firefox')) {
+      window.open('about:preferences#privacy', '_blank');
+    } else if (navigator.userAgent.includes('Safari')) {
+      alert('Откройте Safari → Настройки → Веб-сайты → Местоположение');
+    } else {
+      alert('Откройте настройки браузера и найдите раздел "Местоположение" или "Геолокация"');
+    }
   };
 
   // Показываем загрузку только если нет локации
@@ -129,38 +143,76 @@ const EnvironmentalHealthDashboard = () => {
         </Alert>
       )}
 
-      {/* Ошибка геолокации */}
+      {/* Ошибка геолокации с улучшенными инструкциями */}
       {locationError && geolocationSupported && (
-        <Alert variant="destructive">
+        <Alert variant={hasUserDeniedPermission ? "destructive" : "default"}>
           <AlertTriangle className="h-4 w-4" />
           <AlertDescription>
-            <div className="flex items-center justify-between">
-              <div className="flex-1">
-                <div className="font-medium">Проблема с геолокацией</div>
-                <div className="text-sm mt-1">{locationError}</div>
-                <div className="text-sm mt-2 text-gray-600">
-                  Используются данные для Москвы как альтернатива.
+            <div className="space-y-4">
+              <div>
+                <div className="font-medium">
+                  {hasUserDeniedPermission ? "Доступ к геолокации запрещен" : "Проблема с геолокацией"}
                 </div>
+                <div className="text-sm mt-1">{locationError}</div>
               </div>
-              <Button 
-                variant="outline" 
-                size="sm" 
-                onClick={handleGeolocationRequest}
-                disabled={isRequestingLocation}
-                className="ml-4 bg-white hover:bg-gray-50"
-              >
-                {isRequestingLocation ? (
-                  <>
-                    <Loader2 className="w-4 h-4 mr-2 animate-spin" />
-                    Повтор...
-                  </>
-                ) : (
-                  <>
-                    <Navigation className="w-4 h-4 mr-2" />
-                    Повторить
-                  </>
-                )}
-              </Button>
+
+              {hasUserDeniedPermission && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <div className="flex items-start space-x-3">
+                    <HelpCircle className="w-5 h-5 text-red-600 mt-0.5 flex-shrink-0" />
+                    <div className="space-y-3">
+                      <div className="font-medium text-red-800">Как разрешить доступ к геолокации:</div>
+                      <div className="text-sm text-red-700 space-y-2">
+                        <div className="font-medium">В адресной строке браузера:</div>
+                        <ol className="list-decimal list-inside space-y-1 pl-2">
+                          <li>Найдите иконку замка 🔒 или информации ⓘ слева от адреса</li>
+                          <li>Нажмите на неё</li>
+                          <li>Найдите пункт "Местоположение" или "Геолокация"</li>
+                          <li>Выберите "Разрешить" вместо "Блокировать"</li>
+                          <li>Обновите страницу</li>
+                        </ol>
+                      </div>
+                      <div className="flex space-x-2">
+                        <Button 
+                          variant="outline" 
+                          size="sm" 
+                          onClick={openBrowserSettings}
+                          className="bg-white hover:bg-red-50 border-red-300"
+                        >
+                          <Settings className="w-4 h-4 mr-2" />
+                          Настройки браузера
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              <div className="text-sm text-gray-600">
+                Используются данные для Москвы как альтернатива.
+              </div>
+              
+              <div className="flex space-x-2">
+                <Button 
+                  variant="outline" 
+                  size="sm" 
+                  onClick={handleGeolocationRequest}
+                  disabled={isRequestingLocation}
+                  className="bg-white hover:bg-gray-50"
+                >
+                  {isRequestingLocation ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      Повтор...
+                    </>
+                  ) : (
+                    <>
+                      <Navigation className="w-4 h-4 mr-2" />
+                      Повторить
+                    </>
+                  )}
+                </Button>
+              </div>
             </div>
           </AlertDescription>
         </Alert>
