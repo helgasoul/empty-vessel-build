@@ -6,7 +6,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
-import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield } from "lucide-react";
+import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap, Shield, FlaskConical } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -196,6 +196,30 @@ const RiskAssessment = () => {
                       <li>Семейная история онкологии</li>
                       <li>Этническая принадлежность</li>
                       <li>Возрастные факторы</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <FlaskConical className="w-5 h-5 text-purple-600" />
+                    <span>RAIS Chemical Risk</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Система оценки риска воздействия химических веществ EPA RAIS 
+                    для анализа канцерогенных и неканцерогенных рисков.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Оценивает воздействие:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Летучие органические соединения</li>
+                      <li>Тяжелые металлы и металлоиды</li>
+                      <li>Полициклические ароматические углеводороды</li>
+                      <li>Хлорорганические соединения</li>
                     </ul>
                   </div>
                 </CardContent>

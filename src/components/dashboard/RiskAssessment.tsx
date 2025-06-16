@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield } from "lucide-react";
+import { TrendingUp, Heart, Brain, Zap, RefreshCw, Calculator, Shield, FlaskConical } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from "react-router-dom";
@@ -110,6 +110,8 @@ const RiskAssessment = () => {
         return Zap;
       case 'cancer_risk':
         return Shield;
+      case 'rais_chemical':
+        return FlaskConical;
       case 'bcsc':
       case 'brca':
       case 'gail':
@@ -129,6 +131,8 @@ const RiskAssessment = () => {
         return 'DemPoRT';
       case 'cancer_risk':
         return 'Cancer Risk Calculator';
+      case 'rais_chemical':
+        return 'RAIS Chemical Risk';
       case 'bcsc':
         return 'BCSC v3';
       case 'brca':

@@ -11,7 +11,8 @@ import GailRiskForm from "./GailRiskForm";
 import FraminghamRiskForm from "./FraminghamRiskForm";
 import DemPortRiskForm from "./DemPortRiskForm";
 import CancerRiskForm from "./CancerRiskForm";
-import { Heart, Dna, Calculator, CheckCircle, Activity, Brain, Zap, Shield } from "lucide-react";
+import RaisRiskForm from "./RaisRiskForm";
+import { Heart, Dna, Calculator, CheckCircle, Activity, Brain, Zap, Shield, FlaskConical } from "lucide-react";
 import { toast } from "sonner";
 
 const RiskAssessmentForm = () => {
@@ -52,6 +53,13 @@ const RiskAssessmentForm = () => {
       icon: Shield,
       description: 'Риск развития рака',
       component: <CancerRiskForm onComplete={() => handleAssessmentComplete('Cancer Risk')} />
+    },
+    {
+      id: 'rais',
+      label: 'RAIS Chemical',
+      icon: FlaskConical,
+      description: 'Химические риски',
+      component: <RaisRiskForm onComplete={() => handleAssessmentComplete('RAIS Chemical')} />
     },
     {
       id: 'bcsc',
@@ -102,7 +110,7 @@ const RiskAssessmentForm = () => {
       </Card>
 
       <Tabs defaultValue="qrisk3" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-7">
+        <TabsList className="grid w-full grid-cols-8">
           {assessmentTabs.map((tab) => {
             const IconComponent = tab.icon;
             const isCompleted = completedAssessments.includes(tab.id.toUpperCase()) || completedAssessments.includes(tab.label);
