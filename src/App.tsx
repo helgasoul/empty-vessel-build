@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Toaster } from 'sonner';
-import { QueryClient } from 'react-query';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { ThemeProvider } from "@/components/theme-provider"
 import Index from '@/pages/Index';
@@ -22,7 +23,7 @@ import ExpertBlogPage from '@/pages/ExpertBlogPage';
 import Community from '@/pages/Community';
 import EnvironmentalHealth from '@/pages/EnvironmentalHealth';
 import Subscription from '@/pages/Subscription';
-import GamificationPage from '@/pages/Gamification';
+import GamificationPage from '@/pages/GamificationPage';
 import ResearchFiles from '@/pages/ResearchFiles';
 import About from '@/pages/About';
 import AdminDashboard from '@/pages/AdminDashboard';
@@ -30,9 +31,12 @@ import NotFound from '@/pages/NotFound';
 import { AuthProvider } from '@/contexts/AuthContext';
 import FamilyDataBankPage from '@/pages/FamilyDataBank';
 
+// Create a client
+const queryClient = new QueryClient();
+
 function App() {
   return (
-    <QueryClient>
+    <QueryClientProvider client={queryClient}>
       <BrowserRouter>
         <AuthProvider>
           <ThemeProvider>
@@ -68,7 +72,7 @@ function App() {
           </ThemeProvider>
         </AuthProvider>
       </BrowserRouter>
-    </QueryClient>
+    </QueryClientProvider>
   );
 }
 
