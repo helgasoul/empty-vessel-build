@@ -56,17 +56,43 @@ export const useCancerRisk = (onComplete?: () => void) => {
     setIsLoading(true);
 
     try {
-      console.log('Calculating cancer risk with data:', data);
-      const result = calculateCancerRisk(data);
-      console.log('Cancer risk calculation result:', result);
+      console.log('Starting cancer risk calculation with data:', data);
       
-      await saveCancerRiskAssessment(user.id, data, result);
+      // Проверяем данные перед расчетом
+      if (!data.age || data.age < 18 || data.age > 120) {
+        throw new Error('Некорректный возраст');
+      }
 
-      toast.success('Оценка онкологических рисков завершена!');
+      const result = calculateCancerRisk(data);
+      console.log('Cancer risk calculation completed:', result);
+      
+      // Проверяем результат расчета
+      if (!result || !result.overallRisk) {
+        throw new Error('Ошибка при расчете риска');
+      }
+
+      console.log('Attempting to save cancer risk assessment...');
+      await saveCancerRiskAssessment(user.id, data, result);
+      console.log('Cancer risk assessment saved successfully');
+
+      toast.success('Оценка онкологических рисков завершена!', {
+        description: `Уровень риска: ${result.overallRisk.riskLevel === 'low' ? 'Низкий' : 
+                      result.overallRisk.riskLevel === 'medium' ? 'Средний' : 
+                      result.overallRisk.riskLevel === 'high' ? 'Высокий' : 'Очень высокий'}`
+      });
+      
       onComplete?.();
     } catch (error) {
-      console.error('Error saving cancer risk assessment:', error);
-      toast.error('Ошибка при сохранении оценки');
+      console.error('Error in cancer risk assessment:', error);
+      
+      let errorMessage = 'Ошибка при сохранении оценки';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      toast.error(errorMessage, {
+        description: 'Попробуйте еще раз или обратитесь в поддержку'
+      });
     } finally {
       setIsLoading(false);
     }
