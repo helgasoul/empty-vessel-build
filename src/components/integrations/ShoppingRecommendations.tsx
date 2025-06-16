@@ -30,7 +30,6 @@ interface Product {
   recommendation_reason: string;
   partner_url?: string;
   partner_name?: string;
-  // Добавляем прямую ссылку на товар
   direct_product_url?: string;
 }
 
@@ -118,33 +117,65 @@ const ShoppingRecommendations = () => {
     );
   };
 
-  // Улучшенный обработчик для добавления товара в корзину
+  // Исправленный обработчик для перехода к товару
   const handleAddToCart = (product: Product) => {
     if (!product.inStock) {
       toast.error(`Товар "${product.name}" сейчас недоступен`);
       return;
     }
 
-    // Приоритет: прямая ссылка на товар > общая ссылка партнера
+    // Определяем целевую ссылку
     const targetUrl = product.direct_product_url || product.partner_url;
 
-    if (targetUrl) {
+    if (!targetUrl) {
+      toast.error('Ссылка на товар недоступна');
+      return;
+    }
+
+    // Логируем для отладки
+    console.log('Переход к товару:', {
+      productName: product.name,
+      directUrl: product.direct_product_url,
+      partnerUrl: product.partner_url,
+      targetUrl: targetUrl
+    });
+
+    try {
+      // Показываем уведомление
       if (product.direct_product_url) {
-        toast.success(`Открываем страницу товара "${product.name}"`, {
-          description: `Переходим на ${product.partner_name} к конкретному товару`
+        toast.success(`Переходим к товару "${product.name}"`, {
+          description: `Открываем страницу товара на ${product.partner_name}`,
+          duration: 3000
         });
       } else {
         toast.info(`Переходим к разделу на ${product.partner_name}`, {
-          description: `Ищите "${product.name}" в категории ${product.category}`
+          description: `Ищите "${product.name}" в категории ${product.category}`,
+          duration: 3000
         });
       }
       
-      // Открываем ссылку в новой вкладке
-      window.open(targetUrl, '_blank', 'noopener,noreferrer');
-    } else {
-      toast.info(`Товар "${product.name}" добавлен в корзину`, {
-        description: 'Функция корзины будет доступна в следующем обновлении'
-      });
+      // Принудительно открываем ссылку в новой вкладке
+      const newWindow = window.open(targetUrl, '_blank');
+      
+      // Проверяем, удалось ли открыть окно
+      if (!newWindow) {
+        toast.error('Не удалось открыть ссылку. Проверьте настройки блокировщика всплывающих окон.');
+        // Альтернативный способ - присвоение location.href
+        window.location.href = targetUrl;
+      } else {
+        // Фокус на новом окне
+        newWindow.focus();
+      }
+    } catch (error) {
+      console.error('Ошибка при открытии ссылки:', error);
+      toast.error('Ошибка при переходе к товару');
+      
+      // Запасной вариант - прямое присвоение
+      try {
+        window.location.href = targetUrl;
+      } catch (fallbackError) {
+        console.error('Ошибка запасного варианта:', fallbackError);
+      }
     }
   };
 
@@ -177,7 +208,6 @@ const ShoppingRecommendations = () => {
               -{Math.round((1 - product.price / product.oldPrice) * 100)}%
             </Badge>
           )}
-          {/* Индикатор прямой ссылки на товар */}
           {product.direct_product_url && (
             <Badge className="absolute bottom-2 left-2 bg-green-500 text-xs">
               Прямая ссылка
