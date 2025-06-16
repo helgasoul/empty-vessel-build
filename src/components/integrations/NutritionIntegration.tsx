@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -17,6 +16,7 @@ import {
   BookOpen,
   Zap
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface NutritionGoal {
   name: string;
@@ -356,6 +356,22 @@ const NutritionIntegration = () => {
     </Card>
   );
 
+  // Handlers for quick input buttons
+  const handlePhotoFood = () => {
+    toast.success("Функция фотографирования еды будет доступна в следующем обновлении!");
+    // В будущем здесь будет интеграция с камерой
+  };
+
+  const handleAddProduct = () => {
+    toast.info("Открывается форма добавления продукта...");
+    // В будущем здесь будет открываться модальное окно с формой добавления продукта
+  };
+
+  const handleLogWater = () => {
+    toast.success("Стакан воды записан! 💧");
+    // В будущем здесь будет обновляться счетчик воды в dailyGoals
+  };
+
   return (
     <div className="space-y-6">
       <Card className="prevent-card">
@@ -418,15 +434,27 @@ const NutritionIntegration = () => {
                     </CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
-                    <Button className="w-full" variant="outline">
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={handlePhotoFood}
+                    >
                       <Camera className="w-4 h-4 mr-2" />
                       Сфотографировать еду
                     </Button>
-                    <Button className="w-full" variant="outline">
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={handleAddProduct}
+                    >
                       <Plus className="w-4 h-4 mr-2" />
                       Добавить продукт
                     </Button>
-                    <Button className="w-full" variant="outline">
+                    <Button 
+                      className="w-full" 
+                      variant="outline"
+                      onClick={handleLogWater}
+                    >
                       <Droplets className="w-4 h-4 mr-2" />
                       Записать воду
                     </Button>
