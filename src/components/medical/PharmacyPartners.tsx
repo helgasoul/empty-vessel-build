@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -25,8 +24,8 @@ const PharmacyPartners = () => {
       name: 'EcoHerbs',
       address: 'ул. Эко, 12, Москва',
       phone: '+7 (495) 555-01-23',
-      email: 'info@ecoherbs.ru',
-      website: 'https://ecoherbs.ru',
+      email: 'info@ecoherbs.org',
+      website: 'https://ecoherbs.org',
       delivery_available: true,
       working_hours: {
         'пн-пт': '9:00-21:00',
