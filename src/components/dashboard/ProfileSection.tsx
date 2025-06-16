@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -117,13 +118,7 @@ const ProfileSection = () => {
 
   if (isEditing) {
     return (
-      <ProfileEditForm 
-        onCancel={() => setIsEditing(false)}
-        onSave={() => {
-          setIsEditing(false);
-          fetchProfile();
-        }}
-      />
+      <ProfileEditForm />
     );
   }
 
