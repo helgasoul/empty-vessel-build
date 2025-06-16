@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   Users,
   Video
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Workout {
   id: string;
@@ -142,6 +142,38 @@ const FitnessIntegration = () => {
     }
   };
 
+  // Handler for starting/continuing workouts
+  const handleWorkoutAction = (workout: Workout) => {
+    if (workout.completed) {
+      toast.success(`Повторяем тренировку "${workout.title}"`, {
+        description: `Переходим к ${workout.type} с ${workout.instructor} • ${workout.duration} мин`
+      });
+    } else if (workout.progress && workout.progress > 0) {
+      toast.info(`Продолжаем тренировку "${workout.title}"`, {
+        description: `Прогресс: ${workout.progress}% • Осталось около ${Math.round((100 - workout.progress) / 100 * workout.duration)} мин`
+      });
+    } else {
+      toast.success(`Начинаем тренировку "${workout.title}"`, {
+        description: `${workout.type} с ${workout.instructor} • ${workout.duration} мин • ${workout.calories} ккал`
+      });
+    }
+    // В будущем здесь будет переход на страницу тренировки
+  };
+
+  // Handler for program enrollment/continuation
+  const handleProgramAction = (program: FitnessProgram) => {
+    if (program.enrolled) {
+      toast.info(`Продолжаем программу "${program.name}"`, {
+        description: `Прогресс: ${program.progress}% • ${program.duration_weeks} недель • ${program.workouts_per_week}x в неделю`
+      });
+    } else {
+      toast.success(`Записываемся на программу "${program.name}"`, {
+        description: `${program.duration_weeks} недель тренировок с ${program.instructor}. Начинаем завтра!`
+      });
+    }
+    // В будущем здесь будет переход на страницу программы
+  };
+
   const WorkoutCard = ({ workout }: { workout: Workout }) => (
     <Card className="prevent-card">
       <CardHeader className="p-4">
@@ -222,6 +254,7 @@ const FitnessIntegration = () => {
           <Button 
             className="w-full"
             variant={workout.completed ? "outline" : "default"}
+            onClick={() => handleWorkoutAction(workout)}
           >
             <Play className="w-4 h-4 mr-2" />
             {workout.completed ? 'Повторить' : workout.progress ? 'Продолжить' : 'Начать'}
@@ -301,6 +334,7 @@ const FitnessIntegration = () => {
           <Button 
             className="w-full"
             variant={program.enrolled ? "outline" : "default"}
+            onClick={() => handleProgramAction(program)}
           >
             <Video className="w-4 h-4 mr-2" />
             {program.enrolled ? 'Продолжить' : 'Записаться'}
