@@ -396,6 +396,45 @@ export type Database = {
         }
         Relationships: []
       }
+      founder_info: {
+        Row: {
+          achievements: string[] | null
+          created_at: string
+          description: string | null
+          education: string[] | null
+          id: string
+          image_url: string | null
+          name: string
+          quote: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          achievements?: string[] | null
+          created_at?: string
+          description?: string | null
+          education?: string[] | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          quote?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          achievements?: string[] | null
+          created_at?: string
+          description?: string | null
+          education?: string[] | null
+          id?: string
+          image_url?: string | null
+          name?: string
+          quote?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       genetic_data: {
         Row: {
           created_at: string
