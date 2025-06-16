@@ -72,11 +72,11 @@ const calculateLungCancerRisk = (data: CancerRiskFormData): CancerTypeRisk => {
   
   // Курение - основной фактор риска
   if (data.smoking_status === 'current') {
-    const packYears = ((data.cigarettes_per_day || 0) / 20) * (data.smoking_years || 0);
+    const packYears = (data.cigarettes_per_day / 20) * data.smoking_years;
     risk *= (1 + packYears * 0.1);
     riskFactors.push('Текущее курение');
   } else if (data.smoking_status === 'former') {
-    const packYears = ((data.cigarettes_per_day || 0) / 20) * (data.smoking_years || 0);
+    const packYears = (data.cigarettes_per_day / 20) * data.smoking_years;
     risk *= (1 + packYears * 0.05);
     riskFactors.push('Курение в прошлом');
   }
@@ -87,7 +87,7 @@ const calculateLungCancerRisk = (data: CancerRiskFormData): CancerTypeRisk => {
   }
   
   // Семейная история
-  if (data.family_cancer_history && data.family_cancer_types?.includes('lung')) {
+  if (data.family_cancer_history && data.family_cancer_types.includes('lung')) {
     risk *= 1.8;
     riskFactors.push('Семейная история рака легких');
   }
@@ -121,7 +121,7 @@ const calculateBreastCancerRisk = (data: CancerRiskFormData, bmi: number): Cance
   }
   
   // Семейная история
-  if (data.family_cancer_history && data.family_cancer_types?.includes('breast')) {
+  if (data.family_cancer_history && data.family_cancer_types.includes('breast')) {
     if (data.family_cancer_degree === 'first') {
       risk *= 2.1;
       riskFactors.push('Семейная история рака молочной железы (первая линия)');
@@ -193,7 +193,7 @@ const calculateColorectalCancerRisk = (data: CancerRiskFormData, bmi: number): C
   }
   
   // Семейная история
-  if (data.family_cancer_history && data.family_cancer_types?.includes('colorectal')) {
+  if (data.family_cancer_history && data.family_cancer_types.includes('colorectal')) {
     risk *= 2.3;
     riskFactors.push('Семейная история колоректального рака');
   }
@@ -274,7 +274,7 @@ const calculateMelanomaRisk = (data: CancerRiskFormData): CancerTypeRisk => {
   }
   
   // Семейная история
-  if (data.family_cancer_history && data.family_cancer_types?.includes('melanoma')) {
+  if (data.family_cancer_history && data.family_cancer_types.includes('melanoma')) {
     risk *= 2.8;
     riskFactors.push('Семейная история меланомы');
   }
@@ -307,7 +307,7 @@ const calculateProstateCancerRisk = (data: CancerRiskFormData): CancerTypeRisk =
   }
   
   // Семейная история
-  if (data.family_cancer_history && data.family_cancer_types?.includes('prostate')) {
+  if (data.family_cancer_history && data.family_cancer_types.includes('prostate')) {
     risk *= 2.2;
     riskFactors.push('Семейная история рака простаты');
   }

@@ -12,8 +12,8 @@ export const cancerRiskSchema = z.object({
   
   // Образ жизни
   smoking_status: z.enum(['never', 'former', 'current']),
-  smoking_years: z.number().min(0).max(80).optional(),
-  cigarettes_per_day: z.number().min(0).max(100).optional(),
+  smoking_years: z.number().min(0).max(80).default(0),
+  cigarettes_per_day: z.number().min(0).max(100).default(0),
   alcohol_consumption: z.enum(['none', 'light', 'moderate', 'heavy']),
   physical_activity: z.enum(['low', 'moderate', 'high']),
   
@@ -26,32 +26,32 @@ export const cancerRiskSchema = z.object({
   diabetes: z.boolean(),
   inflammatory_bowel_disease: z.boolean(),
   previous_cancer_history: z.boolean(),
-  previous_cancer_types: z.array(z.string()).optional(),
+  previous_cancer_types: z.array(z.string()).default([]),
   
   // Семейная история
   family_cancer_history: z.boolean(),
-  family_cancer_types: z.array(z.string()).optional(),
+  family_cancer_types: z.array(z.string()).default([]),
   family_cancer_degree: z.enum(['first', 'second', 'both']).optional(),
   
   // Репродуктивные факторы (для женщин)
   age_at_menarche: z.number().min(8).max(18).optional(),
   age_at_menopause: z.number().min(35).max(65).optional(),
-  pregnancies_count: z.number().min(0).max(20).optional(),
+  pregnancies_count: z.number().min(0).max(20).default(0),
   age_at_first_birth: z.number().min(15).max(50).optional(),
-  breastfeeding_duration: z.number().min(0).max(120).optional(), // месяцы
-  hormone_replacement_therapy: z.boolean().optional(),
-  oral_contraceptive_use: z.boolean().optional(),
+  breastfeeding_duration: z.number().min(0).max(120).default(0), // месяцы
+  hormone_replacement_therapy: z.boolean().default(false),
+  oral_contraceptive_use: z.boolean().default(false),
   
   // Факторы окружающей среды
   sun_exposure: z.enum(['low', 'moderate', 'high']),
   skin_type: z.enum(['very_fair', 'fair', 'medium', 'olive', 'brown', 'black']),
   occupational_exposure: z.boolean(),
-  exposure_types: z.array(z.string()).optional(),
+  exposure_types: z.array(z.string()).default([]),
   
   // Скрининг
-  mammography_frequency: z.enum(['never', 'irregular', 'regular']).optional(),
-  pap_smear_frequency: z.enum(['never', 'irregular', 'regular']).optional(),
-  colonoscopy_frequency: z.enum(['never', 'irregular', 'regular']).optional(),
+  mammography_frequency: z.enum(['never', 'irregular', 'regular']).default('never'),
+  pap_smear_frequency: z.enum(['never', 'irregular', 'regular']).default('never'),
+  colonoscopy_frequency: z.enum(['never', 'irregular', 'regular']).default('never'),
 });
 
 export type CancerRiskFormData = z.infer<typeof cancerRiskSchema>;

@@ -20,6 +20,8 @@ export const useCancerRisk = (onComplete?: () => void) => {
       height: 165,
       weight: 65,
       smoking_status: 'never',
+      smoking_years: 0,
+      cigarettes_per_day: 0,
       alcohol_consumption: 'light',
       physical_activity: 'moderate',
       fruit_vegetable_intake: 'moderate',
@@ -28,16 +30,20 @@ export const useCancerRisk = (onComplete?: () => void) => {
       diabetes: false,
       inflammatory_bowel_disease: false,
       previous_cancer_history: false,
+      previous_cancer_types: [],
       family_cancer_history: false,
-      sun_exposure: 'moderate',
-      skin_type: 'fair',
+      family_cancer_types: [],
       occupational_exposure: false,
+      exposure_types: [],
       pregnancies_count: 0,
+      breastfeeding_duration: 0,
       hormone_replacement_therapy: false,
       oral_contraceptive_use: false,
       mammography_frequency: 'irregular',
       pap_smear_frequency: 'regular',
       colonoscopy_frequency: 'never',
+      sun_exposure: 'moderate',
+      skin_type: 'fair',
     },
   });
 
@@ -50,13 +56,16 @@ export const useCancerRisk = (onComplete?: () => void) => {
     setIsLoading(true);
 
     try {
+      console.log('Calculating cancer risk with data:', data);
       const result = calculateCancerRisk(data);
+      console.log('Cancer risk calculation result:', result);
+      
       await saveCancerRiskAssessment(user.id, data, result);
 
       toast.success('Оценка онкологических рисков завершена!');
       onComplete?.();
     } catch (error) {
-      console.error('Error saving assessment:', error);
+      console.error('Error saving cancer risk assessment:', error);
       toast.error('Ошибка при сохранении оценки');
     } finally {
       setIsLoading(false);
