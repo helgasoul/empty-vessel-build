@@ -95,7 +95,7 @@ const RiskAssessment = () => {
                     <div className="flex items-center space-x-3">
                       <div className="w-4 h-4 bg-green-500 rounded"></div>
                       <div>
-                        <span className="font-medium">Низкий риск (< 10%)</span>
+                        <span className="font-medium">Низкий риск (&lt; 10%)</span>
                         <p className="text-sm text-gray-600">
                           Продолжайте здоровый образ жизни
                         </p>
@@ -113,7 +113,7 @@ const RiskAssessment = () => {
                     <div className="flex items-center space-x-3">
                       <div className="w-4 h-4 bg-red-500 rounded"></div>
                       <div>
-                        <span className="font-medium">Высокий риск (> 20%)</span>
+                        <span className="font-medium">Высокий риск (&gt; 20%)</span>
                         <p className="text-sm text-gray-600">
                           Требуется медицинское вмешательство
                         </p>
