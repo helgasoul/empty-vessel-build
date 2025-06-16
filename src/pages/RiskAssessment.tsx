@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
-import { Heart, History, Calculator, Info, Activity, Dna, Brain } from "lucide-react";
+import { Heart, History, Calculator, Info, Activity, Dna, Brain, Zap } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -125,6 +125,30 @@ const RiskAssessment = () => {
                       <li>Сердечно-сосудистые заболевания</li>
                       <li>Образование и когнитивную активность</li>
                       <li>Образ жизни и социальные факторы</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
+                    <Zap className="w-5 h-5 text-indigo-500" />
+                    <span>DemPoRT</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Dementia Population Risk Tool - популяционный инструмент оценки риска 
+                    деменции, разработанный в Канаде на основе крупных когортных исследований.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Особенности DemPoRT:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Учитывает сердечно-сосудистые факторы риска</li>
+                      <li>Образ жизни и социальные факторы</li>
+                      <li>Семейная история и генетика</li>
+                      <li>10-летний популяционный риск</li>
                     </ul>
                   </div>
                 </CardContent>

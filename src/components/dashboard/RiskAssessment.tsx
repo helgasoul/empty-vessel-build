@@ -98,6 +98,8 @@ const RiskAssessment = () => {
         return Heart;
       case 'framingham_alzheimer':
         return Brain;
+      case 'demport':
+        return Zap;
       case 'bcsc':
       case 'brca':
       case 'gail':
@@ -113,6 +115,8 @@ const RiskAssessment = () => {
         return 'QRISK3';
       case 'framingham_alzheimer':
         return 'Framingham (Альцгеймер)';
+      case 'demport':
+        return 'DemPoRT';
       case 'bcsc':
         return 'BCSC v3';
       case 'brca':
