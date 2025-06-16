@@ -3,6 +3,7 @@ import React from 'react';
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BMIDisplay } from "@/components/ui/bmi-display";
 import { CRCProFormData } from './types';
 
 interface CRCProPersonalInfoProps {
@@ -41,7 +42,7 @@ export const CRCProPersonalInfo: React.FC<CRCProPersonalInfoProps> = ({ data, up
         </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <div className="space-y-2">
           <Label htmlFor="height">Рост (см)</Label>
           <Input
@@ -68,22 +69,16 @@ export const CRCProPersonalInfo: React.FC<CRCProPersonalInfoProps> = ({ data, up
             placeholder="Например: 65.5"
           />
         </div>
-      </div>
 
-      {data.height_cm && data.weight_kg && (
-        <div className="p-4 bg-gray-50 rounded-lg">
-          <div className="text-sm text-gray-600">
-            ИМТ: {(data.weight_kg / Math.pow(data.height_cm / 100, 2)).toFixed(1)}
-            {(() => {
-              const bmi = data.weight_kg / Math.pow(data.height_cm / 100, 2);
-              if (bmi < 18.5) return " (недостаточный вес)";
-              if (bmi < 25) return " (нормальный вес)";
-              if (bmi < 30) return " (избыточный вес)";
-              return " (ожирение)";
-            })()}
-          </div>
+        {/* Автоматический расчет ИМТ */}
+        <div className="flex items-end">
+          <BMIDisplay 
+            weight={data.weight_kg} 
+            height={data.height_cm}
+            className="w-full"
+          />
         </div>
-      )}
+      </div>
     </div>
   );
 };

@@ -4,6 +4,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BMIDisplay } from "@/components/ui/bmi-display";
 import { User } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { CancerRiskFormData } from "./types";
@@ -13,6 +14,9 @@ interface CancerPersonalInfoProps {
 }
 
 const CancerPersonalInfo = ({ form }: CancerPersonalInfoProps) => {
+  const height = form.watch('height');
+  const weight = form.watch('weight');
+
   return (
     <Card>
       <CardHeader>
@@ -108,6 +112,15 @@ const CancerPersonalInfo = ({ form }: CancerPersonalInfoProps) => {
             )}
           />
         </div>
+
+        {/* Автоматический расчет ИМТ */}
+        {height && weight && (
+          <div className="mt-6">
+            <div className="flex justify-center">
+              <BMIDisplay weight={weight} height={height} />
+            </div>
+          </div>
+        )}
 
         <div className="p-4 bg-blue-50 rounded-lg">
           <p className="text-sm text-blue-800">

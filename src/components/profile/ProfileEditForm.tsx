@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -8,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BMIDisplay } from "@/components/ui/bmi-display";
 import { toast } from "@/hooks/use-toast";
 import { User, Save, X } from "lucide-react";
 import type { Tables } from '@/integrations/supabase/types';
@@ -254,7 +254,7 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
           {/* Физические параметры */}
           <div className="space-y-4">
             <h3 className="text-lg font-semibold text-gray-900 border-b pb-2">Физические параметры</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="space-y-2">
                 <Label htmlFor="height">Рост (см)</Label>
                 <Input
@@ -279,6 +279,15 @@ const ProfileEditForm: React.FC<ProfileEditFormProps> = ({ onCancel, onSave }) =
                   value={profile.weight || ''}
                   onChange={(e) => handleInputChange('weight', e.target.value ? parseFloat(e.target.value) : null)}
                   placeholder="60.5"
+                />
+              </div>
+
+              {/* Автоматический расчет ИМТ */}
+              <div className="flex items-end">
+                <BMIDisplay 
+                  weight={profile.weight} 
+                  height={profile.height}
+                  className="w-full"
                 />
               </div>
             </div>

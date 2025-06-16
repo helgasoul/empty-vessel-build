@@ -4,6 +4,7 @@ import { FormField, FormItem, FormLabel, FormControl, FormMessage } from "@/comp
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { BMIDisplay } from "@/components/ui/bmi-display";
 import { User } from "lucide-react";
 import { UseFormReturn } from "react-hook-form";
 import { DemPortFormData } from "./types";
@@ -13,6 +14,8 @@ interface DemPortPersonalInfoProps {
 }
 
 const DemPortPersonalInfo = ({ form }: DemPortPersonalInfoProps) => {
+  const bmi = form.watch('bmi');
+  
   return (
     <Card>
       <CardHeader>
@@ -130,6 +133,17 @@ const DemPortPersonalInfo = ({ form }: DemPortPersonalInfoProps) => {
               </FormItem>
             )}
           />
+
+          {/* Отображение ИМТ если он введен */}
+          {bmi && (
+            <div className="flex items-end">
+              <BMIDisplay 
+                weight={bmi * 1.7 * 1.7} // Примерный вес для отображения категории
+                height={170} // Примерный рост
+                className="w-full"
+              />
+            </div>
+          )}
         </div>
       </CardContent>
     </Card>
