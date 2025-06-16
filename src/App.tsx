@@ -1,48 +1,47 @@
-
 import React from 'react';
+import { QueryClient, QueryClientProvider } from 'react-query';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Toaster } from 'sonner';
+import { ThemeProvider } from './components/ThemeProvider';
 import { AuthProvider } from './contexts/AuthContext';
-import { ThemeProvider } from './contexts/ThemeContext';
-import Dashboard from './pages/Dashboard';
-import WomensHealth from './pages/WomensHealth';
-import EnvironmentalHealth from './pages/EnvironmentalHealth';
-import MedicalIntegrations from './pages/MedicalIntegrations';
-import AIHealth from './pages/AIHealth';
-import Auth from './pages/Auth';
-import TelemedicineIntegrations from './pages/TelemedicineIntegrations';
-import HealthAnalytics from './pages/HealthAnalytics';
-import GamificationPage from './pages/GamificationPage';
-import Community from './pages/Community';
-import ExternalIntegrations from './pages/ExternalIntegrations';
+import Profile from './pages/Profile';
+import RiskAssessmentPage from './pages/RiskAssessmentPage';
+import MedicalRecordsPage from './pages/MedicalRecordsPage';
+import IntegrationsPage from './pages/IntegrationsPage';
+import Founder from './pages/Founder';
+import DataExplorer from './pages/DataExplorer';
+import { Toaster } from "@/components/ui/toaster"
+import LandingPage from './pages/LandingPage';
+import ExternalServicesIntegration from './components/integrations/ExternalServicesIntegration';
+import NutritionPage from './pages/NutritionPage';
+import Subscription from './pages/Subscription';
+
+const queryClient = new QueryClient();
 
 function App() {
   return (
-    <Router>
-      <QueryClientProvider client={new QueryClient()}>
-        <AuthProvider>
-          <ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+          <Router>
             <div className="min-h-screen bg-background">
-              <Routes>
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/womens-health" element={<WomensHealth />} />
-                <Route path="/environmental-health" element={<EnvironmentalHealth />} />
-                <Route path="/medical-integrations" element={<MedicalIntegrations />} />
-                <Route path="/telemedicine-integrations" element={<TelemedicineIntegrations />} />
-                <Route path="/ai-health" element={<AIHealth />} />
-                <Route path="/health-analytics" element={<HealthAnalytics />} />
-                <Route path="/gamification" element={<GamificationPage />} />
-                <Route path="/community" element={<Community />} />
-                <Route path="/external-integrations" element={<ExternalIntegrations />} />
-              </Routes>
               <Toaster />
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/risk-assessment" element={<RiskAssessmentPage />} />
+                <Route path="/medical-records" element={<MedicalRecordsPage />} />
+                <Route path="/integrations" element={<IntegrationsPage />} />
+                <Route path="/external-integrations" element={<ExternalServicesIntegration />} />
+                <Route path="/nutrition" element={<NutritionPage />} />
+                <Route path="/founder" element={<Founder />} />
+                <Route path="/data-explorer" element={<DataExplorer />} />
+                <Route path="/subscription" element={<Subscription />} />
+              </Routes>
             </div>
-          </ThemeProvider>
-        </AuthProvider>
-      </QueryClientProvider>
-    </Router>
+          </Router>
+        </ThemeProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }
 
