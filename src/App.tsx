@@ -12,6 +12,7 @@ import MedicalIntegrations from './pages/MedicalIntegrations';
 import AIHealth from './pages/AIHealth';
 import Auth from './pages/Auth';
 import TelemedicineIntegrations from './pages/TelemedicineIntegrations';
+import HealthAnalytics from './pages/HealthAnalytics';
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
                 <Route path="/medical-integrations" element={<MedicalIntegrations />} />
                 <Route path="/telemedicine-integrations" element={<TelemedicineIntegrations />} />
                 <Route path="/ai-health" element={<AIHealth />} />
+                <Route path="/health-analytics" element={<HealthAnalytics />} />
               </Routes>
               <Toaster />
             </div>
