@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { Navigate } from "react-router-dom";
 import RiskAssessmentForm from "@/components/risk/RiskAssessmentForm";
 import RiskAssessmentHistory from "@/components/risk/RiskAssessmentHistory";
-import { Heart, History, Calculator, Info, Activity, Dna } from "lucide-react";
+import { Heart, History, Calculator, Info, Activity, Dna, Brain } from "lucide-react";
 
 const RiskAssessment = () => {
   const { user, loading } = useAuth();
@@ -109,6 +109,30 @@ const RiskAssessment = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center space-x-2">
+                    <Brain className="w-5 h-5 text-purple-500" />
+                    <span>Framingham Alzheimer</span>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  <p className="text-gray-700">
+                    Оценка риска болезни Альцгеймера на основе данных Фрамингемского 
+                    исследования - одного из самых долгосрочных исследований здоровья.
+                  </p>
+                  <div className="space-y-2">
+                    <h4 className="font-medium">Учитывает:</h4>
+                    <ul className="list-disc list-inside text-sm text-gray-600 space-y-1">
+                      <li>Генетические факторы (APOE4)</li>
+                      <li>Сердечно-сосудистые заболевания</li>
+                      <li>Образование и когнитивную активность</li>
+                      <li>Образ жизни и социальные факторы</li>
+                    </ul>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center space-x-2">
                     <Dna className="w-5 h-5 text-purple-500" />
                     <span>BRCA</span>
                   </CardTitle>
@@ -130,7 +154,7 @@ const RiskAssessment = () => {
                 </CardContent>
               </Card>
 
-              <Card>
+              <Card className="lg:col-span-2">
                 <CardHeader>
                   <CardTitle>Интерпретация результатов</CardTitle>
                 </CardHeader>

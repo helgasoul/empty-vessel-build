@@ -53,6 +53,7 @@ const RiskAssessment = () => {
     switch (level) {
       case 'low':
         return 'text-green-700 bg-green-100';
+      case 'intermediate':
       case 'medium':
         return 'text-yellow-700 bg-yellow-100';
       case 'high':
@@ -66,6 +67,7 @@ const RiskAssessment = () => {
     switch (level) {
       case 'low':
         return 'bg-green-500';
+      case 'intermediate':
       case 'medium':
         return 'bg-yellow-500';
       case 'high':
@@ -79,6 +81,7 @@ const RiskAssessment = () => {
     switch (level) {
       case 'low':
         return 'Низкий';
+      case 'intermediate':
       case 'medium':
         return 'Средний';
       case 'high':
@@ -91,11 +94,33 @@ const RiskAssessment = () => {
   const getCategoryIcon = (type: string) => {
     switch (type.toLowerCase()) {
       case 'qrisk3':
-        return Heart;
       case 'framingham':
+        return Heart;
+      case 'framingham_alzheimer':
+        return Brain;
+      case 'bcsc':
+      case 'brca':
+      case 'gail':
         return Heart;
       default:
         return TrendingUp;
+    }
+  };
+
+  const getAssessmentName = (type: string) => {
+    switch (type.toLowerCase()) {
+      case 'qrisk3':
+        return 'QRISK3';
+      case 'framingham_alzheimer':
+        return 'Framingham (Альцгеймер)';
+      case 'bcsc':
+        return 'BCSC v3';
+      case 'brca':
+        return 'BRCA';
+      case 'gail':
+        return 'Gail Model';
+      default:
+        return type.toUpperCase();
     }
   };
 
@@ -167,7 +192,7 @@ const RiskAssessment = () => {
                       </div>
                       <div>
                         <h4 className="font-medium text-gray-900">
-                          {assessment.assessment_type.toUpperCase()}
+                          {getAssessmentName(assessment.assessment_type)}
                         </h4>
                         <p className="text-sm text-gray-600">
                           {assessment.recommendations?.length || 0} рекомендаций
