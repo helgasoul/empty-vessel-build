@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Calendar, Heart, Pill, TrendingUp } from 'lucide-react';
+import { Calendar, Heart, Pill, TrendingUp, Smartphone } from 'lucide-react';
 import MenstrualCycleTracker from './MenstrualCycleTracker';
 import SymptomMoodLogger from './SymptomMoodLogger';
 import MedicationReminders from './MedicationReminders';
+import HealthAppIntegrations from './HealthAppIntegrations';
 
 const WomensHealthDashboard = () => {
-  const [activeSection, setActiveSection] = useState<'overview' | 'cycle' | 'symptoms' | 'medications'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'cycle' | 'symptoms' | 'medications' | 'integrations'>('overview');
 
   const sections = [
     {
@@ -34,6 +35,12 @@ const WomensHealthDashboard = () => {
       title: 'Лекарства',
       icon: <Pill className="w-5 h-5" />,
       description: 'Напоминания и планы лечения'
+    },
+    {
+      key: 'integrations',
+      title: 'Интеграции',
+      icon: <Smartphone className="w-5 h-5" />,
+      description: 'Подключение приложений'
     }
   ];
 
@@ -44,7 +51,7 @@ const WomensHealthDashboard = () => {
       </div>
 
       {/* Navigation */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
         {sections.map(section => (
           <Card 
             key={section.key}
@@ -56,7 +63,7 @@ const WomensHealthDashboard = () => {
             onClick={() => setActiveSection(section.key as any)}
           >
             <CardContent className="pt-6">
-              <div className="flex items-center space-x-3">
+              <div className="flex flex-col items-center space-y-2 text-center">
                 <div className={`p-2 rounded-lg ${
                   activeSection === section.key 
                     ? 'bg-#F0A1C0 text-white' 
@@ -65,8 +72,8 @@ const WomensHealthDashboard = () => {
                   {section.icon}
                 </div>
                 <div>
-                  <h3 className="font-medium">{section.title}</h3>
-                  <p className="text-sm text-gray-600">{section.description}</p>
+                  <h3 className="font-medium text-sm">{section.title}</h3>
+                  <p className="text-xs text-gray-600">{section.description}</p>
                 </div>
               </div>
             </CardContent>
@@ -87,7 +94,7 @@ const WomensHealthDashboard = () => {
                   Этот раздел поможет вам отслеживать различные аспекты женского здоровья, 
                   включая менструальный цикл, симптомы, настроение и лекарства.
                 </p>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                   <div className="p-4 bg-#F0A1C0/10 rounded-lg">
                     <Calendar className="w-8 h-8 text-#F0A1C0 mb-2" />
                     <h4 className="font-medium">Трекер цикла</h4>
@@ -107,6 +114,13 @@ const WomensHealthDashboard = () => {
                     <h4 className="font-medium">Управление лекарствами</h4>
                     <p className="text-sm text-gray-600">
                       Напоминания о приеме и планы лечения
+                    </p>
+                  </div>
+                  <div className="p-4 bg-purple-500/10 rounded-lg">
+                    <Smartphone className="w-8 h-8 text-purple-500 mb-2" />
+                    <h4 className="font-medium">Интеграции</h4>
+                    <p className="text-sm text-gray-600">
+                      Подключение с Flo, MAAM и другими приложениями
                     </p>
                   </div>
                 </div>
@@ -137,6 +151,12 @@ const WomensHealthDashboard = () => {
                   >
                     Управление лекарствами
                   </Button>
+                  <Button 
+                    onClick={() => setActiveSection('integrations')}
+                    className="bg-purple-500 hover:bg-purple-600"
+                  >
+                    Подключить приложения
+                  </Button>
                 </div>
               </CardContent>
             </Card>
@@ -146,6 +166,7 @@ const WomensHealthDashboard = () => {
         {activeSection === 'cycle' && <MenstrualCycleTracker />}
         {activeSection === 'symptoms' && <SymptomMoodLogger />}
         {activeSection === 'medications' && <MedicationReminders />}
+        {activeSection === 'integrations' && <HealthAppIntegrations />}
       </div>
     </div>
   );

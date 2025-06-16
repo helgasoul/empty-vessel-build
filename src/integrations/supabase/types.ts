@@ -170,6 +170,50 @@ export type Database = {
         }
         Relationships: []
       }
+      external_health_data: {
+        Row: {
+          created_at: string
+          data_payload: Json
+          data_type: string
+          external_id: string | null
+          id: string
+          integration_id: string
+          recorded_date: string
+          synced_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          data_payload: Json
+          data_type: string
+          external_id?: string | null
+          id?: string
+          integration_id: string
+          recorded_date: string
+          synced_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          data_payload?: Json
+          data_type?: string
+          external_id?: string | null
+          id?: string
+          integration_id?: string
+          recorded_date?: string
+          synced_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "external_health_data_integration_id_fkey"
+            columns: ["integration_id"]
+            isOneToOne: false
+            referencedRelation: "health_app_integrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       genetic_data: {
         Row: {
           created_at: string
@@ -201,6 +245,51 @@ export type Database = {
           results?: Json | null
           test_date?: string | null
           test_type?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      health_app_integrations: {
+        Row: {
+          access_token: string | null
+          app_name: string
+          app_user_id: string | null
+          created_at: string
+          id: string
+          integration_status: string
+          last_sync_at: string | null
+          refresh_token: string | null
+          sync_settings: Json | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token?: string | null
+          app_name: string
+          app_user_id?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string
+          last_sync_at?: string | null
+          refresh_token?: string | null
+          sync_settings?: Json | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token?: string | null
+          app_name?: string
+          app_user_id?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string
+          last_sync_at?: string | null
+          refresh_token?: string | null
+          sync_settings?: Json | null
+          token_expires_at?: string | null
           updated_at?: string
           user_id?: string
         }
