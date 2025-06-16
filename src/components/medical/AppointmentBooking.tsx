@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -7,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Calendar, Clock, MapPin, Phone, Star, User, Stethoscope } from 'lucide-react';
+import { Calendar, Clock, MapPin, Phone, Star, User, Stethoscope, ExternalLink } from 'lucide-react';
 import { useMedicalAppointments } from '@/hooks/useMedicalAppointments';
 import { format } from 'date-fns';
 import { ru } from 'date-fns/locale';
@@ -22,6 +21,32 @@ const AppointmentBooking = () => {
     createAppointment 
   } = useMedicalAppointments();
 
+  // Статические клиники-партнеры
+  const staticProviders = [
+    {
+      id: 'chaika-clinic',
+      name: 'Клиника Чайка',
+      provider_type: 'clinic',
+      address: 'Литовский бульвар, 1А, Москва',
+      phone: '+7 (495) 104-80-03',
+      website: 'https://chaika.com',
+      rating: 4.8,
+      specializations: ['Многопрофильная клиника', 'Женское здоровье', 'Диагностика'],
+      is_active: true
+    },
+    {
+      id: 'ilinskaya-hospital',
+      name: 'Ильинская больница',
+      provider_type: 'hospital',
+      address: 'пос. Отрадное, ул. Красногорская, д. 15, стр. 1',
+      phone: '+7 (495) 620-84-30',
+      website: 'https://ilinskaya-hospital.ru',
+      rating: 4.9,
+      specializations: ['Многопрофильная больница', 'Хирургия', 'Кардиология'],
+      is_active: true
+    }
+  ];
+
   const [selectedProvider, setSelectedProvider] = useState<string>('');
   const [selectedDoctor, setSelectedDoctor] = useState<string>('');
   const [appointmentType, setAppointmentType] = useState<string>('');
@@ -34,7 +59,12 @@ const AppointmentBooking = () => {
   const handleProviderChange = async (providerId: string) => {
     setSelectedProvider(providerId);
     setSelectedDoctor('');
-    await fetchDoctors(providerId);
+    
+    // Если выбрана статическая клиника, не пытаемся загружать врачей из API
+    const isStaticProvider = staticProviders.some(p => p.id === providerId);
+    if (!isStaticProvider) {
+      await fetchDoctors(providerId);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,6 +96,12 @@ const AppointmentBooking = () => {
       setNotes('');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDirectBooking = (provider: any) => {
+    if (provider.website) {
+      window.open(provider.website, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -118,10 +154,13 @@ const AppointmentBooking = () => {
     return <div className="flex justify-center p-8">Загрузка...</div>;
   }
 
+  // Объединяем провайдеров из базы данных со статическими
+  const allProviders = [...staticProviders, ...providers];
+
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-#F0A1C0">Запись на прием</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Запись на прием</h2>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -142,7 +181,7 @@ const AppointmentBooking = () => {
                     <SelectValue placeholder="Выберите клинику" />
                   </SelectTrigger>
                   <SelectContent>
-                    {providers.map(provider => (
+                    {allProviders.map(provider => (
                       <SelectItem key={provider.id} value={provider.id}>
                         <div className="flex items-center gap-2">
                           <Badge variant="outline" className="text-xs">
@@ -234,7 +273,7 @@ const AppointmentBooking = () => {
               <Button 
                 type="submit" 
                 disabled={isSubmitting || !selectedProvider || !appointmentType || !appointmentDate || !appointmentTime}
-                className="w-full bg-#F0A1C0 hover:bg-#F0A1C0/90"
+                className="w-full"
               >
                 {isSubmitting ? 'Создание записи...' : 'Записаться'}
               </Button>
@@ -252,7 +291,7 @@ const AppointmentBooking = () => {
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
-              {providers.map(provider => (
+              {allProviders.map(provider => (
                 <div key={provider.id} className="p-4 border rounded-lg">
                   <div className="flex justify-between items-start mb-2">
                     <div>
@@ -284,13 +323,25 @@ const AppointmentBooking = () => {
                   )}
                   
                   {provider.specializations && provider.specializations.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
+                    <div className="flex flex-wrap gap-1 mb-3">
                       {provider.specializations.map((spec, index) => (
                         <Badge key={index} variant="secondary" className="text-xs">
                           {spec}
                         </Badge>
                       ))}
                     </div>
+                  )}
+
+                  {provider.website && (
+                    <Button 
+                      onClick={() => handleDirectBooking(provider)}
+                      className="w-full mt-2"
+                      variant="outline"
+                    >
+                      <Calendar className="w-4 h-4 mr-2" />
+                      Записаться на сайте клиники
+                      <ExternalLink className="w-4 h-4 ml-2" />
+                    </Button>
                   )}
                 </div>
               ))}
