@@ -113,10 +113,10 @@ const SymptomMoodLogger = () => {
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
-        <h2 className="text-2xl font-bold text-#61D5A4">Дневник симптомов и настроения</h2>
+        <h2 className="text-2xl font-bold text-gray-900">Дневник симптомов и настроения</h2>
         <Button 
           onClick={() => setIsAdding(true)}
-          className="bg-#61D5A4 hover:bg-#61D5A4/90"
+          className="bg-pink-600 hover:bg-pink-700"
         >
           <Plus className="w-4 h-4 mr-2" />
           Новая запись
@@ -247,7 +247,7 @@ const SymptomMoodLogger = () => {
               </div>
 
               <div className="flex gap-2">
-                <Button type="submit" className="bg-#61D5A4 hover:bg-#61D5A4/90">
+                <Button type="submit" className="bg-pink-600 hover:bg-pink-700">
                   Сохранить
                 </Button>
                 <Button 
