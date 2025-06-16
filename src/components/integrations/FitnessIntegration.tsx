@@ -112,7 +112,7 @@ const FitnessIntegration = () => {
       thumbnail: 'https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       completed: false,
       progress: 0,
-      video_url: 'https://www.youtube.com/embed/v7AYKMP6rOE'
+      video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'
     },
     {
       id: '2',
@@ -127,7 +127,7 @@ const FitnessIntegration = () => {
       thumbnail: 'https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       completed: true,
       progress: 100,
-      video_url: 'https://www.youtube.com/embed/20Nw7obrGQs'
+      video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4'
     },
     {
       id: '3',
@@ -142,7 +142,7 @@ const FitnessIntegration = () => {
       thumbnail: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80',
       completed: false,
       progress: 60,
-      video_url: 'https://www.youtube.com/embed/K56Z12V9NP8'
+      video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4'
     }
   ];
 
@@ -458,15 +458,16 @@ const FitnessIntegration = () => {
           {currentVideo && (
             <div className="space-y-4">
               {/* Video Player */}
-              <div className="relative w-full h-0 pb-[56.25%] bg-black rounded-lg overflow-hidden">
-                <iframe
-                  src={currentVideo.video_url}
-                  title={currentVideo.title}
-                  className="absolute top-0 left-0 w-full h-full"
-                  frameBorder="0"
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  allowFullScreen
-                />
+              <div className="relative w-full bg-black rounded-lg overflow-hidden">
+                <video
+                  className="w-full h-auto max-h-[400px]"
+                  controls
+                  preload="metadata"
+                  poster={currentVideo.thumbnail}
+                >
+                  <source src={currentVideo.video_url} type="video/mp4" />
+                  Ваш браузер не поддерживает воспроизведение видео.
+                </video>
               </div>
 
               {/* Video Info */}
@@ -527,10 +528,6 @@ const FitnessIntegration = () => {
                   )}
 
                   <div className="space-y-2">
-                    <Button className="w-full" size="sm">
-                      <Play className="w-4 h-4 mr-2" />
-                      Воспроизвести
-                    </Button>
                     <Button variant="outline" className="w-full" size="sm">
                       <Heart className="w-4 h-4 mr-2" />
                       В избранное
