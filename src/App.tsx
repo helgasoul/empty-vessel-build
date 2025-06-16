@@ -19,6 +19,7 @@ import Experts from "./pages/Experts";
 import ExpertBlogPage from "./pages/ExpertBlogPage";
 import ExpertManagement from "./pages/ExpertManagement";
 import ExternalIntegrations from "./pages/ExternalIntegrations";
+import GamificationPage from "./pages/GamificationPage";
 import NotFound from "./pages/NotFound";
 
 // Создаем QueryClient один раз за пределами компонента
@@ -52,6 +53,7 @@ const App: React.FC = () => {
                 <Route path="/experts/manage" element={<ExpertManagement />} />
                 <Route path="/experts/:expertId/blog" element={<ExpertBlogPage />} />
                 <Route path="/external-integrations" element={<ExternalIntegrations />} />
+                <Route path="/gamification" element={<GamificationPage />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>

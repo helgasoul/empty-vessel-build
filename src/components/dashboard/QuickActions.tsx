@@ -13,7 +13,8 @@ import {
   Stethoscope,
   Leaf,
   Users,
-  ExternalLink
+  ExternalLink,
+  Trophy
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -34,6 +35,13 @@ const QuickActions = () => {
       icon: Heart,
       color: "bg-pink-500 hover:bg-pink-600",
       action: () => navigate('/womens-health')
+    },
+    {
+      title: "Достижения",
+      description: "Привычки и система наград",
+      icon: Trophy,
+      color: "bg-yellow-500 hover:bg-yellow-600",
+      action: () => navigate('/gamification')
     },
     {
       title: "Сообщество",

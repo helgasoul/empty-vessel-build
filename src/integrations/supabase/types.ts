@@ -9,6 +9,54 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      achievements: {
+        Row: {
+          badge_color: string | null
+          badge_icon: string | null
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          points_reward: number | null
+          requirement_data: Json | null
+          requirement_type: string
+          requirement_value: number
+          updated_at: string
+        }
+        Insert: {
+          badge_color?: string | null
+          badge_icon?: string | null
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          points_reward?: number | null
+          requirement_data?: Json | null
+          requirement_type: string
+          requirement_value: number
+          updated_at?: string
+        }
+        Update: {
+          badge_color?: string | null
+          badge_icon?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          points_reward?: number | null
+          requirement_data?: Json | null
+          requirement_type?: string
+          requirement_value?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           anonymous_name: string
@@ -509,6 +557,44 @@ export type Database = {
           },
         ]
       }
+      habit_completions: {
+        Row: {
+          completed_date: string
+          created_at: string
+          habit_id: string
+          id: string
+          notes: string | null
+          points_earned: number | null
+          user_id: string
+        }
+        Insert: {
+          completed_date: string
+          created_at?: string
+          habit_id: string
+          id?: string
+          notes?: string | null
+          points_earned?: number | null
+          user_id: string
+        }
+        Update: {
+          completed_date?: string
+          created_at?: string
+          habit_id?: string
+          id?: string
+          notes?: string | null
+          points_earned?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "habit_completions_habit_id_fkey"
+            columns: ["habit_id"]
+            isOneToOne: false
+            referencedRelation: "health_habits"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       health_app_integrations: {
         Row: {
           access_token: string | null
@@ -600,6 +686,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      health_habits: {
+        Row: {
+          best_streak: number | null
+          created_at: string
+          current_streak: number | null
+          habit_name: string
+          habit_type: string
+          id: string
+          is_active: boolean | null
+          points_per_completion: number | null
+          target_frequency: number
+          total_completions: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          best_streak?: number | null
+          created_at?: string
+          current_streak?: number | null
+          habit_name: string
+          habit_type: string
+          id?: string
+          is_active?: boolean | null
+          points_per_completion?: number | null
+          target_frequency: number
+          total_completions?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          best_streak?: number | null
+          created_at?: string
+          current_streak?: number | null
+          habit_name?: string
+          habit_type?: string
+          id?: string
+          is_active?: boolean | null
+          points_per_completion?: number | null
+          target_frequency?: number
+          total_completions?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       health_recommendations: {
         Row: {
@@ -1025,6 +1156,39 @@ export type Database = {
           predicted_next_cycle?: string | null
           symptoms?: string[] | null
           updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      motivational_messages: {
+        Row: {
+          content: string
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message_type: string
+          scheduled_for: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message_type: string
+          scheduled_for?: string | null
+          title: string
+          user_id: string
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message_type?: string
+          scheduled_for?: string | null
+          title?: string
           user_id?: string
         }
         Relationships: []
@@ -1719,6 +1883,47 @@ export type Database = {
         }
         Relationships: []
       }
+      user_achievements: {
+        Row: {
+          achievement_id: string
+          completed_at: string | null
+          created_at: string
+          id: string
+          is_completed: boolean | null
+          progress: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          achievement_id: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          progress?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          achievement_id?: string
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          is_completed?: boolean | null
+          progress?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_achievements_achievement_id_fkey"
+            columns: ["achievement_id"]
+            isOneToOne: false
+            referencedRelation: "achievements"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_devices: {
         Row: {
           access_token: string | null
@@ -1762,6 +1967,36 @@ export type Database = {
           last_sync_at?: string | null
           refresh_token?: string | null
           token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_levels: {
+        Row: {
+          created_at: string
+          current_level: number | null
+          id: string
+          points_to_next_level: number | null
+          total_points: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          current_level?: number | null
+          id?: string
+          points_to_next_level?: number | null
+          total_points?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          current_level?: number | null
+          id?: string
+          points_to_next_level?: number | null
+          total_points?: number | null
           updated_at?: string
           user_id?: string
         }
