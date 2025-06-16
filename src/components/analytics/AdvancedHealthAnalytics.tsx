@@ -5,16 +5,23 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
-import { BarChart3, TrendingUp, Brain, Target, Calendar, Download } from "lucide-react";
+import { BarChart3, TrendingUp, Brain, Target, Calendar, Download, Sparkles } from "lucide-react";
 import HealthTrends from './HealthTrends';
 import PersonalizedInsights from './PersonalizedInsights';
+import InteractiveDashboard from './InteractiveDashboard';
+import PredictiveTrends from './PredictiveTrends';
+import AgeGroupComparison from './AgeGroupComparison';
 import { useHealthData } from '@/hooks/useHealthData';
+import { useAuth } from '@/contexts/AuthContext';
 import { toast } from 'sonner';
 
 const AdvancedHealthAnalytics = () => {
+  const { user } = useAuth();
   const { healthData, dailySummary, loading } = useHealthData();
-  const [timeRange, setTimeRange] = useState<'7d' | '30d' | '90d'>('30d');
-  const [selectedMetrics, setSelectedMetrics] = useState(['steps', 'heartRate', 'sleep']);
+  const [activeTab, setActiveTab] = useState('dashboard');
+  
+  // Получаем возраст пользователя (в реальном приложении это должно быть из профиля)
+  const userAge = 30; // Здесь должны быть данные из профиля пользователя
 
   // Process health data for analytics
   const analyticsData = useMemo(() => {
@@ -64,20 +71,9 @@ const AdvancedHealthAnalytics = () => {
     })).sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
   }, [healthData]);
 
-  // Filter data by time range
-  const filteredData = useMemo(() => {
-    const days = timeRange === '7d' ? 7 : timeRange === '30d' ? 30 : 90;
-    const cutoffDate = new Date();
-    cutoffDate.setDate(cutoffDate.getDate() - days);
-    
-    return analyticsData.filter(item => 
-      new Date(item.date) >= cutoffDate
-    );
-  }, [analyticsData, timeRange]);
-
   // Calculate health metrics
   const healthMetrics = useMemo(() => {
-    if (filteredData.length === 0) {
+    if (analyticsData.length === 0) {
       return {
         avgSteps: 0,
         avgHeartRate: 0,
@@ -87,14 +83,14 @@ const AdvancedHealthAnalytics = () => {
       };
     }
 
-    const totalDays = filteredData.length;
-    const avgSteps = filteredData.reduce((sum, day) => sum + day.steps, 0) / totalDays;
-    const avgHeartRate = filteredData.reduce((sum, day) => sum + day.heartRate, 0) / totalDays;
-    const avgSleepHours = filteredData.reduce((sum, day) => sum + day.sleepHours, 0) / totalDays;
-    const avgActiveMinutes = filteredData.reduce((sum, day) => sum + day.activeMinutes, 0) / totalDays;
+    const totalDays = analyticsData.length;
+    const avgSteps = analyticsData.reduce((sum, day) => sum + day.steps, 0) / totalDays;
+    const avgHeartRate = analyticsData.reduce((sum, day) => sum + day.heartRate, 0) / totalDays;
+    const avgSleepHours = analyticsData.reduce((sum, day) => sum + day.sleepHours, 0) / totalDays;
+    const avgActiveMinutes = analyticsData.reduce((sum, day) => sum + day.activeMinutes, 0) / totalDays;
 
     // Calculate consistency score (percentage of days with activity > 0)
-    const activeDays = filteredData.filter(day => day.steps > 1000 || day.activeMinutes > 10).length;
+    const activeDays = analyticsData.filter(day => day.steps > 1000 || day.activeMinutes > 10).length;
     const consistencyScore = (activeDays / totalDays) * 100;
 
     return {
@@ -104,34 +100,13 @@ const AdvancedHealthAnalytics = () => {
       avgActiveMinutes: Math.round(avgActiveMinutes),
       consistencyScore: Math.round(consistencyScore)
     };
-  }, [filteredData]);
+  }, [analyticsData]);
 
   // User goals (these would typically come from user preferences)
   const userGoals = {
     dailySteps: 10000,
     sleepHours: 8,
     activeMinutes: 30
-  };
-
-  const exportData = () => {
-    const dataToExport = {
-      timeRange,
-      metrics: healthMetrics,
-      data: filteredData,
-      exportDate: new Date().toISOString()
-    };
-
-    const dataStr = JSON.stringify(dataToExport, null, 2);
-    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
-    
-    const exportFileDefaultName = `health_analytics_${timeRange}_${new Date().toISOString().split('T')[0]}.json`;
-    
-    const linkElement = document.createElement('a');
-    linkElement.setAttribute('href', dataUri);
-    linkElement.setAttribute('download', exportFileDefaultName);
-    linkElement.click();
-    
-    toast.success('Данные аналитики экспортированы');
   };
 
   if (loading) {
@@ -145,41 +120,28 @@ const AdvancedHealthAnalytics = () => {
 
   return (
     <div className="space-y-6">
-      {/* Header with Controls */}
-      <Card>
+      {/* Header with new features highlight */}
+      <Card className="bg-gradient-to-r from-blue-50 to-purple-50 border-blue-200">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
               <CardTitle className="flex items-center space-x-2">
-                <BarChart3 className="w-6 h-6 text-primary" />
-                <span>Расширенная аналитика здоровья</span>
+                <Sparkles className="w-6 h-6 text-purple-600" />
+                <span>Новая расширенная аналитика</span>
+                <Badge variant="secondary" className="bg-purple-100 text-purple-800">
+                  ИИ-прогнозы
+                </Badge>
               </CardTitle>
               <CardDescription>
-                Детальный анализ данных, тренды и персонализированные рекомендации
+                Интерактивные дашборды, прогнозирование трендов, сравнение с возрастными нормами и экспорт отчетов
               </CardDescription>
-            </div>
-            <div className="flex items-center space-x-3">
-              <Select value={timeRange} onValueChange={(value: any) => setTimeRange(value)}>
-                <SelectTrigger className="w-32">
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="7d">7 дней</SelectItem>
-                  <SelectItem value="30d">30 дней</SelectItem>
-                  <SelectItem value="90d">90 дней</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="sm" onClick={exportData}>
-                <Download className="w-4 h-4 mr-2" />
-                Экспорт
-              </Button>
             </div>
           </div>
         </CardHeader>
       </Card>
 
       {/* Analytics Content */}
-      {filteredData.length === 0 ? (
+      {analyticsData.length === 0 ? (
         <Card>
           <CardContent className="pt-6">
             <div className="text-center py-8">
@@ -194,15 +156,23 @@ const AdvancedHealthAnalytics = () => {
           </CardContent>
         </Card>
       ) : (
-        <Tabs defaultValue="trends" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-3">
+        <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
+          <TabsList className="grid w-full grid-cols-5 bg-white/80 backdrop-blur-sm">
+            <TabsTrigger value="dashboard" className="flex items-center space-x-2">
+              <BarChart3 className="w-4 h-4" />
+              <span>Дашборд</span>
+            </TabsTrigger>
             <TabsTrigger value="trends" className="flex items-center space-x-2">
               <TrendingUp className="w-4 h-4" />
               <span>Тренды</span>
             </TabsTrigger>
-            <TabsTrigger value="insights" className="flex items-center space-x-2">
+            <TabsTrigger value="predictions" className="flex items-center space-x-2">
               <Brain className="w-4 h-4" />
-              <span>Инсайты</span>
+              <span>ИИ-прогнозы</span>
+            </TabsTrigger>
+            <TabsTrigger value="comparison" className="flex items-center space-x-2">
+              <Target className="w-4 h-4" />
+              <span>Сравнение</span>
             </TabsTrigger>
             <TabsTrigger value="goals" className="flex items-center space-x-2">
               <Target className="w-4 h-4" />
@@ -210,24 +180,39 @@ const AdvancedHealthAnalytics = () => {
             </TabsTrigger>
           </TabsList>
 
-          <TabsContent value="trends">
-            <HealthTrends data={filteredData} timeRange={timeRange} />
+          <TabsContent value="dashboard">
+            <InteractiveDashboard 
+              healthData={analyticsData}
+              userAge={userAge}
+            />
           </TabsContent>
 
-          <TabsContent value="insights">
-            <PersonalizedInsights 
-              metrics={healthMetrics} 
-              userGoals={userGoals}
+          <TabsContent value="trends">
+            <HealthTrends 
+              data={analyticsData} 
+              timeRange="30d"
+            />
+          </TabsContent>
+
+          <TabsContent value="predictions">
+            <PredictiveTrends historicalData={analyticsData} />
+          </TabsContent>
+
+          <TabsContent value="comparison">
+            <AgeGroupComparison 
+              userMetrics={healthMetrics} 
+              userAge={userAge} 
             />
           </TabsContent>
 
           <TabsContent value="goals">
             <div className="space-y-6">
+              {/* Goals Progress */}
               <Card>
                 <CardHeader>
                   <CardTitle>Прогресс по целям</CardTitle>
                   <CardDescription>
-                    Ваши достижения за выбранный период
+                    Ваши достижения за последний месяц
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -303,6 +288,12 @@ const AdvancedHealthAnalytics = () => {
                   </div>
                 </CardContent>
               </Card>
+
+              {/* Personalized Insights */}
+              <PersonalizedInsights 
+                metrics={healthMetrics} 
+                userGoals={userGoals}
+              />
             </div>
           </TabsContent>
         </Tabs>
