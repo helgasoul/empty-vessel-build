@@ -12,6 +12,7 @@ import {
   Truck,
   Gift
 } from "lucide-react";
+import { toast } from "sonner";
 
 interface Product {
   id: string;
@@ -27,6 +28,8 @@ interface Product {
   inStock: boolean;
   fastDelivery: boolean;
   recommendation_reason: string;
+  partner_url?: string;
+  partner_name?: string;
 }
 
 const ShoppingRecommendations = () => {
@@ -46,7 +49,9 @@ const ShoppingRecommendations = () => {
       benefits: ['Поддержка иммунитета', 'Здоровье костей', 'Энергия'],
       inStock: true,
       fastDelivery: true,
-      recommendation_reason: 'Рекомендовано на основе вашего анализа крови'
+      recommendation_reason: 'Рекомендовано на основе вашего анализа крови',
+      partner_url: 'https://www.ozon.ru/category/vitaminy-10738/',
+      partner_name: 'Ozon'
     },
     {
       id: '2',
@@ -60,7 +65,9 @@ const ShoppingRecommendations = () => {
       benefits: ['Здоровье сердца', 'Когнитивные функции', 'Красота кожи'],
       inStock: true,
       fastDelivery: false,
-      recommendation_reason: 'Подходит для вашего плана питания'
+      recommendation_reason: 'Подходит для вашего плана питания',
+      partner_url: 'https://market.yandex.ru/search?text=омега%203',
+      partner_name: 'Яндекс Маркет'
     },
     {
       id: '3',
@@ -74,7 +81,9 @@ const ShoppingRecommendations = () => {
       benefits: ['20г белка', 'Без сахара', 'Натуральные ингредиенты'],
       inStock: true,
       fastDelivery: true,
-      recommendation_reason: 'Идеально для ваших тренировок'
+      recommendation_reason: 'Идеально для ваших тренировок',
+      partner_url: 'https://www.wildberries.ru/catalog/pitanie/sportivnoe-pitanie',
+      partner_name: 'Wildberries'
     },
     {
       id: '4',
@@ -89,7 +98,9 @@ const ShoppingRecommendations = () => {
       benefits: ['Антиоксиданты', 'Энергия', 'Метаболизм'],
       inStock: false,
       fastDelivery: false,
-      recommendation_reason: 'Поможет с детоксом организма'
+      recommendation_reason: 'Поможет с детоксом организма',
+      partner_url: 'https://www.ozon.ru/category/chaj-10792/',
+      partner_name: 'Ozon'
     }
   ];
 
@@ -99,6 +110,27 @@ const ShoppingRecommendations = () => {
         ? prev.filter(id => id !== productId)
         : [...prev, productId]
     );
+  };
+
+  // Handler for adding product to cart (redirecting to partner)
+  const handleAddToCart = (product: Product) => {
+    if (!product.inStock) {
+      toast.error(`Товар "${product.name}" сейчас недоступен`);
+      return;
+    }
+
+    if (product.partner_url) {
+      toast.success(`Переходим к партнеру для заказа "${product.name}"`, {
+        description: `Вы будете перенаправлены на ${product.partner_name} для оформления заказа`
+      });
+      
+      // Открываем ссылку партнера в новой вкладке
+      window.open(product.partner_url, '_blank', 'noopener,noreferrer');
+    } else {
+      toast.info(`Товар "${product.name}" добавлен в корзину`, {
+        description: 'Функция корзины будет доступна в следующем обновлении'
+      });
+    }
   };
 
   const ProductCard = ({ product }: { product: Product }) => (
@@ -195,11 +227,17 @@ const ShoppingRecommendations = () => {
                   </span>
                 )}
               </div>
+              {product.partner_name && (
+                <div className="text-xs text-gray-500 mt-1">
+                  Партнер: {product.partner_name}
+                </div>
+              )}
             </div>
             <Button 
               size="sm" 
               disabled={!product.inStock}
               className="flex items-center space-x-1"
+              onClick={() => handleAddToCart(product)}
             >
               <ShoppingBag className="w-4 h-4" />
               <span>В корзину</span>
