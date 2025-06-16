@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { ComprehensiveHealthContext, HealthInsight, CycleData, LogData, HealthData } from '../types/aiTypes';
+import { useUserAge } from '@/hooks/useUserAge';
 import { 
   calculateRegularityScore, 
   analyzeSymptomPatterns, 
@@ -19,6 +20,7 @@ export const useHealthAnalysis = (
 ) => {
   const [healthContext, setHealthContext] = useState<ComprehensiveHealthContext>({});
   const [healthInsights, setHealthInsights] = useState<HealthInsight[]>([]);
+  const { age } = useUserAge();
 
   useEffect(() => {
     if (cycles.length > 0 && logs.length > 0 && healthData.length > 0) {
@@ -26,12 +28,13 @@ export const useHealthAnalysis = (
       setHealthContext(context);
       generateHealthInsights(context);
     }
-  }, [cycles, logs, healthData]);
+  }, [cycles, logs, healthData, age]);
 
   const analyzeComprehensiveHealth = (): ComprehensiveHealthContext => {
     const latestCycle = cycles[0];
     const recentLogs = logs.slice(0, 30);
     const metrics = getHealthMetrics();
+    const userAge = age || 35;
 
     const cycleStart = new Date(latestCycle.cycle_start_date);
     const currentCycleDay = Math.floor((Date.now() - cycleStart.getTime()) / (1000 * 60 * 60 * 24)) + 1;
@@ -77,7 +80,8 @@ export const useHealthAnalysis = (
       averageLength,
       symptomPatterns,
       stressLevel: currentStressLevel,
-      energyLevel: currentEnergyLevel
+      energyLevel: currentEnergyLevel,
+      userAge
     });
 
     return {
@@ -109,7 +113,8 @@ export const useHealthAnalysis = (
         energyLevel: currentEnergyLevel,
         symptomPatterns,
         stepsAverage: metrics.steps,
-        sleepQuality: metrics.sleepHours
+        sleepQuality: metrics.sleepHours,
+        userAge
       })
     };
   };
@@ -168,6 +173,19 @@ export const useHealthAnalysis = (
         title: 'Прогноз симптомов',
         description: `На основе ваших данных, в следующем цикле возможны: ${context.predictions.expectedSymptoms.join(', ')}. Подготовьтесь заранее!`,
         confidence: 72,
+        actionable: true
+      });
+    }
+
+    // Добавляем возрастной инсайт
+    if (age) {
+      const ageGroup = age < 25 ? 'молодой' : age < 35 ? 'активной' : age < 45 ? 'зрелой' : 'мудрой';
+      insights.push({
+        id: '5',
+        type: 'recommendation',
+        title: 'Возрастные рекомендации',
+        description: `Для ${ageGroup} женщины вашего возраста (${age} лет) особенно важны определенные аспекты здоровья. Посмотрите персонализированные рекомендации.`,
+        confidence: 95,
         actionable: true
       });
     }

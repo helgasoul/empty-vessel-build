@@ -4,7 +4,8 @@ import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
 import { 
   Shield, 
-  Settings
+  Settings,
+  BookOpen
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import ProfileSection from '@/components/dashboard/ProfileSection';
@@ -31,6 +32,10 @@ const Dashboard = () => {
     navigate('/medical-integrations');
   };
 
+  const handleRecommendationsClick = () => {
+    navigate('/recommendations');
+  };
+
   return (
     <div className="min-h-screen prevent-gradient-bg">
       {/* Header с улучшенной навигацией */}
@@ -54,14 +59,25 @@ const Dashboard = () => {
               <ThemeToggle />
               <NotificationCenter />
               {!isMobile && (
-                <Button 
-                  variant="ghost" 
-                  size="icon" 
-                  className="hover:bg-primary/10"
-                  onClick={handleSettingsClick}
-                >
-                  <Settings className="w-5 h-5" />
-                </Button>
+                <>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="hover:bg-primary/10"
+                    onClick={handleRecommendationsClick}
+                    title="Персонализированные рекомендации"
+                  >
+                    <BookOpen className="w-5 h-5" />
+                  </Button>
+                  <Button 
+                    variant="ghost" 
+                    size="icon" 
+                    className="hover:bg-primary/10"
+                    onClick={handleSettingsClick}
+                  >
+                    <Settings className="w-5 h-5" />
+                  </Button>
+                </>
               )}
               <Button 
                 variant="outline" 

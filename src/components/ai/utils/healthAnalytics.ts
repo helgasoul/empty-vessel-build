@@ -1,5 +1,5 @@
-
 import { ComprehensiveHealthContext, CycleData, LogData, HealthData } from '../types/aiTypes';
+import { getRecommendationsForAge } from '@/utils/ageBasedRecommendations';
 
 export const calculateRegularityScore = (lengths: number[]): number => {
   if (lengths.length < 3) return 50;
@@ -99,24 +99,51 @@ export const generatePredictions = (data: any) => {
   return predictions;
 };
 
-export const generatePersonalizedRecommendations = (data: any) => ({
-  immediate: [
-    data.cyclePhase === 'menstrual' ? 'Увеличьте потребление железа' : 'Планируйте интенсивные тренировки',
-    data.stressLevel > 6 ? 'Попробуйте 10-минутную медитацию' : 'Отличное время для новых челленджей',
-    data.energyLevel < 5 ? 'Сделайте легкую прогулку на свежем воздухе' : 'Используйте высокую энергию для продуктивности'
-  ],
-  weekly: [
-    'Запланируйте 3-4 тренировки умеренной интенсивности',
-    'Добавьте в рацион больше листовых зеленых овощей',
-    'Обеспечьте 7-8 часов качественного сна'
-  ],
-  lifestyle: [
-    'Ведите дневник симптомов для лучшего понимания паттернов',
-    'Практикуйте техники управления стрессом',
-    'Поддерживайте социальные связи'
-  ],
-  medical: data.stressLevel > 8 || data.energyLevel < 3 ? [
-    'Рассмотрите консультацию с гинекологом-эндокринологом',
-    'Сдайте анализы на гормоны щитовидной железы'
-  ] : []
-});
+export const generatePersonalizedRecommendations = (data: any) => {
+  const userAge = data.userAge || 35;
+  const ageBasedRecs = getRecommendationsForAge(userAge);
+  
+  // Объединяем базовые рекомендации с возрастными
+  const baseRecommendations = {
+    immediate: [
+      data.cyclePhase === 'menstrual' ? 'Увеличьте потребление железа' : 'Планируйте интенсивные тренировки',
+      data.stressLevel > 6 ? 'Попробуйте 10-минутную медитацию' : 'Отличное время для новых челленджей',
+      data.energyLevel < 5 ? 'Сделайте легкую прогулку на свежем воздухе' : 'Используйте высокую энергию для продуктивности'
+    ],
+    weekly: [
+      'Запланируйте 3-4 тренировки умеренной интенсивности',
+      'Добавьте в рацион больше листовых зеленых овощей',
+      'Обеспечьте 7-8 часов качественного сна'
+    ],
+    lifestyle: [
+      'Ведите дневник симптомов для лучшего понимания паттернов',
+      'Практикуйте техники управления стрессом',
+      'Поддерживайте социальные связи'
+    ],
+    medical: data.stressLevel > 8 || data.energyLevel < 3 ? [
+      'Рассмотрите консультацию с гинекологом-эндокринологом',
+      'Сдайте анализы на гормоны щитовидной железы'
+    ] : []
+  };
+
+  // Добавляем возрастные рекомендации
+  const ageSpecificHealth = ageBasedRecs.health
+    .filter(rec => rec.priority === 'high')
+    .slice(0, 2)
+    .map(rec => rec.title);
+
+  const ageSpecificNutrition = ageBasedRecs.nutrition
+    .filter(rec => rec.priority === 'high')
+    .slice(0, 2)
+    .map(rec => rec.title);
+
+  const ageSpecificFitness = ageBasedRecs.fitness
+    .slice(0, 2)
+    .map(rec => rec.title);
+
+  return {
+    ...baseRecommendations,
+    medical: [...baseRecommendations.medical, ...ageSpecificHealth],
+    weekly: [...baseRecommendations.weekly, ...ageSpecificNutrition, ...ageSpecificFitness]
+  };
+};
