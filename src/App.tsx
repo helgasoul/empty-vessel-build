@@ -27,7 +27,7 @@ function App() {
       <TooltipProvider>
         <Toaster />
         <Sonner />
-        <BrowserRouter>
+        <BrowserRouter basename="/">
           <AuthProvider>
             <Routes>
               <Route path="/" element={<Index />} />
