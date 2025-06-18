@@ -17,6 +17,8 @@ import MedicationManager from "./pages/MedicationManager";
 import Community from "./pages/Community";
 import FamilyData from "./pages/FamilyData";
 import PersonalizedRecommendations from "./pages/PersonalizedRecommendations";
+import OnboardingPage from "./pages/OnboardingPage";
+import Auth from "./pages/Auth";
 import "./App.css";
 
 const queryClient = new QueryClient();
@@ -31,6 +33,12 @@ function App() {
           <AuthProvider>
             <Routes>
               <Route path="/" element={<Index />} />
+              <Route path="/auth" element={<Auth />} />
+              <Route path="/onboarding" element={
+                <ProtectedRoute>
+                  <OnboardingPage />
+                </ProtectedRoute>
+              } />
               <Route path="/dashboard" element={
                 <ProtectedRoute>
                   <Dashboard />

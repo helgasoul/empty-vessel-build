@@ -1,55 +1,31 @@
 
-import React, { useEffect } from 'react';
-import { useAuth } from '@/contexts/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import React from 'react';
+import { ThemeProvider } from '@/components/theme-provider';
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
 import Navigation from '@/components/landing/Navigation';
 import HeroSection from '@/components/landing/HeroSection';
 import FeaturesGrid from '@/components/landing/FeaturesGrid';
-import FounderSection from '@/components/founder/FounderSection';
 import CTASection from '@/components/landing/CTASection';
 import Footer from '@/components/landing/Footer';
+import TargetSegments from '@/components/landing/TargetSegments';
+import PlatformMission from '@/components/landing/PlatformMission';
 
 const Index = () => {
-  const { user, loading } = useAuth();
-  const navigate = useNavigate();
-
-  // Перенаправляем авторизованных пользователей на дашборд
-  useEffect(() => {
-    if (user && !loading) {
-      navigate('/dashboard');
-    }
-  }, [user, loading, navigate]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen prevent-gradient-bg flex items-center justify-center">
-        <div className="text-lg font-roboto">Загрузка...</div>
-      </div>
-    );
-  }
-
-  // Если пользователь авторизован, показываем загрузку пока происходит перенаправление
-  if (user) {
-    return (
-      <div className="min-h-screen prevent-gradient-bg flex items-center justify-center">
-        <div className="text-lg font-roboto">Перенаправление на панель управления...</div>
-      </div>
-    );
-  }
-
   return (
-    <div className="min-h-screen prevent-gradient-bg">
-      <Navigation />
-
-      <main className="max-w-7xl mx-auto px-6 py-16">
+    <ThemeProvider defaultTheme="light" storageKey="prevent-theme">
+      <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
+        <Navigation />
+        <PlatformMission />
         <HeroSection />
+        <TargetSegments />
         <FeaturesGrid />
-        <FounderSection />
         <CTASection />
-      </main>
-
-      <Footer />
-    </div>
+        <Footer />
+      </div>
+      <Toaster />
+      <Sonner />
+    </ThemeProvider>
   );
 };
 
