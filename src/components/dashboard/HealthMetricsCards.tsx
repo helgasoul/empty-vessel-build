@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
-import { Shield, Smartphone, Activity, Heart, Ruler, TrendingUp } from "lucide-react";
+import { Shield, Smartphone, Activity, Heart, Weight, TrendingUp } from "lucide-react";
 import { useDevices } from '@/hooks/useDevices';
 import { useHealthData } from '@/hooks/useHealthData';
 import { useAuth } from '@/contexts/AuthContext';
@@ -37,7 +37,7 @@ const HealthMetricsCards = () => {
           console.error('Error fetching profile:', error);
         } else if (data) {
           setProfile(data);
-          console.log('Profile height:', data.height);
+          console.log('Profile weight:', data.weight);
         } else {
           console.log('No profile data found');
         }
@@ -100,15 +100,15 @@ const HealthMetricsCards = () => {
         <CardContent className="p-4 md:p-6">
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-xs md:text-sm font-roboto text-gray-600">Рост</p>
+              <p className="text-xs md:text-sm font-roboto text-gray-600">Вес</p>
               {loading ? (
                 <p className="text-lg md:text-2xl font-montserrat font-bold text-purple-600">...</p>
               ) : (
                 <p className="text-lg md:text-2xl font-montserrat font-bold text-purple-600">
-                  {profile?.height ? (
+                  {profile?.weight ? (
                     <>
-                      {profile.height}
-                      <span className="text-xs md:text-sm text-gray-500 ml-1">см</span>
+                      {profile.weight}
+                      <span className="text-xs md:text-sm text-gray-500 ml-1">кг</span>
                     </>
                   ) : (
                     <span className="text-base text-gray-400">Не указан</span>
@@ -118,12 +118,12 @@ const HealthMetricsCards = () => {
               <div className="flex items-center space-x-1 mt-1">
                 <div className="w-2 h-2 bg-purple-500 rounded-full"></div>
                 <span className="text-xs text-gray-500">
-                  {profile?.height ? 'Данные профиля' : 'Заполните профиль'}
+                  {profile?.weight ? 'Данные профиля' : 'Заполните профиль'}
                 </span>
               </div>
             </div>
             <div className="prevent-icon-container bg-purple-100 w-8 h-8 md:w-12 md:h-12">
-              <Ruler className="w-4 h-4 md:w-6 md:h-6 text-purple-600" />
+              <Weight className="w-4 h-4 md:w-6 md:h-6 text-purple-600" />
             </div>
           </div>
         </CardContent>
