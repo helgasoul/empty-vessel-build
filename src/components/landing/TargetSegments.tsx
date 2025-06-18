@@ -13,7 +13,6 @@ const TargetSegments = () => {
     {
       title: "Осознанный исследователь",
       subtitle: "30-45 лет",
-      description: "Профессионал, технически грамотный, стремится к превентивному контролю и четким обратным связям",
       icon: Brain,
       color: "from-purple-500 to-indigo-600",
       bgColor: "bg-gradient-to-br from-purple-50 to-indigo-50",
@@ -24,7 +23,6 @@ const TargetSegments = () => {
     {
       title: "Будущая мама",
       subtitle: "Планирование беременности",
-      description: "Хочет сбалансировать питание, генетику и гормональный фон для здорового материнства",
       icon: Baby,
       color: "from-pink-500 to-rose-600",
       bgColor: "bg-gradient-to-br from-pink-50 to-rose-50",
@@ -35,7 +33,6 @@ const TargetSegments = () => {
     {
       title: "Навигатор менопаузы",
       subtitle: "45-60 лет",
-      description: "Сталкивается с когнитивными, метаболическими и гормональными изменениями, нуждается в поддержке",
       icon: Zap,
       color: "from-orange-500 to-red-600",
       bgColor: "bg-gradient-to-br from-orange-50 to-red-50",
@@ -44,9 +41,8 @@ const TargetSegments = () => {
       cta: "Получить поддержку"
     },
     {
-      title: "Управляющий хроникой",
+      title: "Управление хроническими заболеваниями",
       subtitle: "Любой возраст",
-      description: "Имеет или боится хронических заболеваний, нуждается в мониторинге и надежных планах с врачами",
       icon: Heart,
       color: "from-emerald-500 to-teal-600",
       bgColor: "bg-gradient-to-br from-emerald-50 to-teal-50",
@@ -86,9 +82,6 @@ const TargetSegments = () => {
                       <Badge variant="secondary" className="mb-3">
                         {segment.subtitle}
                       </Badge>
-                      <CardDescription className="text-gray-700 text-base leading-relaxed">
-                        {segment.description}
-                      </CardDescription>
                     </div>
                   </div>
                 </CardHeader>
