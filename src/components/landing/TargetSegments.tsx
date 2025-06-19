@@ -9,6 +9,11 @@ import { useNavigate } from 'react-router-dom';
 const TargetSegments = () => {
   const navigate = useNavigate();
 
+  const handleButtonClick = () => {
+    console.log('Navigating to auth page...');
+    navigate('/auth');
+  };
+
   const segments = [
     {
       title: "Осознанный исследователь",
@@ -97,7 +102,7 @@ const TargetSegments = () => {
                   
                   <Button 
                     className={`w-full bg-gradient-to-r ${segment.color} hover:opacity-90 transition-opacity`}
-                    onClick={() => navigate('/auth')}
+                    onClick={handleButtonClick}
                   >
                     {segment.cta}
                     <ArrowRight className="w-4 h-4 ml-2" />
@@ -121,7 +126,7 @@ const TargetSegments = () => {
                 size="lg" 
                 variant="secondary" 
                 className="text-purple-600 hover:text-purple-700"
-                onClick={() => navigate('/auth')}
+                onClick={handleButtonClick}
               >
                 Начать бесплатно
                 <ArrowRight className="w-5 h-5 ml-2" />

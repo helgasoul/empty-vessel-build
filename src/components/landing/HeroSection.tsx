@@ -8,6 +8,15 @@ import { useNavigate } from 'react-router-dom';
 const HeroSection = () => {
   const navigate = useNavigate();
 
+  const handleStartAnalysis = () => {
+    console.log('Navigating to auth page from hero section...');
+    navigate('/auth');
+  };
+
+  const handleLearnMore = () => {
+    navigate('/about');
+  };
+
   return (
     <section className="relative px-4 md:px-6 py-20 lg:py-32 overflow-hidden">
       {/* Background Effects */}
@@ -59,7 +68,7 @@ const HeroSection = () => {
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white shadow-lg"
-                onClick={() => navigate('/auth')}
+                onClick={handleStartAnalysis}
               >
                 Начать анализ рисков
                 <ArrowRight className="w-5 h-5 ml-2" />
@@ -68,7 +77,7 @@ const HeroSection = () => {
                 size="lg" 
                 variant="outline" 
                 className="border-purple-200 text-purple-700 hover:bg-purple-50"
-                onClick={() => navigate('/about')}
+                onClick={handleLearnMore}
               >
                 Узнать больше
               </Button>
