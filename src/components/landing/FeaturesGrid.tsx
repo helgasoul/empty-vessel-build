@@ -9,7 +9,6 @@ import {
   Bell, 
   BarChart3, 
   Users, 
-  Microscope,
   Smartphone,
   Calendar,
   Shield
@@ -18,8 +17,8 @@ import {
 const FeaturesGrid = () => {
   const featureMap = [
     {
-      trigger: "Входной триггер",
-      description: "Тревожность, возрастной переход, опыт болезни",
+      trigger: "Начало путешествия к себе",
+      description: "Первые шаги к осознанному управлению здоровьем",
       icon: Bell,
       color: "from-red-500 to-pink-600",
       bgColor: "bg-red-50",
@@ -35,7 +34,7 @@ const FeaturesGrid = () => {
     },
     {
       trigger: "ИИ-оценка рисков",
-      description: "Мультифакторная оценка (рак, CVD, нейро)",
+      description: "Мультифакторная оценка здоровья",
       icon: Brain,
       color: "from-purple-500 to-indigo-600",
       bgColor: "bg-purple-50",
@@ -64,22 +63,6 @@ const FeaturesGrid = () => {
       color: "from-teal-500 to-blue-600",
       bgColor: "bg-teal-50",
       items: ["Динамика показателей", "Сравнительная аналитика", "Достижения"]
-    },
-    {
-      trigger: "Участие в исследованиях",
-      description: "Продажа данных, этичный opt-in",
-      icon: Microscope,
-      color: "from-indigo-500 to-purple-600",
-      bgColor: "bg-indigo-50",
-      items: ["Научные исследования", "Анонимизация данных", "Этичное участие"]
-    },
-    {
-      trigger: "Экосистема PREVENT",
-      description: "Клиники, лаборатории, нутри-продукты, медийное сообщество",
-      icon: Users,
-      color: "from-pink-500 to-rose-600",
-      bgColor: "bg-pink-50",
-      items: ["Партнерские клиники", "Специализированные продукты", "Сообщество"]
     }
   ];
 
@@ -98,7 +81,7 @@ const FeaturesGrid = () => {
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featureMap.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
