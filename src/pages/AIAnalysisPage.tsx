@@ -177,7 +177,7 @@ const AIAnalysisPage = () => {
         </div>
       </section>
 
-      {/* How It Works */}
+      {/* How It Works - Improved Layout */}
       <section className="py-16 px-4 md:px-6 bg-white">
         <div className="max-w-6xl mx-auto">
           <div className="text-center mb-12">
@@ -185,21 +185,30 @@ const AIAnalysisPage = () => {
             <p className="text-lg text-gray-700">Пошаговый процесс анализа</p>
           </div>
           
-          <div className="space-y-8">
+          <div className="space-y-6">
             {workflowSteps.map((step, index) => {
               const IconComponent = step.icon;
               return (
-                <div key={index} className="flex items-start space-x-6 p-6 bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl border border-purple-100">
-                  <div className="flex-shrink-0">
-                    <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-lg">
-                      {step.step}
+                <div key={index} className="bg-gradient-to-br from-purple-50/50 to-pink-50/50 rounded-xl border border-purple-100/50 p-8 hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-center space-x-8">
+                    {/* Step Number */}
+                    <div className="flex-shrink-0">
+                      <div className="w-16 h-16 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-2xl shadow-lg">
+                        {step.step}
+                      </div>
                     </div>
-                  </div>
-                  <div className="flex items-center space-x-4 flex-1">
-                    <IconComponent className="w-8 h-8 text-purple-600" />
-                    <div>
-                      <h3 className="text-xl font-bold text-gray-900 mb-2">{step.title}</h3>
-                      <p className="text-gray-700">{step.description}</p>
+                    
+                    {/* Icon */}
+                    <div className="flex-shrink-0">
+                      <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-md">
+                        <IconComponent className="w-6 h-6 text-purple-600" />
+                      </div>
+                    </div>
+                    
+                    {/* Content */}
+                    <div className="flex-1 min-w-0">
+                      <h3 className="text-2xl font-bold text-gray-900 mb-3">{step.title}</h3>
+                      <p className="text-lg text-gray-700 leading-relaxed">{step.description}</p>
                     </div>
                   </div>
                 </div>
