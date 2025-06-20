@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -16,9 +15,7 @@ const PlatformMission = () => {
             Миссия PREVENT
           </h2>
           <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">
-            Мы создаем будущее превентивной медицины, где каждая женщина имеет доступ к 
-            персонализированному анализу рисков здоровья и научно-обоснованным рекомендациям 
-            для их предотвращения
+            Превентивная медицина, основанная на данных и персонализированном подходе к здоровью каждой женщины
           </p>
         </div>
 
