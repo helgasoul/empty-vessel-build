@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Users } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
-import FamilyDataBank from '@/components/family/FamilyDataBank';
+import EnhancedFamilyDataBank from '@/components/family/EnhancedFamilyDataBank';
 
 const FamilyData = () => {
   const navigate = useNavigate();
@@ -23,19 +23,7 @@ const FamilyData = () => {
           </Button>
         </div>
 
-        <Card className="mb-6">
-          <CardHeader>
-            <CardTitle className="flex items-center space-x-2">
-              <Users className="w-6 h-6 text-orange-600" />
-              <span>Семейные данные</span>
-            </CardTitle>
-            <CardDescription>
-              Управляйте медицинскими данными семьи и семейной историей
-            </CardDescription>
-          </CardHeader>
-        </Card>
-
-        <FamilyDataBank />
+        <EnhancedFamilyDataBank />
       </div>
     </div>
   );

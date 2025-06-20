@@ -809,6 +809,57 @@ export type Database = {
           },
         ]
       }
+      family_data_access_logs: {
+        Row: {
+          access_type: string
+          accessed_at: string
+          accessed_by: string
+          accessed_member_id: string | null
+          data_type: string | null
+          family_group_id: string
+          id: string
+          ip_address: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          access_type: string
+          accessed_at?: string
+          accessed_by: string
+          accessed_member_id?: string | null
+          data_type?: string | null
+          family_group_id: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          access_type?: string
+          accessed_at?: string
+          accessed_by?: string
+          accessed_member_id?: string | null
+          data_type?: string | null
+          family_group_id?: string
+          id?: string
+          ip_address?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_data_access_logs_accessed_member_id_fkey"
+            columns: ["accessed_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "family_data_access_logs_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       family_documents: {
         Row: {
           created_at: string
@@ -888,7 +939,9 @@ export type Database = {
           description: string | null
           family_name: string
           id: string
+          tree_name: string | null
           updated_at: string
+          visibility_settings: Json | null
         }
         Insert: {
           created_at?: string
@@ -896,7 +949,9 @@ export type Database = {
           description?: string | null
           family_name: string
           id?: string
+          tree_name?: string | null
           updated_at?: string
+          visibility_settings?: Json | null
         }
         Update: {
           created_at?: string
@@ -904,9 +959,141 @@ export type Database = {
           description?: string | null
           family_name?: string
           id?: string
+          tree_name?: string | null
           updated_at?: string
+          visibility_settings?: Json | null
         }
         Relationships: []
+      }
+      family_hereditary_risks: {
+        Row: {
+          affected_members: string[] | null
+          age_of_onset_range: string | null
+          calculated_at: string | null
+          condition_name: string
+          created_at: string
+          created_by: string
+          family_group_id: string
+          id: string
+          inheritance_pattern: string | null
+          notes: string | null
+          prevention_recommendations: Json | null
+          risk_level: string | null
+          screening_recommendations: Json | null
+          updated_at: string
+        }
+        Insert: {
+          affected_members?: string[] | null
+          age_of_onset_range?: string | null
+          calculated_at?: string | null
+          condition_name: string
+          created_at?: string
+          created_by: string
+          family_group_id: string
+          id?: string
+          inheritance_pattern?: string | null
+          notes?: string | null
+          prevention_recommendations?: Json | null
+          risk_level?: string | null
+          screening_recommendations?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          affected_members?: string[] | null
+          age_of_onset_range?: string | null
+          calculated_at?: string | null
+          condition_name?: string
+          created_at?: string
+          created_by?: string
+          family_group_id?: string
+          id?: string
+          inheritance_pattern?: string | null
+          notes?: string | null
+          prevention_recommendations?: Json | null
+          risk_level?: string | null
+          screening_recommendations?: Json | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_hereditary_risks_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_medical_events: {
+        Row: {
+          age_at_event: number | null
+          clinic_name: string | null
+          created_at: string
+          created_by: string
+          description: string | null
+          doctor_name: string | null
+          event_date: string | null
+          event_type: string
+          family_member_id: string
+          id: string
+          notes: string | null
+          outcome: string | null
+          severity: string | null
+          tags: string[] | null
+          title: string
+          treatment: string | null
+          updated_at: string
+          verified_by_doctor: boolean | null
+        }
+        Insert: {
+          age_at_event?: number | null
+          clinic_name?: string | null
+          created_at?: string
+          created_by: string
+          description?: string | null
+          doctor_name?: string | null
+          event_date?: string | null
+          event_type: string
+          family_member_id: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+          severity?: string | null
+          tags?: string[] | null
+          title: string
+          treatment?: string | null
+          updated_at?: string
+          verified_by_doctor?: boolean | null
+        }
+        Update: {
+          age_at_event?: number | null
+          clinic_name?: string | null
+          created_at?: string
+          created_by?: string
+          description?: string | null
+          doctor_name?: string | null
+          event_date?: string | null
+          event_type?: string
+          family_member_id?: string
+          id?: string
+          notes?: string | null
+          outcome?: string | null
+          severity?: string | null
+          tags?: string[] | null
+          title?: string
+          treatment?: string | null
+          updated_at?: string
+          verified_by_doctor?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_medical_events_family_member_id_fkey"
+            columns: ["family_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       family_medical_history: {
         Row: {
@@ -972,6 +1159,9 @@ export type Database = {
       }
       family_members: {
         Row: {
+          avatar_url: string | null
+          birth_year: number | null
+          consent_status: boolean | null
           created_at: string
           created_by: string
           date_of_birth: string | null
@@ -979,13 +1169,20 @@ export type Database = {
           gender: string | null
           id: string
           is_alive: boolean | null
+          medical_notes: string | null
           name: string
           notes: string | null
           relationship: string
+          shared_data_types: string[] | null
+          status: string | null
           updated_at: string
           user_id: string | null
+          visibility_scope: string | null
         }
         Insert: {
+          avatar_url?: string | null
+          birth_year?: number | null
+          consent_status?: boolean | null
           created_at?: string
           created_by: string
           date_of_birth?: string | null
@@ -993,13 +1190,20 @@ export type Database = {
           gender?: string | null
           id?: string
           is_alive?: boolean | null
+          medical_notes?: string | null
           name: string
           notes?: string | null
           relationship: string
+          shared_data_types?: string[] | null
+          status?: string | null
           updated_at?: string
           user_id?: string | null
+          visibility_scope?: string | null
         }
         Update: {
+          avatar_url?: string | null
+          birth_year?: number | null
+          consent_status?: boolean | null
           created_at?: string
           created_by?: string
           date_of_birth?: string | null
@@ -1007,15 +1211,119 @@ export type Database = {
           gender?: string | null
           id?: string
           is_alive?: boolean | null
+          medical_notes?: string | null
           name?: string
           notes?: string | null
           relationship?: string
+          shared_data_types?: string[] | null
+          status?: string | null
           updated_at?: string
           user_id?: string | null
+          visibility_scope?: string | null
         }
         Relationships: [
           {
             foreignKeyName: "family_members_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_memories: {
+        Row: {
+          author_id: string
+          content: string
+          created_at: string
+          family_member_id: string
+          id: string
+          is_medical_relevant: boolean | null
+          memory_type: string | null
+          tags: string[] | null
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          author_id: string
+          content: string
+          created_at?: string
+          family_member_id: string
+          id?: string
+          is_medical_relevant?: boolean | null
+          memory_type?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          author_id?: string
+          content?: string
+          created_at?: string
+          family_member_id?: string
+          id?: string
+          is_medical_relevant?: boolean | null
+          memory_type?: string | null
+          tags?: string[] | null
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_memories_family_member_id_fkey"
+            columns: ["family_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_shared_plans: {
+        Row: {
+          created_at: string
+          description: string | null
+          family_group_id: string
+          id: string
+          is_active: boolean | null
+          linked_goals: Json | null
+          owner_user_id: string
+          plan_name: string
+          related_family_member_ids: string[] | null
+          shared_recommendations: Json | null
+          target_conditions: string[] | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          family_group_id: string
+          id?: string
+          is_active?: boolean | null
+          linked_goals?: Json | null
+          owner_user_id: string
+          plan_name: string
+          related_family_member_ids?: string[] | null
+          shared_recommendations?: Json | null
+          target_conditions?: string[] | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          family_group_id?: string
+          id?: string
+          is_active?: boolean | null
+          linked_goals?: Json | null
+          owner_user_id?: string
+          plan_name?: string
+          related_family_member_ids?: string[] | null
+          shared_recommendations?: Json | null
+          target_conditions?: string[] | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_shared_plans_family_group_id_fkey"
             columns: ["family_group_id"]
             isOneToOne: false
             referencedRelation: "family_groups"
