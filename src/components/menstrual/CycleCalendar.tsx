@@ -89,7 +89,7 @@ const CycleCalendar = () => {
             
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold mb-3 text-gray-800">Легенда</h3>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">Обозначения</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3">
                     <div className="w-4 h-4 rounded-full bg-red-500 flex-shrink-0"></div>
