@@ -169,14 +169,35 @@ const handler = async (req: Request): Promise<Response> => {
         `,
       });
 
-      console.log("Password reset email sent successfully:", emailResponse);
+      console.log("Password reset email response:", emailResponse);
 
+      // Check if there's an error in the response
       if (emailResponse.error) {
         console.error('Resend API error:', emailResponse.error);
+        
+        // Handle specific Resend API errors
+        if (emailResponse.error.statusCode === 403) {
+          return new Response(
+            JSON.stringify({ 
+              success: true,
+              message: "Ссылка для восстановления пароля была сгенерирована. В тестовом режиме письма отправляются только на зарегистрированный email.",
+              testMode: true,
+              resetLink: linkData.properties?.action_link
+            }),
+            {
+              status: 200,
+              headers: {
+                "Content-Type": "application/json",
+                ...corsHeaders,
+              },
+            }
+          );
+        }
+        
         return new Response(
           JSON.stringify({ 
             error: 'Failed to send email',
-            details: emailResponse.error
+            details: emailResponse.error.message || 'Unknown email service error'
           }),
           {
             status: 500,
@@ -185,10 +206,11 @@ const handler = async (req: Request): Promise<Response> => {
         );
       }
 
+      // Success case
       return new Response(
         JSON.stringify({ 
           success: true, 
-          message: "Password reset link sent to your email",
+          message: "Ссылка для восстановления пароля отправлена на ваш email",
           emailId: emailResponse.data?.id
         }),
         {

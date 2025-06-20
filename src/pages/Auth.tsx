@@ -174,8 +174,13 @@ const Auth = () => {
       if (response.error) {
         console.error('Error sending password reset:', response.error);
         toast.error('Ошибка при отправке письма для восстановления пароля. Попробуйте еще раз.');
-      } else {
-        toast.success('Письмо для восстановления пароля отправлено на ваш email');
+      } else if (response.data) {
+        if (response.data.testMode) {
+          toast.success('В тестовом режиме письма отправляются только на зарегистрированный email. Ссылка сгенерирована успешно.');
+          console.log('Test mode reset link:', response.data.resetLink);
+        } else {
+          toast.success('Письмо для восстановления пароля отправлено на ваш email');
+        }
         setResetDialogOpen(false);
         // Очищаем форму
         (e.target as HTMLFormElement).reset();
