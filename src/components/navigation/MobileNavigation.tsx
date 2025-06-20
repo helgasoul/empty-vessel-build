@@ -13,7 +13,9 @@ import {
   Video, 
   Leaf, 
   Trophy,
-  Info
+  Info,
+  Pill,
+  Calendar
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
@@ -47,6 +49,18 @@ const MobileNavigation = () => {
       path: '/womens-health', 
       icon: Users,
       description: 'Специализированные инструменты'
+    },
+    { 
+      title: 'Лекарства', 
+      path: '/medications', 
+      icon: Pill,
+      description: 'Управление приемом лекарств'
+    },
+    { 
+      title: 'Медицинский календарь', 
+      path: '/medical-calendar', 
+      icon: Calendar,
+      description: 'Планирование визитов'
     },
     { 
       title: 'ИИ-помощник', 
