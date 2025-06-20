@@ -46,7 +46,7 @@ const Dashboard = () => {
                 <ThemeToggle />
                 <NotificationCenter />
                 
-                {/* Новое выпадающее меню навигации */}
+                {/* Выпадающее меню навигации */}
                 <NavigationDropdown />
                 
                 <Button 
