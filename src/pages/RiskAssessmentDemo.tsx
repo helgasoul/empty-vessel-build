@@ -70,10 +70,10 @@ const RiskAssessmentDemo = () => {
           <BackButton className="mb-6" />
           
           <div className="text-center mb-12">
-            <h1 className="text-4xl font-bold text-gray-900 mb-6">
+            <h1 className="text-4xl font-bold text-gray-700 mb-6">
               Оценка рисков здоровья
             </h1>
-            <p className="text-xl text-gray-700 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
               Получите персонализированный анализ рисков различных заболеваний 
               на основе научно-обоснованных алгоритмов
             </p>
@@ -97,39 +97,39 @@ const RiskAssessmentDemo = () => {
                           <Button 
                             variant="ghost" 
                             size="icon"
-                            className="h-8 w-8 text-gray-500 hover:text-gray-700 hover:bg-white/50"
+                            className="h-8 w-8 text-gray-500 hover:text-gray-600 hover:bg-white/50"
                             aria-label={`Информация об алгоритме ${assessment.title}`}
                           >
                             <Info className="w-4 h-4" />
                           </Button>
                         </TooltipTrigger>
-                        <TooltipContent className="max-w-sm p-4 bg-gray-900 text-white text-sm leading-relaxed">
+                        <TooltipContent className="max-w-sm p-4 bg-gray-800 text-white text-sm leading-relaxed">
                           <p>{assessment.tooltip}</p>
                         </TooltipContent>
                       </Tooltip>
                     </div>
                     
                     <div className="space-y-2">
-                      <CardTitle className="text-2xl font-bold text-gray-900 group-hover:text-purple-700 transition-colors">
+                      <CardTitle className="text-2xl font-bold text-gray-700 group-hover:text-purple-600 transition-colors">
                         {assessment.displayName}
                       </CardTitle>
-                      <Badge variant="outline" className="text-xs font-medium text-gray-600 bg-white/80">
+                      <Badge variant="outline" className="text-xs font-medium text-gray-500 bg-white/80">
                         {assessment.title}
                       </Badge>
                     </div>
                   </CardHeader>
                   
                   <CardContent className="p-6 space-y-4">
-                    <CardDescription className="text-gray-700 text-base leading-relaxed">
+                    <CardDescription className="text-gray-600 text-base leading-relaxed">
                       {assessment.description}
                     </CardDescription>
                     
                     <div className="flex flex-wrap gap-2">
-                      <Badge className="bg-green-100 text-green-800 border-green-200 flex items-center gap-1">
+                      <Badge className="bg-green-100 text-green-700 border-green-200 flex items-center gap-1">
                         <CheckCircle className="w-3 h-3" />
                         {assessment.validation}
                       </Badge>
-                      <Badge className="bg-blue-100 text-blue-800 border-blue-200">
+                      <Badge className="bg-blue-100 text-blue-700 border-blue-200">
                         {assessment.accuracy}
                       </Badge>
                     </div>
