@@ -8,6 +8,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import NavigationMenu from '@/components/navigation/NavigationMenu';
 import { MobileNavigation } from '@/components/navigation/MobileNavigation';
 import Auth from '@/pages/Auth';
+import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
 import Experts from '@/pages/Experts';
 import AdminDashboardPage from '@/pages/AdminDashboard';
@@ -27,6 +28,7 @@ function App() {
             <BrowserRouter>
               <NavigationMenu />
               <Routes>
+                <Route path="/landing" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
                 <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/experts" element={<ProtectedRoute><Experts /></ProtectedRoute>} />
