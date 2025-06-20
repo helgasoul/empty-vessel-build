@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -34,8 +35,10 @@ interface FamilyGroup {
   family_name: string;
   description?: string;
   tree_name?: string;
+  created_by: string;
   visibility_settings: any;
   created_at: string;
+  updated_at: string;
 }
 
 interface FamilyMember {
