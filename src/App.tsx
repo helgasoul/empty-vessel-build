@@ -23,6 +23,8 @@ import OnboardingPage from "./pages/OnboardingPage";
 import Auth from "./pages/Auth";
 import RiskAssessmentDemo from "./pages/RiskAssessmentDemo";
 import WomensHealthDemo from "./pages/WomensHealthDemo";
+import HormonalHealthDemo from "./pages/HormonalHealthDemo";
+import MenopauseDemo from "./pages/MenopauseDemo";
 import EnvironmentalHealthDemo from "./pages/EnvironmentalHealthDemo";
 import CommunityDemo from "./pages/CommunityDemo";
 import AIAnalysisPage from "./pages/AIAnalysisPage";
@@ -59,6 +61,8 @@ const App: React.FC = () => {
               {/* Demo pages - accessible without auth */}
               <Route path="/risk-assessment-demo" element={<RiskAssessmentDemo />} />
               <Route path="/womens-health-demo" element={<WomensHealthDemo />} />
+              <Route path="/hormonal-health-demo" element={<HormonalHealthDemo />} />
+              <Route path="/menopause-demo" element={<MenopauseDemo />} />
               <Route path="/environmental-health-demo" element={<EnvironmentalHealthDemo />} />
               <Route path="/community-demo" element={<CommunityDemo />} />
               

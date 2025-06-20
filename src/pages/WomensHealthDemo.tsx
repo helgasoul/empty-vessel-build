@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,8 +6,6 @@ import { Heart, Calendar, Baby, Flower, ArrowRight, TrendingUp, Activity } from 
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/ui/back-button';
-import HormonalHealthSection from '@/components/hormonal-health/HormonalHealthSection';
-import MenopauseSection from '@/components/menopause/MenopauseSection';
 
 const WomensHealthDemo = () => {
   const navigate = useNavigate();
@@ -52,7 +49,7 @@ const WomensHealthDemo = () => {
       textColor: "text-purple-700",
       buttonAction: "Проверить баланс",
       value: "Гормональная гармония и энергия",
-      route: "#hormonal-health"
+      route: "/hormonal-health-demo"
     },
     {
       title: "Менопауза",
@@ -65,26 +62,14 @@ const WomensHealthDemo = () => {
       textColor: "text-amber-700",
       buttonAction: "Получить поддержку",
       value: "Комфортный переход и активная жизнь",
-      route: "#menopause"
+      route: "/menopause-demo"
     }
   ];
 
   const handleAreaAction = (area: typeof healthAreas[0]) => {
-    // Если это гормональное здоровье, скроллим к разделу
-    if (area.route === "#hormonal-health") {
-      const element = document.getElementById('hormonal-health');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-      return;
-    }
-
-    // Если это менопауза, скроллим к разделу
-    if (area.route === "#menopause") {
-      const element = document.getElementById('menopause');
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
+    // Если это демо-страницы гормонального здоровья или менопаузы, переходим напрямую
+    if (area.route === "/hormonal-health-demo" || area.route === "/menopause-demo") {
+      navigate(area.route);
       return;
     }
 
@@ -236,22 +221,6 @@ const WomensHealthDemo = () => {
               Полный спектр решений для поддержания женского здоровья на каждом этапе жизни
             </p>
           </div>
-        </div>
-
-        {/* Раздел гормонального здоровья */}
-        <div id="hormonal-health" className="mb-12">
-          <HormonalHealthSection 
-            onConsultationClick={handleConsultationClick}
-            onTrackingClick={handleTrackingClick}
-          />
-        </div>
-
-        {/* Раздел менопаузы */}
-        <div id="menopause" className="mb-12">
-          <MenopauseSection 
-            onConsultationClick={handleConsultationClick}
-            onSpecialistClick={handleSpecialistClick}
-          />
         </div>
 
         <Card className="bg-gradient-to-r from-pink-600 to-purple-600 text-white border-none shadow-2xl mt-12">
