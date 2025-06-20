@@ -1,185 +1,44 @@
-
 import React from 'react';
-import { Toaster } from "@/components/ui/toaster";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { AuthProvider } from "@/contexts/AuthContext";
-import ProtectedRoute from "@/components/ProtectedRoute";
-import Index from "./pages/Index";
-import About from "./pages/About";
-import Dashboard from "./pages/Dashboard";
-import Profile from "./pages/Profile";
-import WomensHealth from "./pages/WomensHealth";
-import MedicalIntegrations from "./pages/MedicalIntegrations";
-import RiskAssessment from "./pages/RiskAssessment";
-import MedicalCalendar from "./pages/MedicalCalendar";
-import MedicationManager from "./pages/MedicationManager";
-import Community from "./pages/Community";
-import FamilyData from "./pages/FamilyData";
-import PersonalizedRecommendations from "./pages/PersonalizedRecommendations";
-import OnboardingPage from "./pages/OnboardingPage";
-import Auth from "./pages/Auth";
-import RiskAssessmentDemo from "./pages/RiskAssessmentDemo";
-import WomensHealthDemo from "./pages/WomensHealthDemo";
-import HormonalHealthDemo from "./pages/HormonalHealthDemo";
-import MenopauseDemo from "./pages/MenopauseDemo";
-import EnvironmentalHealthDemo from "./pages/EnvironmentalHealthDemo";
-import CommunityDemo from "./pages/CommunityDemo";
-import AIAnalysisPage from "./pages/AIAnalysisPage";
-import PersonalPlanPage from "./pages/PersonalPlan";
-import AdminDashboard from "./pages/AdminDashboard";
-import MenstrualCycleTracker from "./pages/MenstrualCycleTracker";
-import PregnancyPlanningPage from "./pages/PregnancyPlanningPage";
-import AIHealth from "./pages/AIHealth";
-import ExternalIntegrations from "./pages/ExternalIntegrations";
-import TelemedicineIntegrations from "./pages/TelemedicineIntegrations";
-import EnvironmentalHealth from "./pages/EnvironmentalHealth";
-import GamificationPage from "./pages/GamificationPage";
-import "./App.css";
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'sonner';
+import { ThemeProvider } from "@/components/theme-provider"
+import { AuthProvider } from '@/contexts/AuthContext';
+import { QueryClient } from '@tanstack/react-query';
+import NavigationMenu from '@/components/NavigationMenu';
+import MobileNavigation from '@/components/MobileNavigation';
+import Auth from '@/pages/Auth';
+import Home from '@/pages/Home';
+import Experts from '@/pages/Experts';
+import AdminDashboardPage from '@/pages/AdminDashboard';
+import DoctorDashboardPage from '@/pages/DoctorDashboard';
+import DoctorProfilePage from '@/pages/DoctorProfile';
+import ProtectedRoute from '@/components/ProtectedRoute';
+import DoctorProfile from '@/pages/DoctorProfile';
 
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 1,
-      refetchOnWindowFocus: false,
-    },
-  },
-});
-
-const App: React.FC = () => {
+function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter basename="/">
-          <AuthProvider>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/auth" element={<Auth />} />
-              <Route path="/ai-analysis" element={<AIAnalysisPage />} />
-              <Route path="/personal-plan" element={<PersonalPlanPage />} />
-              
-              {/* Demo pages - accessible without auth */}
-              <Route path="/risk-assessment-demo" element={<RiskAssessmentDemo />} />
-              <Route path="/womens-health-demo" element={<WomensHealthDemo />} />
-              <Route path="/hormonal-health-demo" element={<HormonalHealthDemo />} />
-              <Route path="/menopause-demo" element={<MenopauseDemo />} />
-              <Route path="/environmental-health-demo" element={<EnvironmentalHealthDemo />} />
-              <Route path="/community-demo" element={<CommunityDemo />} />
-              
-              {/* Public family-data route that redirects to auth if not logged in */}
-              <Route path="/family-data" element={
-                <ProtectedRoute>
-                  <FamilyData />
-                </ProtectedRoute>
-              } />
-              
-              {/* Protected routes */}
-              <Route path="/onboarding" element={
-                <ProtectedRoute>
-                  <OnboardingPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/dashboard" element={
-                <ProtectedRoute>
-                  <Dashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/profile" element={
-                <ProtectedRoute>
-                  <Profile />
-                </ProtectedRoute>
-              } />
-              <Route path="/womens-health" element={
-                <ProtectedRoute>
-                  <WomensHealth />
-                </ProtectedRoute>
-              } />
-              <Route path="/menstrual-cycle-tracker" element={
-                <ProtectedRoute>
-                  <MenstrualCycleTracker />
-                </ProtectedRoute>
-              } />
-              <Route path="/pregnancy-planning" element={
-                <ProtectedRoute>
-                  <PregnancyPlanningPage />
-                </ProtectedRoute>
-              } />
-              <Route path="/medical-integrations" element={
-                <ProtectedRoute>
-                  <MedicalIntegrations />
-                </ProtectedRoute>
-              } />
-              <Route path="/risk-assessment" element={
-                <ProtectedRoute>
-                  <RiskAssessment />
-                </ProtectedRoute>
-              } />
-              <Route path="/medical-calendar" element={
-                <ProtectedRoute>
-                  <MedicalCalendar />
-                </ProtectedRoute>
-              } />
-              <Route path="/medications" element={
-                <ProtectedRoute>
-                  <MedicationManager />
-                </ProtectedRoute>
-              } />
-              <Route path="/medication-manager" element={
-                <ProtectedRoute>
-                  <MedicationManager />
-                </ProtectedRoute>
-              } />
-              <Route path="/community" element={
-                <ProtectedRoute>
-                  <Community />
-                </ProtectedRoute>
-              } />
-              <Route path="/recommendations" element={
-                <ProtectedRoute>
-                  <PersonalizedRecommendations />
-                </ProtectedRoute>
-              } />
-              <Route path="/admin" element={
-                <ProtectedRoute>
-                  <AdminDashboard />
-                </ProtectedRoute>
-              } />
-              <Route path="/ai-health" element={
-                <ProtectedRoute>
-                  <AIHealth />
-                </ProtectedRoute>
-              } />
-              <Route path="/external-integrations" element={
-                <ProtectedRoute>
-                  <ExternalIntegrations />
-                </ProtectedRoute>
-              } />
-              <Route path="/telemedicine-integrations" element={
-                <ProtectedRoute>
-                  <TelemedicineIntegrations />
-                </ProtectedRoute>
-              } />
-              <Route path="/environmental-health" element={
-                <ProtectedRoute>
-                  <EnvironmentalHealth />
-                </ProtectedRoute>
-              } />
-              <Route path="/gamification" element={
-                <ProtectedRoute>
-                  <GamificationPage />
-                </ProtectedRoute>
-              } />
-            </Routes>
-          </AuthProvider>
-        </BrowserRouter>
-      </TooltipProvider>
-    </QueryClientProvider>
+    <QueryClient>
+      <ThemeProvider defaultTheme="light" storageKey="prevent-ui-theme">
+        <AuthProvider>
+          <div className="App">
+            <Toaster />
+            <BrowserRouter>
+              <NavigationMenu />
+              <Routes>
+                <Route path="/auth" element={<Auth />} />
+                <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
+                <Route path="/experts" element={<ProtectedRoute><Experts /></ProtectedRoute>} />
+                <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />
+                <Route path="/doctor-dashboard" element={<ProtectedRoute><DoctorDashboardPage /></ProtectedRoute>} />
+                <Route path="/doctor-profile" element={<DoctorProfile />} />
+              </Routes>
+              <MobileNavigation />
+            </BrowserRouter>
+          </div>
+        </AuthProvider>
+      </ThemeProvider>
+    </QueryClient>
   );
-};
+}
 
 export default App;

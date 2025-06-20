@@ -442,6 +442,44 @@ export type Database = {
         }
         Relationships: []
       }
+      diploma_files: {
+        Row: {
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          uploaded_at: string
+          verification_id: string
+        }
+        Insert: {
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          uploaded_at?: string
+          verification_id: string
+        }
+        Update: {
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          uploaded_at?: string
+          verification_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "diploma_files_verification_id_fkey"
+            columns: ["verification_id"]
+            isOneToOne: false
+            referencedRelation: "doctor_verifications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       doctor_access_logs: {
         Row: {
           accessed_at: string
@@ -613,6 +651,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      doctor_verifications: {
+        Row: {
+          created_at: string
+          diploma_file_name: string
+          diploma_file_path: string
+          file_size: number
+          id: string
+          notes: string | null
+          rejection_reason: string | null
+          updated_at: string
+          upload_date: string
+          user_id: string
+          verification_date: string | null
+          verification_status: string
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          diploma_file_name: string
+          diploma_file_path: string
+          file_size: number
+          id?: string
+          notes?: string | null
+          rejection_reason?: string | null
+          updated_at?: string
+          upload_date?: string
+          user_id: string
+          verification_date?: string | null
+          verification_status?: string
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          diploma_file_name?: string
+          diploma_file_path?: string
+          file_size?: number
+          id?: string
+          notes?: string | null
+          rejection_reason?: string | null
+          updated_at?: string
+          upload_date?: string
+          user_id?: string
+          verification_date?: string | null
+          verification_status?: string
+          verified_by?: string | null
+        }
+        Relationships: []
       }
       experts: {
         Row: {

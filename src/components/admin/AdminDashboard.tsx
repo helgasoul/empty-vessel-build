@@ -2,13 +2,14 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Shield, Users, FileText, Settings, Activity, Building, MessageSquare, AlertTriangle } from "lucide-react";
+import { Shield, Users, FileText, Settings, Activity, Building, MessageSquare, AlertTriangle, UserCheck } from "lucide-react";
 import RoleManagementPanel from '@/components/rbac/RoleManagementPanel';
 import AdminActivityLogs from './AdminActivityLogs';
 import AdminSecuritySettings from './AdminSecuritySettings';
 import AdminOrganizationManagement from './AdminOrganizationManagement';
 import AdminSupportTickets from './AdminSupportTickets';
 import AdminSystemSettings from './AdminSystemSettings';
+import AdminDoctorVerifications from './AdminDoctorVerifications';
 
 const AdminDashboard = () => {
   return (
@@ -75,10 +76,14 @@ const AdminDashboard = () => {
 
       {/* Admin Tabs */}
       <Tabs defaultValue="roles" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-6">
+        <TabsList className="grid w-full grid-cols-7">
           <TabsTrigger value="roles" className="flex items-center space-x-2">
             <Shield className="w-4 h-4" />
             <span>Роли</span>
+          </TabsTrigger>
+          <TabsTrigger value="verifications" className="flex items-center space-x-2">
+            <UserCheck className="w-4 h-4" />
+            <span>Верификации</span>
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center space-x-2">
             <Activity className="w-4 h-4" />
@@ -104,6 +109,10 @@ const AdminDashboard = () => {
 
         <TabsContent value="roles">
           <RoleManagementPanel />
+        </TabsContent>
+
+        <TabsContent value="verifications">
+          <AdminDoctorVerifications />
         </TabsContent>
 
         <TabsContent value="activity">
