@@ -28,6 +28,7 @@ import CommunityDemo from "./pages/CommunityDemo";
 import AIAnalysisPage from "./pages/AIAnalysisPage";
 import PersonalPlanPage from "./pages/PersonalPlan";
 import AdminDashboard from "./pages/AdminDashboard";
+import MenstrualCycleTracker from "./pages/MenstrualCycleTracker";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -79,6 +80,11 @@ const App: React.FC = () => {
               <Route path="/womens-health" element={
                 <ProtectedRoute>
                   <WomensHealth />
+                </ProtectedRoute>
+              } />
+              <Route path="/menstrual-cycle-tracker" element={
+                <ProtectedRoute>
+                  <MenstrualCycleTracker />
                 </ProtectedRoute>
               } />
               <Route path="/medical-integrations" element={

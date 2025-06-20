@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -21,7 +20,8 @@ const WomensHealthDemo = () => {
       borderColor: "border-rose-200",
       textColor: "text-rose-700",
       buttonAction: "Начать отслеживать",
-      value: "Точные прогнозы и здоровые циклы"
+      value: "Точные прогнозы и здоровые циклы",
+      route: "/menstrual-cycle-tracker"
     },
     {
       title: "Планирование беременности",
@@ -33,7 +33,8 @@ const WomensHealthDemo = () => {
       borderColor: "border-blue-200",
       textColor: "text-blue-700",
       buttonAction: "Начать планирование",
-      value: "Повышение шансов на здоровую беременность"
+      value: "Повышение шансов на здоровую беременность",
+      route: "/auth"
     },
     {
       title: "Гормональное здоровье",
@@ -45,7 +46,8 @@ const WomensHealthDemo = () => {
       borderColor: "border-purple-200",
       textColor: "text-purple-700",
       buttonAction: "Проверить баланс",
-      value: "Гормональная гармония и энергия"
+      value: "Гормональная гармония и энергия",
+      route: "/auth"
     },
     {
       title: "Менопауза",
@@ -57,13 +59,13 @@ const WomensHealthDemo = () => {
       borderColor: "border-amber-200",
       textColor: "text-amber-700",
       buttonAction: "Получить поддержку",
-      value: "Комфортный переход и активная жизнь"
+      value: "Комфортный переход и активная жизнь",
+      route: "/auth"
     }
   ];
 
   const handleAreaAction = (area: typeof healthAreas[0]) => {
-    // В реальном приложении здесь был бы переход к конкретному разделу
-    navigate('/auth');
+    navigate(area.route);
   };
 
   return (
