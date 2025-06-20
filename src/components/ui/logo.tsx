@@ -1,6 +1,5 @@
 
 import React from 'react';
-import { Heart, Sparkles } from 'lucide-react';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -25,28 +24,14 @@ export const Logo: React.FC<LogoProps> = ({
     lg: 'text-2xl'
   };
 
-  const subtextSizeClasses = {
-    sm: 'text-xs',
-    md: 'text-xs',
-    lg: 'text-sm'
-  };
-
   return (
     <div className={`flex items-center space-x-3 ${className}`}>
-      <div className={`${sizeClasses[size]} prevent-gradient-primary rounded-2xl flex items-center justify-center relative overflow-hidden shadow-lg`}>
-        {/* Фоновое сияние */}
-        <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent" />
-        
-        {/* Основная иконка */}
-        <div className="relative flex items-center justify-center">
-          <Heart className={`${size === 'sm' ? 'w-4 h-4' : size === 'md' ? 'w-5 h-5' : 'w-6 h-6'} text-white`} fill="currentColor" />
-          
-          {/* Декоративная звездочка */}
-          <Sparkles className={`${size === 'sm' ? 'w-2 h-2' : size === 'md' ? 'w-3 h-3' : 'w-3 h-3'} text-white/80 absolute -top-1 -right-1`} />
-        </div>
-        
-        {/* Мягкое свечение */}
-        <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-feminine-lavender-300/30 to-feminine-pink-300/30 animate-glow" />
+      <div className={`${sizeClasses[size]} flex items-center justify-center`}>
+        <img
+          src="/lovable-uploads/5ac94c15-2b2b-47a6-89ea-9e0163d76e7b.png"
+          alt="PREVENT Logo"
+          className="w-full h-full object-contain"
+        />
       </div>
       
       {showText && (
@@ -54,9 +39,6 @@ export const Logo: React.FC<LogoProps> = ({
           <span className={`${textSizeClasses[size]} font-montserrat font-bold bg-gradient-to-r from-feminine-lavender-500 to-feminine-pink-500 bg-clip-text text-transparent`}>
             PREVENT
           </span>
-          <p className={`${subtextSizeClasses[size]} text-gray-600 dark:text-gray-400 font-roboto leading-tight`}>
-            Забота о женском здоровье
-          </p>
         </div>
       )}
     </div>
