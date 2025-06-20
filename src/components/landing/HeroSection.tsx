@@ -82,8 +82,8 @@ const HeroSection = () => {
               </button>
             </div>
 
-            {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row gap-4">
+            {/* CTA Buttons - Centered */}
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Button 
                 size="lg" 
                 className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white shadow-lg text-lg px-8 py-4 transition-all duration-200 hover:shadow-xl hover:scale-105"
@@ -105,8 +105,8 @@ const HeroSection = () => {
               </Button>
             </div>
 
-            {/* Trust Indicators */}
-            <div className="flex items-center space-x-6 pt-8 border-t border-gray-200">
+            {/* Trust Indicators - Centered */}
+            <div className="flex items-center justify-center space-x-6 pt-8 border-t border-gray-200">
               <div className="flex items-center space-x-2">
                 <Shield className="w-5 h-5 text-green-600" aria-hidden="true" />
                 <span className="text-sm text-gray-700">Медицинская точность</span>
