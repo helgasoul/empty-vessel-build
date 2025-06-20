@@ -26,6 +26,7 @@ import WomensHealthDemo from "./pages/WomensHealthDemo";
 import EnvironmentalHealthDemo from "./pages/EnvironmentalHealthDemo";
 import CommunityDemo from "./pages/CommunityDemo";
 import AIAnalysisPage from "./pages/AIAnalysisPage";
+import PersonalPlanPage from "./pages/PersonalPlan";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -50,6 +51,7 @@ const App: React.FC = () => {
               <Route path="/about" element={<About />} />
               <Route path="/auth" element={<Auth />} />
               <Route path="/ai-analysis" element={<AIAnalysisPage />} />
+              <Route path="/personal-plan" element={<PersonalPlanPage />} />
               
               {/* Demo pages - accessible without auth */}
               <Route path="/risk-assessment-demo" element={<RiskAssessmentDemo />} />

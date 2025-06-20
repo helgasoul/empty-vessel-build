@@ -65,7 +65,7 @@ const HeroSection = () => {
                 <span className="text-sm font-medium text-gray-800">ИИ-анализ рисков</span>
               </button>
               <button 
-                onClick={() => scrollToSection('personal-plan')}
+                onClick={() => navigate('/personal-plan')}
                 className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-pink-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
                 aria-label="Перейти к разделу персональный план"
               >

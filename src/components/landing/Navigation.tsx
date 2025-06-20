@@ -21,6 +21,7 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigationItems = [
+    { title: 'Персональный план', path: '/personal-plan' },
     { title: 'Оценка рисков', path: '/risk-assessment-demo' },
     { title: 'Женское здоровье', path: '/womens-health-demo' },
     { title: 'Экология здоровья', path: '/environmental-health-demo' },
