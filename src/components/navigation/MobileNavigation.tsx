@@ -107,6 +107,7 @@ const MobileNavigation = () => {
   ];
 
   const handleNavigate = (path: string) => {
+    console.log('MobileNavigation: переход к', path); // Для отладки
     navigate(path);
     setOpen(false);
   };
