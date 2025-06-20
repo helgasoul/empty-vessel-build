@@ -2742,6 +2742,48 @@ export type Database = {
         }
         Relationships: []
       }
+      organization_verifications: {
+        Row: {
+          created_at: string
+          documents_submitted: Json | null
+          id: string
+          notes: string | null
+          organization_id: string
+          organization_type: string
+          rejection_reason: string | null
+          updated_at: string
+          verification_date: string | null
+          verification_status: string
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string
+          documents_submitted?: Json | null
+          id?: string
+          notes?: string | null
+          organization_id: string
+          organization_type: string
+          rejection_reason?: string | null
+          updated_at?: string
+          verification_date?: string | null
+          verification_status?: string
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string
+          documents_submitted?: Json | null
+          id?: string
+          notes?: string | null
+          organization_id?: string
+          organization_type?: string
+          rejection_reason?: string | null
+          updated_at?: string
+          verification_date?: string | null
+          verification_status?: string
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       partner_doctors: {
         Row: {
           available_slots: Json | null
@@ -3328,6 +3370,36 @@ export type Database = {
         }
         Relationships: []
       }
+      security_settings: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          setting_name: string
+          setting_value: Json
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_name: string
+          setting_value: Json
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          setting_name?: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string
+        }
+        Relationships: []
+      }
       subscribers: {
         Row: {
           created_at: string
@@ -3444,6 +3516,63 @@ export type Database = {
           },
         ]
       }
+      support_tickets: {
+        Row: {
+          assigned_at: string | null
+          assigned_to: string | null
+          attachments: Json | null
+          category: string
+          created_at: string
+          description: string
+          id: string
+          metadata: Json | null
+          priority: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          status: string
+          subject: string
+          ticket_number: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          assigned_to?: string | null
+          attachments?: Json | null
+          category: string
+          created_at?: string
+          description: string
+          id?: string
+          metadata?: Json | null
+          priority?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string
+          subject: string
+          ticket_number: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          assigned_to?: string | null
+          attachments?: Json | null
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          metadata?: Json | null
+          priority?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          status?: string
+          subject?: string
+          ticket_number?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       symptom_mood_logs: {
         Row: {
           created_at: string
@@ -3486,6 +3615,42 @@ export type Database = {
           symptoms?: string[] | null
           updated_at?: string
           user_id?: string
+        }
+        Relationships: []
+      }
+      system_settings: {
+        Row: {
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          is_public: boolean | null
+          setting_key: string
+          setting_value: Json
+          updated_at: string
+          updated_by: string
+        }
+        Insert: {
+          category: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          setting_key: string
+          setting_value: Json
+          updated_at?: string
+          updated_by: string
+        }
+        Update: {
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          setting_key?: string
+          setting_value?: Json
+          updated_at?: string
+          updated_by?: string
         }
         Relationships: []
       }
@@ -3665,6 +3830,48 @@ export type Database = {
           },
         ]
       }
+      user_activity_logs: {
+        Row: {
+          action_description: string
+          action_type: string
+          created_at: string
+          id: string
+          ip_address: unknown | null
+          metadata: Json | null
+          resource_id: string | null
+          resource_type: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          action_description: string
+          action_type: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          action_description?: string
+          action_type?: string
+          created_at?: string
+          id?: string
+          ip_address?: unknown | null
+          metadata?: Json | null
+          resource_id?: string | null
+          resource_type?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_devices: {
         Row: {
           access_token: string | null
@@ -3814,6 +4021,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      generate_ticket_number: {
+        Args: Record<PropertyKey, never>
+        Returns: string
+      }
       has_patient_data_permission: {
         Args: {
           _patient_id: string
