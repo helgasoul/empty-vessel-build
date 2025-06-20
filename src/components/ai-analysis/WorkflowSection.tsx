@@ -18,8 +18,8 @@ const WorkflowSection = ({ workflowSteps }: WorkflowSectionProps) => {
     <section className="py-16 px-4 md:px-6 bg-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Как это работает</h2>
-          <p className="text-lg text-gray-700">Пошаговый процесс анализа</p>
+          <h2 className="text-3xl font-bold text-gray-700 mb-6">Как это работает</h2>
+          <p className="text-lg text-gray-600">Пошаговый процесс анализа</p>
         </div>
         
         <div className="space-y-6">
@@ -41,8 +41,8 @@ const WorkflowSection = ({ workflowSteps }: WorkflowSectionProps) => {
                   </div>
                   
                   <div className="flex-1 min-w-0">
-                    <h3 className="text-2xl font-bold text-gray-900 mb-3">{step.title}</h3>
-                    <p className="text-lg text-gray-700 leading-relaxed">{step.description}</p>
+                    <h3 className="text-2xl font-bold text-gray-700 mb-3">{step.title}</h3>
+                    <p className="text-lg text-gray-600 leading-relaxed">{step.description}</p>
                   </div>
                 </div>
               </div>

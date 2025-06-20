@@ -122,10 +122,10 @@ const AIAnalysisPage = () => {
           <Badge className="bg-purple-100 text-purple-800 mb-6 hover:bg-purple-200 transition-colors duration-200">
             🧠 Искусственный интеллект в медицине
           </Badge>
-          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 bg-clip-text text-transparent mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold bg-gradient-to-br from-gray-700 via-gray-600 to-gray-500 bg-clip-text text-transparent mb-6">
             Как ИИ анализирует ваше здоровье
           </h1>
-          <p className="text-xl text-gray-700 leading-relaxed max-w-3xl mx-auto">
+          <p className="text-xl text-gray-600 leading-relaxed max-w-3xl mx-auto">
             Узнайте, как современные алгоритмы помогают предсказать риски и сохранить ваше здоровье
           </p>
         </div>

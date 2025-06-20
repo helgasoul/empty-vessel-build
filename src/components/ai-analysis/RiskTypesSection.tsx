@@ -20,7 +20,7 @@ const RiskTypesSection = ({ analysisTypes }: RiskTypesSectionProps) => {
     <section className="py-16 px-4 md:px-6 bg-gradient-to-br from-gray-50 to-white">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-900 mb-6">Виды рисков, которые мы прогнозируем</h2>
+          <h2 className="text-3xl font-bold text-gray-700 mb-6">Виды рисков, которые мы прогнозируем</h2>
         </div>
         
         <div className="grid md:grid-cols-2 gap-8">
@@ -33,11 +33,11 @@ const RiskTypesSection = ({ analysisTypes }: RiskTypesSectionProps) => {
                     <div className={`p-3 rounded-full bg-gradient-to-r ${type.color}`}>
                       <IconComponent className="w-6 h-6 text-white" />
                     </div>
-                    <CardTitle className="text-xl text-gray-900">{type.title}</CardTitle>
+                    <CardTitle className="text-xl text-gray-700">{type.title}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-gray-700 leading-relaxed">{type.description}</p>
+                  <p className="text-gray-600 leading-relaxed">{type.description}</p>
                 </CardContent>
               </Card>
             );
