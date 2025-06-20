@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -6,6 +7,7 @@ import { Heart, Calendar, Baby, Flower, ArrowRight, TrendingUp, Activity } from 
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/ui/back-button';
+import HormonalHealthSection from '@/components/hormonal-health/HormonalHealthSection';
 
 const WomensHealthDemo = () => {
   const navigate = useNavigate();
@@ -49,7 +51,7 @@ const WomensHealthDemo = () => {
       textColor: "text-purple-700",
       buttonAction: "Проверить баланс",
       value: "Гормональная гармония и энергия",
-      route: "/auth"
+      route: "#hormonal-health"
     },
     {
       title: "Менопауза",
@@ -67,6 +69,15 @@ const WomensHealthDemo = () => {
   ];
 
   const handleAreaAction = (area: typeof healthAreas[0]) => {
+    // Если это гормональное здоровье, скроллим к разделу
+    if (area.route === "#hormonal-health") {
+      const element = document.getElementById('hormonal-health');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
     // Если это трекер менструального цикла или планирование беременности, проверяем аутентификацию
     if (area.route === "/menstrual-cycle-tracker" || area.route === "/pregnancy-planning") {
       if (user) {
@@ -79,6 +90,26 @@ const WomensHealthDemo = () => {
       }
     } else {
       navigate(area.route);
+    }
+  };
+
+  const handleConsultationClick = () => {
+    if (user) {
+      navigate('/auth');
+    } else {
+      navigate('/auth', { 
+        state: { redirectTo: '/womens-health' } 
+      });
+    }
+  };
+
+  const handleTrackingClick = () => {
+    if (user) {
+      navigate('/womens-health');
+    } else {
+      navigate('/auth', { 
+        state: { redirectTo: '/womens-health' } 
+      });
     }
   };
 
@@ -187,7 +218,15 @@ const WomensHealthDemo = () => {
           </div>
         </div>
 
-        <Card className="bg-gradient-to-r from-pink-600 to-purple-600 text-white border-none shadow-2xl">
+        {/* Раздел гормонального здоровья */}
+        <div id="hormonal-health">
+          <HormonalHealthSection 
+            onConsultationClick={handleConsultationClick}
+            onTrackingClick={handleTrackingClick}
+          />
+        </div>
+
+        <Card className="bg-gradient-to-r from-pink-600 to-purple-600 text-white border-none shadow-2xl mt-12">
           <CardContent className="py-12 text-center">
             <h3 className="text-3xl font-bold mb-4">
               Присоединяйтесь к PREVENT
