@@ -30,8 +30,11 @@ export const Logo: React.FC<LogoProps> = ({
         <img
           src="/lovable-uploads/0c196f8a-c069-4ba0-aeaa-c160705b0c4e.png"
           alt="PREVENT Logo"
-          className="w-full h-full object-contain"
-          style={{ background: 'transparent' }}
+          className="w-full h-full object-contain rounded-lg"
+          style={{ 
+            background: 'transparent',
+            mixBlendMode: 'multiply'
+          }}
         />
       </div>
       
