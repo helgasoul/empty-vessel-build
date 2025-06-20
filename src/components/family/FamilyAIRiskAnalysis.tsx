@@ -48,11 +48,12 @@ interface RiskAnalysisResult {
   last_updated: string;
 }
 
-interface FamilyRiskAnalysisRecord {
+// Type for the database record with proper JSON field handling
+interface DatabaseRiskAnalysisRecord {
   id: string;
   family_group_id: string;
-  analysis_results: RiskAnalysisResult[];
-  ai_recommendations: string[];
+  analysis_results: any; // JSON field from database
+  ai_recommendations: any; // JSON field from database
   confidence_score: number;
   analyzed_by: string;
   created_at: string;
@@ -97,8 +98,13 @@ const FamilyAIRiskAnalysis: React.FC<FamilyAIRiskAnalysisProps> = ({
       }
 
       if (data && data.length > 0) {
-        const record = data[0] as FamilyRiskAnalysisRecord;
-        setRiskAnalysis(record.analysis_results || []);
+        const record = data[0] as DatabaseRiskAnalysisRecord;
+        // Safely parse the JSON analysis_results
+        const analysisResults = Array.isArray(record.analysis_results) 
+          ? record.analysis_results as RiskAnalysisResult[]
+          : [];
+        
+        setRiskAnalysis(analysisResults);
         setLastAnalysisDate(record.created_at);
       }
     } catch (error) {
