@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -94,10 +93,11 @@ const FamilyMedicalEvents: React.FC<FamilyMedicalEventsProps> = ({
   }, [familyGroupId]);
 
   const loadMedicalEvents = async () => {
-    if (!familyGroupId) return;
+    if (!familyGroupId || !familyMembers.length) return;
 
     setLoading(true);
     try {
+      const memberIds = familyMembers.map(m => m.id);
       const { data, error } = await supabase
         .from('family_medical_events')
         .select(`
@@ -107,7 +107,7 @@ const FamilyMedicalEvents: React.FC<FamilyMedicalEventsProps> = ({
             relationship
           )
         `)
-        .eq('family_member_id', familyMembers.map(m => m.id))
+        .in('family_member_id', memberIds)
         .order('event_date', { ascending: false });
 
       if (error) throw error;

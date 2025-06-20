@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -132,6 +131,10 @@ const EnhancedFamilyDataBank: React.FC = () => {
     }
   };
 
+  const handleGroupSelect = (group: FamilyGroup) => {
+    setSelectedGroup(group);
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-indigo-50 p-4">
@@ -172,9 +175,10 @@ const EnhancedFamilyDataBank: React.FC = () => {
           </CardHeader>
           <CardContent>
             <FamilyGroupList 
-              onGroupSelect={setSelectedGroup}
-              selectedGroup={selectedGroup}
-              onGroupCreated={refreshData}
+              familyGroups={familyGroups}
+              selectedFamily={selectedGroup}
+              onSelectFamily={handleGroupSelect}
+              onFamilyUpdated={refreshData}
             />
           </CardContent>
         </Card>
@@ -381,7 +385,6 @@ const EnhancedFamilyDataBank: React.FC = () => {
               <TabsContent value="members">
                 <FamilyMembersList 
                   familyGroupId={selectedGroup.id}
-                  onMemberAdded={loadFamilyMembers}
                 />
               </TabsContent>
 
@@ -408,7 +411,10 @@ const EnhancedFamilyDataBank: React.FC = () => {
               </TabsContent>
 
               <TabsContent value="access">
-                <FamilyAccessManagement familyGroupId={selectedGroup.id} />
+                <FamilyAccessManagement 
+                  familyGroupId={selectedGroup.id}
+                  familyGroupName={selectedGroup.family_name}
+                />
               </TabsContent>
             </Tabs>
           </>

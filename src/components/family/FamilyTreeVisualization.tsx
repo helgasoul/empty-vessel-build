@@ -212,7 +212,6 @@ const FamilyTreeVisualization: React.FC<FamilyTreeVisualizationProps> = ({
                       
                       <div className="mt-2 flex items-center space-x-1">
                         <Badge 
-                          size="sm"
                           className={
                             member.is_alive 
                               ? 'bg-green-50 text-green-700 border-green-200' 
@@ -222,7 +221,7 @@ const FamilyTreeVisualization: React.FC<FamilyTreeVisualizationProps> = ({
                           {member.is_alive ? 'В живых' : 'Ушёл из жизни'}
                         </Badge>
                         {member.gender && (
-                          <Badge size="sm" variant="outline">
+                          <Badge variant="outline">
                             {member.gender === 'male' ? 'М' : 'Ж'}
                           </Badge>
                         )}
@@ -308,7 +307,7 @@ const FamilyTreeVisualization: React.FC<FamilyTreeVisualizationProps> = ({
                               </p>
                             </div>
                             {event.severity && (
-                              <Badge size="sm" variant="outline">
+                              <Badge variant="outline">
                                 {event.severity}
                               </Badge>
                             )}

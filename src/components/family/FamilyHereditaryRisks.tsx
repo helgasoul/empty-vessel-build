@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -89,7 +88,19 @@ const FamilyHereditaryRisks: React.FC<FamilyHereditaryRisksProps> = ({
         .order('risk_level', { ascending: false });
 
       if (error) throw error;
-      setRisks(data || []);
+      
+      // Transform data to match our interface
+      const transformedData: HereditaryRisk[] = (data || []).map(item => ({
+        ...item,
+        prevention_recommendations: Array.isArray(item.prevention_recommendations) 
+          ? item.prevention_recommendations 
+          : [],
+        screening_recommendations: Array.isArray(item.screening_recommendations) 
+          ? item.screening_recommendations 
+          : []
+      }));
+      
+      setRisks(transformedData);
     } catch (error) {
       console.error('Error loading hereditary risks:', error);
       toast({
@@ -119,7 +130,18 @@ const FamilyHereditaryRisks: React.FC<FamilyHereditaryRisksProps> = ({
 
       if (error) throw error;
 
-      setRisks(prev => [data, ...prev]);
+      // Transform the new data to match our interface
+      const newRiskData: HereditaryRisk = {
+        ...data,
+        prevention_recommendations: Array.isArray(data.prevention_recommendations) 
+          ? data.prevention_recommendations 
+          : [],
+        screening_recommendations: Array.isArray(data.screening_recommendations) 
+          ? data.screening_recommendations 
+          : []
+      };
+
+      setRisks(prev => [newRiskData, ...prev]);
       setNewRisk({
         condition_name: '',
         affected_members: [],
