@@ -1,26 +1,15 @@
-
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Shield, Heart, Brain } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { Shield, Heart, Brain } from "lucide-react";
 import FounderSection from '@/components/founder/FounderSection';
+import BackButton from '@/components/ui/back-button';
 
 const About = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
       <div className="max-w-4xl mx-auto px-4 py-16">
         <div className="mb-8">
-          <Button 
-            variant="ghost" 
-            onClick={() => navigate('/')}
-            className="mb-4"
-          >
-            <ArrowLeft className="w-4 h-4 mr-2" />
-            Назад на главную
-          </Button>
+          <BackButton className="mb-4" />
           
           <h1 className="text-4xl font-bold text-gray-900 mb-6">
             О платформе PREVENT

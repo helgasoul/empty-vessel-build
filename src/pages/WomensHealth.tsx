@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate, useSearchParams } from 'react-router-dom';
 import WomensHealthDashboard from '@/components/health/WomensHealthDashboard';
+import BackButton from '@/components/ui/back-button';
 
 const WomensHealth = () => {
   const { user, loading } = useAuth();
@@ -27,6 +28,7 @@ const WomensHealth = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="container mx-auto px-4 py-8">
+        <BackButton fallbackPath="/dashboard" className="mb-4" />
         <WomensHealthDashboard initialTab={initialTab} />
       </div>
     </div>
