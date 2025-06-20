@@ -21,7 +21,6 @@ const Navigation = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navigationItems = [
-    { title: 'О нас', path: '/about' },
     { title: 'Оценка рисков', path: '/risk-assessment-demo' },
     { title: 'Женское здоровье', path: '/womens-health-demo' },
     { title: 'Экология здоровья', path: '/environmental-health-demo' },
@@ -58,6 +57,14 @@ const Navigation = () => {
                 </NavigationMenuItem>
               </NavigationMenuList>
             </NavigationMenu>
+            
+            <Button 
+              variant="ghost" 
+              onClick={() => navigate('/about')}
+              className="text-gray-700 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200 font-medium"
+            >
+              О нас
+            </Button>
           </div>
         )}
 
@@ -120,6 +127,16 @@ const Navigation = () => {
                 {item.title}
               </Button>
             ))}
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50"
+              onClick={() => {
+                navigate('/about');
+                setMobileMenuOpen(false);
+              }}
+            >
+              О нас
+            </Button>
             <div className="pt-4 border-t border-purple-200/30 flex items-center justify-between">
               <ThemeToggle />
               <Button 
