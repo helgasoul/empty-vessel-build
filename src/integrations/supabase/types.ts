@@ -3655,6 +3655,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      can_access_family_group: {
+        Args: { group_id: string }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _user_id: string
