@@ -163,20 +163,26 @@ const Auth = () => {
         return;
       }
 
+      console.log('Sending password reset request for:', email);
+
       const response = await supabase.functions.invoke('send-password-reset', {
         body: { email }
       });
 
+      console.log('Password reset response:', response);
+
       if (response.error) {
         console.error('Error sending password reset:', response.error);
-        toast.error('Ошибка при отправке письма для восстановления пароля');
+        toast.error('Ошибка при отправке письма для восстановления пароля. Попробуйте еще раз.');
       } else {
         toast.success('Письмо для восстановления пароля отправлено на ваш email');
         setResetDialogOpen(false);
+        // Очищаем форму
+        (e.target as HTMLFormElement).reset();
       }
     } catch (err) {
       console.error('Unexpected error:', err);
-      toast.error('Произошла неожиданная ошибка');
+      toast.error('Произошла неожиданная ошибка. Попробуйте еще раз.');
     } finally {
       setIsResetLoading(false);
     }
