@@ -1098,6 +1098,7 @@ export type Database = {
       founder_info: {
         Row: {
           achievements: string[] | null
+          certificates: Json | null
           created_at: string
           description: string | null
           education: string[] | null
@@ -1110,6 +1111,7 @@ export type Database = {
         }
         Insert: {
           achievements?: string[] | null
+          certificates?: Json | null
           created_at?: string
           description?: string | null
           education?: string[] | null
@@ -1122,6 +1124,7 @@ export type Database = {
         }
         Update: {
           achievements?: string[] | null
+          certificates?: Json | null
           created_at?: string
           description?: string | null
           education?: string[] | null

@@ -1,14 +1,13 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { useFounderInfo, useUpdateFounderInfo, useUploadFounderImage, FounderInfo } from '@/hooks/useFounderInfo';
+import { useFounderInfo, useUpdateFounderInfo, useUploadFounderImage, useUploadFounderCertificate, FounderInfo } from '@/hooks/useFounderInfo';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { Plus, Minus, Upload, Edit } from 'lucide-react';
+import { Plus, Minus, Upload, Edit, FileText, X } from 'lucide-react';
 
 const FounderEditForm = () => {
   const { user } = useAuth();
@@ -16,6 +15,7 @@ const FounderEditForm = () => {
   const { data: founderInfo } = useFounderInfo();
   const updateFounderInfo = useUpdateFounderInfo();
   const uploadImage = useUploadFounderImage();
+  const uploadCertificate = useUploadFounderCertificate();
 
   const [formData, setFormData] = useState<Omit<FounderInfo, 'id' | 'created_at' | 'updated_at'>>({
     name: '',
@@ -24,12 +24,15 @@ const FounderEditForm = () => {
     education: [],
     achievements: [],
     quote: '',
-    image_url: ''
+    image_url: '',
+    certificates: []
   });
 
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [isUploading, setIsUploading] = useState(false);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const [selectedCertFile, setSelectedCertFile] = useState<File | null>(null);
+  const [isUploadingImage, setIsUploadingImage] = useState(false);
+  const [isUploadingCert, setIsUploadingCert] = useState(false);
 
   useEffect(() => {
     if (founderInfo) {
@@ -40,26 +43,34 @@ const FounderEditForm = () => {
         education: founderInfo.education || [],
         achievements: founderInfo.achievements || [],
         quote: founderInfo.quote || '',
-        image_url: founderInfo.image_url || ''
+        image_url: founderInfo.image_url || '',
+        certificates: founderInfo.certificates || []
       });
     }
   }, [founderInfo]);
 
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
+      setSelectedImageFile(file);
+    }
+  };
+
+  const handleCertFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setSelectedCertFile(file);
     }
   };
 
   const handleImageUpload = async () => {
-    if (!selectedFile) return;
+    if (!selectedImageFile) return;
 
-    setIsUploading(true);
+    setIsUploadingImage(true);
     try {
-      const imageUrl = await uploadImage.mutateAsync(selectedFile);
+      const imageUrl = await uploadImage.mutateAsync(selectedImageFile);
       setFormData(prev => ({ ...prev, image_url: imageUrl }));
-      setSelectedFile(null);
+      setSelectedImageFile(null);
       toast({
         title: "Изображение загружено",
         description: "Изображение успешно загружено и будет сохранено при сохранении формы"
@@ -67,11 +78,45 @@ const FounderEditForm = () => {
     } catch (error) {
       toast({
         title: "Ошибка загрузки",
-        description: "Не удалось загрузить изображение"
+        description: "Не удалось загрузить изображение",
+        variant: "destructive"
       });
     } finally {
-      setIsUploading(false);
+      setIsUploadingImage(false);
     }
+  };
+
+  const handleCertificateUpload = async () => {
+    if (!selectedCertFile) return;
+
+    setIsUploadingCert(true);
+    try {
+      const certUrl = await uploadCertificate.mutateAsync(selectedCertFile);
+      setFormData(prev => ({ 
+        ...prev, 
+        certificates: [...(prev.certificates || []), certUrl] 
+      }));
+      setSelectedCertFile(null);
+      toast({
+        title: "Сертификат загружен",
+        description: "Сертификат успешно загружен и будет сохранен при сохранении формы"
+      });
+    } catch (error) {
+      toast({
+        title: "Ошибка загрузки",
+        description: "Не удалось загрузить сертификат",
+        variant: "destructive"
+      });
+    } finally {
+      setIsUploadingCert(false);
+    }
+  };
+
+  const removeCertificate = (index: number) => {
+    setFormData(prev => ({
+      ...prev,
+      certificates: prev.certificates?.filter((_, i) => i !== index) || []
+    }));
   };
 
   const addEducationItem = () => {
@@ -129,7 +174,8 @@ const FounderEditForm = () => {
     } catch (error) {
       toast({
         title: "Ошибка сохранения",
-        description: "Не удалось сохранить информацию"
+        description: "Не удалось сохранить информацию",
+        variant: "destructive"
       });
     }
   };
@@ -199,6 +245,7 @@ const FounderEditForm = () => {
             </div>
 
             <div className="space-y-4">
+              {/* Avatar Upload Section */}
               <div>
                 <Label>Изображение</Label>
                 <div className="space-y-2">
@@ -212,17 +259,70 @@ const FounderEditForm = () => {
                   <Input
                     type="file"
                     accept="image/*"
-                    onChange={handleFileChange}
+                    onChange={handleImageFileChange}
                   />
-                  {selectedFile && (
+                  {selectedImageFile && (
                     <Button 
                       type="button" 
                       onClick={handleImageUpload}
-                      disabled={isUploading}
+                      disabled={isUploadingImage}
                       className="w-full"
                     >
                       <Upload className="w-4 h-4 mr-2" />
-                      {isUploading ? 'Загрузка...' : 'Загрузить изображение'}
+                      {isUploadingImage ? 'Загрузка...' : 'Загрузить изображение'}
+                    </Button>
+                  )}
+                </div>
+              </div>
+
+              {/* Certificates Upload Section */}
+              <div>
+                <Label>Сертификаты</Label>
+                <div className="space-y-2">
+                  {formData.certificates && formData.certificates.length > 0 && (
+                    <div className="space-y-2">
+                      <Label className="text-sm font-medium">Загруженные сертификаты:</Label>
+                      {formData.certificates.map((cert, index) => (
+                        <div key={index} className="flex items-center justify-between p-2 border rounded">
+                          <div className="flex items-center space-x-2">
+                            <FileText className="w-4 h-4" />
+                            <span className="text-sm">Сертификат {index + 1}</span>
+                            <a 
+                              href={cert} 
+                              target="_blank" 
+                              rel="noopener noreferrer"
+                              className="text-blue-600 hover:text-blue-800 text-sm"
+                            >
+                              Просмотр
+                            </a>
+                          </div>
+                          <Button
+                            type="button"
+                            variant="outline"
+                            size="sm"
+                            onClick={() => removeCertificate(index)}
+                          >
+                            <X className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <Input
+                    type="file"
+                    accept="image/*,application/pdf"
+                    onChange={handleCertFileChange}
+                  />
+                  {selectedCertFile && (
+                    <Button 
+                      type="button" 
+                      onClick={handleCertificateUpload}
+                      disabled={isUploadingCert}
+                      className="w-full"
+                      variant="outline"
+                    >
+                      <Upload className="w-4 h-4 mr-2" />
+                      {isUploadingCert ? 'Загрузка...' : 'Загрузить сертификат'}
                     </Button>
                   )}
                 </div>
@@ -230,6 +330,7 @@ const FounderEditForm = () => {
             </div>
           </div>
 
+          {/* Education Section */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">
@@ -260,6 +361,7 @@ const FounderEditForm = () => {
             </CardContent>
           </Card>
 
+          {/* Achievements Section */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center justify-between">

@@ -1,3 +1,4 @@
+
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 
@@ -10,6 +11,7 @@ export interface FounderInfo {
   achievements?: string[];
   quote?: string;
   image_url?: string;
+  certificates?: string[];
   created_at?: string;
   updated_at?: string;
 }
@@ -35,7 +37,8 @@ const defaultFounderInfo: FounderInfo = {
     'Курс профессора László Tabár по ранней диагностике рака молочной железы, Швеция (2012)'
   ],
   quote: 'Моя миссия — дать каждой женщине уверенность в завтрашнем дне через знания, заботу и современные технологии диагностики. Превентивная медицина — это не просто выявление рисков, это путь к гармонии между телом и душой.',
-  image_url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+  image_url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+  certificates: []
 };
 
 export const useFounderInfo = () => {
@@ -62,7 +65,7 @@ export const useFounderInfo = () => {
       }
     },
     staleTime: 5 * 60 * 1000, // 5 минут
-    gcTime: 10 * 60 * 1000, // 10 минут (заменил cacheTime на gcTime)
+    gcTime: 10 * 60 * 1000, // 10 минут
   });
 };
 
@@ -132,6 +135,32 @@ export const useUploadFounderImage = () => {
 
       const { data: { publicUrl } } = supabase.storage
         .from('founder-images')
+        .getPublicUrl(fileName);
+
+      return publicUrl;
+    },
+  });
+};
+
+export const useUploadFounderCertificate = () => {
+  return useMutation({
+    mutationFn: async (file: File) => {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `certificate-${Date.now()}.${fileExt}`;
+
+      const { data, error } = await supabase.storage
+        .from('founder-certificates')
+        .upload(fileName, file, {
+          cacheControl: '3600',
+          upsert: true
+        });
+
+      if (error) {
+        throw new Error(error.message);
+      }
+
+      const { data: { publicUrl } } = supabase.storage
+        .from('founder-certificates')
         .getPublicUrl(fileName);
 
       return publicUrl;

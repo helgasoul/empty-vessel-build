@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Sparkles, Award, Users, Heart } from "lucide-react";
+import { Sparkles, Award, Users, Heart, FileText, ExternalLink } from "lucide-react";
 import { useFounderInfo } from '@/hooks/useFounderInfo';
 import FounderEditForm from './FounderEditForm';
 
@@ -31,7 +31,8 @@ const FounderSection = () => {
       'Курс профессора László Tabár по ранней диагностике рака молочной железы, Швеция (2012)'
     ],
     quote: 'Моя миссия — дать каждой женщине уверенность в завтрашнем дне через знания, заботу и современные технологии диагностики. Превентивная медицина — это не просто выявление рисков, это путь к гармонии между телом и душой.',
-    image_url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80'
+    image_url: 'https://images.unsplash.com/photo-1559839734-2b71ea197ec2?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    certificates: []
   };
 
   if (isLoading) {
@@ -162,6 +163,28 @@ const FounderSection = () => {
                         <li className="text-muted-foreground">• множественные международные сертификации...</li>
                       )}
                     </ul>
+                  </div>
+                )}
+
+                {/* Certificates Section */}
+                {founder.certificates && founder.certificates.length > 0 && (
+                  <div className="pt-4">
+                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Сертификаты:</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {founder.certificates.map((cert, index) => (
+                        <a
+                          key={index}
+                          href={cert}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center space-x-1 text-blue-600 hover:text-blue-800 text-sm bg-blue-50 px-2 py-1 rounded"
+                        >
+                          <FileText className="w-3 h-3" />
+                          <span>Сертификат {index + 1}</span>
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      ))}
+                    </div>
                   </div>
                 )}
               </div>
