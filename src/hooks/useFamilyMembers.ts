@@ -35,23 +35,8 @@ export const useFamilyMembers = (familyGroupId?: string) => {
       setLoading(true);
       console.log('Loading family members for group:', familyGroupId);
       
-      // Поскольку RLS отключен для family_members, нам нужно проверить доступ самостоятельно
-      // Сначала проверим, что пользователь имеет доступ к этой семейной группе
-      const { data: familyGroup, error: groupError } = await supabase
-        .from('family_groups')
-        .select('id, created_by')
-        .eq('id', familyGroupId)
-        .eq('created_by', user.id)
-        .single();
-
-      if (groupError || !familyGroup) {
-        console.error('User does not have access to this family group');
-        setFamilyMembers([]);
-        setLoading(false);
-        return;
-      }
-
-      // Теперь загружаем членов семьи для этой группы
+      // С включенным RLS можем напрямую загружать членов семьи
+      // RLS автоматически фильтрует по created_by = auth.uid()
       const { data, error } = await supabase
         .from('family_members')
         .select('*')
@@ -88,7 +73,7 @@ export const useFamilyMembers = (familyGroupId?: string) => {
   }) => {
     if (!user || !familyGroupId) throw new Error('User not authenticated or no family group selected');
 
-    // Проверяем доступ к семейной группе
+    // Проверяем доступ к семейной группе через отдельный запрос
     const { data: familyGroup, error: groupError } = await supabase
       .from('family_groups')
       .select('id')
@@ -124,7 +109,6 @@ export const useFamilyMembers = (familyGroupId?: string) => {
       .from('family_members')
       .update(updates)
       .eq('id', memberId)
-      .eq('created_by', user.id)
       .select()
       .single();
 
@@ -143,8 +127,7 @@ export const useFamilyMembers = (familyGroupId?: string) => {
     const { error } = await supabase
       .from('family_members')
       .delete()
-      .eq('id', memberId)
-      .eq('created_by', user.id);
+      .eq('id', memberId);
 
     if (error) throw error;
     
