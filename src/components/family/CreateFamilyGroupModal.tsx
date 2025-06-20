@@ -43,6 +43,7 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
     if (!user) {
       toast({
         title: "Ошибка авторизации",
@@ -70,12 +71,13 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
     });
 
     try {
-      const { data, error } = await supabase
+      // Создаем семейную группу
+      const { data: familyGroup, error: familyError } = await supabase
         .from('family_groups')
         .insert({
-          family_name: formData.family_name,
-          tree_name: formData.tree_name || formData.family_name,
-          description: formData.description,
+          family_name: formData.family_name.trim(),
+          tree_name: formData.tree_name.trim() || formData.family_name.trim(),
+          description: formData.description.trim() || null,
           created_by: user.id,
           visibility_settings: {
             medical_sharing: true,
@@ -85,31 +87,32 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
         .select()
         .single();
 
-      if (error) {
-        console.error('Supabase error:', error);
-        throw error;
+      if (familyError) {
+        console.error('Error creating family group:', familyError);
+        throw familyError;
       }
 
-      console.log('Family group created successfully:', data);
+      console.log('Family group created successfully:', familyGroup);
 
       toast({
         title: "Семейная группа создана",
-        description: `Группа "${data.family_name}" успешно создана. Вы можете начать добавлять членов семьи и медицинскую информацию`
+        description: `Группа "${familyGroup.family_name}" успешно создана. Теперь вы можете добавлять членов семьи и медицинскую информацию.`
       });
 
-      onFamilyCreated(data);
+      onFamilyCreated(familyGroup);
       setFormData({ family_name: '', tree_name: '', description: '' });
       onClose();
+
     } catch (error: any) {
-      console.error('Error creating family group:', error);
+      console.error('Error in family group creation:', error);
       
       let errorMessage = "Не удалось создать семейную группу";
       
       if (error?.message) {
         if (error.message.includes('duplicate key')) {
           errorMessage = "Семейная группа с таким названием уже существует";
-        } else if (error.message.includes('permission')) {
-          errorMessage = "Недостаточно прав для создания семейной группы";
+        } else if (error.message.includes('permission') || error.message.includes('policy')) {
+          errorMessage = "Недостаточно прав для создания семейной группы. Убедитесь, что вы авторизованы.";
         } else if (error.message.includes('network')) {
           errorMessage = "Ошибка сети. Проверьте подключение к интернету";
         } else {
