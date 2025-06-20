@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -70,6 +71,13 @@ const App: React.FC = () => {
               <Route path="/environmental-health-demo" element={<EnvironmentalHealthDemo />} />
               <Route path="/community-demo" element={<CommunityDemo />} />
               
+              {/* Public family-data route that redirects to auth if not logged in */}
+              <Route path="/family-data" element={
+                <ProtectedRoute>
+                  <FamilyData />
+                </ProtectedRoute>
+              } />
+              
               {/* Protected routes */}
               <Route path="/onboarding" element={
                 <ProtectedRoute>
@@ -129,11 +137,6 @@ const App: React.FC = () => {
               <Route path="/community" element={
                 <ProtectedRoute>
                   <Community />
-                </ProtectedRoute>
-              } />
-              <Route path="/family-data" element={
-                <ProtectedRoute>
-                  <FamilyData />
                 </ProtectedRoute>
               } />
               <Route path="/recommendations" element={
