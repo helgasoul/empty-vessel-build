@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -10,6 +9,7 @@ import { format } from "date-fns";
 import { ru } from "date-fns/locale";
 import AddFamilyMemberModal from "./AddFamilyMemberModal";
 import FamilyTreeVisualization from "./FamilyTreeVisualization";
+import FamilyMemberExtendedProfile from "./member-profile/FamilyMemberExtendedProfile";
 
 interface FamilyMember {
   id: string;
@@ -34,6 +34,7 @@ const FamilyMembersList: React.FC<FamilyMembersListProps> = ({ familyGroupId }) 
   const [members, setMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
+  const [selectedMemberId, setSelectedMemberId] = useState<string | null>(null);
 
   useEffect(() => {
     if (familyGroupId) {
@@ -91,6 +92,15 @@ const FamilyMembersList: React.FC<FamilyMembersListProps> = ({ familyGroupId }) 
     };
     return colors[relationship.toLowerCase()] || 'bg-gray-100 text-gray-800';
   };
+
+  if (selectedMemberId) {
+    return (
+      <FamilyMemberExtendedProfile
+        memberId={selectedMemberId}
+        onBack={() => setSelectedMemberId(null)}
+      />
+    );
+  }
 
   if (loading) {
     return (
@@ -197,15 +207,26 @@ const FamilyMembersList: React.FC<FamilyMembersListProps> = ({ familyGroupId }) 
                         </div>
                       </div>
                       
-                      <div className="text-right text-sm text-gray-600">
+                      <div className="flex items-center space-x-2">
                         {member.date_of_birth && (
-                          <div className="flex items-center space-x-1">
-                            <Calendar className="w-4 h-4" />
-                            <span>
-                              {calculateAge(member.date_of_birth)} лет
-                            </span>
+                          <div className="text-right text-sm text-gray-600 mr-4">
+                            <div className="flex items-center space-x-1">
+                              <Calendar className="w-4 h-4" />
+                              <span>
+                                {calculateAge(member.date_of_birth)} лет
+                              </span>
+                            </div>
                           </div>
                         )}
+                        
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => setSelectedMemberId(member.id)}
+                        >
+                          <Heart className="w-4 h-4 mr-2" />
+                          Профиль
+                        </Button>
                       </div>
                     </div>
 
@@ -219,10 +240,6 @@ const FamilyMembersList: React.FC<FamilyMembersListProps> = ({ familyGroupId }) 
                       <span className="text-xs text-gray-500">
                         Добавлен {format(new Date(member.created_at), 'dd MMM yyyy', { locale: ru })}
                       </span>
-                      <Button variant="outline" size="sm">
-                        <Heart className="w-4 h-4 mr-2" />
-                        Медицинская история
-                      </Button>
                     </div>
                   </CardContent>
                 </Card>

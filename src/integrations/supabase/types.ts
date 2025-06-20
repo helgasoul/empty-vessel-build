@@ -1157,69 +1157,253 @@ export type Database = {
           },
         ]
       }
+      family_member_health_metrics: {
+        Row: {
+          created_at: string
+          created_by: string
+          family_member_id: string
+          id: string
+          is_within_normal_range: boolean | null
+          measured_by: string | null
+          measurement_date: string
+          metric_type: string
+          notes: string | null
+          reference_range_max: number | null
+          reference_range_min: number | null
+          unit: string | null
+          updated_at: string
+          value_numeric: number | null
+          value_text: string | null
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          family_member_id: string
+          id?: string
+          is_within_normal_range?: boolean | null
+          measured_by?: string | null
+          measurement_date: string
+          metric_type: string
+          notes?: string | null
+          reference_range_max?: number | null
+          reference_range_min?: number | null
+          unit?: string | null
+          updated_at?: string
+          value_numeric?: number | null
+          value_text?: string | null
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          family_member_id?: string
+          id?: string
+          is_within_normal_range?: boolean | null
+          measured_by?: string | null
+          measurement_date?: string
+          metric_type?: string
+          notes?: string | null
+          reference_range_max?: number | null
+          reference_range_min?: number | null
+          unit?: string | null
+          updated_at?: string
+          value_numeric?: number | null
+          value_text?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_member_health_metrics_family_member_id_fkey"
+            columns: ["family_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      family_member_health_records: {
+        Row: {
+          attachments: Json | null
+          clinic_name: string | null
+          created_at: string
+          created_by: string
+          date_recorded: string | null
+          description: string | null
+          doctor_name: string | null
+          family_member_id: string
+          id: string
+          notes: string | null
+          record_type: string
+          results: Json | null
+          severity: string | null
+          status: string | null
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json | null
+          clinic_name?: string | null
+          created_at?: string
+          created_by: string
+          date_recorded?: string | null
+          description?: string | null
+          doctor_name?: string | null
+          family_member_id: string
+          id?: string
+          notes?: string | null
+          record_type: string
+          results?: Json | null
+          severity?: string | null
+          status?: string | null
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json | null
+          clinic_name?: string | null
+          created_at?: string
+          created_by?: string
+          date_recorded?: string | null
+          description?: string | null
+          doctor_name?: string | null
+          family_member_id?: string
+          id?: string
+          notes?: string | null
+          record_type?: string
+          results?: Json | null
+          severity?: string | null
+          status?: string | null
+          title?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_member_health_records_family_member_id_fkey"
+            columns: ["family_member_id"]
+            isOneToOne: false
+            referencedRelation: "family_members"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       family_members: {
         Row: {
+          allergies: Json | null
           avatar_url: string | null
           birth_year: number | null
+          blood_type: string | null
+          chronic_conditions: Json | null
           consent_status: boolean | null
           created_at: string
           created_by: string
           date_of_birth: string | null
+          education_level: string | null
+          emergency_contact_name: string | null
+          emergency_contact_phone: string | null
           family_group_id: string
+          family_history_notes: string | null
           gender: string | null
+          genetic_predispositions: Json | null
+          height_cm: number | null
           id: string
+          insurance_info: string | null
           is_alive: boolean | null
+          last_medical_checkup: string | null
+          lifestyle_factors: Json | null
+          marital_status: string | null
           medical_notes: string | null
+          medications: Json | null
           name: string
           notes: string | null
+          occupation: string | null
+          place_of_birth: string | null
+          preferred_doctor: string | null
           relationship: string
           shared_data_types: string[] | null
           status: string | null
           updated_at: string
           user_id: string | null
+          vaccinations: Json | null
           visibility_scope: string | null
+          weight_kg: number | null
         }
         Insert: {
+          allergies?: Json | null
           avatar_url?: string | null
           birth_year?: number | null
+          blood_type?: string | null
+          chronic_conditions?: Json | null
           consent_status?: boolean | null
           created_at?: string
           created_by: string
           date_of_birth?: string | null
+          education_level?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           family_group_id: string
+          family_history_notes?: string | null
           gender?: string | null
+          genetic_predispositions?: Json | null
+          height_cm?: number | null
           id?: string
+          insurance_info?: string | null
           is_alive?: boolean | null
+          last_medical_checkup?: string | null
+          lifestyle_factors?: Json | null
+          marital_status?: string | null
           medical_notes?: string | null
+          medications?: Json | null
           name: string
           notes?: string | null
+          occupation?: string | null
+          place_of_birth?: string | null
+          preferred_doctor?: string | null
           relationship: string
           shared_data_types?: string[] | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
+          vaccinations?: Json | null
           visibility_scope?: string | null
+          weight_kg?: number | null
         }
         Update: {
+          allergies?: Json | null
           avatar_url?: string | null
           birth_year?: number | null
+          blood_type?: string | null
+          chronic_conditions?: Json | null
           consent_status?: boolean | null
           created_at?: string
           created_by?: string
           date_of_birth?: string | null
+          education_level?: string | null
+          emergency_contact_name?: string | null
+          emergency_contact_phone?: string | null
           family_group_id?: string
+          family_history_notes?: string | null
           gender?: string | null
+          genetic_predispositions?: Json | null
+          height_cm?: number | null
           id?: string
+          insurance_info?: string | null
           is_alive?: boolean | null
+          last_medical_checkup?: string | null
+          lifestyle_factors?: Json | null
+          marital_status?: string | null
           medical_notes?: string | null
+          medications?: Json | null
           name?: string
           notes?: string | null
+          occupation?: string | null
+          place_of_birth?: string | null
+          preferred_doctor?: string | null
           relationship?: string
           shared_data_types?: string[] | null
           status?: string | null
           updated_at?: string
           user_id?: string | null
+          vaccinations?: Json | null
           visibility_scope?: string | null
+          weight_kg?: number | null
         }
         Relationships: [
           {
