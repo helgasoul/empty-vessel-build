@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -115,7 +116,7 @@ const FounderEditForm = () => {
   const removeCertificate = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      certificates: prev.certificates?.filter((_, i) => i !== index) || []
+      certificates: (prev.certificates || []).filter((_, i) => i !== index)
     }));
   };
 
@@ -129,14 +130,14 @@ const FounderEditForm = () => {
   const removeEducationItem = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      education: prev.education?.filter((_, i) => i !== index) || []
+      education: (prev.education || []).filter((_, i) => i !== index)
     }));
   };
 
   const updateEducationItem = (index: number, value: string) => {
     setFormData(prev => ({
       ...prev,
-      education: prev.education?.map((item, i) => i === index ? value : item) || []
+      education: (prev.education || []).map((item, i) => i === index ? value : item)
     }));
   };
 
@@ -150,14 +151,14 @@ const FounderEditForm = () => {
   const removeAchievementItem = (index: number) => {
     setFormData(prev => ({
       ...prev,
-      achievements: prev.achievements?.filter((_, i) => i !== index) || []
+      achievements: (prev.achievements || []).filter((_, i) => i !== index)
     }));
   };
 
   const updateAchievementItem = (index: number, value: string) => {
     setFormData(prev => ({
       ...prev,
-      achievements: prev.achievements?.map((item, i) => i === index ? value : item) || []
+      achievements: (prev.achievements || []).map((item, i) => i === index ? value : item)
     }));
   };
 
@@ -341,7 +342,7 @@ const FounderEditForm = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              {formData.education?.map((item, index) => (
+              {(formData.education || []).map((item, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Input
                     value={item}
@@ -372,7 +373,7 @@ const FounderEditForm = () => {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-2">
-              {formData.achievements?.map((item, index) => (
+              {(formData.achievements || []).map((item, index) => (
                 <div key={index} className="flex items-center space-x-2">
                   <Input
                     value={item}

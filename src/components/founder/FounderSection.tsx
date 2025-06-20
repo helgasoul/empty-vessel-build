@@ -138,7 +138,7 @@ const FounderSection = () => {
                   </p>
                 )}
 
-                {founder.education && founder.education.length > 0 && (
+                {founder.education && Array.isArray(founder.education) && founder.education.length > 0 && (
                   <div className="pt-4">
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Образование:</h4>
                     <ul className="text-sm space-y-1">
@@ -152,7 +152,7 @@ const FounderSection = () => {
                   </div>
                 )}
 
-                {founder.achievements && founder.achievements.length > 0 && (
+                {founder.achievements && Array.isArray(founder.achievements) && founder.achievements.length > 0 && (
                   <div className="pt-4">
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Ключевые достижения:</h4>
                     <ul className="text-sm space-y-1">
@@ -167,7 +167,7 @@ const FounderSection = () => {
                 )}
 
                 {/* Certificates Section */}
-                {founder.certificates && founder.certificates.length > 0 && (
+                {founder.certificates && Array.isArray(founder.certificates) && founder.certificates.length > 0 && (
                   <div className="pt-4">
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Сертификаты:</h4>
                     <div className="flex flex-wrap gap-2">

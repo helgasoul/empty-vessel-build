@@ -41,6 +41,14 @@ const defaultFounderInfo: FounderInfo = {
   certificates: []
 };
 
+// Функция для безопасного преобразования JSON данных в массив строк
+const parseStringArray = (value: any): string[] => {
+  if (Array.isArray(value)) {
+    return value.filter((item): item is string => typeof item === 'string');
+  }
+  return [];
+};
+
 export const useFounderInfo = () => {
   return useQuery({
     queryKey: ['founder-info'],
@@ -58,7 +66,17 @@ export const useFounderInfo = () => {
         }
 
         // Если данных нет в базе, возвращаем данные по умолчанию
-        return data || defaultFounderInfo;
+        if (!data) {
+          return defaultFounderInfo;
+        }
+
+        // Преобразуем данные из базы в правильный формат
+        return {
+          ...data,
+          education: parseStringArray(data.education),
+          achievements: parseStringArray(data.achievements),
+          certificates: parseStringArray(data.certificates),
+        } as FounderInfo;
       } catch (error) {
         console.warn('Ошибка при запросе данных основателя:', error);
         return defaultFounderInfo;
