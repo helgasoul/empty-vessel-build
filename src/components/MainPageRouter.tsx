@@ -1,8 +1,6 @@
 
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import NavigationMenu from '@/components/navigation/NavigationMenu';
-import { MobileNavigation } from '@/components/navigation/MobileNavigation';
 import Index from '@/pages/Index';
 import Dashboard from '@/pages/Dashboard';
 
@@ -21,15 +19,11 @@ const MainPageRouter = () => {
   }
 
   if (user) {
-    return (
-      <>
-        <NavigationMenu />
-        <Dashboard />
-        <MobileNavigation />
-      </>
-    );
+    // Dashboard уже содержит всю необходимую структуру (NavigationMenu, MobileNavigation, etc.)
+    return <Dashboard />;
   }
 
+  // Для неавторизованных пользователей показываем лендинг
   return <Index />;
 };
 
