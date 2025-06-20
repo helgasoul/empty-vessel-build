@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/ui/back-button';
 import HormonalHealthSection from '@/components/hormonal-health/HormonalHealthSection';
+import MenopauseSection from '@/components/menopause/MenopauseSection';
 
 const WomensHealthDemo = () => {
   const navigate = useNavigate();
@@ -64,7 +65,7 @@ const WomensHealthDemo = () => {
       textColor: "text-amber-700",
       buttonAction: "Получить поддержку",
       value: "Комфортный переход и активная жизнь",
-      route: "/auth"
+      route: "#menopause"
     }
   ];
 
@@ -72,6 +73,15 @@ const WomensHealthDemo = () => {
     // Если это гормональное здоровье, скроллим к разделу
     if (area.route === "#hormonal-health") {
       const element = document.getElementById('hormonal-health');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+      }
+      return;
+    }
+
+    // Если это менопауза, скроллим к разделу
+    if (area.route === "#menopause") {
+      const element = document.getElementById('menopause');
       if (element) {
         element.scrollIntoView({ behavior: 'smooth' });
       }
@@ -106,6 +116,16 @@ const WomensHealthDemo = () => {
   const handleTrackingClick = () => {
     if (user) {
       navigate('/womens-health');
+    } else {
+      navigate('/auth', { 
+        state: { redirectTo: '/womens-health' } 
+      });
+    }
+  };
+
+  const handleSpecialistClick = () => {
+    if (user) {
+      navigate('/auth');
     } else {
       navigate('/auth', { 
         state: { redirectTo: '/womens-health' } 
@@ -219,10 +239,18 @@ const WomensHealthDemo = () => {
         </div>
 
         {/* Раздел гормонального здоровья */}
-        <div id="hormonal-health">
+        <div id="hormonal-health" className="mb-12">
           <HormonalHealthSection 
             onConsultationClick={handleConsultationClick}
             onTrackingClick={handleTrackingClick}
+          />
+        </div>
+
+        {/* Раздел менопаузы */}
+        <div id="menopause" className="mb-12">
+          <MenopauseSection 
+            onConsultationClick={handleConsultationClick}
+            onSpecialistClick={handleSpecialistClick}
           />
         </div>
 
