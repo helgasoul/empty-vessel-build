@@ -97,6 +97,19 @@ export default {
 					'peach-300': '#F5E4CD',
 					'peach-400': '#F5D5AE',
 					'peach-500': '#F0C688'
+				},
+				// Добавляем мятные цвета
+				mint: {
+					'50': '#F0FFFE',
+					'100': '#CCFFFE',
+					'200': '#99FFFC',
+					'300': '#5FFFFF',
+					'400': '#1AFBFF',
+					'500': '#00E3E8',
+					'600': '#00B3B8',
+					'700': '#008B94',
+					'800': '#086A77',
+					'900': '#0A5963'
 				}
 			},
 			borderRadius: {
@@ -148,6 +161,16 @@ export default {
 					'100%': {
 						boxShadow: '0 0 5px rgba(184, 168, 216, 0.5), 0 0 10px rgba(184, 168, 216, 0.5), 0 0 15px rgba(184, 168, 216, 0.5)'
 					}
+				},
+				'scale-in': {
+					'0%': {
+						transform: 'scale(0.95)',
+						opacity: '0'
+					},
+					'100%': {
+						transform: 'scale(1)',
+						opacity: '1'
+					}
 				}
 			},
 			animation: {
@@ -155,7 +178,8 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
 				'slide-up': 'slide-up 0.8s ease-out',
-				'glow': 'glow 2s ease-in-out infinite alternate'
+				'glow': 'glow 2s ease-in-out infinite alternate',
+				'scale-in': 'scale-in 0.2s ease-out'
 			}
 		}
 	},

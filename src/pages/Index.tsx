@@ -12,6 +12,7 @@ import Footer from '@/components/landing/Footer';
 import PlatformMission from '@/components/landing/PlatformMission';
 import TrustBlock from '@/components/landing/TrustBlock';
 import UserTestimonials from '@/components/landing/UserTestimonials';
+import PersonalPlan from '@/components/landing/PersonalPlan';
 
 const Index = () => {
   return (
@@ -21,6 +22,7 @@ const Index = () => {
         <PlatformMission />
         <HeroSection />
         <TargetSegments />
+        <PersonalPlan />
         <FeaturesGrid />
         <TrustBlock />
         <UserTestimonials />
