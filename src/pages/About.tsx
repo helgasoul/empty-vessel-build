@@ -16,11 +16,11 @@ const About = () => {
         <div className="mb-8">
           <BackButton className="mb-4" />
           
-          <h1 className="text-4xl font-semibold text-gray-900 mb-6 animate-fade-in">
+          <h1 className="text-4xl font-semibold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-6 animate-fade-in text-center">
             О платформе PREVENT
           </h1>
           
-          <p className="text-xl text-gray-700 leading-relaxed font-medium">
+          <p className="text-xl text-gray-700 leading-relaxed font-medium text-center max-w-3xl mx-auto">
             PREVENT — это персонализированная платформа женского здоровья, направленная на снижение рисков хронических заболеваний через осознанность, изменения образа жизни и доказательную превентивную медицину.
           </p>
         </div>
