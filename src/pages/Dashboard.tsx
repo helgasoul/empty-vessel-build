@@ -36,12 +36,14 @@ const Dashboard = () => {
               <Logo size={isMobile ? 'sm' : 'md'} />
             </div>
             
+            {/* Центральная секция с выпадающим меню */}
+            <div className="flex-1 flex justify-center max-w-md mx-8">
+              <NavigationDropdown />
+            </div>
+            
             <div className="flex items-center space-x-2 md:space-x-4">
               <ThemeToggle />
               <NotificationCenter />
-              
-              {/* Выпадающее меню навигации */}
-              <NavigationDropdown />
               
               <Button 
                 variant="outline" 
