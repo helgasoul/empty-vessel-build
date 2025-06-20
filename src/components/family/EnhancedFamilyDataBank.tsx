@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -30,7 +29,7 @@ import FamilyAccessManagement from './FamilyAccessManagement';
 import FamilyMedicalEvents from './FamilyMedicalEvents';
 import FamilyHereditaryRisks from './FamilyHereditaryRisks';
 
-interface FamilyGroup {
+interface DatabaseFamilyGroup {
   id: string;
   family_name: string;
   description?: string;
@@ -61,8 +60,8 @@ interface FamilyMember {
 const EnhancedFamilyDataBank: React.FC = () => {
   const { user } = useAuth();
   const { toast } = useToast();
-  const [familyGroups, setFamilyGroups] = useState<FamilyGroup[]>([]);
-  const [selectedGroup, setSelectedGroup] = useState<FamilyGroup | null>(null);
+  const [familyGroups, setFamilyGroups] = useState<DatabaseFamilyGroup[]>([]);
+  const [selectedGroup, setSelectedGroup] = useState<DatabaseFamilyGroup | null>(null);
   const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
@@ -134,7 +133,7 @@ const EnhancedFamilyDataBank: React.FC = () => {
     }
   };
 
-  const handleGroupSelect = (group: FamilyGroup) => {
+  const handleGroupSelect = (group: DatabaseFamilyGroup) => {
     setSelectedGroup(group);
   };
 

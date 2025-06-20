@@ -9,7 +9,9 @@ import {
   FileText,
   BookOpen,
   Users,
-  Microscope
+  Microscope,
+  Stethoscope,
+  FlaskConical
 } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
@@ -17,11 +19,35 @@ const QuickActions = () => {
   const navigate = useNavigate();
 
   const handleMedicationsClick = () => {
-    console.log('Навигация к /medications'); // Для отладки
+    console.log('Навигация к /medications');
     navigate('/medications');
   };
 
+  const handleDoctorAppointmentClick = () => {
+    console.log('Навигация к записи к врачу');
+    navigate('/medical-calendar?action=doctor');
+  };
+
+  const handleLabTestsClick = () => {
+    console.log('Навигация к сдаче анализов');
+    navigate('/medical-calendar?action=tests');
+  };
+
   const actions = [
+    {
+      title: "Записаться к врачу",
+      description: "Запись на консультацию",
+      icon: Stethoscope,
+      onClick: handleDoctorAppointmentClick,
+      color: "text-blue-500"
+    },
+    {
+      title: "Сдать анализы",
+      description: "Запись в лабораторию",
+      icon: FlaskConical,
+      onClick: handleLabTestsClick,
+      color: "text-green-500"
+    },
     {
       title: "Записать симптомы",
       description: "Отследить настроение и симптомы",
@@ -34,14 +60,14 @@ const QuickActions = () => {
       description: "Рекомендации по возрасту",
       icon: BookOpen,
       onClick: () => navigate('/recommendations'),
-      color: "text-blue-500"
+      color: "text-indigo-500"
     },
     {
       title: "Медицинский календарь",
       description: "Запланировать визиты",
       icon: Calendar,
       onClick: () => navigate('/medical-calendar'),
-      color: "text-green-500"
+      color: "text-emerald-500"
     },
     {
       title: "Лекарства",
@@ -75,7 +101,7 @@ const QuickActions = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {actions.map((action, index) => (
             <Button
               key={index}
