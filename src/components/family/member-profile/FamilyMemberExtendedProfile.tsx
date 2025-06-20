@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { User, Heart, Activity, FileText, ArrowLeft } from "lucide-react";
+import { User, Heart, Activity, FileText, ArrowLeft, Upload } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -12,6 +12,7 @@ import BasicInfoTab from "./BasicInfoTab";
 import MedicalInfoTab from "./MedicalInfoTab";
 import HealthMetricsTab from "./HealthMetricsTab";
 import HealthRecordsTab from "./HealthRecordsTab";
+import DocumentsTab from "./DocumentsTab";
 
 interface FamilyMember {
   id: string;
@@ -74,7 +75,23 @@ const FamilyMemberExtendedProfile: React.FC<FamilyMemberExtendedProfileProps> = 
         .single();
 
       if (error) throw error;
-      setMember(data);
+      
+      // Convert database JSON fields to proper arrays
+      const transformedData = {
+        ...data,
+        chronic_conditions: Array.isArray(data.chronic_conditions) ? data.chronic_conditions : 
+          (data.chronic_conditions ? JSON.parse(data.chronic_conditions) : []),
+        allergies: Array.isArray(data.allergies) ? data.allergies : 
+          (data.allergies ? JSON.parse(data.allergies) : []),
+        medications: Array.isArray(data.medications) ? data.medications : 
+          (data.medications ? JSON.parse(data.medications) : []),
+        vaccinations: Array.isArray(data.vaccinations) ? data.vaccinations : 
+          (data.vaccinations ? JSON.parse(data.vaccinations) : []),
+        genetic_predispositions: Array.isArray(data.genetic_predispositions) ? data.genetic_predispositions : 
+          (data.genetic_predispositions ? JSON.parse(data.genetic_predispositions) : [])
+      };
+      
+      setMember(transformedData);
     } catch (error) {
       console.error('Error loading member data:', error);
       toast({
@@ -191,7 +208,7 @@ const FamilyMemberExtendedProfile: React.FC<FamilyMemberExtendedProfileProps> = 
 
       {/* Main Content Tabs */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4 bg-white/80 backdrop-blur-sm border border-purple-200">
+        <TabsList className="grid w-full grid-cols-5 bg-white/80 backdrop-blur-sm border border-purple-200">
           <TabsTrigger value="basic" className="flex items-center space-x-2">
             <User className="w-4 h-4" />
             <span className="hidden md:inline">Основное</span>
@@ -207,6 +224,10 @@ const FamilyMemberExtendedProfile: React.FC<FamilyMemberExtendedProfileProps> = 
           <TabsTrigger value="records" className="flex items-center space-x-2">
             <FileText className="w-4 h-4" />
             <span className="hidden md:inline">Записи</span>
+          </TabsTrigger>
+          <TabsTrigger value="documents" className="flex items-center space-x-2">
+            <Upload className="w-4 h-4" />
+            <span className="hidden md:inline">Документы</span>
           </TabsTrigger>
         </TabsList>
 
@@ -232,6 +253,10 @@ const FamilyMemberExtendedProfile: React.FC<FamilyMemberExtendedProfileProps> = 
 
         <TabsContent value="records" className="space-y-6">
           <HealthRecordsTab memberId={memberId} />
+        </TabsContent>
+
+        <TabsContent value="documents" className="space-y-6">
+          <DocumentsTab memberId={memberId} />
         </TabsContent>
       </Tabs>
     </div>
