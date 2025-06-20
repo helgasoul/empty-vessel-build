@@ -7,9 +7,9 @@ import { useSessionSecurity } from '@/hooks/useSessionSecurity';
 interface SecurityContextType {
   isSecurityEnabled: boolean;
   logSecurityEvent: (event: any) => void;
-  validateFile: (file: File) => boolean;
+  validateFile: (file: File, allowedMimeTypes?: string[], maxSizeBytes?: number) => boolean;
   sanitizeInput: (input: string) => string;
-  checkRateLimit: (action: string) => boolean;
+  checkRateLimit: (action: string, maxRequests?: number, windowMinutes?: number) => boolean;
 }
 
 const SecurityContext = createContext<SecurityContextType | null>(null);
@@ -62,10 +62,16 @@ export const SecurityProvider: React.FC<SecurityProviderProps> = ({
   const contextValue: SecurityContextType = {
     isSecurityEnabled,
     logSecurityEvent: SecurityService.logSecurityEvent,
-    validateFile: (file: File) => SecurityService.validateFile(
-      file,
-      ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain']
-    ),
+    validateFile: (file: File, allowedMimeTypes?: string[], maxSizeBytes?: number) => {
+      const defaultAllowedTypes = ['image/jpeg', 'image/png', 'image/gif', 'application/pdf', 'application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'text/plain'];
+      const defaultMaxSize = 50 * 1024 * 1024; // 50MB
+      
+      return SecurityService.validateFile(
+        file,
+        allowedMimeTypes || defaultAllowedTypes,
+        maxSizeBytes || defaultMaxSize
+      );
+    },
     sanitizeInput: SecurityService.sanitizeInput,
     checkRateLimit: SecurityService.checkRateLimit
   };
