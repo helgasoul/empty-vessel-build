@@ -14,7 +14,7 @@ const FounderSection = () => {
     id: 'default',
     name: 'Др. Ольга Пучкова',
     title: 'Врач-онколог, маммолог • Основатель и CEO PREVENT',
-    description: 'Врач-онколог с 20-летним опытом работы в области женского здоровья и превентивной медицины. Специалист по ранней диагностике онкологических заболеваний, эксперт в области маммологии и ультразвуковой диагностики. Ольга посвятила свою карьеру созданию персонализированного подхода к профилактике заболеваний, объединяя глубокие медицинские знания с современными технологиями для заботы о здоровье каждой женщины.',
+    description: 'Врач-онколог с 20-летним опытом работы в области женского здоровья и превентивной медицины. Специалист по ранней диагностике онкологических заболеваний, эксперт в области маммологии и ультразвуковой диагностики.',
     education: [
       'Московская Медицинская Академия им И.М. Сеченова, лечебное дело (1999-2005)',
       'Ординатура по специальности «Хирургия», ММА им И.М. Сеченова (2005-2007)',
@@ -131,44 +131,76 @@ const FounderSection = () => {
                 </div>
               </div>
 
-              <div className="space-y-4 text-gray-600 dark:text-gray-300 font-roboto">
-                {founder.description && (
-                  <p className="leading-relaxed">
+              <div className="space-y-6 text-gray-700 dark:text-gray-300 font-roboto">
+                {/* Основная информация */}
+                <div>
+                  <p className="leading-relaxed mb-4">
                     {founder.description}
                   </p>
-                )}
+                </div>
 
-                {founder.education && Array.isArray(founder.education) && founder.education.length > 0 && (
-                  <div className="pt-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Образование:</h4>
-                    <ul className="text-sm space-y-1">
-                      {founder.education.slice(0, 3).map((item, index) => (
-                        <li key={index}>• {item}</li>
-                      ))}
-                      {founder.education.length > 3 && (
-                        <li className="text-muted-foreground">• и другие специализации...</li>
-                      )}
-                    </ul>
-                  </div>
-                )}
+                {/* Опыт в диагностике */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-lg">
+                    15+ лет в диагностике заболеваний молочной железы
+                  </h4>
+                  <ul className="text-sm space-y-2">
+                    <li className="flex items-start">
+                      <span className="text-purple-500 mr-2 mt-1">•</span>
+                      <span>Провела тысячи консультаций, помогая женщинам понять свое здоровье</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-500 mr-2 mt-1">•</span>
+                      <span>Руководила командами из 10+ специалистов в ведущих медицинских центрах Москвы</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-500 mr-2 mt-1">•</span>
+                      <span>Увеличила эффективность диагностики на 74% благодаря внедрению новых стандартов</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-purple-500 mr-2 mt-1">•</span>
+                      <span>Аккредитация EUSOBI — европейской ассоциации специалистов по маммографии (2016)</span>
+                    </li>
+                  </ul>
+                </div>
 
-                {founder.achievements && Array.isArray(founder.achievements) && founder.achievements.length > 0 && (
-                  <div className="pt-4">
-                    <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Ключевые достижения:</h4>
-                    <ul className="text-sm space-y-1">
-                      {founder.achievements.slice(0, 3).map((item, index) => (
-                        <li key={index}>• {item}</li>
-                      ))}
-                      {founder.achievements.length > 3 && (
-                        <li className="text-muted-foreground">• множественные международные сертификации...</li>
-                      )}
-                    </ul>
-                  </div>
-                )}
+                {/* Экспертность в AI */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-lg">
+                    Экспертность в области AI и медицины
+                  </h4>
+                  <ul className="text-sm space-y-2">
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-2 mt-1">•</span>
+                      <span>Ведущий клинический специалист в SBERmed.AI</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-2 mt-1">•</span>
+                      <span>Оценила более 100 проектов по применению AI в медицине</span>
+                    </li>
+                    <li className="flex items-start">
+                      <span className="text-blue-500 mr-2 mt-1">•</span>
+                      <span>Вывела на рынок 2 продукта с AI для диагностики</span>
+                    </li>
+                  </ul>
+                </div>
 
-                {/* Certificates Section */}
+                {/* Миссия платформы */}
+                <div>
+                  <h4 className="font-semibold text-gray-900 dark:text-white mb-3 text-lg">
+                    Почему я создала эту платформу
+                  </h4>
+                  <p className="text-sm leading-relaxed">
+                    Работая в разных странах и медицинских системах, я видела, как женщины часто остаются без ответов на важные вопросы о своем здоровье. Языковые барьеры, недоступность специалистов, страх перед процедурами — все это мешает своевременной диагностике и лечению.
+                  </p>
+                  <p className="text-sm leading-relaxed mt-2 font-medium text-primary">
+                    Эта платформа — мой способ быть рядом с каждой женщиной, предоставляя профессиональные консультации, основанные на современных технологиях и многолетнем опыте.
+                  </p>
+                </div>
+
+                {/* Сертификаты */}
                 {founder.certificates && Array.isArray(founder.certificates) && founder.certificates.length > 0 && (
-                  <div className="pt-4">
+                  <div>
                     <h4 className="font-semibold text-gray-900 dark:text-white mb-2">Сертификаты:</h4>
                     <div className="flex flex-wrap gap-2">
                       {founder.certificates.map((cert, index) => (
