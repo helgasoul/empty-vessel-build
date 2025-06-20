@@ -17,9 +17,9 @@ const AnalysisFactorsSection = ({ factors }: AnalysisFactorsSectionProps) => {
         
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {factors.map((factor, index) => (
-            <div key={index} className="flex items-start space-x-3 p-4 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border border-purple-100">
-              <CheckCircle className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" />
-              <span className="text-gray-800 font-medium">{factor}</span>
+            <div key={index} className="flex items-start space-x-3 p-6 bg-gradient-to-br from-purple-50 to-pink-50 rounded-lg border border-purple-100 min-h-[100px]">
+              <CheckCircle className="w-6 h-6 text-purple-600 mt-1 flex-shrink-0" />
+              <span className="text-gray-800 font-medium leading-relaxed text-sm">{factor}</span>
             </div>
           ))}
         </div>
