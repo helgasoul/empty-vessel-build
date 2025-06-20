@@ -84,37 +84,20 @@ const FamilyAIRiskAnalysis: React.FC<FamilyAIRiskAnalysisProps> = ({
     
     setLoading(true);
     try {
-      // Query the family_risk_analysis table using a raw SQL query since the types aren't updated yet
       const { data, error } = await supabase
-        .rpc('exec_sql', {
-          sql: `
-            SELECT * FROM family_risk_analysis 
-            WHERE family_group_id = $1 
-            ORDER BY created_at DESC 
-            LIMIT 1
-          `,
-          params: [familyGroupId]
-        });
+        .from('family_risk_analysis')
+        .select('*')
+        .eq('family_group_id', familyGroupId)
+        .order('created_at', { ascending: false })
+        .limit(1);
 
       if (error) {
         console.error('Error loading risk analysis:', error);
-        // Try alternative approach using from() method
-        const { data: fallbackData, error: fallbackError } = await supabase
-          .from('family_risk_analysis' as any)
-          .select('*')
-          .eq('family_group_id', familyGroupId)
-          .order('created_at', { ascending: false })
-          .limit(1);
+        return;
+      }
 
-        if (fallbackError) throw fallbackError;
-        
-        if (fallbackData && fallbackData.length > 0) {
-          const record = fallbackData[0] as any;
-          setRiskAnalysis(record.analysis_results || []);
-          setLastAnalysisDate(record.created_at);
-        }
-      } else if (data && data.length > 0) {
-        const record = data[0] as any;
+      if (data && data.length > 0) {
+        const record = data[0] as FamilyRiskAnalysisRecord;
         setRiskAnalysis(record.analysis_results || []);
         setLastAnalysisDate(record.created_at);
       }
@@ -171,7 +154,7 @@ const FamilyAIRiskAnalysis: React.FC<FamilyAIRiskAnalysisProps> = ({
       // Сохраняем результаты анализа
       try {
         const { data: savedAnalysis, error: saveError } = await supabase
-          .from('family_risk_analysis' as any)
+          .from('family_risk_analysis')
           .insert({
             family_group_id: familyGroupId,
             analysis_results: analysisResult.risks,
