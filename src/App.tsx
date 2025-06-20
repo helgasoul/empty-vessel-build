@@ -34,7 +34,7 @@ import PregnancyPlanningPage from "./pages/PregnancyPlanningPage";
 import AIHealth from "./pages/AIHealth";
 import ExternalIntegrations from "./pages/ExternalIntegrations";
 import TelemedicineIntegrations from "./pages/TelemedicineIntegrations";
-import EnvironmentalHealth from "./pages/EnvironmentalHealthPage";
+import EnvironmentalHealth from "./pages/EnvironmentalHealth";
 import GamificationPage from "./pages/GamificationPage";
 import "./App.css";
 
