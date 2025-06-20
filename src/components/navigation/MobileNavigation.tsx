@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
 import { 
   Menu, 
   Shield, 
@@ -15,53 +16,87 @@ import {
   Trophy,
   Info,
   Pill,
-  Calendar
+  Calendar,
+  User,
+  Heart,
+  TrendingUp,
+  Baby,
+  Star
 } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { Separator } from "@/components/ui/separator";
 
 const MobileNavigation = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useAuth();
 
   const navigationItems = [
+    // Профиль и настройки
     { 
-      title: 'Дашборд', 
-      path: '/dashboard', 
-      icon: Shield,
-      description: 'Главная панель'
+      title: 'Мой профиль', 
+      path: '/profile', 
+      icon: User,
+      description: 'Личные данные и настройки',
+      category: 'Профиль и настройки'
     },
     { 
-      title: 'О нас', 
-      path: '/about', 
-      icon: Info,
-      description: 'Миссия и команда'
+      title: 'Интеграции данных', 
+      path: '/medical-integrations', 
+      icon: Smartphone,
+      description: 'Подключение устройств',
+      category: 'Профиль и настройки'
     },
-    { 
-      title: 'Оценка рисков', 
-      path: '/risk-assessment', 
-      icon: Activity,
-      description: 'Анализ здоровья'
-    },
+
+    // Женское здоровье
     { 
       title: 'Женское здоровье', 
       path: '/womens-health', 
-      icon: Users,
-      description: 'Специализированные инструменты'
+      icon: Heart,
+      description: 'Комплексный мониторинг',
+      category: 'Женское здоровье'
     },
     { 
-      title: 'Лекарства', 
-      path: '/medications', 
-      icon: Pill,
-      description: 'Управление приемом лекарств'
+      title: 'Цикл и фертильность', 
+      path: '/menstrual-cycle-tracker', 
+      icon: Activity,
+      description: 'Отслеживание цикла',
+      category: 'Женское здоровье',
+      status: 'events'
+    },
+    { 
+      title: 'Планирование беременности', 
+      path: '/pregnancy-planning', 
+      icon: Baby,
+      description: 'Подготовка к беременности',
+      category: 'Женское здоровье'
+    },
+
+    // Контроль и планирование
+    { 
+      title: 'Оценка рисков', 
+      path: '/risk-assessment', 
+      icon: TrendingUp,
+      description: 'Анализ здоровья'
     },
     { 
       title: 'Медицинский календарь', 
       path: '/medical-calendar', 
       icon: Calendar,
-      description: 'Планирование визитов'
+      description: 'Планирование визитов',
+      status: 'events'
     },
+    { 
+      title: 'Мои лекарства', 
+      path: '/medications', 
+      icon: Pill,
+      description: 'Управление приемом',
+      status: 'new'
+    },
+
+    // Дополнительные инструменты
     { 
       title: 'ИИ-помощник', 
       path: '/ai-health', 
@@ -69,16 +104,10 @@ const MobileNavigation = () => {
       description: 'Умные рекомендации'
     },
     { 
-      title: 'Интеграции', 
-      path: '/external-integrations', 
-      icon: Smartphone,
-      description: 'Подключение устройств'
-    },
-    { 
-      title: 'Медицинские услуги', 
-      path: '/medical-integrations', 
-      icon: Stethoscope,
-      description: 'Записи и консультации'
+      title: 'Семейная история', 
+      path: '/family-data', 
+      icon: Users,
+      description: 'Медицинские данные семьи'
     },
     { 
       title: 'Телемедицина', 
@@ -93,10 +122,10 @@ const MobileNavigation = () => {
       description: 'Влияние среды'
     },
     { 
-      title: 'Геймификация', 
+      title: 'Достижения', 
       path: '/gamification', 
       icon: Trophy,
-      description: 'Достижения и мотивация'
+      description: 'Мотивация и прогресс'
     },
     { 
       title: 'Сообщество', 
@@ -107,12 +136,33 @@ const MobileNavigation = () => {
   ];
 
   const handleNavigate = (path: string) => {
-    console.log('MobileNavigation: переход к', path); // Для отладки
+    console.log('MobileNavigation: переход к', path);
     navigate(path);
     setOpen(false);
   };
 
+  const getStatusBadge = (status?: string) => {
+    switch (status) {
+      case 'new':
+        return <Badge className="bg-green-100 text-green-800 text-xs ml-auto">Новое</Badge>;
+      case 'events':
+        return <Badge className="bg-blue-100 text-blue-800 text-xs ml-auto">События</Badge>;
+      case 'updated':
+        return <Badge className="bg-orange-100 text-orange-800 text-xs ml-auto">Обновлено</Badge>;
+      default:
+        return null;
+    }
+  };
+
+  const isActive = (path: string) => location.pathname === path;
+
   if (!user) return null;
+
+  // Группировка элементов по категориям
+  const profileItems = navigationItems.filter(item => item.category === 'Профиль и настройки');
+  const womenHealthItems = navigationItems.filter(item => item.category === 'Женское здоровье');
+  const controlItems = navigationItems.filter(item => !item.category);
+  const additionalItems = navigationItems.filter(item => !item.category && !controlItems.includes(item));
 
   return (
     <div className="md:hidden">
@@ -135,25 +185,130 @@ const MobileNavigation = () => {
             </div>
           </div>
           
-          <div className="p-6 space-y-2">
-            {navigationItems.map((item) => (
-              <Button
-                key={item.path}
-                variant="ghost"
-                className="w-full justify-start h-auto p-4 text-left hover:bg-primary/5"
-                onClick={() => handleNavigate(item.path)}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className="prevent-icon-container bg-primary/10 w-10 h-10 shrink-0">
-                    <item.icon className="w-5 h-5 text-primary" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <div className="font-medium text-gray-900">{item.title}</div>
-                    <div className="text-sm text-gray-500 truncate">{item.description}</div>
-                  </div>
-                </div>
-              </Button>
-            ))}
+          <div className="p-6 space-y-6 overflow-y-auto max-h-[calc(100vh-120px)]">
+            {/* Текущий этап */}
+            <div className="p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg border border-purple-100">
+              <div className="flex items-center space-x-2">
+                <div className="w-2 h-2 bg-purple-500 rounded-full animate-pulse"></div>
+                <span className="text-sm font-medium text-purple-700">
+                  Планирование беременности
+                </span>
+              </div>
+            </div>
+
+            {/* Профиль и настройки */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Профиль и настройки</h3>
+              <div className="space-y-2">
+                {profileItems.map((item) => (
+                  <Button
+                    key={item.path}
+                    variant={isActive(item.path) ? "default" : "ghost"}
+                    className="w-full justify-start h-auto p-3"
+                    onClick={() => handleNavigate(item.path)}
+                  >
+                    <div className="flex items-center space-x-3 w-full">
+                      <div className="prevent-icon-container bg-primary/10 w-8 h-8 shrink-0">
+                        <item.icon className="w-4 h-4 text-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1 text-left">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <div className="text-xs text-gray-500 truncate">{item.description}</div>
+                      </div>
+                      {getStatusBadge(item.status)}
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Женское здоровье */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Женское здоровье</h3>
+              <div className="space-y-2">
+                {womenHealthItems.map((item) => (
+                  <Button
+                    key={item.path}
+                    variant={isActive(item.path) ? "default" : "ghost"}
+                    className="w-full justify-start h-auto p-3"
+                    onClick={() => handleNavigate(item.path)}
+                  >
+                    <div className="flex items-center space-x-3 w-full">
+                      <div className="prevent-icon-container bg-primary/10 w-8 h-8 shrink-0">
+                        <item.icon className="w-4 h-4 text-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1 text-left">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <div className="text-xs text-gray-500 truncate">{item.description}</div>
+                      </div>
+                      {getStatusBadge(item.status)}
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Контроль и планирование */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Контроль и планирование</h3>
+              <div className="space-y-2">
+                {controlItems.map((item) => (
+                  <Button
+                    key={item.path}
+                    variant={isActive(item.path) ? "default" : "ghost"}
+                    className="w-full justify-start h-auto p-3"
+                    onClick={() => handleNavigate(item.path)}
+                  >
+                    <div className="flex items-center space-x-3 w-full">
+                      <div className="prevent-icon-container bg-primary/10 w-8 h-8 shrink-0">
+                        <item.icon className="w-4 h-4 text-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1 text-left">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <div className="text-xs text-gray-500 truncate">{item.description}</div>
+                      </div>
+                      {getStatusBadge(item.status)}
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+
+            <Separator />
+
+            {/* Дополнительные инструменты */}
+            <div>
+              <h3 className="text-sm font-semibold text-gray-700 mb-3">Дополнительные инструменты</h3>
+              <div className="space-y-2">
+                {navigationItems.filter(item => 
+                  !profileItems.includes(item) && 
+                  !womenHealthItems.includes(item) && 
+                  !controlItems.includes(item)
+                ).map((item) => (
+                  <Button
+                    key={item.path}
+                    variant={isActive(item.path) ? "default" : "ghost"}
+                    className="w-full justify-start h-auto p-3"
+                    onClick={() => handleNavigate(item.path)}
+                  >
+                    <div className="flex items-center space-x-3 w-full">
+                      <div className="prevent-icon-container bg-primary/10 w-8 h-8 shrink-0">
+                        <item.icon className="w-4 h-4 text-primary" />
+                      </div>
+                      <div className="min-w-0 flex-1 text-left">
+                        <div className="font-medium text-sm">{item.title}</div>
+                        <div className="text-xs text-gray-500 truncate">{item.description}</div>
+                      </div>
+                      {getStatusBadge(item.status)}
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
           </div>
         </SheetContent>
       </Sheet>
