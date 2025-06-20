@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,12 +5,12 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { useFounderInfo, useUpdateFounderInfo, useUploadFounderImage, useUploadFounderCertificate, FounderInfo } from '@/hooks/useFounderInfo';
-import { useAuth } from '@/contexts/AuthContext';
+import { useAdminCheck } from '@/hooks/useAdminCheck';
 import { useToast } from '@/hooks/use-toast';
 import { Plus, Minus, Upload, Edit, FileText, X } from 'lucide-react';
 
 const FounderEditForm = () => {
-  const { user } = useAuth();
+  const { isAdmin, isLoading: adminLoading } = useAdminCheck();
   const { toast } = useToast();
   const { data: founderInfo } = useFounderInfo();
   const updateFounderInfo = useUpdateFounderInfo();
@@ -49,6 +48,11 @@ const FounderEditForm = () => {
       });
     }
   }, [founderInfo]);
+
+  // Если пользователь не администратор или загрузка роли еще идет, не показываем кнопку
+  if (adminLoading || !isAdmin) {
+    return null;
+  }
 
   const handleImageFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -180,10 +184,6 @@ const FounderEditForm = () => {
       });
     }
   };
-
-  if (!user) {
-    return null;
-  }
 
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>

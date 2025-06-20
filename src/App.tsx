@@ -27,6 +27,7 @@ import EnvironmentalHealthDemo from "./pages/EnvironmentalHealthDemo";
 import CommunityDemo from "./pages/CommunityDemo";
 import AIAnalysisPage from "./pages/AIAnalysisPage";
 import PersonalPlanPage from "./pages/PersonalPlan";
+import AdminDashboard from "./pages/AdminDashboard";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -113,6 +114,11 @@ const App: React.FC = () => {
               <Route path="/recommendations" element={
                 <ProtectedRoute>
                   <PersonalizedRecommendations />
+                </ProtectedRoute>
+              } />
+              <Route path="/admin" element={
+                <ProtectedRoute>
+                  <AdminDashboard />
                 </ProtectedRoute>
               } />
             </Routes>
