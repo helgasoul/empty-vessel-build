@@ -13,30 +13,31 @@ export const Logo: React.FC<LogoProps> = ({
   className = '' 
 }) => {
   const sizeClasses = {
-    sm: 'w-8 h-8',
-    md: 'w-10 h-10',
-    lg: 'w-12 h-12'
+    sm: 'w-12 h-12',
+    md: 'w-16 h-16',
+    lg: 'w-20 h-20'
   };
 
   const textSizeClasses = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-2xl'
+    sm: 'text-xl',
+    md: 'text-2xl',
+    lg: 'text-3xl'
   };
 
   return (
-    <div className={`flex items-center space-x-3 ${className}`}>
+    <div className={`flex items-center space-x-4 ${className}`}>
       <div className={`${sizeClasses[size]} flex items-center justify-center`}>
         <img
           src="/lovable-uploads/5ac94c15-2b2b-47a6-89ea-9e0163d76e7b.png"
           alt="PREVENT Logo"
           className="w-full h-full object-contain"
+          style={{ background: 'transparent' }}
         />
       </div>
       
       {showText && (
         <div className="flex flex-col">
-          <span className={`${textSizeClasses[size]} font-montserrat font-bold bg-gradient-to-r from-feminine-lavender-500 to-feminine-pink-500 bg-clip-text text-transparent`}>
+          <span className={`${textSizeClasses[size]} font-montserrat font-bold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent`}>
             PREVENT
           </span>
         </div>
