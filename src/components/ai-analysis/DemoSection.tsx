@@ -3,11 +3,45 @@ import React, { useState } from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Brain, ArrowRight, FileText } from "lucide-react";
+import { Brain, ArrowRight, FileText, Download } from "lucide-react";
+import { useReportExport } from "@/hooks/useReportExport";
 import AIReportDemo from './AIReportDemo';
 
 const DemoSection = () => {
   const [showReport, setShowReport] = useState(false);
+  const { exporting, exportToPDF } = useReportExport();
+
+  const generateSamplePDF = async () => {
+    const sampleReportData = {
+      patientName: "Анна К.",
+      patientAge: 35,
+      reportDate: "15 июня 2025",
+      riskAssessment: {
+        breastCancer: { risk: 8, status: "low" },
+        diabetes: { risk: 12, status: "low" },
+        cardiovascular: { risk: 18, status: "medium" },
+        osteoporosis: { risk: 35, status: "attention" }
+      },
+      recommendations: [
+        "Денситометрия костей в течение месяца",
+        "Консультация эндокринолога",
+        "Анализ витамина D",
+        "Кардиотренировки 3 раза в неделю"
+      ],
+      lifestyle: {
+        nutrition: "Хорошо, нужны улучшения",
+        activity: "Требует внимания",
+        sleep: "Отлично"
+      },
+      genetics: {
+        brca: "Не обнаружено патогенных мутаций",
+        apoe: "Тип E3/E4 - повышен риск Альцгеймера",
+        fto: "Предрасположенность к набору веса"
+      }
+    };
+
+    await exportToPDF(sampleReportData, "PREVENT_Sample_Report");
+  };
 
   return (
     <section className="py-16 px-4 md:px-6 bg-white">
@@ -55,9 +89,20 @@ const DemoSection = () => {
               <Button 
                 variant="outline"
                 className="border-blue-300 text-blue-600 hover:bg-blue-50"
+                onClick={generateSamplePDF}
+                disabled={exporting}
               >
-                Скачать образец PDF
-                <ArrowRight className="w-4 h-4 ml-2" />
+                {exporting ? (
+                  <>
+                    <div className="w-4 h-4 border-2 border-blue-600 border-t-transparent rounded-full animate-spin mr-2" />
+                    Генерация...
+                  </>
+                ) : (
+                  <>
+                    <Download className="w-4 h-4 mr-2" />
+                    Скачать образец PDF
+                  </>
+                )}
               </Button>
             </CardContent>
           </Card>
