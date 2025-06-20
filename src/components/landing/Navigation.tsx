@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Info, Menu, X } from "lucide-react";
+import { Info, Menu, X, Crown, Languages } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -14,11 +14,18 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 const Navigation = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentLanguage, setCurrentLanguage] = useState('ru');
 
   const navigationItems = [
     { title: 'Персональный план', path: '/personal-plan' },
@@ -27,6 +34,12 @@ const Navigation = () => {
     { title: 'Экология здоровья', path: '/environmental-health-demo' },
     { title: 'Сообщество', path: '/community-demo' }
   ];
+
+  const handleLanguageChange = (language: string) => {
+    setCurrentLanguage(language);
+    // Здесь можно добавить логику переключения языка
+    console.log('Language changed to:', language);
+  };
 
   return (
     <nav className="w-full px-4 md:px-6 py-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-purple-200/30 dark:border-gray-700/50">
@@ -45,9 +58,9 @@ const Navigation = () => {
           </Button>
         )}
         
-        {/* Desktop Navigation - moved to right side */}
+        {/* Desktop Navigation */}
         {!isMobile && (
-          <div className="flex items-center space-x-6">
+          <div className="flex items-center space-x-4">
             <NavigationMenu>
               <NavigationMenuList>
                 <NavigationMenuItem>
@@ -78,6 +91,39 @@ const Navigation = () => {
             >
               О нас
             </Button>
+
+            {/* Subscription Plans Button */}
+            <Button 
+              variant="outline" 
+              onClick={() => navigate('/subscription')}
+              className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 hover:text-purple-700 transition-all duration-200 font-medium flex items-center gap-2"
+            >
+              <Crown className="w-4 h-4" />
+              Планы
+            </Button>
+
+            {/* Language Selector */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="icon" className="text-gray-700 hover:text-purple-700">
+                  <Languages className="w-5 h-5" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('ru')}
+                  className={currentLanguage === 'ru' ? 'bg-purple-50 text-purple-700' : ''}
+                >
+                  🇷🇺 Русский
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={() => handleLanguageChange('en')}
+                  className={currentLanguage === 'en' ? 'bg-purple-50 text-purple-700' : ''}
+                >
+                  🇺🇸 English
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <ThemeToggle />
             <Button 
@@ -133,6 +179,45 @@ const Navigation = () => {
             >
               О нас
             </Button>
+            
+            {/* Mobile Subscription Plans Button */}
+            <Button
+              variant="ghost"
+              className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-2"
+              onClick={() => {
+                navigate('/subscription');
+                setMobileMenuOpen(false);
+              }}
+            >
+              <Crown className="w-4 h-4" />
+              Планы подписки
+            </Button>
+
+            {/* Mobile Language Selector */}
+            <div className="pt-2 border-t border-purple-200/30">
+              <p className="text-sm text-gray-600 mb-2 px-4">Язык / Language</p>
+              <div className="flex flex-col gap-1">
+                <Button
+                  variant="ghost"
+                  className={`w-full justify-start ${currentLanguage === 'ru' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:text-purple-700 hover:bg-purple-50'}`}
+                  onClick={() => {
+                    handleLanguageChange('ru');
+                  }}
+                >
+                  🇷🇺 Русский
+                </Button>
+                <Button
+                  variant="ghost"
+                  className={`w-full justify-start ${currentLanguage === 'en' ? 'bg-purple-50 text-purple-700' : 'text-gray-700 hover:text-purple-700 hover:bg-purple-50'}`}
+                  onClick={() => {
+                    handleLanguageChange('en');
+                  }}
+                >
+                  🇺🇸 English
+                </Button>
+              </div>
+            </div>
+
             <div className="pt-4 border-t border-purple-200/30 flex items-center justify-between">
               <ThemeToggle />
               <Button 
