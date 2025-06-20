@@ -5,10 +5,11 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import Navigation from '@/components/landing/Navigation';
 import HeroSection from '@/components/landing/HeroSection';
-import FeaturesGrid from '@/components/landing/FeaturesGrid';
-import CTASection from '@/components/landing/CTASection';
-import Footer from '@/components/landing/Footer';
+import TrustBlock from '@/components/landing/TrustBlock';
 import TargetSegments from '@/components/landing/TargetSegments';
+import FeaturesGrid from '@/components/landing/FeaturesGrid';
+import SocialProofSection from '@/components/landing/SocialProofSection';
+import Footer from '@/components/landing/Footer';
 import PlatformMission from '@/components/landing/PlatformMission';
 
 const Index = () => {
@@ -18,9 +19,10 @@ const Index = () => {
         <Navigation />
         <PlatformMission />
         <HeroSection />
+        <TrustBlock />
         <TargetSegments />
         <FeaturesGrid />
-        <CTASection />
+        <SocialProofSection />
         <Footer />
       </div>
       <Toaster />

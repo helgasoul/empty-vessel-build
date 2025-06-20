@@ -3,161 +3,179 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { 
+  ClipboardList, 
+  Smartphone, 
   Brain, 
-  Activity, 
-  Heart, 
-  Bell, 
-  BarChart3, 
-  Users, 
-  Smartphone,
-  Calendar,
-  Shield
+  Calendar, 
+  TrendingUp,
+  ArrowRight,
+  CheckCircle
 } from "lucide-react";
 
 const FeaturesGrid = () => {
-  const featureMap = [
+  const journeySteps = [
     {
-      trigger: "Начало путешествия к себе",
-      description: "Первые шаги к осознанному управлению здоровьем",
-      icon: Bell,
-      color: "from-red-500 to-pink-600",
-      bgColor: "bg-red-50",
-      items: ["Анкета здоровья", "Психологическая оценка", "Семейная история"]
-    },
-    {
-      trigger: "Анкета + Подключение данных",
-      description: "Apple Health, генетика, анализы",
-      icon: Smartphone,
+      step: "1️⃣",
+      title: "Расскажите о себе",
+      subtitle: "5 минут",
+      description: "Анкета здоровья + семейная история",
+      icon: ClipboardList,
       color: "from-blue-500 to-cyan-600",
       bgColor: "bg-blue-50",
-      items: ["Apple Health", "Генетические тесты", "Лабораторные анализы"]
+      details: ["Базовые показатели здоровья", "История семьи", "Текущий образ жизни"]
     },
     {
-      trigger: "ИИ-оценка рисков",
-      description: "Мультифакторная оценка здоровья",
+      step: "2️⃣",
+      title: "Подключите данные",
+      subtitle: "Опционально",
+      description: "Apple Health, анализы, генетика",
+      icon: Smartphone,
+      color: "from-green-500 to-emerald-600",
+      bgColor: "bg-green-50",
+      details: ["Данные фитнес-трекеров", "Результаты анализов", "Генетические тесты"]
+    },
+    {
+      step: "3️⃣",
+      title: "Получите анализ рисков",
+      subtitle: "Мгновенно",
+      description: "ИИ оценивает риски рака, сердца, диабета",
       icon: Brain,
       color: "from-purple-500 to-indigo-600",
       bgColor: "bg-purple-50",
-      items: ["Онкологические риски", "Сердечно-сосудистые", "Нейродегенеративные"]
+      details: ["Персональная оценка рисков", "Научно-обоснованные алгоритмы", "Понятные объяснения"]
     },
     {
-      trigger: "План действий",
-      description: "Чекапы, питание, сон, активность + конкретные шаги",
+      step: "4️⃣",
+      title: "Следуйте персональному плану",
+      subtitle: "Конкретные шаги",
+      description: "Анализы, образ жизни, профилактика",
       icon: Calendar,
-      color: "from-green-500 to-emerald-600",
-      bgColor: "bg-green-50",
-      items: ["Медицинские чекапы", "План питания", "Режим сна и активности"]
-    },
-    {
-      trigger: "Поведенческая поддержка",
-      description: "Нуджи, трекеры, уведомления, микро-контент",
-      icon: Activity,
       color: "from-orange-500 to-red-600",
       bgColor: "bg-orange-50",
-      items: ["Умные напоминания", "Трекинг привычек", "Образовательный контент"]
+      details: ["План медицинских обследований", "Рекомендации по питанию", "Профилактические меры"]
     },
     {
-      trigger: "Мониторинг прогресса",
-      description: "Динамика риска, сравнение до/после",
-      icon: BarChart3,
+      step: "5️⃣",
+      title: "Отслеживайте прогресс",
+      subtitle: "Регулярно",
+      description: "Видите, как снижаются ваши риски",
+      icon: TrendingUp,
       color: "from-teal-500 to-blue-600",
       bgColor: "bg-teal-50",
-      items: ["Динамика показателей", "Сравнительная аналитика", "Достижения"]
+      details: ["Динамика показателей", "Отчеты о прогрессе", "Мотивация и поддержка"]
     }
+  ];
+
+  const benefits = [
+    "Персональная оценка рисков основных заболеваний",
+    "План медицинских обследований на год",
+    "Рекомендации по питанию и образу жизни",
+    "Уведомления о важных профилактических мерах",
+    "Связь с проверенными врачами при необходимости"
   ];
 
   return (
     <section className="py-20 px-4 md:px-6 bg-gradient-to-br from-gray-50 to-white">
       <div className="max-w-7xl mx-auto">
+        {/* How it works */}
         <div className="text-center mb-16">
           <Badge className="bg-purple-100 text-purple-800 mb-6">
-            🚀 Карта функций платформы
+            🚀 Простой процесс
           </Badge>
           <h2 className="text-4xl font-bold text-gray-900 mb-6">
             Как работает PREVENT?
           </h2>
           <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            От первичной оценки до постоянного мониторинга — полный цикл превентивной медицины
+            От первичной оценки до постоянного мониторинга — полный цикл заботы о вашем здоровье
           </p>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {featureMap.map((feature, index) => {
-            const IconComponent = feature.icon;
+        {/* Journey Steps */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-20">
+          {journeySteps.map((step, index) => {
+            const IconComponent = step.icon;
             return (
-              <Card key={index} className={`${feature.bgColor} border-none hover:shadow-lg transition-all duration-300 hover:scale-105`}>
+              <Card key={index} className={`${step.bgColor} border-none hover:shadow-lg transition-all duration-300 hover:scale-105 relative`}>
                 <CardHeader className="pb-4">
-                  <div className={`w-12 h-12 rounded-full bg-gradient-to-r ${feature.color} flex items-center justify-center mb-4`}>
-                    <IconComponent className="w-6 h-6 text-white" />
+                  <div className="flex items-center space-x-3 mb-3">
+                    <span className="text-2xl">{step.step}</span>
+                    <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center`}>
+                      <IconComponent className="w-5 h-5 text-white" />
+                    </div>
                   </div>
                   <CardTitle className="text-lg font-bold text-gray-900 leading-tight">
-                    {feature.trigger}
+                    {step.title}
                   </CardTitle>
-                  <CardDescription className="text-gray-700 text-sm">
-                    {feature.description}
+                  <Badge variant="secondary" className="w-fit">
+                    {step.subtitle}
+                  </Badge>
+                  <CardDescription className="text-gray-700 text-sm mt-2">
+                    {step.description}
                   </CardDescription>
                 </CardHeader>
                 
                 <CardContent>
                   <div className="space-y-2">
-                    {feature.items.map((item, itemIndex) => (
-                      <div key={itemIndex} className="flex items-center space-x-2">
+                    {step.details.map((detail, detailIndex) => (
+                      <div key={detailIndex} className="flex items-center space-x-2">
                         <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
-                        <span className="text-xs text-gray-600">{item}</span>
+                        <span className="text-xs text-gray-600">{detail}</span>
                       </div>
                     ))}
                   </div>
                 </CardContent>
+
+                {/* Arrow for desktop */}
+                {index < journeySteps.length - 1 && (
+                  <div className="hidden lg:block absolute -right-4 top-1/2 transform -translate-y-1/2">
+                    <ArrowRight className="w-8 h-8 text-gray-300" />
+                  </div>
+                )}
               </Card>
             );
           })}
         </div>
 
-        {/* Process Flow */}
-        <div className="mt-20">
-          <h3 className="text-2xl font-bold text-center text-gray-900 mb-12">
-            Ваш путь к здоровью
+        {/* What you get */}
+        <div className="text-center mb-12">
+          <Badge className="bg-green-100 text-green-800 mb-6">
+            ✅ Что вы получите
+          </Badge>
+          <h3 className="text-3xl font-bold text-gray-900 mb-8">
+            Полный спектр заботы о здоровье
           </h3>
-          
-          <div className="relative">
-            {/* Desktop Flow */}
-            <div className="hidden lg:flex items-center justify-between">
-              {[
-                { icon: Bell, text: "Оценка", color: "bg-red-500" },
-                { icon: Smartphone, text: "Данные", color: "bg-blue-500" },
-                { icon: Brain, text: "ИИ-анализ", color: "bg-purple-500" },
-                { icon: Calendar, text: "План", color: "bg-green-500" },
-                { icon: BarChart3, text: "Мониторинг", color: "bg-teal-500" }
-              ].map((step, index) => (
-                <div key={index} className="flex flex-col items-center">
-                  <div className={`w-16 h-16 ${step.color} rounded-full flex items-center justify-center shadow-lg`}>
-                    <step.icon className="w-8 h-8 text-white" />
-                  </div>
-                  <span className="mt-3 text-sm font-medium text-gray-700">{step.text}</span>
-                  {index < 4 && (
-                    <div className="absolute top-8 w-24 h-0.5 bg-gray-300" style={{left: `${(index + 1) * 20}%`}}></div>
-                  )}
-                </div>
-              ))}
-            </div>
+        </div>
 
-            {/* Mobile Flow */}
-            <div className="lg:hidden space-y-4">
-              {[
-                { icon: Bell, text: "Первичная оценка рисков", color: "bg-red-500" },
-                { icon: Smartphone, text: "Подключение ваших данных", color: "bg-blue-500" },
-                { icon: Brain, text: "ИИ-анализ и прогноз", color: "bg-purple-500" },
-                { icon: Calendar, text: "Персональный план действий", color: "bg-green-500" },
-                { icon: BarChart3, text: "Постоянный мониторинг", color: "bg-teal-500" }
-              ].map((step, index) => (
-                <div key={index} className="flex items-center space-x-4">
-                  <div className={`w-12 h-12 ${step.color} rounded-full flex items-center justify-center shadow-md`}>
-                    <step.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <span className="text-base font-medium text-gray-800">{step.text}</span>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {benefits.map((benefit, index) => (
+            <Card key={index} className="bg-white hover:shadow-md transition-shadow border-green-100">
+              <CardContent className="p-6">
+                <div className="flex items-start space-x-3">
+                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-800 font-medium">{benefit}</span>
                 </div>
-              ))}
-            </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Process Flow Visualization for Mobile */}
+        <div className="lg:hidden">
+          <h4 className="text-xl font-bold text-center text-gray-900 mb-8">
+            Ваш путь к здоровью
+          </h4>
+          <div className="space-y-4">
+            {journeySteps.map((step, index) => (
+              <div key={index} className="flex items-center space-x-4">
+                <div className={`w-12 h-12 ${step.color.replace('from-', 'bg-').replace(' to-', '-').replace('-600', '-500').replace('-500', '')} rounded-full flex items-center justify-center shadow-md`}>
+                  <step.icon className="w-6 h-6 text-white" />
+                </div>
+                <div>
+                  <span className="text-base font-medium text-gray-800">{step.title}</span>
+                  <p className="text-sm text-gray-600">{step.description}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>
