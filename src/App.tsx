@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -32,6 +31,11 @@ import PersonalPlanPage from "./pages/PersonalPlan";
 import AdminDashboard from "./pages/AdminDashboard";
 import MenstrualCycleTracker from "./pages/MenstrualCycleTracker";
 import PregnancyPlanningPage from "./pages/PregnancyPlanningPage";
+import AIHealth from "./pages/AIHealth";
+import ExternalIntegrations from "./pages/ExternalIntegrations";
+import TelemedicineIntegrations from "./pages/TelemedicineIntegrations";
+import EnvironmentalHealth from "./pages/EnvironmentalHealthPage";
+import GamificationPage from "./pages/GamificationPage";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -140,6 +144,31 @@ const App: React.FC = () => {
               <Route path="/admin" element={
                 <ProtectedRoute>
                   <AdminDashboard />
+                </ProtectedRoute>
+              } />
+              <Route path="/ai-health" element={
+                <ProtectedRoute>
+                  <AIHealth />
+                </ProtectedRoute>
+              } />
+              <Route path="/external-integrations" element={
+                <ProtectedRoute>
+                  <ExternalIntegrations />
+                </ProtectedRoute>
+              } />
+              <Route path="/telemedicine-integrations" element={
+                <ProtectedRoute>
+                  <TelemedicineIntegrations />
+                </ProtectedRoute>
+              } />
+              <Route path="/environmental-health" element={
+                <ProtectedRoute>
+                  <EnvironmentalHealth />
+                </ProtectedRoute>
+              } />
+              <Route path="/gamification" element={
+                <ProtectedRoute>
+                  <GamificationPage />
                 </ProtectedRoute>
               } />
             </Routes>
