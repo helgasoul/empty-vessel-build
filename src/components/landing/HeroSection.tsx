@@ -57,7 +57,7 @@ const HeroSection = () => {
             {/* Feature Pills */}
             <div className="flex flex-wrap gap-3">
               <button 
-                onClick={() => scrollToSection('ai-analysis')}
+                onClick={() => navigate('/ai-analysis')}
                 className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
                 aria-label="Перейти к разделу ИИ-анализ рисков"
               >
