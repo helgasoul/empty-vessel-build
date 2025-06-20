@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -8,7 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Calendar as CalendarIcon, Clock, MapPin, User, Building, Plus, Edit, Trash2 } from "lucide-react";
+import { Calendar as CalendarIcon, Clock, MapPin, User, Building, Plus, Edit, Trash2, AlertCircle } from "lucide-react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -16,6 +17,7 @@ import { format, parseISO, isSameDay } from "date-fns";
 import { ru } from "date-fns/locale";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface MedicalEvent {
   id: string;
@@ -31,6 +33,9 @@ interface MedicalEvent {
   reminder_minutes?: number;
   is_completed: boolean;
   notes?: string;
+  user_id: string;
+  created_at: string;
+  updated_at: string;
 }
 
 const eventTypeLabels = {
@@ -70,6 +75,7 @@ const formSchema = z.object({
 type FormData = z.infer<typeof formSchema>;
 
 const MedicalCalendar = () => {
+  const { user } = useAuth();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [events, setEvents] = useState<MedicalEvent[]>([]);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
@@ -95,12 +101,26 @@ const MedicalCalendar = () => {
 
   const fetchEvents = async () => {
     try {
+      if (!user) {
+        console.log('Пользователь не авторизован, пропускаем загрузку событий');
+        setLoading(false);
+        return;
+      }
+
+      console.log('Загружаем события календаря для пользователя:', user.id);
+      
       const { data, error } = await supabase
         .from('medical_calendar_events')
         .select('*')
+        .eq('user_id', user.id)
         .order('event_date', { ascending: true });
 
-      if (error) throw error;
+      if (error) {
+        console.error('Ошибка при загрузке событий:', error);
+        throw error;
+      }
+      
+      console.log('Загружено событий:', data?.length || 0);
       setEvents(data || []);
     } catch (error) {
       console.error('Error fetching events:', error);
@@ -112,12 +132,16 @@ const MedicalCalendar = () => {
 
   useEffect(() => {
     fetchEvents();
-  }, []);
+  }, [user]);
 
   const onSubmit = async (data: FormData) => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
-      if (!user) throw new Error('Пользователь не авторизован');
+      if (!user) {
+        toast.error('Необходимо войти в систему');
+        return;
+      }
+
+      console.log('Сохраняем событие:', data);
 
       const eventData = {
         title: data.title,
@@ -132,6 +156,7 @@ const MedicalCalendar = () => {
         reminder_minutes: data.reminder_minutes || 15,
         notes: data.notes || null,
         user_id: user.id,
+        is_completed: false
       };
 
       if (editingEvent) {
@@ -210,6 +235,28 @@ const MedicalCalendar = () => {
       toast.error('Ошибка при обновлении статуса');
     }
   };
+
+  // Если пользователь не авторизован
+  if (!user) {
+    return (
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <AlertCircle className="w-5 h-5 text-orange-500" />
+            Медицинский календарь
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="text-center py-8">
+            <p className="text-gray-600 mb-4">Для использования медицинского календаря необходимо войти в систему</p>
+            <Button onClick={() => window.location.href = '/auth'}>
+              Войти в систему
+            </Button>
+          </div>
+        </CardContent>
+      </Card>
+    );
+  }
 
   const selectedDateEvents = events.filter(event => 
     isSameDay(parseISO(event.event_date), selectedDate)
