@@ -38,14 +38,14 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="min-h-screen prevent-gradient-bg flex">
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50/30 flex">
       {/* Desktop Navigation Menu */}
       {!isMobile && <NavigationMenu />}
       
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col">
         {/* Header с улучшенной навигацией */}
-        <header className="bg-white/95 backdrop-blur-md border-b border-purple-200/30">
+        <header className="bg-white/95 backdrop-blur-md border-b border-purple-200/30 sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
@@ -61,7 +61,7 @@ const Dashboard = () => {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="hover:bg-purple-100/50"
+                      className="hover:bg-purple-100/50 transition-colors"
                       onClick={handleRecommendationsClick}
                       title="Персонализированные рекомендации"
                     >
@@ -70,8 +70,9 @@ const Dashboard = () => {
                     <Button 
                       variant="ghost" 
                       size="icon" 
-                      className="hover:bg-purple-100/50"
+                      className="hover:bg-purple-100/50 transition-colors"
                       onClick={handleSettingsClick}
+                      title="Настройки интеграций"
                     >
                       <Settings className="w-5 h-5 text-gray-600" />
                     </Button>
@@ -80,7 +81,7 @@ const Dashboard = () => {
                 <Button 
                   variant="outline" 
                   onClick={signOut}
-                  className="hover:bg-red-50 hover:border-red-200 transition-colors font-medium text-sm border-purple-200"
+                  className="hover:bg-red-50 hover:border-red-200 transition-colors font-medium text-sm border-purple-200 shadow-sm"
                 >
                   Выйти
                 </Button>
@@ -97,24 +98,26 @@ const Dashboard = () => {
           </div>
 
           {/* Health Metrics Cards */}
-          <HealthMetricsCards />
+          <div className="mb-6 md:mb-8 animate-slide-up">
+            <HealthMetricsCards />
+          </div>
 
           {/* Health Data Dashboard */}
-          <div className="mb-6 md:mb-8">
+          <div className="mb-6 md:mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
             <HealthDataDashboard />
           </div>
 
-          {/* Main Grid */}
+          {/* Main Grid Layout */}
           <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
             {/* Left Column - Profile & Devices */}
-            <div className="lg:col-span-1 space-y-6">
+            <div className="lg:col-span-1 space-y-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
               <ProfileSection />
               <DeviceIntegration />
               <DataSync />
             </div>
 
             {/* Right Column - Progress, Risk Assessment & Actions */}
-            <div className="lg:col-span-2 space-y-6">
+            <div className="lg:col-span-2 space-y-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
               <ProgressIndicators />
               <RiskAssessment />
               <QuickActions />
@@ -122,6 +125,28 @@ const Dashboard = () => {
             </div>
           </div>
         </main>
+
+        {/* Footer для дополнительной информации */}
+        <footer className="border-t border-gray-200/50 bg-white/30 backdrop-blur-sm mt-auto">
+          <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
+            <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
+              <div className="flex items-center space-x-4 mb-2 md:mb-0">
+                <span>© 2024 PREVENT Platform</span>
+                <span className="hidden md:inline">•</span>
+                <span className="text-xs bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-medium">
+                  Ваше здоровье — наш приоритет
+                </span>
+              </div>
+              <div className="flex items-center space-x-4">
+                <span className="text-xs">Последнее обновление: {new Date().toLocaleTimeString('ru-RU')}</span>
+                <div className="flex items-center space-x-1">
+                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                  <span className="text-xs">Онлайн</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </footer>
       </div>
     </div>
   );

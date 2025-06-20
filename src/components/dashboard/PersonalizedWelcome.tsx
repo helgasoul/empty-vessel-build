@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Sparkles, Sun, Moon, Coffee, Sunset } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useNavigate } from 'react-router-dom';
-import TodayGoals from './TodayGoals';
+import EnhancedTodayGoals from './EnhancedTodayGoals';
 
 const PersonalizedWelcome = () => {
   const { user } = useAuth();
@@ -67,13 +67,17 @@ const PersonalizedWelcome = () => {
     'Сделайте 5-минутную разминку',
     'Проверьте свои цели на сегодня',
     'Запишите настроение в дневник',
+    'Примите витамины',
+    'Прогуляйтесь на свежем воздухе',
+    'Сделайте дыхательное упражнение',
+    'Запланируйте здоровый перекус'
   ];
 
   const randomTip = quickTips[Math.floor(Math.random() * quickTips.length)];
 
   return (
     <div className="space-y-6">
-      <Card className={`prevent-card-soft bg-gradient-to-r ${bgGradient} border-0 overflow-hidden relative`}>
+      <Card className={`prevent-card-soft bg-gradient-to-r ${bgGradient} border-0 overflow-hidden relative shadow-lg hover:shadow-xl transition-shadow duration-300`}>
         <div className="absolute top-0 right-0 w-32 h-32 opacity-10">
           <div className={`w-full h-full bg-gradient-to-br ${gradient} rounded-full transform translate-x-8 -translate-y-8`} />
         </div>
@@ -102,7 +106,7 @@ const PersonalizedWelcome = () => {
             </div>
           </div>
 
-          <div className="bg-white/70 backdrop-blur-sm rounded-xl p-4 border border-white/60">
+          <div className="bg-white/80 backdrop-blur-sm rounded-xl p-4 border border-white/60 shadow-sm">
             <div className="flex items-center justify-between">
               <div>
                 <h3 className="font-medium font-montserrat text-gray-800 mb-1">
@@ -115,7 +119,7 @@ const PersonalizedWelcome = () => {
               <Button 
                 variant="outline" 
                 size="sm"
-                className="prevent-button-soft bg-white/80 hover:bg-white border-white/60 hover:border-white transition-all"
+                className="prevent-button-soft bg-white/80 hover:bg-white border-white/60 hover:border-white transition-all shadow-sm hover:shadow-md"
               >
                 Выполнено
               </Button>
@@ -159,8 +163,8 @@ const PersonalizedWelcome = () => {
         </CardContent>
       </Card>
 
-      {/* Цели на сегодня */}
-      <TodayGoals />
+      {/* Улучшенные цели на сегодня */}
+      <EnhancedTodayGoals />
     </div>
   );
 };
