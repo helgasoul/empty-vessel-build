@@ -38,31 +38,33 @@ const FamilyGroupList: React.FC<FamilyGroupListProps> = ({
 }) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
-  const handleFamilyCreated = (newFamily: any) => {
+  const handleFamilyCreated = (newFamily: DatabaseFamilyGroup) => {
     onFamilyUpdated();
     setShowCreateModal(false);
   };
 
   if (familyGroups.length === 0) {
     return (
-      <div className="text-center py-8">
-        <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
-        <h3 className="text-lg font-medium text-gray-900 mb-2">
-          Нет семейных групп
-        </h3>
-        <p className="text-gray-600 mb-4">
-          Создайте семейную группу для отслеживания медицинской истории вашей семьи
-        </p>
-        <Button onClick={() => setShowCreateModal(true)}>
-          <Plus className="w-4 h-4 mr-2" />
-          Создать группу
-        </Button>
-        <CreateFamilyGroupModal
-          isOpen={showCreateModal}
-          onClose={() => setShowCreateModal(false)}
-          onFamilyCreated={handleFamilyCreated}
-        />
-      </div>
+      <Card className="bg-white/80 backdrop-blur-sm">
+        <CardContent className="p-8 text-center">
+          <Users className="w-12 h-12 mx-auto mb-4 text-gray-400" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">
+            Нет семейных групп
+          </h3>
+          <p className="text-gray-600 mb-4">
+            Создайте семейную группу для отслеживания медицинской истории вашей семьи и анализа наследственных рисков
+          </p>
+          <Button onClick={() => setShowCreateModal(true)} className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700">
+            <Plus className="w-4 h-4 mr-2" />
+            Создать семейную группу
+          </Button>
+          <CreateFamilyGroupModal
+            isOpen={showCreateModal}
+            onClose={() => setShowCreateModal(false)}
+            onFamilyCreated={handleFamilyCreated}
+          />
+        </CardContent>
+      </Card>
     );
   }
 
@@ -70,28 +72,33 @@ const FamilyGroupList: React.FC<FamilyGroupListProps> = ({
     <div className="space-y-4">
       <div className="flex items-center justify-between">
         <h3 className="text-lg font-semibold">Семейные группы</h3>
-        <Button size="sm" onClick={() => setShowCreateModal(true)}>
+        <Button 
+          size="sm" 
+          onClick={() => setShowCreateModal(true)}
+          className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+        >
           <Plus className="w-4 h-4 mr-2" />
           Создать группу
         </Button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div className="space-y-3">
         {familyGroups.map((group) => (
           <Card 
             key={group.id}
             className={`cursor-pointer transition-all hover:shadow-md ${
               selectedFamily?.id === group.id 
-                ? 'ring-2 ring-purple-500 bg-purple-50' 
-                : 'hover:bg-gray-50'
+                ? 'ring-2 ring-purple-500 bg-gradient-to-r from-purple-50 to-pink-50' 
+                : 'hover:bg-gray-50 bg-white/80 backdrop-blur-sm'
             }`}
             onClick={() => onSelectFamily(group)}
           >
             <CardHeader className="pb-3">
               <div className="flex items-start justify-between">
                 <div className="flex-1">
-                  <CardTitle className="text-lg">
-                    {group.tree_name || group.family_name}
+                  <CardTitle className="text-lg flex items-center space-x-2">
+                    <Users className="w-5 h-5 text-purple-600" />
+                    <span>{group.tree_name || group.family_name}</span>
                   </CardTitle>
                   {group.description && (
                     <CardDescription className="mt-1">
@@ -139,7 +146,7 @@ const FamilyGroupList: React.FC<FamilyGroupListProps> = ({
                 </Badge>
                 
                 {selectedFamily?.id === group.id && (
-                  <Badge className="bg-purple-100 text-purple-800">
+                  <Badge className="bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border-purple-200">
                     Выбрана
                   </Badge>
                 )}
