@@ -69,12 +69,20 @@ export const useMyLaboratoryProfile = () => {
 export const useCreateLaboratoryProfile = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (profileData: Omit<LaboratoryProfile, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+      if (!user) {
+        throw new Error('User must be authenticated');
+      }
+
       const { data, error } = await supabase
         .from('laboratory_profiles')
-        .insert(profileData)
+        .insert({
+          ...profileData,
+          user_id: user.id
+        })
         .select()
         .single();
 

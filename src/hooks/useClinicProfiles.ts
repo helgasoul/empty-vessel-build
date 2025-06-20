@@ -69,12 +69,20 @@ export const useMyClinicProfile = () => {
 export const useCreateClinicProfile = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (profileData: Omit<ClinicProfile, 'id' | 'user_id' | 'created_at' | 'updated_at'>) => {
+      if (!user) {
+        throw new Error('User must be authenticated');
+      }
+
       const { data, error } = await supabase
         .from('clinic_profiles')
-        .insert(profileData)
+        .insert({
+          ...profileData,
+          user_id: user.id
+        })
         .select()
         .single();
 
