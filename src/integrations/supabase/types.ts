@@ -1278,6 +1278,47 @@ export type Database = {
           },
         ]
       }
+      family_risk_analysis: {
+        Row: {
+          ai_recommendations: Json
+          analysis_results: Json
+          analyzed_by: string
+          confidence_score: number | null
+          created_at: string
+          family_group_id: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          ai_recommendations?: Json
+          analysis_results?: Json
+          analyzed_by: string
+          confidence_score?: number | null
+          created_at?: string
+          family_group_id: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          ai_recommendations?: Json
+          analysis_results?: Json
+          analyzed_by?: string
+          confidence_score?: number | null
+          created_at?: string
+          family_group_id?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "family_risk_analysis_family_group_id_fkey"
+            columns: ["family_group_id"]
+            isOneToOne: false
+            referencedRelation: "family_groups"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       family_shared_plans: {
         Row: {
           created_at: string
