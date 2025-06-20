@@ -76,19 +76,19 @@ const FamilyMemberExtendedProfile: React.FC<FamilyMemberExtendedProfileProps> = 
 
       if (error) throw error;
       
-      // Convert database JSON fields to proper arrays
+      // Convert database JSON fields to proper arrays with proper type checking
       const transformedData = {
         ...data,
         chronic_conditions: Array.isArray(data.chronic_conditions) ? data.chronic_conditions : 
-          (data.chronic_conditions ? JSON.parse(data.chronic_conditions) : []),
+          (data.chronic_conditions && typeof data.chronic_conditions === 'string' ? JSON.parse(data.chronic_conditions) : []),
         allergies: Array.isArray(data.allergies) ? data.allergies : 
-          (data.allergies ? JSON.parse(data.allergies) : []),
+          (data.allergies && typeof data.allergies === 'string' ? JSON.parse(data.allergies) : []),
         medications: Array.isArray(data.medications) ? data.medications : 
-          (data.medications ? JSON.parse(data.medications) : []),
+          (data.medications && typeof data.medications === 'string' ? JSON.parse(data.medications) : []),
         vaccinations: Array.isArray(data.vaccinations) ? data.vaccinations : 
-          (data.vaccinations ? JSON.parse(data.vaccinations) : []),
+          (data.vaccinations && typeof data.vaccinations === 'string' ? JSON.parse(data.vaccinations) : []),
         genetic_predispositions: Array.isArray(data.genetic_predispositions) ? data.genetic_predispositions : 
-          (data.genetic_predispositions ? JSON.parse(data.genetic_predispositions) : [])
+          (data.genetic_predispositions && typeof data.genetic_predispositions === 'string' ? JSON.parse(data.genetic_predispositions) : [])
       };
       
       setMember(transformedData);
