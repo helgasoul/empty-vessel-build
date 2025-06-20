@@ -4,10 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Calendar, Baby, Flower, ArrowRight, TrendingUp, Activity } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/ui/back-button';
 
 const WomensHealthDemo = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const healthAreas = [
     {
@@ -21,7 +23,7 @@ const WomensHealthDemo = () => {
       textColor: "text-rose-700",
       buttonAction: "Начать отслеживать",
       value: "Точные прогнозы и здоровые циклы",
-      route: "/auth"
+      route: "/menstrual-cycle-tracker"
     },
     {
       title: "Планирование беременности",
@@ -65,7 +67,19 @@ const WomensHealthDemo = () => {
   ];
 
   const handleAreaAction = (area: typeof healthAreas[0]) => {
-    navigate(area.route);
+    // Если это трекер менструального цикла, проверяем аутентификацию
+    if (area.route === "/menstrual-cycle-tracker") {
+      if (user) {
+        navigate(area.route);
+      } else {
+        // Если пользователь не авторизован, перенаправляем на страницу авторизации
+        navigate("/auth", { 
+          state: { redirectTo: area.route } 
+        });
+      }
+    } else {
+      navigate(area.route);
+    }
   };
 
   return (
