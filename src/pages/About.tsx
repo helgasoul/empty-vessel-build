@@ -4,6 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Shield, Heart, Brain } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import FounderSection from '@/components/founder/FounderSection';
 
 const About = () => {
   const navigate = useNavigate();
@@ -74,7 +75,7 @@ const About = () => {
           </Card>
         </div>
 
-        <Card>
+        <Card className="mb-12">
           <CardHeader>
             <CardTitle>Наша миссия</CardTitle>
           </CardHeader>
@@ -90,6 +91,9 @@ const About = () => {
             </p>
           </CardContent>
         </Card>
+
+        {/* Founder Section */}
+        <FounderSection />
       </div>
     </div>
   );

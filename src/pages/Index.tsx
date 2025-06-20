@@ -5,7 +5,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import Navigation from '@/components/landing/Navigation';
 import HeroSection from '@/components/landing/HeroSection';
-import TrustBlock from '@/components/landing/TrustBlock';
 import TargetSegments from '@/components/landing/TargetSegments';
 import FeaturesGrid from '@/components/landing/FeaturesGrid';
 import SocialProofSection from '@/components/landing/SocialProofSection';
@@ -19,7 +18,6 @@ const Index = () => {
         <Navigation />
         <PlatformMission />
         <HeroSection />
-        <TrustBlock />
         <TargetSegments />
         <FeaturesGrid />
         <SocialProofSection />
