@@ -54,7 +54,7 @@ const CycleCalendar = () => {
     
     return (
       <div className="relative w-full h-full flex flex-col items-center justify-center">
-        <span className="text-sm">{format(day, 'd')}</span>
+        <span className="text-sm text-gray-700">{format(day, 'd')}</span>
         {dayInfo.color && (
           <div className={`w-2 h-2 rounded-full ${dayInfo.color} mt-1`} />
         )}
@@ -71,7 +71,7 @@ const CycleCalendar = () => {
     <div className="space-y-6">
       <Card className="bg-white/80 backdrop-blur-sm">
         <CardHeader>
-          <CardTitle>Календарь цикла</CardTitle>
+          <CardTitle className="text-gray-800">Календарь цикла</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid lg:grid-cols-2 gap-6">
@@ -89,34 +89,34 @@ const CycleCalendar = () => {
             
             <div className="space-y-4">
               <div>
-                <h3 className="text-lg font-semibold mb-3">Легенда</h3>
-                <div className="space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <span className="text-sm">Менструация</span>
+                <h3 className="text-lg font-semibold mb-3 text-gray-800">Легенда</h3>
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-red-500 flex-shrink-0"></div>
+                    <span className="text-sm text-gray-700">Менструация</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-blue-500"></div>
-                    <span className="text-sm">Фолликулярная фаза</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-blue-500 flex-shrink-0"></div>
+                    <span className="text-sm text-gray-700">Фолликулярная фаза</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    <span className="text-sm">Овуляция</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-green-500 flex-shrink-0"></div>
+                    <span className="text-sm text-gray-700">Овуляция</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <span className="text-sm">Лютеиновая фаза</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-yellow-500 flex-shrink-0"></div>
+                    <span className="text-sm text-gray-700">Лютеиновая фаза</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <div className="w-3 h-3 rounded-full bg-purple-400"></div>
-                    <span className="text-sm">Есть записи о симптомах</span>
+                  <div className="flex items-center gap-3">
+                    <div className="w-4 h-4 rounded-full bg-purple-400 flex-shrink-0"></div>
+                    <span className="text-sm text-gray-700">Есть записи о симптомах</span>
                   </div>
                 </div>
               </div>
 
               {selectedDate && selectedDayInfo && (
                 <div className="p-4 bg-gray-50 rounded-lg">
-                  <h4 className="font-semibold mb-2">
+                  <h4 className="font-semibold mb-2 text-gray-800">
                     {format(selectedDate, 'dd MMMM yyyy', { locale: ru })}
                   </h4>
                   
@@ -135,7 +135,7 @@ const CycleCalendar = () => {
 
                   {selectedDayInfo.symptoms && (
                     <div className="mt-3">
-                      <h5 className="font-medium text-sm mb-2">Симптомы:</h5>
+                      <h5 className="font-medium text-sm mb-2 text-gray-700">Симптомы:</h5>
                       {selectedDayInfo.symptoms.symptoms && selectedDayInfo.symptoms.symptoms.length > 0 && (
                         <div className="flex flex-wrap gap-1 mb-2">
                           {selectedDayInfo.symptoms.symptoms.map(symptom => (
