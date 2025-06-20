@@ -4,7 +4,7 @@ import { useUserRoles } from '@/hooks/useUserRoles';
 
 export const useAdminCheck = () => {
   const { user } = useAuth();
-  const { data: userRoles, isLoading } = useUserRoles(user?.id);
+  const { data: userRoles, isLoading } = useUserRoles();
 
   const isAdmin = userRoles?.some(role => role.role === 'admin') || false;
 
