@@ -112,12 +112,12 @@ const App: React.FC = () => {
                   <MedicalCalendar />
                 </ProtectedRoute>
               } />
-              <Route path="/medication-manager" element={
+              <Route path="/medications" element={
                 <ProtectedRoute>
                   <MedicationManager />
                 </ProtectedRoute>
               } />
-              <Route path="/medications" element={
+              <Route path="/medication-manager" element={
                 <ProtectedRoute>
                   <MedicationManager />
                 </ProtectedRoute>

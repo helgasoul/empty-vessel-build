@@ -16,6 +16,11 @@ import { useNavigate } from 'react-router-dom';
 const QuickActions = () => {
   const navigate = useNavigate();
 
+  const handleMedicationsClick = () => {
+    console.log('Навигация к /medications'); // Для отладки
+    navigate('/medications');
+  };
+
   const actions = [
     {
       title: "Записать симптомы",
@@ -42,7 +47,7 @@ const QuickActions = () => {
       title: "Лекарства",
       description: "Напоминания о приеме",
       icon: Pill,
-      onClick: () => navigate('/medications'),
+      onClick: handleMedicationsClick,
       color: "text-purple-500"
     },
     {

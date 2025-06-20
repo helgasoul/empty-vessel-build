@@ -9,6 +9,8 @@ import MedicationReminders from '@/components/health/MedicationReminders';
 const MedicationManager = () => {
   const navigate = useNavigate();
 
+  console.log('MedicationManager компонент загружен'); // Для отладки
+
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
