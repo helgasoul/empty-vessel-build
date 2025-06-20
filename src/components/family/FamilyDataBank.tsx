@@ -13,18 +13,21 @@ import FamilyMedicalHistory from "./FamilyMedicalHistory";
 import FamilyDocuments from "./FamilyDocuments";
 import FamilyAccessManagement from "./FamilyAccessManagement";
 
-interface FamilyGroup {
+interface DatabaseFamilyGroup {
   id: string;
   family_name: string;
-  description: string;
+  description?: string;
+  tree_name?: string;
   created_by: string;
+  visibility_settings: any;
   created_at: string;
+  updated_at: string;
 }
 
 const FamilyDataBank: React.FC = () => {
   const { user } = useAuth();
-  const [familyGroups, setFamilyGroups] = useState<FamilyGroup[]>([]);
-  const [selectedFamily, setSelectedFamily] = useState<FamilyGroup | null>(null);
+  const [familyGroups, setFamilyGroups] = useState<DatabaseFamilyGroup[]>([]);
+  const [selectedFamily, setSelectedFamily] = useState<DatabaseFamilyGroup | null>(null);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -55,10 +58,14 @@ const FamilyDataBank: React.FC = () => {
     }
   };
 
-  const handleFamilyCreated = (newFamily: FamilyGroup) => {
+  const handleFamilyCreated = (newFamily: DatabaseFamilyGroup) => {
     setFamilyGroups(prev => [newFamily, ...prev]);
     setSelectedFamily(newFamily);
     setShowCreateModal(false);
+  };
+
+  const handleSelectFamily = (family: DatabaseFamilyGroup) => {
+    setSelectedFamily(family);
   };
 
   if (loading) {
@@ -121,7 +128,7 @@ const FamilyDataBank: React.FC = () => {
             <FamilyGroupList
               familyGroups={familyGroups}
               selectedFamily={selectedFamily}
-              onSelectFamily={setSelectedFamily}
+              onSelectFamily={handleSelectFamily}
               onFamilyUpdated={loadFamilyGroups}
             />
           </div>
