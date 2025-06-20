@@ -43,9 +43,32 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!user) return;
+    if (!user) {
+      toast({
+        title: "Ошибка авторизации",
+        description: "Пожалуйста, войдите в систему",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    if (!formData.family_name.trim()) {
+      toast({
+        title: "Ошибка валидации",
+        description: "Название семьи обязательно для заполнения",
+        variant: "destructive"
+      });
+      return;
+    }
 
     setLoading(true);
+    console.log('Creating family group with data:', {
+      family_name: formData.family_name,
+      tree_name: formData.tree_name || formData.family_name,
+      description: formData.description,
+      created_by: user.id
+    });
+
     try {
       const { data, error } = await supabase
         .from('family_groups')
@@ -62,21 +85,41 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Supabase error:', error);
+        throw error;
+      }
+
+      console.log('Family group created successfully:', data);
 
       toast({
         title: "Семейная группа создана",
-        description: "Вы можете начать добавлять членов семьи и медицинскую информацию"
+        description: `Группа "${data.family_name}" успешно создана. Вы можете начать добавлять членов семьи и медицинскую информацию`
       });
 
       onFamilyCreated(data);
       setFormData({ family_name: '', tree_name: '', description: '' });
       onClose();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error creating family group:', error);
+      
+      let errorMessage = "Не удалось создать семейную группу";
+      
+      if (error?.message) {
+        if (error.message.includes('duplicate key')) {
+          errorMessage = "Семейная группа с таким названием уже существует";
+        } else if (error.message.includes('permission')) {
+          errorMessage = "Недостаточно прав для создания семейной группы";
+        } else if (error.message.includes('network')) {
+          errorMessage = "Ошибка сети. Проверьте подключение к интернету";
+        } else {
+          errorMessage = `Ошибка: ${error.message}`;
+        }
+      }
+      
       toast({
-        title: "Ошибка",
-        description: "Не удалось создать семейную группу",
+        title: "Ошибка создания группы",
+        description: errorMessage,
         variant: "destructive"
       });
     } finally {
@@ -110,6 +153,7 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
               onChange={(e) => handleInputChange('family_name', e.target.value)}
               placeholder="Например: Семья Ивановых"
               required
+              disabled={loading}
             />
           </div>
 
@@ -120,6 +164,7 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
               value={formData.tree_name}
               onChange={(e) => handleInputChange('tree_name', e.target.value)}
               placeholder="Оставьте пустым для автоматического заполнения"
+              disabled={loading}
             />
           </div>
 
@@ -131,6 +176,7 @@ const CreateFamilyGroupModal: React.FC<CreateFamilyGroupModalProps> = ({
               onChange={(e) => handleInputChange('description', e.target.value)}
               placeholder="Краткое описание группы (необязательно)"
               rows={3}
+              disabled={loading}
             />
           </div>
 
