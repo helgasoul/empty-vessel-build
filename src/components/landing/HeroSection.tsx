@@ -17,6 +17,13 @@ const HeroSection = () => {
     navigate('/about');
   };
 
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <section className="relative px-4 md:px-6 py-20 lg:py-32 overflow-hidden">
       {/* Background Effects */}
@@ -41,7 +48,7 @@ const HeroSection = () => {
                 до появления симптомов
               </h1>
               
-              <p className="text-xl text-gray-700 leading-relaxed max-w-2xl">
+              <p className="text-xl text-gray-700 leading-relaxed max-w-2xl mx-auto text-center">
                 Персональная оценка рисков рака груди, болезней сердца и других заболеваний 
                 на основе ваших данных и современного ИИ
               </p>
@@ -49,18 +56,30 @@ const HeroSection = () => {
 
             {/* Feature Pills */}
             <div className="flex flex-wrap gap-3">
-              <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-100 hover:shadow-md transition-all duration-200 hover:scale-105">
+              <button 
+                onClick={() => scrollToSection('ai-analysis')}
+                className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
+                aria-label="Перейти к разделу ИИ-анализ рисков"
+              >
                 <Brain className="w-4 h-4 text-purple-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-gray-800">ИИ-анализ рисков</span>
-              </div>
-              <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-pink-100 hover:shadow-md transition-all duration-200 hover:scale-105">
+              </button>
+              <button 
+                onClick={() => scrollToSection('personal-plan')}
+                className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-pink-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
+                aria-label="Перейти к разделу персональный план"
+              >
                 <Heart className="w-4 h-4 text-pink-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-gray-800">Персональный план</span>
-              </div>
-              <div className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-green-100 hover:shadow-md transition-all duration-200 hover:scale-105">
+              </button>
+              <button 
+                onClick={() => scrollToSection('scientific-basis')}
+                className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-green-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
+                aria-label="Перейти к разделу научно обосновано"
+              >
                 <Shield className="w-4 h-4 text-green-600" aria-hidden="true" />
                 <span className="text-sm font-medium text-gray-800">Научно обосновано</span>
-              </div>
+              </button>
             </div>
 
             {/* CTA Buttons */}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -6,7 +5,7 @@ import { Shield, Award, Users, Heart, Star, Lock } from "lucide-react";
 
 const TrustBlock = () => {
   return (
-    <section className="py-16 px-4 md:px-6 bg-gradient-to-br from-purple-50 to-pink-50">
+    <section id="scientific-basis" className="py-16 px-4 md:px-6 bg-gradient-to-br from-purple-50 to-pink-50">
       <div className="max-w-6xl mx-auto">
         <Card className="bg-white/90 backdrop-blur-sm border-purple-100 shadow-xl hover:shadow-2xl transition-shadow duration-300">
           <CardContent className="p-8 lg:p-12">
