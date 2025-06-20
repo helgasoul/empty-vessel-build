@@ -24,6 +24,21 @@ const PlatformMission = () => {
           </p>
         </div>
 
+        {/* Hero Image Section */}
+        <div className="mb-12 text-center">
+          <div className="relative inline-block">
+            <img
+              src="/lovable-uploads/0d284322-f92c-4a79-a82b-576ce951a7fa.png"
+              alt="Команда PREVENT - женщины разных возрастов"
+              className="w-full max-w-4xl mx-auto rounded-2xl shadow-2xl"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent rounded-2xl"></div>
+          </div>
+          <p className="text-gray-600 mt-4 italic">
+            Забота о здоровье женщин на всех этапах жизни
+          </p>
+        </div>
+
         {/* Mission Images Section */}
         {!isLoading && missionImages.length > 0 && (
           <div className="mb-12">
