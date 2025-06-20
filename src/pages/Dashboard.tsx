@@ -2,12 +2,9 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
-import { 
-  Settings,
-  BookOpen
-} from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import NavigationMenu from '@/components/navigation/NavigationMenu';
+import NavigationDropdown from '@/components/navigation/NavigationDropdown';
 import ProfileSection from '@/components/dashboard/ProfileSection';
 import DeviceIntegration from '@/components/dashboard/DeviceIntegration';
 import RiskAssessment from '@/components/dashboard/RiskAssessment';
@@ -29,14 +26,6 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const isMobile = useIsMobile();
 
-  const handleSettingsClick = () => {
-    navigate('/medical-integrations');
-  };
-
-  const handleRecommendationsClick = () => {
-    navigate('/recommendations');
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50/30 flex">
       {/* Desktop Navigation Menu */}
@@ -56,28 +45,10 @@ const Dashboard = () => {
               <div className="flex items-center space-x-2 md:space-x-4">
                 <ThemeToggle />
                 <NotificationCenter />
-                {!isMobile && (
-                  <>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="hover:bg-purple-100/50 transition-colors"
-                      onClick={handleRecommendationsClick}
-                      title="Персонализированные рекомендации"
-                    >
-                      <BookOpen className="w-5 h-5 text-gray-600" />
-                    </Button>
-                    <Button 
-                      variant="ghost" 
-                      size="icon" 
-                      className="hover:bg-purple-100/50 transition-colors"
-                      onClick={handleSettingsClick}
-                      title="Настройки интеграций"
-                    >
-                      <Settings className="w-5 h-5 text-gray-600" />
-                    </Button>
-                  </>
-                )}
+                
+                {/* Новое выпадающее меню навигации */}
+                <NavigationDropdown />
+                
                 <Button 
                   variant="outline" 
                   onClick={signOut}
