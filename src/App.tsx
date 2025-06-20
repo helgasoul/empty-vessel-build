@@ -15,6 +15,7 @@ import AdminDashboardPage from '@/pages/AdminDashboard';
 import DoctorDashboardPage from '@/pages/DoctorDashboardPage';
 import DoctorProfile from '@/pages/DoctorProfile';
 import ProtectedRoute from '@/components/ProtectedRoute';
+import MainPageRouter from '@/components/MainPageRouter';
 
 const queryClient = new QueryClient();
 
@@ -26,17 +27,16 @@ function App() {
           <div className="App">
             <Toaster />
             <BrowserRouter>
-              <NavigationMenu />
               <Routes>
+                <Route path="/" element={<MainPageRouter />} />
                 <Route path="/landing" element={<Index />} />
                 <Route path="/auth" element={<Auth />} />
-                <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+                <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
                 <Route path="/experts" element={<ProtectedRoute><Experts /></ProtectedRoute>} />
                 <Route path="/admin-dashboard" element={<ProtectedRoute><AdminDashboardPage /></ProtectedRoute>} />
                 <Route path="/doctor-dashboard" element={<ProtectedRoute><DoctorDashboardPage /></ProtectedRoute>} />
                 <Route path="/doctor-profile" element={<DoctorProfile />} />
               </Routes>
-              <MobileNavigation />
             </BrowserRouter>
           </div>
         </AuthProvider>

@@ -1,13 +1,12 @@
 
 import React from 'react';
-import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import NavigationMenu from '@/components/navigation/NavigationMenu';
+import { MobileNavigation } from '@/components/navigation/MobileNavigation';
+import Index from '@/pages/Index';
+import Dashboard from '@/pages/Dashboard';
 
-interface ProtectedRouteProps {
-  children: React.ReactNode;
-}
-
-const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
+const MainPageRouter = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
@@ -21,11 +20,17 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
     );
   }
 
-  if (!user) {
-    return <Navigate to="/auth" replace />;
+  if (user) {
+    return (
+      <>
+        <NavigationMenu />
+        <Dashboard />
+        <MobileNavigation />
+      </>
+    );
   }
 
-  return <>{children}</>;
+  return <Index />;
 };
 
-export default ProtectedRoute;
+export default MainPageRouter;
