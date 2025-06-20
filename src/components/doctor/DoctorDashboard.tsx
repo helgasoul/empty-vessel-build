@@ -8,6 +8,10 @@ import { useAuth } from '@/contexts/AuthContext';
 import MedicalCalculatorsModule from './calculators/MedicalCalculatorsModule';
 import PatientRiskOverview from './PatientRiskOverview';
 import DoctorQuickActions from './DoctorQuickActions';
+import RiskStratificationModule from './risk-stratification/RiskStratificationModule';
+import BehaviorMonitoringModule from './behavior-monitoring/BehaviorMonitoringModule';
+import MentalHealthModule from './mental-health/MentalHealthModule';
+import ScheduleModule from './schedule/ScheduleModule';
 
 const DoctorDashboard = () => {
   const { user } = useAuth();
@@ -85,71 +89,19 @@ const DoctorDashboard = () => {
         </TabsContent>
 
         <TabsContent value="risks">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <AlertTriangle className="w-5 h-5 text-orange-600" />
-                <span>Стратификация рисков</span>
-              </CardTitle>
-              <CardDescription>
-                Автоматическая оценка рисков пациентов
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-500">Модуль в разработке</p>
-            </CardContent>
-          </Card>
+          <RiskStratificationModule />
         </TabsContent>
 
         <TabsContent value="monitoring">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Activity className="w-5 h-5 text-green-600" />
-                <span>Мониторинг поведения</span>
-              </CardTitle>
-              <CardDescription>
-                Отслеживание комплаентности и показателей здоровья
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-500">Модуль в разработке</p>
-            </CardContent>
-          </Card>
+          <BehaviorMonitoringModule />
         </TabsContent>
 
         <TabsContent value="mental-health">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Brain className="w-5 h-5 text-purple-600" />
-                <span>Ментальное здоровье</span>
-              </CardTitle>
-              <CardDescription>
-                Скрининг психоэмоционального состояния
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-500">Модуль в разработке</p>
-            </CardContent>
-          </Card>
+          <MentalHealthModule />
         </TabsContent>
 
         <TabsContent value="schedule">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center space-x-2">
-                <Calendar className="w-5 h-5 text-blue-600" />
-                <span>Расписание и напоминания</span>
-              </CardTitle>
-              <CardDescription>
-                Управление консультациями и профилактическими осмотрами
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-500">Модуль в разработке</p>
-            </CardContent>
-          </Card>
+          <ScheduleModule />
         </TabsContent>
       </Tabs>
     </div>
