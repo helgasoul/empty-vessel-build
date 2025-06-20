@@ -25,7 +25,8 @@ import {
   Users,
   Video,
   Leaf,
-  Trophy
+  Trophy,
+  Search
 } from "lucide-react";
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -192,7 +193,7 @@ const NavigationDropdown = () => {
         <Button 
           variant="outline" 
           size="sm" 
-          className="bg-white hover:bg-purple-50 border-purple-200 shadow-sm hover:shadow-md transition-all duration-200"
+          className="bg-white hover:bg-purple-50 border-purple-200 shadow-sm hover:shadow-md transition-all duration-200 z-50"
           title="Навигация по разделам"
         >
           <Menu className="w-4 h-4 mr-2 text-purple-600" />
@@ -200,15 +201,27 @@ const NavigationDropdown = () => {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent 
-        className="w-80 max-h-[80vh] overflow-y-auto bg-white border border-purple-200/50 shadow-xl rounded-xl z-[9999]"
+        className="w-80 max-h-[80vh] overflow-y-auto bg-white border border-purple-200/50 shadow-xl rounded-xl"
         align="end"
         sideOffset={8}
         style={{ 
           backgroundColor: '#ffffff',
           zIndex: 9999,
-          position: 'relative'
+          position: 'fixed'
         }}
       >
+        {/* Поиск разделов */}
+        <div className="p-3 border-b border-gray-200/50">
+          <div className="relative">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+            <input
+              type="text"
+              placeholder="Поиск разделов..."
+              className="w-full pl-10 pr-4 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-gray-50"
+            />
+          </div>
+        </div>
+
         {navigationSections.map((section, sectionIndex) => (
           <div key={section.label}>
             <DropdownMenuLabel className="text-sm font-semibold text-gray-700 px-3 py-2 bg-gray-50/80">
