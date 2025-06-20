@@ -1,9 +1,14 @@
+
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Shield, Brain, Heart, Users } from "lucide-react";
+import { useMissionImages } from '@/hooks/useMissionImages';
+import MissionImageManager from '@/components/mission/MissionImageManager';
 
 const PlatformMission = () => {
+  const { data: missionImages = [], isLoading } = useMissionImages();
+
   return (
     <section id="ai-analysis" className="py-16 px-4 md:px-6 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
       <div className="max-w-6xl mx-auto">
@@ -18,6 +23,37 @@ const PlatformMission = () => {
             Мы поддерживаем женщин во всем мире в заботе о своем здоровье, предоставляя персонализированные, научно обоснованные рекомендации для предотвращения заболеваний до их появления
           </p>
         </div>
+
+        {/* Mission Images Section */}
+        {!isLoading && missionImages.length > 0 && (
+          <div className="mb-12">
+            <h3 className="text-2xl font-bold text-gray-800 text-center mb-8">
+              {missionImages[0]?.title || 'Наша команда'}
+            </h3>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+              {missionImages.map((image) => (
+                <div key={image.id} className="relative group">
+                  <img
+                    src={image.image_url}
+                    alt={image.title}
+                    className="w-full h-64 object-cover rounded-xl shadow-lg group-hover:shadow-xl transition-all duration-300"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                  {image.description && (
+                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 transition-all duration-300 rounded-xl flex items-end">
+                      <div className="p-4 text-white opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                        <p className="text-sm font-medium">{image.description}</p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
           {[
@@ -85,6 +121,8 @@ const PlatformMission = () => {
           </div>
         </div>
       </div>
+
+      <MissionImageManager />
     </section>
   );
 };
