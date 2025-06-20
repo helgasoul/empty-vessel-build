@@ -32,7 +32,19 @@ const Navigation = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <Logo size={isMobile ? 'sm' : 'md'} />
         
-        {/* Desktop Navigation */}
+        {/* Mobile Menu Button */}
+        {isMobile && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="md:hidden"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </Button>
+        )}
+        
+        {/* Desktop Navigation - moved to right side */}
         {!isMobile && (
           <div className="flex items-center space-x-6">
             <NavigationMenu>
@@ -65,24 +77,7 @@ const Navigation = () => {
             >
               О нас
             </Button>
-          </div>
-        )}
-
-        {/* Mobile Menu Button */}
-        {isMobile && (
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="md:hidden"
-          >
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </Button>
-        )}
-        
-        {/* Desktop Actions */}
-        {!isMobile && (
-          <div className="flex items-center space-x-4">
+            
             <ThemeToggle />
             <Button 
               variant="outline" 
@@ -94,7 +89,7 @@ const Navigation = () => {
           </div>
         )}
 
-        {/* Mobile Actions */}
+        {/* Mobile Actions - when menu is closed */}
         {isMobile && !mobileMenuOpen && (
           <div className="flex items-center space-x-2">
             <ThemeToggle />
