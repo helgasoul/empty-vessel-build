@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Plus, Users, FileText, Heart, Upload, Shield } from "lucide-react";
+import { Plus, Users, FileText, Heart, Upload, Shield, Brain } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import FamilyGroupList from "./FamilyGroupList";
@@ -12,6 +12,7 @@ import FamilyMembersList from "./FamilyMembersList";
 import FamilyMedicalHistory from "./FamilyMedicalHistory";
 import FamilyDocuments from "./FamilyDocuments";
 import FamilyAccessManagement from "./FamilyAccessManagement";
+import FamilyAIRiskAnalysis from "./FamilyAIRiskAnalysis";
 
 interface DatabaseFamilyGroup {
   id: string;
@@ -24,10 +25,21 @@ interface DatabaseFamilyGroup {
   updated_at: string;
 }
 
+interface FamilyMember {
+  id: string;
+  name: string;
+  relationship: string;
+  gender?: string;
+  date_of_birth?: string;
+  medical_notes?: string;
+  is_alive: boolean;
+}
+
 const FamilyDataBank: React.FC = () => {
   const { user } = useAuth();
   const [familyGroups, setFamilyGroups] = useState<DatabaseFamilyGroup[]>([]);
   const [selectedFamily, setSelectedFamily] = useState<DatabaseFamilyGroup | null>(null);
+  const [familyMembers, setFamilyMembers] = useState<FamilyMember[]>([]);
   const [loading, setLoading] = useState(true);
   const [showCreateModal, setShowCreateModal] = useState(false);
 
@@ -36,6 +48,12 @@ const FamilyDataBank: React.FC = () => {
       loadFamilyGroups();
     }
   }, [user]);
+
+  useEffect(() => {
+    if (selectedFamily) {
+      loadFamilyMembers();
+    }
+  }, [selectedFamily]);
 
   const loadFamilyGroups = async () => {
     try {
@@ -55,6 +73,22 @@ const FamilyDataBank: React.FC = () => {
       console.error('Error loading family groups:', error);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadFamilyMembers = async () => {
+    if (!selectedFamily) return;
+
+    try {
+      const { data, error } = await supabase
+        .from('family_members')
+        .select('id, name, relationship, gender, date_of_birth, medical_notes, is_alive')
+        .eq('family_group_id', selectedFamily.id);
+
+      if (error) throw error;
+      setFamilyMembers(data || []);
+    } catch (error) {
+      console.error('Error loading family members:', error);
     }
   };
 
@@ -136,10 +170,14 @@ const FamilyDataBank: React.FC = () => {
           <div className="lg:col-span-3">
             {selectedFamily ? (
               <Tabs defaultValue="members" className="space-y-6">
-                <TabsList className="grid w-full grid-cols-4">
+                <TabsList className="grid w-full grid-cols-5">
                   <TabsTrigger value="members" className="flex items-center space-x-2">
                     <Users className="w-4 h-4" />
                     <span>Члены семьи</span>
+                  </TabsTrigger>
+                  <TabsTrigger value="ai-analysis" className="flex items-center space-x-2">
+                    <Brain className="w-4 h-4" />
+                    <span>AI Анализ</span>
                   </TabsTrigger>
                   <TabsTrigger value="medical" className="flex items-center space-x-2">
                     <Heart className="w-4 h-4" />
@@ -157,6 +195,13 @@ const FamilyDataBank: React.FC = () => {
 
                 <TabsContent value="members">
                   <FamilyMembersList familyGroupId={selectedFamily.id} />
+                </TabsContent>
+
+                <TabsContent value="ai-analysis">
+                  <FamilyAIRiskAnalysis 
+                    familyGroupId={selectedFamily.id} 
+                    familyMembers={familyMembers}
+                  />
                 </TabsContent>
 
                 <TabsContent value="medical">
