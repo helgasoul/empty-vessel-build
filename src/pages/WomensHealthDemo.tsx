@@ -21,7 +21,7 @@ const WomensHealthDemo = () => {
       textColor: "text-rose-700",
       buttonAction: "Начать отслеживать",
       value: "Точные прогнозы и здоровые циклы",
-      route: "/menstrual-cycle-tracker"
+      route: "/auth"
     },
     {
       title: "Планирование беременности",
