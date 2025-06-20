@@ -21,6 +21,10 @@ import FamilyData from "./pages/FamilyData";
 import PersonalizedRecommendations from "./pages/PersonalizedRecommendations";
 import OnboardingPage from "./pages/OnboardingPage";
 import Auth from "./pages/Auth";
+import RiskAssessmentDemo from "./pages/RiskAssessmentDemo";
+import WomensHealthDemo from "./pages/WomensHealthDemo";
+import EnvironmentalHealthDemo from "./pages/EnvironmentalHealthDemo";
+import CommunityDemo from "./pages/CommunityDemo";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -44,6 +48,14 @@ const App: React.FC = () => {
               <Route path="/" element={<Index />} />
               <Route path="/about" element={<About />} />
               <Route path="/auth" element={<Auth />} />
+              
+              {/* Demo pages - accessible without auth */}
+              <Route path="/risk-assessment-demo" element={<RiskAssessmentDemo />} />
+              <Route path="/womens-health-demo" element={<WomensHealthDemo />} />
+              <Route path="/environmental-health-demo" element={<EnvironmentalHealthDemo />} />
+              <Route path="/community-demo" element={<CommunityDemo />} />
+              
+              {/* Protected routes */}
               <Route path="/onboarding" element={
                 <ProtectedRoute>
                   <OnboardingPage />
