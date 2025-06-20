@@ -130,46 +130,46 @@ const HeroSection = () => {
               <div className="grid grid-cols-1 gap-4">
                 <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-lg p-4 transition-all duration-200 hover:shadow-lg border border-blue-200/50">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Heart className="w-6 h-6 text-blue-600" aria-hidden="true" />
-                      <div>
+                    <div className="flex items-start space-x-3">
+                      <Heart className="w-5 h-5 text-blue-600 mt-1 flex-shrink-0" aria-hidden="true" />
+                      <div className="min-w-0 flex-1">
                         <p className="text-xs text-blue-700 font-medium uppercase tracking-wide">Сердечно-сосудистый риск</p>
-                        <p className="text-3xl font-bold text-blue-900 mt-1">12%</p>
+                        <p className="text-2xl font-bold text-blue-900 mt-1">12%</p>
                       </div>
                     </div>
-                    <div className="text-xs text-blue-800 bg-blue-200/80 px-3 py-1 rounded-full font-medium">Норма</div>
+                    <div className="text-xs text-blue-800 bg-blue-200/80 px-2 py-1 rounded-full font-medium whitespace-nowrap">Норма</div>
                   </div>
                 </div>
                 
                 <div className="bg-gradient-to-br from-purple-50 to-purple-100 rounded-lg p-4 transition-all duration-200 hover:shadow-lg border border-purple-200/50">
                   <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-3">
-                      <Shield className="w-6 h-6 text-purple-600" aria-hidden="true" />
-                      <div>
+                    <div className="flex items-start space-x-3">
+                      <Shield className="w-5 h-5 text-purple-600 mt-1 flex-shrink-0" aria-hidden="true" />
+                      <div className="min-w-0 flex-1">
                         <p className="text-xs text-purple-700 font-medium uppercase tracking-wide">Риск рака груди</p>
-                        <p className="text-3xl font-bold text-purple-900 mt-1">8%</p>
+                        <p className="text-2xl font-bold text-purple-900 mt-1">8%</p>
                       </div>
                     </div>
-                    <div className="text-xs text-purple-800 bg-purple-200/80 px-3 py-1 rounded-full font-medium">Низкий</div>
+                    <div className="text-xs text-purple-800 bg-purple-200/80 px-2 py-1 rounded-full font-medium whitespace-nowrap">Низкий</div>
                   </div>
                 </div>
               </div>
 
               {/* Action Items */}
               <div className="space-y-3">
-                <h4 className="font-semibold text-gray-900 text-sm">Персональные рекомендации:</h4>
+                <h4 className="font-semibold text-gray-900 text-sm text-left">Персональные рекомендации:</h4>
                 <div className="space-y-2">
-                  <div className="flex items-center space-x-3 p-3 bg-green-50 rounded-lg border border-green-200/50 transition-all duration-200 hover:bg-green-100">
-                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0"></div>
-                    <div>
-                      <span className="text-sm text-green-800 font-medium">Маммография до 15 мая</span>
+                  <div className="flex items-start space-x-3 p-3 bg-green-50 rounded-lg border border-green-200/50 transition-all duration-200 hover:bg-green-100">
+                    <div className="w-2 h-2 bg-green-500 rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="text-left min-w-0 flex-1">
+                      <span className="text-sm text-green-800 font-medium block">Маммография до 15 мая</span>
                       <p className="text-xs text-green-700 mt-1">Важно для раннего выявления изменений</p>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200/50 transition-all duration-200 hover:bg-blue-100">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0"></div>
-                    <div>
-                      <span className="text-sm text-blue-800 font-medium">Увеличить омега-3</span>
+                  <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg border border-blue-200/50 transition-all duration-200 hover:bg-blue-100">
+                    <div className="w-2 h-2 bg-blue-500 rounded-full flex-shrink-0 mt-2"></div>
+                    <div className="text-left min-w-0 flex-1">
+                      <span className="text-sm text-blue-800 font-medium block">Увеличить омега-3</span>
                       <p className="text-xs text-blue-700 mt-1">Поддержит здоровье сердца</p>
                     </div>
                   </div>
