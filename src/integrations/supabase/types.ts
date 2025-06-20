@@ -99,6 +99,63 @@ export type Database = {
         }
         Relationships: []
       }
+      clinic_profiles: {
+        Row: {
+          address: string | null
+          api_access_enabled: boolean | null
+          clinic_name: string
+          clinic_type: string | null
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          license_number: string | null
+          phone: string | null
+          services_offered: string[] | null
+          updated_at: string
+          user_id: string
+          website: string | null
+          working_hours: Json | null
+        }
+        Insert: {
+          address?: string | null
+          api_access_enabled?: boolean | null
+          clinic_name: string
+          clinic_type?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          license_number?: string | null
+          phone?: string | null
+          services_offered?: string[] | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Update: {
+          address?: string | null
+          api_access_enabled?: boolean | null
+          clinic_name?: string
+          clinic_type?: string | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          license_number?: string | null
+          phone?: string | null
+          services_offered?: string[] | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
       community_posts: {
         Row: {
           anonymous_name: string
@@ -2070,6 +2127,63 @@ export type Database = {
         }
         Relationships: []
       }
+      laboratory_profiles: {
+        Row: {
+          accreditation: string[] | null
+          address: string | null
+          api_access_enabled: boolean | null
+          created_at: string
+          description: string | null
+          email: string | null
+          id: string
+          is_active: boolean | null
+          laboratory_name: string
+          license_number: string | null
+          phone: string | null
+          test_types_offered: string[] | null
+          updated_at: string
+          user_id: string
+          website: string | null
+          working_hours: Json | null
+        }
+        Insert: {
+          accreditation?: string[] | null
+          address?: string | null
+          api_access_enabled?: boolean | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          laboratory_name: string
+          license_number?: string | null
+          phone?: string | null
+          test_types_offered?: string[] | null
+          updated_at?: string
+          user_id: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Update: {
+          accreditation?: string[] | null
+          address?: string | null
+          api_access_enabled?: boolean | null
+          created_at?: string
+          description?: string | null
+          email?: string | null
+          id?: string
+          is_active?: boolean | null
+          laboratory_name?: string
+          license_number?: string | null
+          phone?: string | null
+          test_types_offered?: string[] | null
+          updated_at?: string
+          user_id?: string
+          website?: string | null
+          working_hours?: Json | null
+        }
+        Relationships: []
+      }
       medical_appointments: {
         Row: {
           appointment_date: string
@@ -2732,6 +2846,51 @@ export type Database = {
           updated_at?: string
           website?: string | null
           working_hours?: Json | null
+        }
+        Relationships: []
+      }
+      patient_data_permissions: {
+        Row: {
+          created_at: string
+          data_types: string[]
+          expires_at: string | null
+          granted_at: string
+          granted_to_id: string
+          granted_to_role: Database["public"]["Enums"]["app_role"]
+          id: string
+          is_active: boolean | null
+          patient_id: string
+          permission_type: string
+          revoked_at: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          data_types: string[]
+          expires_at?: string | null
+          granted_at?: string
+          granted_to_id: string
+          granted_to_role: Database["public"]["Enums"]["app_role"]
+          id?: string
+          is_active?: boolean | null
+          patient_id: string
+          permission_type: string
+          revoked_at?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          data_types?: string[]
+          expires_at?: string | null
+          granted_at?: string
+          granted_to_id?: string
+          granted_to_role?: Database["public"]["Enums"]["app_role"]
+          id?: string
+          is_active?: boolean | null
+          patient_id?: string
+          permission_type?: string
+          revoked_at?: string | null
+          updated_at?: string
         }
         Relationships: []
       }
@@ -3655,6 +3814,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      has_patient_data_permission: {
+        Args: {
+          _patient_id: string
+          _requester_id: string
+          _permission_type: string
+          _data_type: string
+        }
+        Returns: boolean
+      }
       has_role: {
         Args: {
           _user_id: string
@@ -3664,7 +3832,7 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "admin" | "doctor" | "patient"
+      app_role: "patient" | "doctor" | "clinic" | "laboratory" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -3780,7 +3948,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["admin", "doctor", "patient"],
+      app_role: ["patient", "doctor", "clinic", "laboratory", "admin"],
     },
   },
 } as const
