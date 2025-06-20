@@ -29,6 +29,7 @@ import AIAnalysisPage from "./pages/AIAnalysisPage";
 import PersonalPlanPage from "./pages/PersonalPlan";
 import AdminDashboard from "./pages/AdminDashboard";
 import MenstrualCycleTracker from "./pages/MenstrualCycleTracker";
+import PregnancyPlanningPage from "./pages/PregnancyPlanningPage";
 import "./App.css";
 
 const queryClient = new QueryClient({
@@ -85,6 +86,11 @@ const App: React.FC = () => {
               <Route path="/menstrual-cycle-tracker" element={
                 <ProtectedRoute>
                   <MenstrualCycleTracker />
+                </ProtectedRoute>
+              } />
+              <Route path="/pregnancy-planning" element={
+                <ProtectedRoute>
+                  <PregnancyPlanningPage />
                 </ProtectedRoute>
               } />
               <Route path="/medical-integrations" element={

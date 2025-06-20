@@ -36,7 +36,7 @@ const WomensHealthDemo = () => {
       textColor: "text-blue-700",
       buttonAction: "Начать планирование",
       value: "Повышение шансов на здоровую беременность",
-      route: "/auth"
+      route: "/pregnancy-planning"
     },
     {
       title: "Гормональное здоровье",
@@ -67,8 +67,8 @@ const WomensHealthDemo = () => {
   ];
 
   const handleAreaAction = (area: typeof healthAreas[0]) => {
-    // Если это трекер менструального цикла, проверяем аутентификацию
-    if (area.route === "/menstrual-cycle-tracker") {
+    // Если это трекер менструального цикла или планирование беременности, проверяем аутентификацию
+    if (area.route === "/menstrual-cycle-tracker" || area.route === "/pregnancy-planning") {
       if (user) {
         navigate(area.route);
       } else {
