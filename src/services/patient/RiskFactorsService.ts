@@ -1,13 +1,73 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { RiskFactors, CancerTypeRisk } from '@/types/patient';
+
+// Define specific types here to avoid circular dependencies
+interface CancerTypeRisk {
+  type: string;
+  score: number;
+  level: 'low' | 'moderate' | 'high';
+  specificFactors: string[];
+}
+
+interface RiskFactors {
+  cardiovascular: {
+    score: number;
+    level: 'low' | 'moderate' | 'high';
+    factors: string[];
+    recommendations: string[];
+    calculatedScores: {
+      framinghamScore: number;
+      reynoldsScore: number;
+    };
+  };
+  cancer: {
+    score: number;
+    level: 'low' | 'moderate' | 'high';
+    factors: string[];
+    types: CancerTypeRisk[];
+    geneticFactors: string[];
+    recommendations: string[];
+  };
+  diabetes: {
+    score: number;
+    level: 'low' | 'moderate' | 'high';
+    type: 'type1' | 'type2';
+    factors: string[];
+    recommendations: string[];
+  };
+  osteoporosis: {
+    score: number;
+    level: 'low' | 'moderate' | 'high';
+    factors: string[];
+    recommendations: string[];
+  };
+  mentalHealth: {
+    depressionScore: number;
+    anxietyScore: number;
+    stressScore: number;
+    level: 'low' | 'moderate' | 'high';
+    factors: string[];
+    recommendations: string[];
+  };
+  calculatedScores: {
+    framinghamScore: number;
+    reynoldsScore: number;
+    homaIR: number;
+    ft3ft4Ratio: number;
+    tshft4Ratio: number;
+    faiIndex: number;
+    nlrRatio: number;
+    tghdlRatio: number;
+  };
+  lastUpdated: Date;
+}
 
 export class RiskFactorsService {
   static async loadRiskFactors(patientId: string): Promise<RiskFactors> {
     const { data } = await supabase
       .from('risk_assessments')
       .select('*')
-      .eq('patient_id', patientId)
+      .eq('user_id', patientId)
       .order('created_at', { ascending: false })
       .limit(1);
 
@@ -141,7 +201,7 @@ export class RiskFactorsService {
     const { error } = await supabase
       .from('risk_assessments')
       .insert({
-        patient_id: patientId,
+        user_id: patientId, // Changed from patient_id to user_id to match schema
         assessment_type: 'comprehensive',
         risk_percentage: this.calculateOverallRiskPercentage(riskData),
         risk_level: this.calculateOverallRiskLevel(riskData),

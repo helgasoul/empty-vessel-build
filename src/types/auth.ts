@@ -2,6 +2,15 @@
 // Export for consistency with existing usage
 export type UserRole = 'patient' | 'doctor' | 'clinic' | 'laboratory' | 'admin';
 
+export interface User {
+  id: string;
+  email: string;
+  name: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: Date;
+}
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -17,7 +26,7 @@ export interface RegisterFormData {
 }
 
 export interface AuthContextType {
-  user: any | null;
+  user: User | null;
   signIn: (email: string, password: string) => Promise<{ error?: any }>;
   signUp: (email: string, password: string, fullName: string, role: UserRole) => Promise<{ error?: any }>;
   signOut: () => Promise<void>;
