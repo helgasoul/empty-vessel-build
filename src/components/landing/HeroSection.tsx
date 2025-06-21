@@ -3,18 +3,41 @@ import React from 'react';
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ArrowRight, Shield, Heart, Brain, Activity, Play } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const HeroSection = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleStartAnalysis = () => {
     console.log('Navigating to auth page from hero section...');
-    navigate('/auth');
+    console.log('Current location:', location.pathname);
+    try {
+      navigate('/auth');
+    } catch (error) {
+      console.error('Hero navigation error:', error);
+      window.location.href = '/auth';
+    }
   };
 
   const handleLearnMore = () => {
-    navigate('/about');
+    console.log('Navigating to about page...');
+    try {
+      navigate('/about');
+    } catch (error) {
+      console.error('About navigation error:', error);
+      window.location.href = '/about';
+    }
+  };
+
+  const handleNavigateToSection = (path: string) => {
+    console.log('Navigating to section:', path);
+    try {
+      navigate(path);
+    } catch (error) {
+      console.error('Section navigation error:', error);
+      window.location.href = path;
+    }
   };
 
   const scrollToSection = (sectionId: string) => {
@@ -57,7 +80,7 @@ const HeroSection = () => {
             {/* Feature Pills - Centered */}
             <div className="flex flex-wrap gap-3 justify-center">
               <button 
-                onClick={() => navigate('/ai-analysis')}
+                onClick={() => handleNavigateToSection('/risk-assessment-demo')}
                 className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-purple-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
                 aria-label="Перейти к разделу ИИ-анализ рисков"
               >
@@ -65,7 +88,7 @@ const HeroSection = () => {
                 <span className="text-sm font-medium text-gray-800">ИИ-анализ рисков</span>
               </button>
               <button 
-                onClick={() => navigate('/personal-plan')}
+                onClick={() => handleNavigateToSection('/personal-plan')}
                 className="flex items-center space-x-2 bg-white/90 backdrop-blur-sm rounded-full px-4 py-2 border border-pink-100 hover:shadow-md transition-all duration-200 hover:scale-105 cursor-pointer"
                 aria-label="Перейти к разделу персональный план"
               >

@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Menu, X } from "lucide-react";
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Logo } from '@/components/ui/logo';
@@ -12,6 +12,7 @@ import { NavigationItem } from './navigation/types';
 
 const Navigation = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('ru');
@@ -30,7 +31,24 @@ const Navigation = () => {
   };
 
   const handleNavClick = (path: string) => {
-    navigate(path);
+    console.log('Navigation clicked:', path, 'Current location:', location.pathname);
+    try {
+      navigate(path);
+    } catch (error) {
+      console.error('Navigation error:', error);
+      // Fallback to window.location for published sites
+      window.location.href = path;
+    }
+  };
+
+  const handleAuthClick = () => {
+    console.log('Auth button clicked');
+    try {
+      navigate('/auth');
+    } catch (error) {
+      console.error('Auth navigation error:', error);
+      window.location.href = '/auth';
+    }
   };
 
   return (
@@ -69,7 +87,7 @@ const Navigation = () => {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => handleNavClick('/auth')}
+              onClick={handleAuthClick}
               className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 transition-all duration-200 font-medium"
             >
               Войти
