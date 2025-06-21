@@ -13,9 +13,6 @@ const PlatformMission = () => {
     <section id="ai-analysis" className="py-16 px-4 md:px-6 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <Badge className="bg-purple-100 text-purple-800 mb-6 hover:bg-purple-200 transition-colors duration-200">
-            🎯 Наша миссия
-          </Badge>
           <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent mb-6">
             Миссия PREVENT
           </h2>
