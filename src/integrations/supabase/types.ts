@@ -57,6 +57,78 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_analysis_sessions: {
+        Row: {
+          ai_model_version: string
+          analysis_date: string | null
+          analysis_scope: Json
+          anomalies_detected: Json | null
+          confidence_score: number | null
+          correlations_found: Json | null
+          created_at: string | null
+          data_completeness: number | null
+          data_timeframe: Json
+          error_details: string | null
+          id: string
+          input_data_sources: Json
+          key_findings: Json
+          model_uncertainty: number | null
+          patterns_detected: Json | null
+          processing_duration_ms: number | null
+          processing_status: string | null
+          session_type: string
+          trends_identified: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          ai_model_version: string
+          analysis_date?: string | null
+          analysis_scope: Json
+          anomalies_detected?: Json | null
+          confidence_score?: number | null
+          correlations_found?: Json | null
+          created_at?: string | null
+          data_completeness?: number | null
+          data_timeframe: Json
+          error_details?: string | null
+          id?: string
+          input_data_sources: Json
+          key_findings: Json
+          model_uncertainty?: number | null
+          patterns_detected?: Json | null
+          processing_duration_ms?: number | null
+          processing_status?: string | null
+          session_type: string
+          trends_identified?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          ai_model_version?: string
+          analysis_date?: string | null
+          analysis_scope?: Json
+          anomalies_detected?: Json | null
+          confidence_score?: number | null
+          correlations_found?: Json | null
+          created_at?: string | null
+          data_completeness?: number | null
+          data_timeframe?: Json
+          error_details?: string | null
+          id?: string
+          input_data_sources?: Json
+          key_findings?: Json
+          model_uncertainty?: number | null
+          patterns_detected?: Json | null
+          processing_duration_ms?: number | null
+          processing_status?: string | null
+          session_type?: string
+          trends_identified?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       calculator_results: {
         Row: {
           calculated_at: string
@@ -2170,6 +2242,110 @@ export type Database = {
           },
         ]
       }
+      health_anomalies: {
+        Row: {
+          analysis_session_id: string | null
+          anomaly_duration_days: number | null
+          anomaly_score: number | null
+          anomaly_type: string | null
+          concurrent_events: Json | null
+          confidence_level: number | null
+          created_at: string | null
+          detected_value: number | null
+          detection_date: string
+          expected_value: number | null
+          external_factors: Json | null
+          follow_up_required: boolean | null
+          follow_up_timeline: string | null
+          healthcare_provider_notified: boolean | null
+          id: string
+          metric_name: string
+          metric_type: string
+          potential_causes: Json | null
+          recommended_action: string | null
+          related_symptoms: Json | null
+          resolution_status: string | null
+          severity_level: string | null
+          threshold_used: number | null
+          time_since_last_normal: number | null
+          updated_at: string | null
+          urgency: string | null
+          user_acknowledged: boolean | null
+          user_action_taken: string | null
+          user_id: string | null
+        }
+        Insert: {
+          analysis_session_id?: string | null
+          anomaly_duration_days?: number | null
+          anomaly_score?: number | null
+          anomaly_type?: string | null
+          concurrent_events?: Json | null
+          confidence_level?: number | null
+          created_at?: string | null
+          detected_value?: number | null
+          detection_date: string
+          expected_value?: number | null
+          external_factors?: Json | null
+          follow_up_required?: boolean | null
+          follow_up_timeline?: string | null
+          healthcare_provider_notified?: boolean | null
+          id?: string
+          metric_name: string
+          metric_type: string
+          potential_causes?: Json | null
+          recommended_action?: string | null
+          related_symptoms?: Json | null
+          resolution_status?: string | null
+          severity_level?: string | null
+          threshold_used?: number | null
+          time_since_last_normal?: number | null
+          updated_at?: string | null
+          urgency?: string | null
+          user_acknowledged?: boolean | null
+          user_action_taken?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          analysis_session_id?: string | null
+          anomaly_duration_days?: number | null
+          anomaly_score?: number | null
+          anomaly_type?: string | null
+          concurrent_events?: Json | null
+          confidence_level?: number | null
+          created_at?: string | null
+          detected_value?: number | null
+          detection_date?: string
+          expected_value?: number | null
+          external_factors?: Json | null
+          follow_up_required?: boolean | null
+          follow_up_timeline?: string | null
+          healthcare_provider_notified?: boolean | null
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          potential_causes?: Json | null
+          recommended_action?: string | null
+          related_symptoms?: Json | null
+          resolution_status?: string | null
+          severity_level?: string | null
+          threshold_used?: number | null
+          time_since_last_normal?: number | null
+          updated_at?: string | null
+          urgency?: string | null
+          user_acknowledged?: boolean | null
+          user_action_taken?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_anomalies_analysis_session_id_fkey"
+            columns: ["analysis_session_id"]
+            isOneToOne: false
+            referencedRelation: "ai_analysis_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       health_app_integrations: {
         Row: {
           access_token: string | null
@@ -2214,6 +2390,98 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      health_correlations: {
+        Row: {
+          actionable_insights: string | null
+          analysis_session_id: string | null
+          causality_likelihood: string | null
+          clinical_meaningfulness: string | null
+          confounding_factors: Json | null
+          contextual_notes: string | null
+          correlation_coefficient: number
+          correlation_period: string | null
+          correlation_type: string | null
+          created_at: string | null
+          health_implications: string | null
+          id: string
+          metric_1_name: string
+          metric_1_type: string
+          metric_2_name: string
+          metric_2_type: string
+          moderating_variables: Json | null
+          relationship_direction: string | null
+          relationship_strength: string | null
+          sample_size: number | null
+          statistical_significance: number | null
+          temporal_stability: string | null
+          time_lag_days: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          actionable_insights?: string | null
+          analysis_session_id?: string | null
+          causality_likelihood?: string | null
+          clinical_meaningfulness?: string | null
+          confounding_factors?: Json | null
+          contextual_notes?: string | null
+          correlation_coefficient: number
+          correlation_period?: string | null
+          correlation_type?: string | null
+          created_at?: string | null
+          health_implications?: string | null
+          id?: string
+          metric_1_name: string
+          metric_1_type: string
+          metric_2_name: string
+          metric_2_type: string
+          moderating_variables?: Json | null
+          relationship_direction?: string | null
+          relationship_strength?: string | null
+          sample_size?: number | null
+          statistical_significance?: number | null
+          temporal_stability?: string | null
+          time_lag_days?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          actionable_insights?: string | null
+          analysis_session_id?: string | null
+          causality_likelihood?: string | null
+          clinical_meaningfulness?: string | null
+          confounding_factors?: Json | null
+          contextual_notes?: string | null
+          correlation_coefficient?: number
+          correlation_period?: string | null
+          correlation_type?: string | null
+          created_at?: string | null
+          health_implications?: string | null
+          id?: string
+          metric_1_name?: string
+          metric_1_type?: string
+          metric_2_name?: string
+          metric_2_type?: string
+          moderating_variables?: Json | null
+          relationship_direction?: string | null
+          relationship_strength?: string | null
+          sample_size?: number | null
+          statistical_significance?: number | null
+          temporal_stability?: string | null
+          time_lag_days?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_correlations_analysis_session_id_fkey"
+            columns: ["analysis_session_id"]
+            isOneToOne: false
+            referencedRelation: "ai_analysis_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       health_device_data: {
         Row: {
@@ -2306,6 +2574,98 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      health_patterns: {
+        Row: {
+          actionability: string | null
+          analysis_session_id: string | null
+          clinical_relevance: string | null
+          confidence_interval: Json | null
+          created_at: string | null
+          effect_size: number | null
+          end_date: string | null
+          frequency_description: string | null
+          future_trend: string | null
+          health_impact: string | null
+          id: string
+          pattern_category: string | null
+          pattern_description: string
+          pattern_name: string
+          pattern_strength: number | null
+          pattern_type: string
+          predictive_value: number | null
+          primary_metrics: Json
+          secondary_metrics: Json | null
+          start_date: string | null
+          statistical_significance: number | null
+          time_period: string | null
+          trigger_factors: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          actionability?: string | null
+          analysis_session_id?: string | null
+          clinical_relevance?: string | null
+          confidence_interval?: Json | null
+          created_at?: string | null
+          effect_size?: number | null
+          end_date?: string | null
+          frequency_description?: string | null
+          future_trend?: string | null
+          health_impact?: string | null
+          id?: string
+          pattern_category?: string | null
+          pattern_description: string
+          pattern_name: string
+          pattern_strength?: number | null
+          pattern_type: string
+          predictive_value?: number | null
+          primary_metrics: Json
+          secondary_metrics?: Json | null
+          start_date?: string | null
+          statistical_significance?: number | null
+          time_period?: string | null
+          trigger_factors?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          actionability?: string | null
+          analysis_session_id?: string | null
+          clinical_relevance?: string | null
+          confidence_interval?: Json | null
+          created_at?: string | null
+          effect_size?: number | null
+          end_date?: string | null
+          frequency_description?: string | null
+          future_trend?: string | null
+          health_impact?: string | null
+          id?: string
+          pattern_category?: string | null
+          pattern_description?: string
+          pattern_name?: string
+          pattern_strength?: number | null
+          pattern_type?: string
+          predictive_value?: number | null
+          primary_metrics?: Json
+          secondary_metrics?: Json | null
+          start_date?: string | null
+          statistical_significance?: number | null
+          time_period?: string | null
+          trigger_factors?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "health_patterns_analysis_session_id_fkey"
+            columns: ["analysis_session_id"]
+            isOneToOne: false
+            referencedRelation: "ai_analysis_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       health_recommendations: {
         Row: {
