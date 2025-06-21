@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
@@ -25,7 +24,7 @@ import {
 } from 'lucide-react';
 
 const Dashboard = () => {
-  const { user, loading, logout } = useAuth();
+  const { user, loading } = useAuth();
 
   if (loading) {
     return <div className="flex justify-center items-center min-h-screen">Загрузка...</div>;
@@ -133,9 +132,6 @@ const Dashboard = () => {
             <Button variant="outline" size="sm">
               <Settings className="h-4 w-4 mr-2" />
               Настройки
-            </Button>
-            <Button variant="outline" size="sm" onClick={logout}>
-              Выйти
             </Button>
           </div>
         </div>

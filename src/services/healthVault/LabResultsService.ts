@@ -4,9 +4,20 @@ import { LabResult } from '@/types/healthVault';
 
 export class LabResultsService {
   static async createLabResult(resultData: Partial<LabResult>): Promise<LabResult> {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) throw new Error('User not authenticated');
+
+    // Ensure required fields are present
+    const dataToInsert = {
+      ...resultData,
+      user_id: user.id,
+      test_date: resultData.test_date || new Date().toISOString().split('T')[0],
+      test_name: resultData.test_name || 'Unknown Test'
+    };
+
     const { data, error } = await supabase
       .from('lab_results')
-      .insert(resultData)
+      .insert(dataToInsert)
       .select()
       .single();
       
