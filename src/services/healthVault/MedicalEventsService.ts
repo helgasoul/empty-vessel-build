@@ -34,14 +34,7 @@ export class MedicalEventsService {
       throw new Error(`Ошибка создания события: ${error.message}`);
     }
     
-    // Convert JSON strings back to arrays for the response
-    return {
-      ...data,
-      icd_codes: Array.isArray(data.icd_codes) ? data.icd_codes : JSON.parse(data.icd_codes || '[]'),
-      symptoms: Array.isArray(data.symptoms) ? data.symptoms : JSON.parse(data.symptoms || '[]'),
-      medications: Array.isArray(data.medications) ? data.medications : JSON.parse(data.medications || '[]'),
-      attached_files: Array.isArray(data.attached_files) ? data.attached_files : JSON.parse(data.attached_files || '[]')
-    };
+    return this.transformMedicalEventFromDb(data);
   }
   
   static async getUserEvents(userId: string): Promise<MedicalEvent[]> {
@@ -55,14 +48,7 @@ export class MedicalEventsService {
       throw new Error(`Ошибка получения событий: ${error.message}`);
     }
     
-    // Convert JSON strings back to arrays
-    return (data || []).map(event => ({
-      ...event,
-      icd_codes: Array.isArray(event.icd_codes) ? event.icd_codes : JSON.parse(event.icd_codes || '[]'),
-      symptoms: Array.isArray(event.symptoms) ? event.symptoms : JSON.parse(event.symptoms || '[]'),
-      medications: Array.isArray(event.medications) ? event.medications : JSON.parse(event.medications || '[]'),
-      attached_files: Array.isArray(event.attached_files) ? event.attached_files : JSON.parse(event.attached_files || '[]')
-    }));
+    return (data || []).map(event => this.transformMedicalEventFromDb(event));
   }
   
   static async getEventById(eventId: string): Promise<MedicalEvent | null> {
@@ -77,14 +63,7 @@ export class MedicalEventsService {
       throw new Error(`Ошибка получения события: ${error.message}`);
     }
     
-    // Convert JSON strings back to arrays
-    return {
-      ...data,
-      icd_codes: Array.isArray(data.icd_codes) ? data.icd_codes : JSON.parse(data.icd_codes || '[]'),
-      symptoms: Array.isArray(data.symptoms) ? data.symptoms : JSON.parse(data.symptoms || '[]'),
-      medications: Array.isArray(data.medications) ? data.medications : JSON.parse(data.medications || '[]'),
-      attached_files: Array.isArray(data.attached_files) ? data.attached_files : JSON.parse(data.attached_files || '[]')
-    };
+    return this.transformMedicalEventFromDb(data);
   }
   
   static async updateEvent(eventId: string, updates: Partial<MedicalEvent>): Promise<MedicalEvent> {
@@ -108,14 +87,7 @@ export class MedicalEventsService {
       throw new Error(`Ошибка обновления события: ${error.message}`);
     }
     
-    // Convert JSON strings back to arrays
-    return {
-      ...data,
-      icd_codes: Array.isArray(data.icd_codes) ? data.icd_codes : JSON.parse(data.icd_codes || '[]'),
-      symptoms: Array.isArray(data.symptoms) ? data.symptoms : JSON.parse(data.symptoms || '[]'),
-      medications: Array.isArray(data.medications) ? data.medications : JSON.parse(data.medications || '[]'),
-      attached_files: Array.isArray(data.attached_files) ? data.attached_files : JSON.parse(data.attached_files || '[]')
-    };
+    return this.transformMedicalEventFromDb(data);
   }
   
   static async deleteEvent(eventId: string): Promise<void> {
@@ -141,14 +113,7 @@ export class MedicalEventsService {
       throw new Error(`Ошибка получения событий по типу: ${error.message}`);
     }
     
-    // Convert JSON strings back to arrays
-    return (data || []).map(event => ({
-      ...event,
-      icd_codes: Array.isArray(event.icd_codes) ? event.icd_codes : JSON.parse(event.icd_codes || '[]'),
-      symptoms: Array.isArray(event.symptoms) ? event.symptoms : JSON.parse(event.symptoms || '[]'),
-      medications: Array.isArray(event.medications) ? event.medications : JSON.parse(event.medications || '[]'),
-      attached_files: Array.isArray(event.attached_files) ? event.attached_files : JSON.parse(event.attached_files || '[]')
-    }));
+    return (data || []).map(event => this.transformMedicalEventFromDb(event));
   }
   
   static async getUpcomingEvents(userId: string): Promise<MedicalEvent[]> {
@@ -166,13 +131,47 @@ export class MedicalEventsService {
       throw new Error(`Ошибка получения предстоящих событий: ${error.message}`);
     }
     
-    // Convert JSON strings back to arrays
-    return (data || []).map(event => ({
-      ...event,
-      icd_codes: Array.isArray(event.icd_codes) ? event.icd_codes : JSON.parse(event.icd_codes || '[]'),
-      symptoms: Array.isArray(event.symptoms) ? event.symptoms : JSON.parse(event.symptoms || '[]'),
-      medications: Array.isArray(event.medications) ? event.medications : JSON.parse(event.medications || '[]'),
-      attached_files: Array.isArray(event.attached_files) ? event.attached_files : JSON.parse(event.attached_files || '[]')
-    }));
+    return (data || []).map(event => this.transformMedicalEventFromDb(event));
+  }
+
+  private static transformMedicalEventFromDb(data: any): MedicalEvent {
+    return {
+      ...data,
+      icd_codes: this.safeJsonParse(data.icd_codes, []),
+      symptoms: this.safeJsonParse(data.symptoms, []),
+      medications: this.safeJsonParse(data.medications, []),
+      attached_files: this.safeJsonParse(data.attached_files, []),
+      results: this.ensureObject(data.results)
+    };
+  }
+
+  private static safeJsonParse(value: any, defaultValue: any[] = []): any[] {
+    if (Array.isArray(value)) {
+      return value;
+    }
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+    return defaultValue;
+  }
+
+  private static ensureObject(value: any): Record<string, any> {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return value;
+    }
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      } catch {
+        return {};
+      }
+    }
+    return {};
   }
 }
