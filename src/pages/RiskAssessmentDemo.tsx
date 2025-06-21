@@ -25,7 +25,7 @@ const RiskAssessmentDemo = () => {
       bgColor: "from-red-50 to-pink-50",
       validation: "Рекомендован NHS и ESC",
       accuracy: "92% точность",
-      route: "/risk-assessment"
+      tab: "assessment" // Указываем вкладку для навигации
     },
     {
       title: "BCSC v3",
@@ -37,7 +37,7 @@ const RiskAssessmentDemo = () => {
       bgColor: "from-pink-50 to-rose-50",
       validation: "Одобрен FDA",
       accuracy: "88% точность",
-      route: "/risk-assessment"
+      tab: "assessment"
     },
     {
       title: "DemPoRT",
@@ -49,7 +49,7 @@ const RiskAssessmentDemo = () => {
       bgColor: "from-purple-50 to-indigo-50",
       validation: "Валидирован международно",
       accuracy: "85% точность",
-      route: "/risk-assessment"
+      tab: "assessment"
     },
     {
       title: "Cancer Risk",
@@ -61,51 +61,40 @@ const RiskAssessmentDemo = () => {
       bgColor: "from-blue-50 to-cyan-50",
       validation: "Научно подтверждено",
       accuracy: "89% точность",
-      route: "/risk-assessment"
+      tab: "assessment"
     }
   ];
 
   const handleStartTest = (assessment: typeof assessmentTypes[0]) => {
+    console.log('handleStartTest called for:', assessment.title);
+    
     // Проверяем авторизацию пользователя
     if (!user) {
       toast.info('Для прохождения тестов необходимо авторизоваться');
+      console.log('User not authenticated, redirecting to auth');
       
-      // Используем fallback для деплоя
-      try {
-        navigate('/auth');
-      } catch (error) {
-        console.log('Navigation fallback for deployment');
-        window.location.href = '/auth';
-      }
+      // Простое перенаправление без fallback
+      navigate('/auth');
       return;
     }
 
     // Если пользователь авторизован, переходим к тестированию
     toast.success(`Начинаем тест: ${assessment.displayName}`);
+    console.log('User authenticated, navigating to risk assessment');
     
-    try {
-      navigate(assessment.route);
-    } catch (error) {
-      console.log('Navigation fallback for deployment');
-      window.location.href = assessment.route;
-    }
+    // Переходим на страницу оценки рисков с указанной вкладкой
+    navigate('/risk-assessment');
   };
 
   const handleFullAssessment = () => {
+    console.log('handleFullAssessment called');
+    
     if (!user) {
-      try {
-        navigate('/auth');
-      } catch (error) {
-        console.log('Navigation fallback for deployment');
-        window.location.href = '/auth';
-      }
+      console.log('User not authenticated, redirecting to auth');
+      navigate('/auth');
     } else {
-      try {
-        navigate('/risk-assessment');
-      } catch (error) {
-        console.log('Navigation fallback for deployment');
-        window.location.href = '/risk-assessment';
-      }
+      console.log('User authenticated, navigating to risk assessment');
+      navigate('/risk-assessment');
     }
   };
 
