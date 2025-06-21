@@ -7,7 +7,7 @@ export class RiskFactorsService {
     const { data } = await supabase
       .from('risk_assessments')
       .select('*')
-      .eq('user_id', patientId) // Fixed back to user_id
+      .eq('user_id', patientId)
       .order('created_at', { ascending: false })
       .limit(1);
 
@@ -137,12 +137,11 @@ export class RiskFactorsService {
   }
 
   static async saveRiskAssessment(patientId: string, riskData: Partial<RiskFactors>): Promise<void> {
-    // Based on the database schema, we need to insert into risk_assessments table
-    // with the correct column names
+    // Insert into risk_assessments table with the correct column names according to database schema
     const { error } = await supabase
       .from('risk_assessments')
       .insert({
-        assessment_type: 'comprehensive',
+        user_id: patientId,
         risk_percentage: this.calculateOverallRiskPercentage(riskData),
         risk_level: this.calculateOverallRiskLevel(riskData),
         assessment_data: riskData,
@@ -170,7 +169,7 @@ export class RiskFactorsService {
     const percentage = this.calculateOverallRiskPercentage(riskData);
     
     if (percentage < 20) return 'low';
-    if (percentage < 40) return 'moderate';
+    if (percentage < 40) return 'medium';
     if (percentage < 70) return 'high';
     return 'very-high';
   }
