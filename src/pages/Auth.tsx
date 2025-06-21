@@ -8,7 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Shield, ArrowLeft, AlertCircle, Mail, User, Stethoscope, Settings, Building2, FlaskConical, CheckCircle } from 'lucide-react';
+import { Shield, ArrowLeft, AlertCircle, Mail, User, Stethoscope, Settings, Building2, FlaskConical, CheckCircle, Crown } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
@@ -35,40 +35,66 @@ const Auth = () => {
       label: 'Пациент',
       description: 'Хочу следить за своим здоровьем',
       icon: User,
-      color: 'bg-blue-100 text-blue-600',
-      bgGradient: 'from-blue-50 to-cyan-50'
+      color: 'bg-blue-500',
+      hoverColor: 'hover:bg-blue-600',
+      textColor: 'text-white',
+      borderColor: 'border-blue-500',
+      bgGradient: 'from-blue-50 to-cyan-50',
+      iconBg: 'bg-blue-100',
+      iconColor: 'text-blue-600'
     },
     {
       value: 'doctor' as UserRole,
       label: 'Врач',
       description: 'Медицинский специалист',
       icon: Stethoscope,
-      color: 'bg-green-100 text-green-600',
-      bgGradient: 'from-green-50 to-emerald-50'
+      color: 'bg-green-500',
+      hoverColor: 'hover:bg-green-600',
+      textColor: 'text-white',
+      borderColor: 'border-green-500',
+      bgGradient: 'from-green-50 to-emerald-50',
+      iconBg: 'bg-green-100',
+      iconColor: 'text-green-600'
     },
     {
       value: 'admin' as UserRole,
       label: 'Администратор',
       description: 'Управление платформой',
-      icon: Settings,
-      color: 'bg-red-100 text-red-600',
-      bgGradient: 'from-red-50 to-rose-50'
+      icon: Crown,
+      color: 'bg-red-500',
+      hoverColor: 'hover:bg-red-600',
+      textColor: 'text-white',
+      borderColor: 'border-red-500',
+      bgGradient: 'from-red-50 to-rose-50',
+      iconBg: 'bg-red-100',
+      iconColor: 'text-red-600',
+      requiresCode: true
     },
     {
       value: 'clinic' as UserRole,
       label: 'Клиника',
       description: 'Медицинское учреждение',
       icon: Building2,
-      color: 'bg-purple-100 text-purple-600',
-      bgGradient: 'from-purple-50 to-violet-50'
+      color: 'bg-purple-500',
+      hoverColor: 'hover:bg-purple-600',
+      textColor: 'text-white',
+      borderColor: 'border-purple-500',
+      bgGradient: 'from-purple-50 to-violet-50',
+      iconBg: 'bg-purple-100',
+      iconColor: 'text-purple-600'
     },
     {
       value: 'laboratory' as UserRole,
       label: 'Лаборатория',
       description: 'Лабораторные исследования',
       icon: FlaskConical,
-      color: 'bg-orange-100 text-orange-600',
-      bgGradient: 'from-orange-50 to-amber-50'
+      color: 'bg-orange-500',
+      hoverColor: 'hover:bg-orange-600',
+      textColor: 'text-white',
+      borderColor: 'border-orange-500',
+      bgGradient: 'from-orange-50 to-amber-50',
+      iconBg: 'bg-orange-100',
+      iconColor: 'text-orange-600'
     }
   ];
 
@@ -373,7 +399,7 @@ const Auth = () => {
 
   return (
     <div className="min-h-screen prevent-gradient-bg flex items-center justify-center p-4">
-      <div className="w-full max-w-md animate-fade-in">
+      <div className="w-full max-w-2xl animate-fade-in">
         <div className="flex items-center justify-center mb-8">
           <Button
             variant="ghost"
@@ -485,32 +511,35 @@ const Auth = () => {
                 </div>
               </TabsContent>
 
-              <TabsContent value="signup" className="space-y-4">
-                <form onSubmit={handleSignUp} className="space-y-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-name" className="font-roboto">Полное имя</Label>
-                    <Input
-                      id="signup-name"
-                      name="fullName"
-                      type="text"
-                      placeholder="Анна Иванова"
-                      required
-                      className="font-roboto"
-                      disabled={isLoading}
-                    />
+              <TabsContent value="signup" className="space-y-6">
+                <form onSubmit={handleSignUp} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-name" className="font-roboto">Полное имя</Label>
+                      <Input
+                        id="signup-name"
+                        name="fullName"
+                        type="text"
+                        placeholder="Анна Иванова"
+                        required
+                        className="font-roboto"
+                        disabled={isLoading}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="signup-email" className="font-roboto">Email</Label>
+                      <Input
+                        id="signup-email"
+                        name="email"
+                        type="email"
+                        placeholder="your@email.com"
+                        required
+                        className="font-roboto"
+                        disabled={isLoading}
+                      />
+                    </div>
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="signup-email" className="font-roboto">Email</Label>
-                    <Input
-                      id="signup-email"
-                      name="email"
-                      type="email"
-                      placeholder="your@email.com"
-                      required
-                      className="font-roboto"
-                      disabled={isLoading}
-                    />
-                  </div>
+                  
                   <div className="space-y-2">
                     <Label htmlFor="signup-password" className="font-roboto">Пароль</Label>
                     <Input
@@ -525,12 +554,20 @@ const Auth = () => {
                   </div>
 
                   {/* Выбор роли */}
-                  <div className="space-y-3">
-                    <Label className="text-base font-semibold">Выберите вашу роль</Label>
+                  <div className="space-y-4">
+                    <div className="text-center">
+                      <Label className="text-xl font-bold text-gray-900 mb-2 block">
+                        Выберите вашу роль в системе
+                      </Label>
+                      <p className="text-sm text-gray-600 mb-4">
+                        Выберите роль, которая лучше всего описывает ваше положение
+                      </p>
+                    </div>
+                    
                     <RadioGroup 
                       value={selectedRole} 
                       onValueChange={(value) => setSelectedRole(value as UserRole)}
-                      className="space-y-3"
+                      className="grid grid-cols-1 md:grid-cols-2 gap-4"
                     >
                       {roleOptions.map((option) => (
                         <div key={option.value} className="relative">
@@ -542,33 +579,63 @@ const Auth = () => {
                           <Label 
                             htmlFor={option.value} 
                             className={`
-                              flex items-center space-x-4 cursor-pointer p-4 rounded-xl border-2 transition-all duration-200
+                              group flex flex-col items-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-300
                               ${selectedRole === option.value 
-                                ? 'border-purple-500 bg-purple-50 shadow-lg' 
-                                : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                                ? `${option.borderColor} bg-gradient-to-br ${option.bgGradient} shadow-lg scale-105` 
+                                : 'border-gray-200 hover:border-gray-300 hover:shadow-md hover:scale-102'
                               }
                             `}
                           >
-                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${option.color} transition-all duration-200`}>
-                              <option.icon className="w-6 h-6" />
+                            <div className={`
+                              w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-all duration-300
+                              ${selectedRole === option.value 
+                                ? `${option.color} ${option.textColor} shadow-lg` 
+                                : `${option.iconBg} group-hover:scale-110`
+                              }
+                            `}>
+                              <option.icon className={`
+                                w-8 h-8 transition-all duration-300
+                                ${selectedRole === option.value 
+                                  ? option.textColor 
+                                  : option.iconColor
+                                }
+                              `} />
                             </div>
-                            <div className="flex-1">
-                              <div className="font-semibold text-gray-900">{option.label}</div>
-                              <div className="text-sm text-gray-600">{option.description}</div>
+                            
+                            <div className="text-center">
+                              <div className={`
+                                font-bold text-lg mb-2 transition-colors duration-300
+                                ${selectedRole === option.value 
+                                  ? 'text-gray-900' 
+                                  : 'text-gray-700 group-hover:text-gray-900'
+                                }
+                              `}>
+                                {option.label}
+                              </div>
+                              <div className="text-sm text-gray-600 mb-3">
+                                {option.description}
+                              </div>
                             </div>
+                            
                             {selectedRole === option.value && (
-                              <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
-                                <CheckCircle className="w-4 h-4 text-white" />
+                              <div className="absolute -top-2 -right-2">
+                                <div className={`
+                                  w-8 h-8 rounded-full flex items-center justify-center
+                                  ${option.color} ${option.textColor} shadow-lg animate-scale-in
+                                `}>
+                                  <CheckCircle className="w-5 h-5" />
+                                </div>
+                              </div>
+                            )}
+                            
+                            {option.requiresCode && (
+                              <div className="absolute top-2 left-2">
+                                <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium shadow">
+                                  Код доступа
+                                </div>
                               </div>
                             )}
                           </Label>
-                          {option.value === 'admin' && (
-                            <div className="absolute top-2 right-2">
-                              <div className="bg-red-500 text-white text-xs px-2 py-1 rounded">
-                                Требует код доступа
-                              </div>
-                            </div>
-                          )}
                         </div>
                       ))}
                     </RadioGroup>
@@ -576,8 +643,13 @@ const Auth = () => {
 
                   {/* Дополнительное поле для администраторов */}
                   {selectedRole === 'admin' && (
-                    <div className="space-y-2">
-                      <Label htmlFor="adminCode" className="font-roboto">Код администратора</Label>
+                    <div className="space-y-3 p-4 bg-red-50 border border-red-200 rounded-lg">
+                      <div className="flex items-center space-x-2">
+                        <Crown className="w-5 h-5 text-red-600" />
+                        <Label htmlFor="adminCode" className="font-roboto font-semibold text-red-800">
+                          Код администратора
+                        </Label>
+                      </div>
                       <Input
                         id="adminCode"
                         type="password"
@@ -585,18 +657,18 @@ const Auth = () => {
                         value={adminCode}
                         onChange={(e) => setAdminCode(e.target.value)}
                         required
-                        className="font-roboto"
+                        className="font-roboto border-red-300 focus:border-red-500"
                         disabled={isLoading}
                       />
-                      <p className="text-xs text-gray-500">
-                        Обратитесь к главному администратору для получения кода
+                      <p className="text-xs text-red-600">
+                        Обратитесь к главному администратору для получения кода доступа
                       </p>
                     </div>
                   )}
 
                   <Button
                     type="submit"
-                    className="w-full prevent-button-primary"
+                    className="w-full prevent-button-primary text-lg py-3"
                     disabled={isLoading}
                   >
                     {isLoading ? "Регистрация..." : "Создать аккаунт"}
