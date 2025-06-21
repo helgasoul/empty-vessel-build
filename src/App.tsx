@@ -56,6 +56,9 @@ import Team from "./pages/Team";
 import AdminDashboardPage from "./pages/AdminDashboard";
 import DoctorDashboardPage from "./pages/DoctorDashboardPage";
 
+// ✅ НОВАЯ СТРАНИЦА: Медицинские калькуляторы
+import MedicalCalculators from "./pages/MedicalCalculators";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -107,6 +110,9 @@ const App = () => (
                   {/* ✅ АДМИН И ДОКТОР ДАШБОРДЫ */}
                   <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
                   <Route path="/doctor-dashboard" element={<DoctorDashboardPage />} />
+                  
+                  {/* ✅ НОВАЯ СТРАНИЦА: Медицинские калькуляторы */}
+                  <Route path="/medical-calculators" element={<MedicalCalculators />} />
                   
                   {/* ✅ Временные заглушки для отсутствующих страниц */}
                   <Route path="/hormone-balance" element={

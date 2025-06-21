@@ -70,7 +70,7 @@ const MedicalCalculatorsModule = () => {
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="endocrinology" className="space-y-6">
+        <Tabs defaultValue="thyroid" className="space-y-6">
           <TabNavigation tabs={tabs} />
           <TabContent tabs={tabs} />
         </Tabs>

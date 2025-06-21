@@ -1,5 +1,7 @@
 
 export { default as MedicalCalculatorsModule } from './MedicalCalculatorsModule';
+export { default as ThyroidCalculators } from './ThyroidCalculators';
+export { default as HormonalMetabolicCalculators } from './HormonalMetabolicCalculators';
 export { default as EndocrinologyCalculators } from './EndocrinologyCalculators';
 export { default as MetabolicCalculators } from './MetabolicCalculators';
 export { default as GynecologyCalculators } from './GynecologyCalculators';

@@ -1,26 +1,46 @@
 
-import React, { Suspense } from 'react';
+import React from 'react';
 import { TabsContent } from "@/components/ui/tabs";
 import { CalculatorTab } from '../config/calculatorTabs';
+import ThyroidCalculators from '../ThyroidCalculators';
+import HormonalMetabolicCalculators from '../HormonalMetabolicCalculators';
+import EndocrinologyCalculators from '../EndocrinologyCalculators';
+import MetabolicCalculators from '../MetabolicCalculators';
+import GynecologyCalculators from '../GynecologyCalculators';
+import CardiovascularCalculators from '../CardiovascularCalculators';
+import PsychologicalScales from '../PsychologicalScales';
 
 interface TabContentProps {
   tabs: CalculatorTab[];
 }
 
-const LoadingSpinner = () => (
-  <div className="flex items-center justify-center p-8">
-    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
-  </div>
-);
+export const TabContent = ({ tabs }: TabContentProps) => {
+  const renderCalculatorComponent = (componentName: string) => {
+    switch (componentName) {
+      case 'ThyroidCalculators':
+        return <ThyroidCalculators />;
+      case 'HormonalMetabolicCalculators':
+        return <HormonalMetabolicCalculators />;
+      case 'EndocrinologyCalculators':
+        return <EndocrinologyCalculators />;
+      case 'MetabolicCalculators':
+        return <MetabolicCalculators />;
+      case 'GynecologyCalculators':
+        return <GynecologyCalculators />;
+      case 'CardiovascularCalculators':
+        return <CardiovascularCalculators />;
+      case 'PsychologicalScales':
+        return <PsychologicalScales />;
+      default:
+        return <div>Калькулятор в разработке</div>;
+    }
+  };
 
-export const TabContent: React.FC<TabContentProps> = ({ tabs }) => {
   return (
     <>
       {tabs.map((tab) => (
-        <TabsContent key={tab.id} value={tab.id}>
-          <Suspense fallback={<LoadingSpinner />}>
-            <tab.component />
-          </Suspense>
+        <TabsContent key={tab.id} value={tab.id} className="space-y-6">
+          {renderCalculatorComponent(tab.component)}
         </TabsContent>
       ))}
     </>
