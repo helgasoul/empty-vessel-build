@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 // Define specific types here to avoid circular dependencies
@@ -198,50 +197,21 @@ export class RiskFactorsService {
   }
 
   static async saveRiskAssessment(patientId: string, riskData: Partial<RiskFactors>): Promise<void> {
-    try {
-      // Use raw SQL query to insert data with the new user_id column
-      const { error } = await supabase.rpc('execute_sql', {
-        query: `
-          INSERT INTO public.risk_assessments (
-            user_id,
-            assessment_type, 
-            risk_percentage, 
-            risk_level, 
-            assessment_data, 
-            results_data, 
-            recommendations
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
-        `,
-        params: [
-          patientId,
-          'comprehensive',
-          this.calculateOverallRiskPercentage(riskData),
-          this.calculateOverallRiskLevel(riskData),
-          JSON.stringify(riskData),
-          JSON.stringify(riskData),
-          this.getAllRecommendations(riskData)
-        ]
+    const { error } = await supabase
+      .from('risk_assessments')
+      .insert({
+        user_id: patientId,
+        assessment_type: 'comprehensive',
+        risk_percentage: this.calculateOverallRiskPercentage(riskData),
+        risk_level: this.calculateOverallRiskLevel(riskData),
+        assessment_data: riskData as any,
+        results_data: riskData as any,
+        recommendations: this.getAllRecommendations(riskData)
       });
 
-      if (error) {
-        console.error('Error saving risk assessment:', error);
-        throw error;
-      }
-    } catch (error) {
-      console.error('Error in saveRiskAssessment:', error);
-      // Fallback: try using the standard insert method
-      const { error: fallbackError } = await supabase
-        .from('risk_assessments')
-        .insert([{
-          assessment_type: 'comprehensive',
-          risk_percentage: this.calculateOverallRiskPercentage(riskData),
-          risk_level: this.calculateOverallRiskLevel(riskData),
-          assessment_data: riskData as any,
-          results_data: riskData as any,
-          recommendations: this.getAllRecommendations(riskData)
-        }]);
-
-      if (fallbackError) throw fallbackError;
+    if (error) {
+      console.error('Error saving risk assessment:', error);
+      throw error;
     }
   }
 
