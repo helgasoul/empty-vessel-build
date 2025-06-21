@@ -75,24 +75,14 @@ export class PatientDataManager {
       name: profile?.full_name || 'Пациент',
       dateOfBirth: profile?.date_of_birth ? new Date(profile.date_of_birth) : new Date(),
       email: profile?.email || '',
-      phone: profile?.phone || undefined,
-      address: profile?.address ? {
-        street: profile.address.street || '',
-        city: profile.address.city || '',
-        state: profile.address.state || '',
-        zipCode: profile.address.zipCode || '',
-        country: profile.address.country || ''
-      } : undefined,
+      phone: undefined, // This field doesn't exist in the profiles table
+      address: undefined, // This field doesn't exist in the profiles table
       emergencyContact: profile?.emergency_contact_name ? {
         name: profile.emergency_contact_name,
         relationship: 'Unknown',
         phone: profile.emergency_contact_phone || ''
       } : undefined,
-      insurance: profile?.insurance_info ? {
-        provider: profile.insurance_info.provider || '',
-        policyNumber: profile.insurance_info.policyNumber || '',
-        groupNumber: profile.insurance_info.groupNumber
-      } : undefined
+      insurance: undefined // This field structure doesn't match the actual schema
     };
   }
 
@@ -159,7 +149,7 @@ export class PatientDataManager {
         lastPeriodDate: new Date(data[0].cycle_start_date),
         irregularities: [],
         symptoms: [],
-        contraception: data[0].contraception || undefined
+        contraception: undefined // This field doesn't exist in the menstrual_cycles table
       };
     }
 
