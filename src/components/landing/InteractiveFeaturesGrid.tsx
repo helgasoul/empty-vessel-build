@@ -12,12 +12,12 @@ import {
   Activity,
   CheckCircle
 } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
+import { useNavigationHelper } from './shared/NavigationHelper';
 
 const InteractiveFeaturesGrid = () => {
-  const navigate = useNavigate();
   const { user } = useAuth();
+  const { handleButtonClick } = useNavigationHelper();
 
   // Универсальная функция для отладки кликов
   const debugButtonClick = (buttonName: string, targetPath: string, authRequired: boolean = false) => {
@@ -26,18 +26,11 @@ const InteractiveFeaturesGrid = () => {
       console.log(`📍 Переход на: ${targetPath}`);
       console.log(`🔒 Требует авторизации: ${authRequired}`);
       
-      try {
-        if (authRequired && !user) {
-          console.log('👤 Пользователь не авторизован, переход на страницу входа');
-          navigate('/auth', { state: { redirectTo: targetPath } });
-        } else {
-          navigate(targetPath);
-          console.log(`✅ Навигация успешна`);
-        }
-      } catch (error) {
-        console.error(`❌ Ошибка навигации:`, error);
-        // Fallback для published сайтов
-        window.location.href = targetPath;
+      if (authRequired && !user) {
+        console.log('👤 Пользователь не авторизован, переход на страницу входа');
+        handleButtonClick(buttonName, '/auth')();
+      } else {
+        handleButtonClick(buttonName, targetPath)();
       }
     };
   };
@@ -65,7 +58,7 @@ const InteractiveFeaturesGrid = () => {
       borderColor: "border-purple-200",
       buttonText: "Проверить баланс",
       buttonColor: "bg-purple-500 hover:bg-purple-600",
-      targetPath: "/womens-health-demo",
+      targetPath: "/hormonal-health-demo",
       authRequired: false,
       benefits: ["Анализ гормонов", "Персональные рекомендации", "Отслеживание изменений"]
     },
@@ -91,7 +84,7 @@ const InteractiveFeaturesGrid = () => {
       borderColor: "border-orange-200",
       buttonText: "Получить поддержку",
       buttonColor: "bg-orange-500 hover:bg-orange-600",
-      targetPath: "/environmental-health-demo",
+      targetPath: "/menopause-demo",
       authRequired: false,
       benefits: ["Облегчение симптомов", "Гормональная терапия", "Образ жизни и питание"]
     }

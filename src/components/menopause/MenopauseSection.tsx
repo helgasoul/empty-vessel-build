@@ -1,29 +1,24 @@
+
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Progress } from "@/components/ui/progress";
 import { 
-  Thermometer, 
-  Moon, 
-  Brain, 
-  Smile, 
   Calendar, 
-  Heart,
-  TrendingUp,
-  Star,
-  CheckCircle,
-  BookOpen,
-  Video,
-  MessageCircle,
+  Heart, 
+  BookOpen, 
   Stethoscope,
   Shield,
-  Award,
-  Eye,
-  Coffee
+  Video,
+  MessageCircle,
+  Coffee,
+  CheckCircle,
+  Award
 } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import MonitoringTab from './components/MonitoringTab';
+import SupportProgramCard from './components/SupportProgramCard';
+import SpecialistCard from './components/SpecialistCard';
 
 interface MenopauseSectionProps {
   onConsultationClick?: () => void;
@@ -33,53 +28,6 @@ interface MenopauseSectionProps {
 
 const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistClick }: MenopauseSectionProps) => {
   const [selectedPeriod, setSelectedPeriod] = useState('week');
-
-  // Данные симптомов
-  const symptoms = [
-    { 
-      name: 'Приливы', 
-      icon: Thermometer, 
-      intensity: 3, 
-      frequency: 4, 
-      color: '#D2691E',
-      description: 'Частота и интенсивность приливов'
-    },
-    { 
-      name: 'Сон', 
-      icon: Moon, 
-      intensity: 2, 
-      frequency: 5, 
-      color: '#8B4F99',
-      description: 'Качество и продолжительность сна'
-    },
-    { 
-      name: 'Концентрация', 
-      icon: Brain, 
-      intensity: 4, 
-      frequency: 3, 
-      color: '#CD853F',
-      description: 'Когнитивные функции и память'
-    },
-    { 
-      name: 'Настроение', 
-      icon: Smile, 
-      intensity: 3, 
-      frequency: 4, 
-      color: '#BC8F8F',
-      description: 'Эмоциональное состояние'
-    }
-  ];
-
-  // Данные графика симптомов
-  const symptomsData = [
-    { day: 'Пн', hot_flashes: 3, sleep: 2, mood: 4, concentration: 3 },
-    { day: 'Вт', hot_flashes: 4, sleep: 3, mood: 3, concentration: 4 },
-    { day: 'Ср', hot_flashes: 2, sleep: 2, mood: 5, concentration: 2 },
-    { day: 'Чт', hot_flashes: 5, sleep: 4, mood: 2, concentration: 5 },
-    { day: 'Пт', hot_flashes: 3, sleep: 3, mood: 4, concentration: 3 },
-    { day: 'Сб', hot_flashes: 2, sleep: 2, mood: 5, concentration: 2 },
-    { day: 'Вс', hot_flashes: 3, sleep: 3, mood: 4, concentration: 3 }
-  ];
 
   // Программы поддержки
   const supportPrograms = [
@@ -169,12 +117,6 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
     }
   ];
 
-  const getIntensityColor = (intensity: number) => {
-    if (intensity <= 2) return '#7BC4A4';
-    if (intensity <= 3) return '#E8B87A';
-    return '#E8A07A';
-  };
-
   return (
     <div className="max-w-6xl mx-auto p-6 space-y-8 bg-gradient-to-br from-orange-50 via-rose-50 to-amber-50 min-h-screen">
       {/* Заголовок раздела */}
@@ -208,135 +150,11 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
         </TabsList>
 
         {/* Персональный мониторинг симптомов */}
-        <TabsContent value="monitoring" className="space-y-6">
-          {/* Фильтр по периоду */}
-          <div className="flex gap-2 mb-6">
-            {['day', 'week', 'month'].map((period) => (
-              <Button
-                key={period}
-                variant={selectedPeriod === period ? "default" : "outline"}
-                size="sm"
-                onClick={() => setSelectedPeriod(period)}
-                className={selectedPeriod === period ? "bg-amber-600 hover:bg-amber-700" : "border-amber-300 text-amber-700"}
-              >
-                {period === 'day' ? 'День' : period === 'week' ? 'Неделя' : 'Месяц'}
-              </Button>
-            ))}
-          </div>
-
-          {/* Карточки симптомов */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {symptoms.map((symptom, index) => {
-              const IconComponent = symptom.icon;
-              return (
-                <Card key={index} className="border-2 hover:shadow-lg transition-shadow" style={{ borderColor: `${symptom.color}40` }}>
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center justify-between">
-                      <div 
-                        className="p-3 rounded-full"
-                        style={{ backgroundColor: `${symptom.color}20` }}
-                      >
-                        <IconComponent className="w-6 h-6" style={{ color: symptom.color }} />
-                      </div>
-                      <Badge 
-                        variant="secondary" 
-                        style={{ backgroundColor: getIntensityColor(symptom.intensity), color: 'white' }}
-                      >
-                        {symptom.intensity}/5
-                      </Badge>
-                    </div>
-                    <CardTitle className="text-lg" style={{ color: symptom.color }}>
-                      {symptom.name}
-                    </CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="space-y-3">
-                      <p className="text-sm text-gray-600">{symptom.description}</p>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Интенсивность</span>
-                          <span className="font-medium">{symptom.intensity}/5</span>
-                        </div>
-                        <Progress 
-                          value={symptom.intensity * 20} 
-                          className="h-2"
-                          style={{ 
-                            backgroundColor: `${symptom.color}20`
-                          }}
-                        />
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span className="text-gray-600">Частота</span>
-                          <span className="font-medium">{symptom.frequency} раз</span>
-                        </div>
-                        <Progress 
-                          value={symptom.frequency * 20} 
-                          className="h-2"
-                          style={{ 
-                            backgroundColor: `${symptom.color}20`
-                          }}
-                        />
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
-              );
-            })}
-          </div>
-
-          {/* График динамики симптомов */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-amber-800">
-                <TrendingUp className="w-5 h-5" />
-                Динамика симптомов за неделю
-              </CardTitle>
-              <CardDescription>
-                Отслеживание изменений для выявления паттернов
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="h-80">
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={symptomsData}>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                    <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                    <YAxis domain={[0, 5]} tick={{ fontSize: 12 }} />
-                    <Tooltip 
-                      contentStyle={{ 
-                        backgroundColor: 'white', 
-                        border: '1px solid #e5e7eb',
-                        borderRadius: '8px' 
-                      }} 
-                    />
-                    <Line type="monotone" dataKey="hot_flashes" stroke="#D2691E" strokeWidth={2} name="Приливы" />
-                    <Line type="monotone" dataKey="sleep" stroke="#8B4F99" strokeWidth={2} name="Сон" />
-                    <Line type="monotone" dataKey="mood" stroke="#BC8F8F" strokeWidth={2} name="Настроение" />
-                    <Line type="monotone" dataKey="concentration" stroke="#CD853F" strokeWidth={2} name="Концентрация" />
-                  </LineChart>
-                </ResponsiveContainer>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Инсайт недели */}
-          <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
-            <CardContent className="p-6">
-              <div className="flex items-start gap-3">
-                <Eye className="w-5 h-5 text-amber-600 mt-0.5" />
-                <div>
-                  <h4 className="font-medium text-amber-900 mb-1">Инсайт недели</h4>
-                  <p className="text-sm text-amber-800">
-                    Приливы усиливаются в середине недели. Рекомендуем добавить дыхательные практики 
-                    и ограничить кофеин в эти дни.
-                  </p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="monitoring">
+          <MonitoringTab 
+            selectedPeriod={selectedPeriod} 
+            setSelectedPeriod={setSelectedPeriod} 
+          />
         </TabsContent>
 
         {/* Программа поддержки */}
@@ -345,97 +163,65 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
             {/* Карточки программ */}
             <div className="space-y-4">
               {supportPrograms.map((program, index) => (
-                <Card key={index} className="border-l-4 hover:shadow-lg transition-shadow" style={{ borderLeftColor: program.color }}>
-                  <CardContent className="p-6">
-                    <div className="space-y-4">
-                      <div className="flex items-start justify-between">
-                        <div className="flex-1">
-                          <div className="flex items-center gap-2 mb-2">
-                            <Badge variant="secondary" style={{ backgroundColor: `${program.color}20`, color: program.color }}>
-                              {program.category}
-                            </Badge>
-                            {program.isFavorite && <Star className="w-4 h-4 text-amber-500 fill-current" />}
-                          </div>
-                          <h3 className="font-semibold text-lg mb-1">{program.title}</h3>
-                          <p className="text-gray-600 text-sm">{program.description}</p>
-                        </div>
-                      </div>
-                      
-                      <div className="space-y-2">
-                        <div className="flex justify-between text-sm">
-                          <span>Прогресс выполнения</span>
-                          <span className="font-medium">{program.progress}%</span>
-                        </div>
-                        <Progress value={program.progress} className="h-2" />
-                      </div>
-
-                      <div className="flex gap-2">
-                        <Button size="sm" variant="outline" className="flex-1">
-                          {program.isFavorite ? 'В избранном' : 'В избранное'}
-                        </Button>
-                        <Button 
-                          size="sm" 
-                          className="flex-1" 
-                          style={{ backgroundColor: program.color }}
-                          onClick={onSupportClick}
-                        >
-                          Выполнено
-                        </Button>
-                      </div>
-                    </div>
-                  </CardContent>
-                </Card>
+                <SupportProgramCard 
+                  key={index} 
+                  {...program} 
+                  onSupportClick={onSupportClick} 
+                />
               ))}
             </div>
 
             {/* План фокуса недели */}
             <div className="space-y-6">
               <Card className="bg-gradient-to-br from-amber-100 to-orange-100 border-amber-200">
-                <CardHeader>
-                  <div className="flex items-center gap-2">
-                    <Coffee className="w-5 h-5 text-amber-700" />
-                    <CardTitle className="text-amber-800">План-фокус: "Неделя качественного сна"</CardTitle>
-                  </div>
-                  <CardDescription className="text-amber-700">
-                    Специальная программа для улучшения сна в период менопаузы
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div className="p-4 bg-green-50 rounded-lg border border-green-200">
-                    <div className="flex items-center gap-2 mb-2">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="font-medium text-green-800">Выполнено: 5 из 7 рекомендаций</span>
+                <Card className="bg-gradient-to-br from-amber-100 to-orange-100 border-amber-200">
+                  <div className="p-6">
+                    <div className="flex items-center gap-2 mb-4">
+                      <Coffee className="w-5 h-5 text-amber-700" />
+                      <h3 className="text-lg font-semibold text-amber-800">План-фокус: "Неделя качественного сна"</h3>
                     </div>
-                    <p className="text-sm text-green-700">
-                      Отличные результаты! Продолжайте следовать режиму сна.
+                    <p className="text-amber-700 mb-4">
+                      Специальная программа для улучшения сна в период менопаузы
                     </p>
-                  </div>
+                    
+                    <div className="space-y-4">
+                      <div className="p-4 bg-green-50 rounded-lg border border-green-200">
+                        <div className="flex items-center gap-2 mb-2">
+                          <CheckCircle className="w-4 h-4 text-green-600" />
+                          <span className="font-medium text-green-800">Выполнено: 5 из 7 рекомендаций</span>
+                        </div>
+                        <p className="text-sm text-green-700">
+                          Отличные результаты! Продолжайте следовать режиму сна.
+                        </p>
+                      </div>
 
-                  <div className="space-y-3">
-                    <h4 className="font-medium text-amber-800">Рекомендации на завтра:</h4>
-                    <ul className="space-y-2 text-sm">
-                      <li className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        Магний за 2 часа до сна
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        Прохладная спальня (18-20°C)
-                      </li>
-                      <li className="flex items-center gap-2">
-                        <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
-                        Дыхательная практика 4-7-8
-                      </li>
-                    </ul>
-                  </div>
+                      <div className="space-y-3">
+                        <h4 className="font-medium text-amber-800">Рекомендации на завтра:</h4>
+                        <ul className="space-y-2 text-sm">
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                            Магний за 2 часа до сна
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                            Прохладная спальня (18-20°C)
+                          </li>
+                          <li className="flex items-center gap-2">
+                            <div className="w-2 h-2 bg-amber-500 rounded-full"></div>
+                            Дыхательная практика 4-7-8
+                          </li>
+                        </ul>
+                      </div>
 
-                  <Button 
-                    className="w-full bg-amber-600 hover:bg-amber-700"
-                    onClick={onSupportClick}
-                  >
-                    Продолжить программу
-                  </Button>
-                </CardContent>
+                      <Button 
+                        className="w-full bg-amber-600 hover:bg-amber-700"
+                        onClick={onSupportClick}
+                      >
+                        Продолжить программу
+                      </Button>
+                    </div>
+                  </div>
+                </Card>
               </Card>
 
               {/* Мотивация */}
@@ -464,7 +250,7 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {educationalContent.map((content, index) => (
               <Card key={index} className="hover:shadow-lg transition-shadow border-2 border-orange-100">
-                <CardHeader>
+                <div className="p-6">
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2">
                       {content.type === 'video' && <Video className="w-4 h-4 text-orange-600" />}
@@ -481,14 +267,12 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
                       </Badge>
                     )}
                   </div>
-                  <CardTitle className="text-lg text-orange-800 leading-tight">
+                  <h3 className="text-lg text-orange-800 leading-tight mb-2">
                     {content.title}
-                  </CardTitle>
-                  <CardDescription className="text-orange-600">
+                  </h3>
+                  <p className="text-orange-600 mb-4">
                     {content.duration}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
+                  </p>
                   <div className="flex gap-2">
                     <Button variant="outline" size="sm" className="flex-1 border-orange-300 text-orange-700">
                       Сохранить
@@ -497,7 +281,7 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
                       Читать
                     </Button>
                   </div>
-                </CardContent>
+                </div>
               </Card>
             ))}
           </div>
@@ -521,72 +305,21 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
         <TabsContent value="specialists" className="space-y-6">
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {specialists.map((specialist, index) => (
-              <Card key={index} className="border-2 border-amber-200 hover:shadow-lg transition-shadow">
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <CardTitle className="text-lg text-amber-800">{specialist.name}</CardTitle>
-                      <CardDescription className="text-amber-700">
-                        {specialist.specialty} • {specialist.experience}
-                      </CardDescription>
-                    </div>
-                    <div className="flex items-center gap-1">
-                      <Star className="w-4 h-4 text-yellow-500 fill-current" />
-                      <span className="text-sm font-medium">{specialist.rating}</span>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                  <div>
-                    <h4 className="text-sm font-medium text-amber-800 mb-2">Специализация:</h4>
-                    <div className="flex flex-wrap gap-1">
-                      {specialist.topics.map((topic, topicIndex) => (
-                        <Badge key={topicIndex} variant="secondary" className="bg-amber-100 text-amber-800">
-                          {topic}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="p-3 bg-green-50 rounded-lg border border-green-200">
-                    <div className="text-sm text-green-800">
-                      <strong>Ближайший слот:</strong>
-                      <br />
-                      {specialist.available}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button variant="outline" size="sm" className="border-amber-300 text-amber-700">
-                      <MessageCircle className="w-4 h-4 mr-1" />
-                      Чат
-                    </Button>
-                    <Button size="sm" className="bg-amber-600 hover:bg-amber-700">
-                      <Video className="w-4 h-4 mr-1" />
-                      Видео
-                    </Button>
-                  </div>
-
-                  <Button 
-                    className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700"
-                    onClick={onSpecialistClick}
-                  >
-                    Записаться на прием
-                  </Button>
-                </CardContent>
-              </Card>
+              <SpecialistCard 
+                key={index} 
+                {...specialist} 
+                onSpecialistClick={onSpecialistClick} 
+              />
             ))}
           </div>
 
           {/* Быстрая запись */}
           <Card className="bg-gradient-to-r from-amber-100 to-orange-100 border-amber-200">
-            <CardHeader>
-              <CardTitle className="text-amber-800">Быстрая запись</CardTitle>
-              <CardDescription className="text-amber-700">
+            <div className="p-6">
+              <h3 className="text-lg font-semibold text-amber-800 mb-2">Быстрая запись</h3>
+              <p className="text-amber-700 mb-4">
                 Выберите тему консультации для быстрого подбора специалиста
-              </CardDescription>
-            </CardHeader>
-            <CardContent>
+              </p>
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                 {['Начать ЗГТ', 'Проблемы со сном', 'Приливы', 'Настроение'].map((topic, index) => (
                   <Button
@@ -599,7 +332,7 @@ const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistCli
                   </Button>
                 ))}
               </div>
-            </CardContent>
+            </div>
           </Card>
         </TabsContent>
       </Tabs>

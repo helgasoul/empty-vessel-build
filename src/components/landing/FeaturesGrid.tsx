@@ -12,27 +12,10 @@ import {
   ArrowRight,
   CheckCircle
 } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { useNavigationHelper } from './shared/NavigationHelper';
 
 const FeaturesGrid = () => {
-  const navigate = useNavigate();
-
-  // Функция для обработки кликов по кнопкам с отладкой
-  const handleButtonClick = (stepName: string, targetPath: string) => {
-    return () => {
-      console.log(`🔥 Шаг "${stepName}" - кнопка нажата`);
-      console.log(`📍 Переход на: ${targetPath}`);
-      
-      try {
-        navigate(targetPath);
-        console.log(`✅ Навигация успешна к ${targetPath}`);
-      } catch (error) {
-        console.error(`❌ Ошибка навигации:`, error);
-        // Fallback для опубликованных сайтов
-        window.location.href = targetPath;
-      }
-    };
-  };
+  const { handleButtonClick } = useNavigationHelper();
 
   const journeySteps = [
     {
@@ -197,33 +180,6 @@ const FeaturesGrid = () => {
               </CardContent>
             </Card>
           ))}
-        </div>
-
-        {/* Process Flow Visualization for Mobile */}
-        <div className="lg:hidden">
-          <h4 className="text-xl font-bold text-center text-gray-900 mb-8">
-            Ваш путь к здоровью
-          </h4>
-          <div className="space-y-4">
-            {journeySteps.map((step, index) => (
-              <div key={index} className="flex items-center space-x-4">
-                <div className={`w-12 h-12 ${step.color.replace('from-', 'bg-').replace(' to-', '-').replace('-600', '-500').replace('-500', '')} rounded-full flex items-center justify-center shadow-md`}>
-                  <step.icon className="w-6 h-6 text-white" />
-                </div>
-                <div className="flex-1">
-                  <span className="text-base font-medium text-gray-800">{step.title}</span>
-                  <p className="text-sm text-gray-600">{step.description}</p>
-                  <Button 
-                    size="sm"
-                    className="mt-2 text-xs"
-                    onClick={handleButtonClick(step.title, step.targetPath)}
-                  >
-                    {step.buttonText}
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
         </div>
       </div>
     </section>
