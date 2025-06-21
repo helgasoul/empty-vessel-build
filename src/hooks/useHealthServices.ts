@@ -38,7 +38,7 @@ export const useHealthServiceOrders = () => {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('health_service_orders')
+        .from('health_service_orders' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -71,7 +71,7 @@ export const useCreateHealthServiceOrder = () => {
       }
 
       const { data, error } = await supabase
-        .from('health_service_orders')
+        .from('health_service_orders' as any)
         .insert({
           ...orderData,
           user_id: user.id,
@@ -111,7 +111,7 @@ export const useHealthServiceIntegrations = () => {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('health_service_integrations')
+        .from('health_service_integrations' as any)
         .select('*')
         .order('created_at', { ascending: false });
 
@@ -141,7 +141,7 @@ export const useCreateHealthServiceIntegration = () => {
       }
 
       const { data, error } = await supabase
-        .from('health_service_integrations')
+        .from('health_service_integrations' as any)
         .insert({
           ...integrationData,
           user_id: user.id,

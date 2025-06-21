@@ -2881,6 +2881,81 @@ export type Database = {
           },
         ]
       }
+      health_service_integrations: {
+        Row: {
+          created_at: string
+          id: string
+          integration_status: string
+          provider_name: string
+          service_type: string
+          settings: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          integration_status?: string
+          provider_name: string
+          service_type: string
+          settings?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          integration_status?: string
+          provider_name?: string
+          service_type?: string
+          settings?: Json
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      health_service_orders: {
+        Row: {
+          created_at: string
+          cycle_phase_at_order: string | null
+          estimated_delivery: string | null
+          id: string
+          order_data: Json
+          service_provider: string
+          service_type: string
+          status: string
+          total_amount: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          cycle_phase_at_order?: string | null
+          estimated_delivery?: string | null
+          id?: string
+          order_data?: Json
+          service_provider: string
+          service_type: string
+          status?: string
+          total_amount?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          cycle_phase_at_order?: string | null
+          estimated_delivery?: string | null
+          id?: string
+          order_data?: Json
+          service_provider?: string
+          service_type?: string
+          status?: string
+          total_amount?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       hormonal_health_tracking: {
         Row: {
           created_at: string
