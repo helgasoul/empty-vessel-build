@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { User, Stethoscope, Building, TestTube, CheckCircle } from "lucide-react";
-import { useCreateUserRole, AppRole } from '@/hooks/useUserRoles';
+import { useCreateUserRole, UserRole } from '@/hooks/useUserRoles';
 import { useToast } from "@/hooks/use-toast";
 
 interface RoleSelectionModalProps {
@@ -15,13 +15,13 @@ interface RoleSelectionModalProps {
 }
 
 const RoleSelectionModal = ({ isOpen, onClose, userId }: RoleSelectionModalProps) => {
-  const [selectedRole, setSelectedRole] = useState<AppRole | null>(null);
+  const [selectedRole, setSelectedRole] = useState<UserRole | null>(null);
   const createUserRole = useCreateUserRole();
   const { toast } = useToast();
 
   const roles = [
     {
-      id: 'patient' as AppRole,
+      id: 'patient' as UserRole,
       name: 'Пациент',
       description: 'Получайте персонализированные рекомендации и отслеживайте своё здоровье',
       icon: User,
@@ -34,7 +34,7 @@ const RoleSelectionModal = ({ isOpen, onClose, userId }: RoleSelectionModalProps
       ]
     },
     {
-      id: 'doctor' as AppRole,
+      id: 'doctor' as UserRole,
       name: 'Врач',
       description: 'Предоставляйте консультации и работайте с пациентами',
       icon: Stethoscope,
@@ -47,7 +47,7 @@ const RoleSelectionModal = ({ isOpen, onClose, userId }: RoleSelectionModalProps
       ]
     },
     {
-      id: 'clinic' as AppRole,
+      id: 'clinic' as UserRole,
       name: 'Клиника',
       description: 'Управляйте медицинским учреждением и предоставляйте услуги',
       icon: Building,
@@ -60,7 +60,7 @@ const RoleSelectionModal = ({ isOpen, onClose, userId }: RoleSelectionModalProps
       ]
     },
     {
-      id: 'laboratory' as AppRole,
+      id: 'laboratory' as UserRole,
       name: 'Лаборатория',
       description: 'Предоставляйте лабораторные услуги и анализы',
       icon: TestTube,

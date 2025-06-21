@@ -1,14 +1,11 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User, Session } from '@supabase/supabase-js';
+import { User } from '@supabase/supabase-js';
 import { supabase } from '@/integrations/supabase/client';
 
 interface AuthContextType {
   user: User | null;
-  session: Session | null;
-  loading: boolean;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
-  signIn: (email: string, password: string) => Promise<{ error: any }>;
+  isLoading: boolean;
   signOut: () => Promise<void>;
 }
 
@@ -24,113 +21,47 @@ export const useAuth = () => {
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [session, setSession] = useState<Session | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    console.log('AuthProvider: Инициализация...');
-    
-    // Настраиваем слушатель изменений состояния аутентификации
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      (event, session) => {
-        console.log('AuthProvider: Auth state change:', event, session?.user?.email);
-        setSession(session);
+    // Get initial session
+    const getInitialSession = async () => {
+      try {
+        const { data: { session } } = await supabase.auth.getSession();
         setUser(session?.user ?? null);
-        setLoading(false);
+      } catch (error) {
+        console.error('Error getting initial session:', error);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    getInitialSession();
+
+    // Listen for auth changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(
+      async (event, session) => {
+        setUser(session?.user ?? null);
+        setIsLoading(false);
       }
     );
-
-    // Проверяем существующую сессию
-    supabase.auth.getSession().then(({ data: { session }, error }) => {
-      if (error) {
-        console.error('AuthProvider: Ошибка при получении сессии:', error);
-      } else {
-        console.log('AuthProvider: Существующая сессия:', session?.user?.email || 'нет');
-      }
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    });
 
     return () => subscription.unsubscribe();
   }, []);
 
-  const signUp = async (email: string, password: string, fullName: string) => {
-    try {
-      console.log('AuthProvider: Попытка регистрации для:', email);
-      
-      const redirectUrl = `${window.location.origin}/`;
-      
-      const { data, error } = await supabase.auth.signUp({
-        email,
-        password,
-        options: {
-          emailRedirectTo: redirectUrl,
-          data: {
-            full_name: fullName
-          }
-        }
-      });
-      
-      if (error) {
-        console.error('AuthProvider: Ошибка регистрации:', error);
-      } else {
-        console.log('AuthProvider: Регистрация успешна:', data.user?.email);
-      }
-      
-      return { error };
-    } catch (err) {
-      console.error('AuthProvider: Неожиданная ошибка при регистрации:', err);
-      return { error: new Error('Произошла неожиданная ошибка') };
-    }
-  };
-
-  const signIn = async (email: string, password: string) => {
-    try {
-      console.log('AuthProvider: Попытка входа для:', email);
-      
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password
-      });
-      
-      if (error) {
-        console.error('AuthProvider: Ошибка входа:', error);
-      } else {
-        console.log('AuthProvider: Вход успешен:', data.user?.email);
-      }
-      
-      return { error };
-    } catch (err) {
-      console.error('AuthProvider: Неожиданная ошибка при входе:', err);
-      return { error: new Error('Произошла неожиданная ошибка') };
-    }
-  };
-
   const signOut = async () => {
     try {
-      console.log('AuthProvider: Выход из системы...');
-      const { error } = await supabase.auth.signOut();
-      if (error) {
-        console.error('AuthProvider: Ошибка при выходе:', error);
-      } else {
-        console.log('AuthProvider: Выход успешен');
-      }
-    } catch (err) {
-      console.error('AuthProvider: Неожиданная ошибка при выходе:', err);
+      await supabase.auth.signOut();
+    } catch (error) {
+      console.error('Error signing out:', error);
     }
   };
 
-  const value = {
+  const value: AuthContextType = {
     user,
-    session,
-    loading,
-    signUp,
-    signIn,
-    signOut
+    isLoading,
+    signOut,
   };
-
-  console.log('AuthProvider: Текущее состояние - loading:', loading, ', user:', user?.email || 'нет');
 
   return (
     <AuthContext.Provider value={value}>

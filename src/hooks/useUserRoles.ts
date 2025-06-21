@@ -2,13 +2,15 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
+import { UserRole as UserRoleType } from '@/types/user';
 
-export type AppRole = 'patient' | 'doctor' | 'clinic' | 'laboratory' | 'admin';
+export type AppRole = UserRoleType;
+export type UserRole = UserRoleType;
 
 export interface UserRole {
   id: string;
   user_id: string;
-  role: AppRole;
+  role: UserRoleType;
   created_at: string;
   updated_at: string;
 }
@@ -36,7 +38,7 @@ export const useUserRoles = () => {
   });
 };
 
-export const useHasRole = (role: AppRole) => {
+export const useHasRole = (role: UserRoleType) => {
   const { data: userRoles, isLoading } = useUserRoles();
   
   return {
@@ -69,7 +71,7 @@ export const useCreateUserRole = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ userId, role }: { userId: string; role: AppRole }) => {
+    mutationFn: async ({ userId, role }: { userId: string; role: UserRoleType }) => {
       const { data, error } = await supabase
         .from('user_roles')
         .insert({ user_id: userId, role })

@@ -1,5 +1,5 @@
-
 export type UserRole = 'patient' | 'doctor' | 'clinic' | 'laboratory' | 'admin';
+export type AppRole = UserRole; // Add this alias for consistency
 
 export interface User {
   id: string;

@@ -29,7 +29,7 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const { user } = useAuth();
   const { data: userRoles, isLoading } = useUserRoles();
   
-  const roles: UserRole[] = userRoles?.map(r => r.role) || [];
+  const roles: UserRole[] = userRoles?.map(r => r.role as UserRole) || [];
   const primaryRole = roles.length > 0 ? roles[0] : null;
 
   const hasRole = (role: UserRole): boolean => {
