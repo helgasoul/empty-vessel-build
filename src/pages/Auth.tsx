@@ -7,15 +7,19 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Shield, ArrowLeft, AlertCircle, Mail } from 'lucide-react';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { Shield, ArrowLeft, AlertCircle, Mail, User, Stethoscope, Settings, Building2, FlaskConical, CheckCircle } from 'lucide-react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
+import { UserRole } from '@/types/user';
 
 const Auth = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [isResetLoading, setIsResetLoading] = useState(false);
   const [resetDialogOpen, setResetDialogOpen] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<UserRole>('patient');
+  const [adminCode, setAdminCode] = useState('');
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -24,6 +28,49 @@ const Auth = () => {
   const type = searchParams.get('type');
   const accessToken = searchParams.get('access_token');
   const refreshToken = searchParams.get('refresh_token');
+
+  const roleOptions = [
+    {
+      value: 'patient' as UserRole,
+      label: 'Пациент',
+      description: 'Хочу следить за своим здоровьем',
+      icon: User,
+      color: 'bg-blue-100 text-blue-600',
+      bgGradient: 'from-blue-50 to-cyan-50'
+    },
+    {
+      value: 'doctor' as UserRole,
+      label: 'Врач',
+      description: 'Медицинский специалист',
+      icon: Stethoscope,
+      color: 'bg-green-100 text-green-600',
+      bgGradient: 'from-green-50 to-emerald-50'
+    },
+    {
+      value: 'admin' as UserRole,
+      label: 'Администратор',
+      description: 'Управление платформой',
+      icon: Settings,
+      color: 'bg-red-100 text-red-600',
+      bgGradient: 'from-red-50 to-rose-50'
+    },
+    {
+      value: 'clinic' as UserRole,
+      label: 'Клиника',
+      description: 'Медицинское учреждение',
+      icon: Building2,
+      color: 'bg-purple-100 text-purple-600',
+      bgGradient: 'from-purple-50 to-violet-50'
+    },
+    {
+      value: 'laboratory' as UserRole,
+      label: 'Лаборатория',
+      description: 'Лабораторные исследования',
+      icon: FlaskConical,
+      color: 'bg-orange-100 text-orange-600',
+      bgGradient: 'from-orange-50 to-amber-50'
+    }
+  ];
 
   // Handle password reset flow
   useEffect(() => {
@@ -96,6 +143,21 @@ const Auth = () => {
     }
   };
 
+  const validateAdminRegistration = (adminCodeValue: string) => {
+    if (selectedRole === 'admin') {
+      if (!adminCodeValue) {
+        toast.error('Для регистрации администратора требуется специальный код');
+        return false;
+      }
+      // В реальном проекте здесь должна быть проверка кода
+      if (adminCodeValue !== 'PREVENT_ADMIN_2024') {
+        toast.error('Неверный код администратора');
+        return false;
+      }
+    }
+    return true;
+  };
+
   const handleSignUp = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -106,10 +168,15 @@ const Auth = () => {
       const password = formData.get('password') as string;
       const fullName = formData.get('fullName') as string;
 
-      console.log('Попытка регистрации для:', email);
+      console.log('Попытка регистрации для:', email, 'с ролью:', selectedRole);
 
       if (!email || !password || !fullName) {
         toast.error('Пожалуйста, заполните все поля');
+        setIsLoading(false);
+        return;
+      }
+
+      if (!validateAdminRegistration(adminCode)) {
         setIsLoading(false);
         return;
       }
@@ -139,7 +206,7 @@ const Auth = () => {
         toast.error(errorMessage);
       } else {
         toast.success('Регистрация успешна! Проверьте почту для подтверждения аккаунта');
-        console.log('Успешная регистрация');
+        console.log('Успешная регистрация с ролью:', selectedRole);
       }
     } catch (err) {
       console.error('Неожиданная ошибка:', err);
@@ -456,6 +523,77 @@ const Auth = () => {
                       disabled={isLoading}
                     />
                   </div>
+
+                  {/* Выбор роли */}
+                  <div className="space-y-3">
+                    <Label className="text-base font-semibold">Выберите вашу роль</Label>
+                    <RadioGroup 
+                      value={selectedRole} 
+                      onValueChange={(value) => setSelectedRole(value as UserRole)}
+                      className="space-y-3"
+                    >
+                      {roleOptions.map((option) => (
+                        <div key={option.value} className="relative">
+                          <RadioGroupItem 
+                            value={option.value} 
+                            id={option.value} 
+                            className="sr-only"
+                          />
+                          <Label 
+                            htmlFor={option.value} 
+                            className={`
+                              flex items-center space-x-4 cursor-pointer p-4 rounded-xl border-2 transition-all duration-200
+                              ${selectedRole === option.value 
+                                ? 'border-purple-500 bg-purple-50 shadow-lg' 
+                                : 'border-gray-200 hover:border-gray-300 hover:shadow-md'
+                              }
+                            `}
+                          >
+                            <div className={`w-12 h-12 rounded-xl flex items-center justify-center ${option.color} transition-all duration-200`}>
+                              <option.icon className="w-6 h-6" />
+                            </div>
+                            <div className="flex-1">
+                              <div className="font-semibold text-gray-900">{option.label}</div>
+                              <div className="text-sm text-gray-600">{option.description}</div>
+                            </div>
+                            {selectedRole === option.value && (
+                              <div className="w-6 h-6 bg-purple-500 rounded-full flex items-center justify-center">
+                                <CheckCircle className="w-4 h-4 text-white" />
+                              </div>
+                            )}
+                          </Label>
+                          {option.value === 'admin' && (
+                            <div className="absolute top-2 right-2">
+                              <div className="bg-red-500 text-white text-xs px-2 py-1 rounded">
+                                Требует код доступа
+                              </div>
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </div>
+
+                  {/* Дополнительное поле для администраторов */}
+                  {selectedRole === 'admin' && (
+                    <div className="space-y-2">
+                      <Label htmlFor="adminCode" className="font-roboto">Код администратора</Label>
+                      <Input
+                        id="adminCode"
+                        type="password"
+                        placeholder="Введите код доступа администратора"
+                        value={adminCode}
+                        onChange={(e) => setAdminCode(e.target.value)}
+                        required
+                        className="font-roboto"
+                        disabled={isLoading}
+                      />
+                      <p className="text-xs text-gray-500">
+                        Обратитесь к главному администратору для получения кода
+                      </p>
+                    </div>
+                  )}
+
                   <Button
                     type="submit"
                     className="w-full prevent-button-primary"
@@ -480,6 +618,9 @@ const Auth = () => {
               <div className="text-xs text-blue-800">
                 <p className="font-medium mb-1">Информация для тестирования:</p>
                 <p>Если у вас проблемы с входом, убедитесь что email и пароль введены корректно. При возникновении ошибок проверьте консоль браузера для получения детальной информации.</p>
+                {selectedRole === 'admin' && (
+                  <p className="mt-1 font-medium">Тестовый код администратора: PREVENT_ADMIN_2024</p>
+                )}
               </div>
             </div>
           </div>
