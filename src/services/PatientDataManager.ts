@@ -1,4 +1,3 @@
-
 import { PatientProfile, LabResult, AIRecommendation, HealthAssessment, RiskFactors, EnvironmentalHealth, FamilyHistory, CalculatedIndex } from '../types/patient';
 import { supabase } from '../integrations/supabase/client';
 import { toast } from 'sonner';
@@ -76,10 +75,24 @@ export class PatientDataManager {
       name: profile?.full_name || 'Пациент',
       dateOfBirth: profile?.date_of_birth ? new Date(profile.date_of_birth) : new Date(),
       email: profile?.email || '',
-      phone: profile?.phone,
-      address: profile?.address,
-      emergencyContact: profile?.emergency_contact,
-      insurance: profile?.insurance_info
+      phone: profile?.phone || undefined,
+      address: profile?.address ? {
+        street: profile.address.street || '',
+        city: profile.address.city || '',
+        state: profile.address.state || '',
+        zipCode: profile.address.zipCode || '',
+        country: profile.address.country || ''
+      } : undefined,
+      emergencyContact: profile?.emergency_contact_name ? {
+        name: profile.emergency_contact_name,
+        relationship: 'Unknown',
+        phone: profile.emergency_contact_phone || ''
+      } : undefined,
+      insurance: profile?.insurance_info ? {
+        provider: profile.insurance_info.provider || '',
+        policyNumber: profile.insurance_info.policyNumber || '',
+        groupNumber: profile.insurance_info.groupNumber
+      } : undefined
     };
   }
 
@@ -146,7 +159,7 @@ export class PatientDataManager {
         lastPeriodDate: new Date(data[0].cycle_start_date),
         irregularities: [],
         symptoms: [],
-        contraception: data[0].contraception_method
+        contraception: data[0].contraception || undefined
       };
     }
 
@@ -171,8 +184,15 @@ export class PatientDataManager {
 
     return {
       cardiovascular: defaultRisk,
-      cancer: defaultRisk,
-      diabetes: defaultRisk,
+      cancer: {
+        ...defaultRisk,
+        types: [],
+        geneticFactors: []
+      },
+      diabetes: {
+        ...defaultRisk,
+        type: 'type2' as const
+      },
       osteoporosis: defaultRisk,
       mentalHealth: {
         ...defaultRisk,
@@ -203,18 +223,29 @@ export class PatientDataManager {
       .eq('record_type', 'lab_result')
       .order('record_date', { ascending: false });
 
-    return (data || []).map(record => ({
-      id: record.id,
-      testType: record.title,
-      testDate: new Date(record.record_date),
-      results: record.metadata?.results || {},
-      interpretation: record.description || '',
-      referenceRanges: record.metadata?.reference_ranges || {},
-      status: 'completed' as const,
-      uploadedBy: 'patient' as const,
-      doctorNotes: record.metadata?.doctor_notes,
-      calculatedIndices: record.metadata?.calculated_indices || []
-    }));
+    return (data || []).map(record => {
+      let metadata: any = {};
+      try {
+        metadata = typeof record.metadata === 'string' 
+          ? JSON.parse(record.metadata) 
+          : record.metadata || {};
+      } catch (e) {
+        console.warn('Failed to parse metadata:', e);
+      }
+
+      return {
+        id: record.id,
+        testType: record.title,
+        testDate: new Date(record.record_date),
+        results: metadata.results || {},
+        interpretation: record.description || '',
+        referenceRanges: metadata.reference_ranges || {},
+        status: 'completed' as const,
+        uploadedBy: 'patient' as const,
+        doctorNotes: metadata.doctor_notes,
+        calculatedIndices: metadata.calculated_indices || []
+      };
+    });
   }
 
   // Загрузка медицинской истории
@@ -475,7 +506,7 @@ export class PatientDataManager {
           reference_ranges: labResult.referenceRanges,
           calculated_indices: labResult.calculatedIndices,
           status: labResult.status
-        }
+        } as any
       });
 
     if (error) {

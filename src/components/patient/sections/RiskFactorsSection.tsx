@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { AlertTriangle, TrendingUp, Shield, Refresh } from 'lucide-react';
+import { AlertTriangle, TrendingUp, Shield, RefreshCw } from 'lucide-react';
 import { RiskFactors } from '@/types/patient';
 
 interface RiskFactorsSectionProps {
@@ -37,7 +37,7 @@ export default function RiskFactorsSection({ data, onUpdate }: RiskFactorsSectio
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-bold text-gray-800">Факторы риска</h2>
         <Button className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600">
-          <Refresh className="w-4 h-4 mr-2" />
+          <RefreshCw className="w-4 h-4 mr-2" />
           Пересчитать риски
         </Button>
       </div>
