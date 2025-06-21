@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
 import { Info, Menu, X, Crown, Languages } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { Logo } from '@/components/ui/logo';
@@ -41,10 +41,17 @@ const Navigation = () => {
     console.log('Language changed to:', language);
   };
 
+  const handleNavClick = (path: string) => {
+    // Используем window.location для полного перехода, что решает проблемы с SPA
+    window.location.href = path;
+  };
+
   return (
     <nav className="w-full px-4 md:px-6 py-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-purple-200/30 dark:border-gray-700/50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
-        <Logo size={isMobile ? 'sm' : 'md'} />
+        <Link to="/">
+          <Logo size={isMobile ? 'sm' : 'md'} />
+        </Link>
         
         {/* Mobile Menu Button */}
         {isMobile && (
@@ -73,7 +80,7 @@ const Navigation = () => {
                         <NavigationMenuLink
                           key={item.path}
                           className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground cursor-pointer"
-                          onClick={() => navigate(item.path)}
+                          onClick={() => handleNavClick(item.path)}
                         >
                           <div className="text-sm font-medium leading-none">{item.title}</div>
                         </NavigationMenuLink>
@@ -86,7 +93,7 @@ const Navigation = () => {
             
             <Button 
               variant="ghost" 
-              onClick={() => navigate('/about')}
+              onClick={() => handleNavClick('/about')}
               className="text-gray-700 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200 font-medium"
             >
               О нас
@@ -95,7 +102,7 @@ const Navigation = () => {
             {/* Subscription Plans Button */}
             <Button 
               variant="outline" 
-              onClick={() => navigate('/subscription')}
+              onClick={() => handleNavClick('/subscription')}
               className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 hover:text-purple-700 transition-all duration-200 font-medium flex items-center gap-2"
             >
               <Crown className="w-4 h-4" />
@@ -128,7 +135,7 @@ const Navigation = () => {
             <ThemeToggle />
             <Button 
               variant="outline" 
-              onClick={() => navigate('/auth')}
+              onClick={() => handleNavClick('/auth')}
               className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 transition-all duration-200 font-medium"
             >
               Войти
@@ -143,7 +150,7 @@ const Navigation = () => {
             <Button 
               variant="outline" 
               size="sm"
-              onClick={() => navigate('/auth')}
+              onClick={() => handleNavClick('/auth')}
               className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 transition-all duration-200 font-medium"
             >
               Войти
@@ -162,7 +169,7 @@ const Navigation = () => {
                 variant="ghost"
                 className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50"
                 onClick={() => {
-                  navigate(item.path);
+                  handleNavClick(item.path);
                   setMobileMenuOpen(false);
                 }}
               >
@@ -173,7 +180,7 @@ const Navigation = () => {
               variant="ghost"
               className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50"
               onClick={() => {
-                navigate('/about');
+                handleNavClick('/about');
                 setMobileMenuOpen(false);
               }}
             >
@@ -185,7 +192,7 @@ const Navigation = () => {
               variant="ghost"
               className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-2"
               onClick={() => {
-                navigate('/subscription');
+                handleNavClick('/subscription');
                 setMobileMenuOpen(false);
               }}
             >
@@ -223,7 +230,7 @@ const Navigation = () => {
               <Button 
                 variant="outline" 
                 onClick={() => {
-                  navigate('/auth');
+                  handleNavClick('/auth');
                   setMobileMenuOpen(false);
                 }}
                 className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700"
