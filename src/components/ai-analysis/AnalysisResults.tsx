@@ -209,21 +209,21 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                        {pattern.pattern_name}
+                        {pattern.patternName}
                       </h3>
                       <p className="text-body text-text-secondary mb-3">
-                        {pattern.pattern_description}
+                        {pattern.description}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={getImpactColor(pattern.health_impact)} size="sm">
-                        {pattern.health_impact === 'positive' ? 'Позитивный' : 
-                         pattern.health_impact === 'negative' ? 'Негативный' : 
-                         pattern.health_impact === 'mixed' ? 'Смешанный' : 'Нейтральный'}
+                      <Badge variant={getImpactColor(pattern.healthImpact)} size="sm">
+                        {pattern.healthImpact === 'positive' ? 'Позитивный' : 
+                         pattern.healthImpact === 'negative' ? 'Негативный' : 
+                         pattern.healthImpact === 'mixed' ? 'Смешанный' : 'Нейтральный'}
                       </Badge>
                       <Badge variant="info" size="sm">
-                        {pattern.clinical_relevance === 'high' ? 'Высокая значимость' :
-                         pattern.clinical_relevance === 'moderate' ? 'Умеренная значимость' : 'Низкая значимость'}
+                        {pattern.clinicalRelevance === 'high' ? 'Высокая значимость' :
+                         pattern.clinicalRelevance === 'moderate' ? 'Умеренная значимость' : 'Низкая значимость'}
                       </Badge>
                     </div>
                   </div>
@@ -232,25 +232,25 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                     <div>
                       <p className="text-body-small text-text-secondary">Тип</p>
                       <p className="text-body font-medium text-text-primary">
-                        {pattern.pattern_type.replace('_', ' ')}
+                        {pattern.patternType.replace('_', ' ')}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Категория</p>
                       <p className="text-body font-medium text-text-primary">
-                        {pattern.pattern_category}
+                        {pattern.patternCategory}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Сила</p>
                       <p className="text-body font-medium text-text-primary">
-                        {Math.round((pattern.pattern_strength || 0) * 100)}%
+                        {Math.round((pattern.strength || 0) * 100)}%
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Период</p>
                       <p className="text-body font-medium text-text-primary">
-                        {pattern.time_period}
+                        {pattern.timePeriod}
                       </p>
                     </div>
                   </div>
@@ -277,23 +277,23 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                        {correlation.metric_1_name} ↔ {correlation.metric_2_name}
+                        {correlation.metric1} ↔ {correlation.metric2}
                       </h3>
                       <p className="text-body text-text-secondary mb-3">
-                        {correlation.actionable_insights}
+                        {correlation.insights}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
                       <Badge 
-                        variant={correlation.relationship_direction === 'positive' ? 'success' : 'warning'} 
+                        variant={correlation.direction === 'positive' ? 'success' : 'warning'} 
                         size="sm"
                       >
-                        {correlation.relationship_direction === 'positive' ? 'Положительная' :
-                         correlation.relationship_direction === 'negative' ? 'Отрицательная' : 'Двунаправленная'}
+                        {correlation.direction === 'positive' ? 'Положительная' :
+                         correlation.direction === 'negative' ? 'Отрицательная' : 'Двунаправленная'}
                       </Badge>
                       <Badge variant="info" size="sm">
-                        {correlation.relationship_strength === 'strong' ? 'Сильная' :
-                         correlation.relationship_strength === 'moderate' ? 'Умеренная' : 'Слабая'}
+                        {correlation.strength === 'strong' ? 'Сильная' :
+                         correlation.strength === 'moderate' ? 'Умеренная' : 'Слабая'}
                       </Badge>
                     </div>
                   </div>
@@ -302,25 +302,25 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                     <div>
                       <p className="text-body-small text-text-secondary">Коэффициент</p>
                       <p className="text-body font-medium text-text-primary">
-                        {(correlation.correlation_coefficient || 0).toFixed(3)}
+                        {(correlation.coefficient || 0).toFixed(3)}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Значимость</p>
                       <p className="text-body font-medium text-text-primary">
-                        p &lt; {(correlation.statistical_significance || 0).toFixed(3)}
+                        p &lt; {(correlation.significance || 0).toFixed(3)}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Сила связи</p>
                       <p className="text-body font-medium text-text-primary">
-                        {correlation.relationship_strength}
+                        {correlation.strength}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Значимость</p>
                       <p className="text-body font-medium text-text-primary">
-                        {correlation.clinical_meaningfulness}
+                        {correlation.clinicalMeaning}
                       </p>
                     </div>
                   </div>
@@ -348,17 +348,17 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                   <div className="flex items-start justify-between mb-4">
                     <div>
                       <h3 className="text-h4 font-semibold text-text-primary mb-2">
-                        {anomaly.metric_name}
+                        {anomaly.metricName}
                       </h3>
                       <p className="text-body text-text-secondary mb-3">
-                        {anomaly.recommended_action}
+                        {anomaly.recommendedAction}
                       </p>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Badge variant={getSeverityColor(anomaly.severity_level)} size="sm">
-                        {anomaly.severity_level === 'critical' ? 'Критическая' :
-                         anomaly.severity_level === 'high' ? 'Высокая' :
-                         anomaly.severity_level === 'moderate' ? 'Умеренная' : 'Низкая'}
+                      <Badge variant={getSeverityColor(anomaly.severity)} size="sm">
+                        {anomaly.severity === 'critical' ? 'Критическая' :
+                         anomaly.severity === 'high' ? 'Высокая' :
+                         anomaly.severity === 'moderate' ? 'Умеренная' : 'Низкая'}
                       </Badge>
                       <Badge variant="warning" size="sm">
                         {anomaly.urgency === 'immediate' ? 'Немедленно' :
@@ -372,25 +372,25 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                     <div>
                       <p className="text-body-small text-text-secondary">Обнаружено</p>
                       <p className="text-body font-medium text-text-primary">
-                        {(anomaly.detected_value || 0).toFixed(2)}
+                        {(anomaly.detectedValue || 0).toFixed(2)}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Ожидалось</p>
                       <p className="text-body font-medium text-text-primary">
-                        {(anomaly.expected_value || 0).toFixed(2)}
+                        {(anomaly.expectedValue || 0).toFixed(2)}
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Отклонение</p>
                       <p className="text-body font-medium text-text-primary">
-                        {Math.round((anomaly.anomaly_score || 0) * 100)}%
+                        {Math.round((anomaly.anomalyScore || 0) * 100)}%
                       </p>
                     </div>
                     <div>
                       <p className="text-body-small text-text-secondary">Дата</p>
                       <p className="text-body font-medium text-text-primary">
-                        {new Date(anomaly.detection_date).toLocaleDateString('ru-RU')}
+                        {new Date(anomaly.detectionDate).toLocaleDateString('ru-RU')}
                       </p>
                     </div>
                   </div>
