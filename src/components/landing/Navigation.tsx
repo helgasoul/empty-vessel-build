@@ -37,13 +37,11 @@ const Navigation = () => {
 
   const handleLanguageChange = (language: string) => {
     setCurrentLanguage(language);
-    // Здесь можно добавить логику переключения языка
     console.log('Language changed to:', language);
   };
 
   const handleNavClick = (path: string) => {
-    // Используем window.location для полного перехода, что решает проблемы с SPA
-    window.location.href = path;
+    navigate(path);
   };
 
   return (
@@ -99,7 +97,6 @@ const Navigation = () => {
               О нас
             </Button>
 
-            {/* Subscription Plans Button */}
             <Button 
               variant="outline" 
               onClick={() => handleNavClick('/subscription')}
@@ -109,7 +106,6 @@ const Navigation = () => {
               Планы
             </Button>
 
-            {/* Language Selector */}
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="icon" className="text-gray-700 hover:text-purple-700">
@@ -187,7 +183,6 @@ const Navigation = () => {
               О нас
             </Button>
             
-            {/* Mobile Subscription Plans Button */}
             <Button
               variant="ghost"
               className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-2"
@@ -200,7 +195,6 @@ const Navigation = () => {
               Планы подписки
             </Button>
 
-            {/* Mobile Language Selector */}
             <div className="pt-2 border-t border-purple-200/30">
               <p className="text-sm text-gray-600 mb-2 px-4">Язык / Language</p>
               <div className="flex flex-col gap-1">

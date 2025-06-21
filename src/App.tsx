@@ -11,6 +11,13 @@ import MainPageRouter from "./components/MainPageRouter";
 
 // Import all pages that should be accessible
 import PersonalPlanPage from "./pages/PersonalPlan";
+import RiskAssessmentDemo from "./pages/RiskAssessmentDemo";
+import WomensHealthDemo from "./pages/WomensHealthDemo";
+import EnvironmentalHealthDemo from "./pages/EnvironmentalHealthDemo";
+import CommunityDemo from "./pages/CommunityDemo";
+import About from "./pages/About";
+import Subscription from "./pages/Subscription";
+import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -37,6 +44,13 @@ const App = () => (
                 
                 {/* Страницы лендинга */}
                 <Route path="/personal-plan" element={<PersonalPlanPage />} />
+                <Route path="/risk-assessment-demo" element={<RiskAssessmentDemo />} />
+                <Route path="/womens-health-demo" element={<WomensHealthDemo />} />
+                <Route path="/environmental-health-demo" element={<EnvironmentalHealthDemo />} />
+                <Route path="/community-demo" element={<CommunityDemo />} />
+                <Route path="/about" element={<About />} />
+                <Route path="/subscription" element={<Subscription />} />
+                <Route path="/auth" element={<Auth />} />
                 
                 {/* 404 страница */}
                 <Route path="*" element={<NotFound />} />
