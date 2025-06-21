@@ -64,16 +64,20 @@ const MonitoringTab = ({ selectedPeriod, setSelectedPeriod }: MonitoringTabProps
   ];
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 w-full">
       {/* Фильтр по периоду */}
-      <div className="flex gap-2 mb-6">
+      <div className="flex flex-wrap gap-2 mb-6">
         {['day', 'week', 'month'].map((period) => (
           <Button
             key={period}
             variant={selectedPeriod === period ? "default" : "outline"}
             size="sm"
             onClick={() => setSelectedPeriod(period)}
-            className={selectedPeriod === period ? "bg-amber-600 hover:bg-amber-700" : "border-amber-300 text-amber-700"}
+            className={`text-xs sm:text-sm ${
+              selectedPeriod === period 
+                ? "bg-amber-600 hover:bg-amber-700" 
+                : "border-amber-300 text-amber-700"
+            }`}
           >
             {period === 'day' ? 'День' : period === 'week' ? 'Неделя' : 'Месяц'}
           </Button>
@@ -81,35 +85,36 @@ const MonitoringTab = ({ selectedPeriod, setSelectedPeriod }: MonitoringTabProps
       </div>
 
       {/* Карточки симптомов */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-8">
         {symptoms.map((symptom, index) => (
           <SymptomCard key={index} {...symptom} />
         ))}
       </div>
 
       {/* График динамики симптомов */}
-      <Card>
+      <Card className="w-full">
         <CardHeader>
-          <CardTitle className="flex items-center gap-2 text-amber-800">
-            <TrendingUp className="w-5 h-5" />
+          <CardTitle className="flex items-center gap-2 text-amber-800 text-base sm:text-lg">
+            <TrendingUp className="w-4 h-4 sm:w-5 sm:h-5" />
             Динамика симптомов за неделю
           </CardTitle>
-          <CardDescription>
+          <CardDescription className="text-sm">
             Отслеживание изменений для выявления паттернов
           </CardDescription>
         </CardHeader>
-        <CardContent>
-          <div className="h-80">
+        <CardContent className="p-2 sm:p-6">
+          <div className="h-64 sm:h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={symptomsData}>
+              <LineChart data={symptomsData} margin={{ top: 5, right: 5, left: 5, bottom: 5 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="day" tick={{ fontSize: 12 }} />
-                <YAxis domain={[0, 5]} tick={{ fontSize: 12 }} />
+                <XAxis dataKey="day" tick={{ fontSize: 10 }} />
+                <YAxis domain={[0, 5]} tick={{ fontSize: 10 }} />
                 <Tooltip 
                   contentStyle={{ 
                     backgroundColor: 'white', 
                     border: '1px solid #e5e7eb',
-                    borderRadius: '8px' 
+                    borderRadius: '8px',
+                    fontSize: '12px'
                   }} 
                 />
                 <Line type="monotone" dataKey="hot_flashes" stroke="#D2691E" strokeWidth={2} name="Приливы" />
@@ -123,13 +128,13 @@ const MonitoringTab = ({ selectedPeriod, setSelectedPeriod }: MonitoringTabProps
       </Card>
 
       {/* Инсайт недели */}
-      <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200">
-        <CardContent className="p-6">
+      <Card className="bg-gradient-to-r from-amber-50 to-orange-50 border-amber-200 w-full">
+        <CardContent className="p-4 sm:p-6">
           <div className="flex items-start gap-3">
-            <Eye className="w-5 h-5 text-amber-600 mt-0.5" />
-            <div>
-              <h4 className="font-medium text-amber-900 mb-1">Инсайт недели</h4>
-              <p className="text-sm text-amber-800">
+            <Eye className="w-4 h-4 sm:w-5 sm:h-5 text-amber-600 mt-0.5 flex-shrink-0" />
+            <div className="flex-1 min-w-0">
+              <h4 className="font-medium text-amber-900 mb-1 text-sm sm:text-base">Инсайт недели</h4>
+              <p className="text-xs sm:text-sm text-amber-800 leading-relaxed break-words">
                 Приливы усиливаются в середине недели. Рекомендуем добавить дыхательные практики 
                 и ограничить кофеин в эти дни.
               </p>

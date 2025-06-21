@@ -22,29 +22,30 @@ const SymptomCard = ({ name, icon: IconComponent, intensity, frequency, color, d
   };
 
   return (
-    <Card className="border-2 hover:shadow-lg transition-shadow" style={{ borderColor: `${color}40` }}>
+    <Card className="border-2 hover:shadow-lg transition-shadow w-full" style={{ borderColor: `${color}40` }}>
       <CardHeader className="pb-3">
         <div className="flex items-center justify-between">
           <div 
-            className="p-3 rounded-full"
+            className="p-2 sm:p-3 rounded-full flex-shrink-0"
             style={{ backgroundColor: `${color}20` }}
           >
-            <IconComponent className="w-6 h-6" style={{ color }} />
+            <IconComponent className="w-5 h-5 sm:w-6 sm:h-6" style={{ color }} />
           </div>
           <Badge 
             variant="secondary" 
+            className="text-xs"
             style={{ backgroundColor: getIntensityColor(intensity), color: 'white' }}
           >
             {intensity}/5
           </Badge>
         </div>
-        <CardTitle className="text-lg" style={{ color }}>
+        <CardTitle className="text-base sm:text-lg break-words" style={{ color }}>
           {name}
         </CardTitle>
       </CardHeader>
-      <CardContent>
+      <CardContent className="pt-0">
         <div className="space-y-3">
-          <p className="text-sm text-gray-600">{description}</p>
+          <p className="text-sm text-gray-600 leading-relaxed break-words">{description}</p>
           
           <div className="space-y-2">
             <div className="flex justify-between text-sm">

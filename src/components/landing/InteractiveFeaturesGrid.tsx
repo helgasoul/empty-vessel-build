@@ -99,40 +99,40 @@ const InteractiveFeaturesGrid = () => {
   ];
 
   return (
-    <section className="py-20 px-4 md:px-6 bg-gradient-to-br from-gray-50 to-white">
+    <section className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-gradient-to-br from-gray-50 to-white">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <Badge className="bg-purple-100 text-purple-800 mb-6">
+        <div className="text-center mb-12 sm:mb-16">
+          <Badge className="bg-purple-100 text-purple-800 mb-4 sm:mb-6 text-xs sm:text-sm">
             🌸 Женское здоровье на каждом этапе
           </Badge>
-          <h2 className="text-4xl font-bold text-gray-900 mb-6">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-900 mb-4 sm:mb-6">
             Персонализированная забота о здоровье
           </h2>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+          <p className="text-lg sm:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
             Комплексные решения для мониторинга и поддержания женского здоровья с использованием современных технологий
           </p>
         </div>
 
         {/* Features Grid */}
-        <div className="grid md:grid-cols-2 gap-8 mb-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 sm:gap-8 mb-12 sm:mb-16">
           {features.map((feature, index) => {
             const IconComponent = feature.icon;
             return (
               <Card 
                 key={index} 
-                className={`${feature.bgColor} ${feature.borderColor} hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group`}
+                className={`${feature.bgColor} ${feature.borderColor} hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group w-full`}
               >
                 <CardHeader className="pb-4">
                   <div className="flex items-start space-x-4">
-                    <div className={`p-3 rounded-full bg-gradient-to-r ${feature.color} relative group-hover:scale-110 transition-transform duration-200`}>
-                      <IconComponent className="w-6 h-6 text-white" aria-hidden="true" />
+                    <div className={`p-2 sm:p-3 rounded-full bg-gradient-to-r ${feature.color} relative group-hover:scale-110 transition-transform duration-200 flex-shrink-0`}>
+                      <IconComponent className="w-5 h-5 sm:w-6 sm:h-6 text-white" aria-hidden="true" />
                     </div>
-                    <div className="flex-1">
-                      <CardTitle className="text-xl font-bold text-gray-900 mb-2">
+                    <div className="flex-1 min-w-0">
+                      <CardTitle className="text-lg sm:text-xl font-bold text-gray-900 mb-2 break-words">
                         {feature.title}
                       </CardTitle>
-                      <CardDescription className="text-gray-700 text-base leading-relaxed">
+                      <CardDescription className="text-gray-700 text-sm sm:text-base leading-relaxed break-words">
                         {feature.description}
                       </CardDescription>
                     </div>
@@ -143,25 +143,25 @@ const InteractiveFeaturesGrid = () => {
                   <div className="space-y-3 mb-6">
                     <h4 className="font-semibold text-gray-900 text-sm">Возможности:</h4>
                     {feature.benefits.map((benefit, benefitIndex) => (
-                      <div key={benefitIndex} className="flex items-center space-x-2">
-                        <CheckCircle className="w-3 h-3 text-green-600 flex-shrink-0" aria-hidden="true" />
-                        <span className="text-sm text-gray-700 font-medium">{benefit}</span>
+                      <div key={benefitIndex} className="flex items-start space-x-2">
+                        <CheckCircle className="w-3 h-3 sm:w-4 sm:h-4 text-green-600 flex-shrink-0 mt-0.5" aria-hidden="true" />
+                        <span className="text-xs sm:text-sm text-gray-700 font-medium leading-relaxed break-words">{benefit}</span>
                       </div>
                     ))}
                   </div>
                   
                   <div className="space-y-3">
                     <Button 
-                      className={`w-full ${feature.buttonColor} text-white font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105`}
+                      className={`w-full ${feature.buttonColor} text-white font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105 text-sm`}
                       onClick={debugButtonClick(feature.buttonText, feature.targetPath, feature.authRequired)}
                       aria-label={`${feature.buttonText} - ${feature.title}`}
                     >
                       {feature.buttonText}
-                      <ArrowRight className="w-4 h-4 ml-2" aria-hidden="true" />
+                      <ArrowRight className="w-3 h-3 sm:w-4 sm:h-4 ml-2" aria-hidden="true" />
                     </Button>
                     
                     {feature.authRequired && !user && (
-                      <p className="text-xs text-gray-600 text-center">
+                      <p className="text-xs text-gray-600 text-center leading-relaxed">
                         💡 Требуется регистрация для полного доступа
                       </p>
                     )}
@@ -173,22 +173,22 @@ const InteractiveFeaturesGrid = () => {
         </div>
 
         {/* General Benefits */}
-        <div className="text-center mb-12">
-          <Badge className="bg-green-100 text-green-800 mb-6">
+        <div className="text-center mb-8 sm:mb-12">
+          <Badge className="bg-green-100 text-green-800 mb-4 sm:mb-6 text-xs sm:text-sm">
             ✅ Что вы получите
           </Badge>
-          <h3 className="text-3xl font-bold text-gray-900 mb-8">
+          <h3 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-6 sm:mb-8">
             Полный спектр заботы о здоровье
           </h3>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-12 sm:mb-16">
           {generalBenefits.map((benefit, index) => (
-            <Card key={index} className="bg-white hover:shadow-md transition-shadow border-green-100">
-              <CardContent className="p-6">
+            <Card key={index} className="bg-white hover:shadow-md transition-shadow border-green-100 w-full">
+              <CardContent className="p-4 sm:p-6">
                 <div className="flex items-start space-x-3">
-                  <CheckCircle className="w-6 h-6 text-green-600 flex-shrink-0 mt-1" />
-                  <span className="text-gray-800 font-medium">{benefit}</span>
+                  <CheckCircle className="w-5 h-5 sm:w-6 sm:h-6 text-green-600 flex-shrink-0 mt-1" />
+                  <span className="text-gray-800 font-medium text-sm sm:text-base leading-relaxed break-words">{benefit}</span>
                 </div>
               </CardContent>
             </Card>
@@ -197,23 +197,23 @@ const InteractiveFeaturesGrid = () => {
 
         {/* CTA Section */}
         <div className="text-center">
-          <Card className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-none shadow-2xl">
-            <CardContent className="py-12">
-              <h3 className="text-2xl font-bold mb-4">
+          <Card className="bg-gradient-to-r from-purple-500 to-pink-500 text-white border-none shadow-2xl w-full">
+            <CardContent className="py-8 sm:py-12 px-4 sm:px-6">
+              <h3 className="text-xl sm:text-2xl font-bold mb-4">
                 Начните заботиться о своем здоровье сегодня
               </h3>
-              <p className="text-lg mb-8 opacity-90 max-w-2xl mx-auto">
+              <p className="text-base sm:text-lg mb-6 sm:mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
                 Присоединяйтесь к тысячам женщин, которые уже управляют своими рисками здоровья с помощью PREVENT
               </p>
               <Button 
                 size="lg" 
                 variant="secondary" 
-                className="text-purple-600 hover:text-purple-700 font-semibold hover:scale-105 transition-all duration-200"
+                className="text-purple-600 hover:text-purple-700 font-semibold hover:scale-105 transition-all duration-200 text-sm sm:text-base"
                 onClick={debugButtonClick('Начать путешествие', '/auth', false)}
                 aria-label="Начать персональную программу здоровья"
               >
                 {user ? "Перейти в личный кабинет" : "Начать бесплатно"}
-                <Heart className="w-5 h-5 ml-2" aria-hidden="true" />
+                <Heart className="w-4 h-4 sm:w-5 sm:h-5 ml-2" aria-hidden="true" />
               </Button>
             </CardContent>
           </Card>
