@@ -1,7 +1,34 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X, Crown, Info, User } from "lucide-react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { 
+  Menu, 
+  X, 
+  Crown, 
+  Info, 
+  User, 
+  ChevronDown,
+  Users, 
+  Stethoscope, 
+  BookOpen, 
+  Heart,
+  Brain,
+  Calendar,
+  UserCheck,
+  Building2,
+  FileText,
+  Database,
+  Dna,
+  Leaf
+} from "lucide-react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -16,6 +43,113 @@ const Navigation = () => {
   const isMobile = useIsMobile();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [currentLanguage, setCurrentLanguage] = useState('ru');
+
+  const navigationSections = [
+    {
+      label: "Здоровье и анализы",
+      items: [
+        {
+          title: 'Оценка рисков',
+          path: '/risk-assessment-demo',
+          icon: Brain,
+          description: 'ИИ-анализ рисков здоровья'
+        },
+        {
+          title: 'Женское здоровье',
+          path: '/womens-health-demo',
+          icon: Heart,
+          description: 'Комплексная диагностика'
+        },
+        {
+          title: 'Экология здоровья',
+          path: '/environmental-health-demo',
+          icon: Leaf,
+          description: 'Влияние окружающей среды'
+        },
+        {
+          title: 'Персональный план',
+          path: '/personal-plan',
+          icon: Calendar,
+          description: 'Индивидуальные рекомендации'
+        }
+      ]
+    },
+    {
+      label: "Семейные данные",
+      items: [
+        {
+          title: 'Семейный банк данных',
+          path: '/family-data-bank',
+          icon: Database,
+          description: 'База данных здоровья семьи'
+        },
+        {
+          title: 'История здоровья семьи',
+          path: '/family-health-history',
+          icon: FileText,
+          description: 'Медицинская история родственников'
+        },
+        {
+          title: 'Генетические риски',
+          path: '/genetic-risks',
+          icon: Dna,
+          description: 'Наследственные предрасположенности'
+        }
+      ]
+    },
+    {
+      label: "Эксперты и партнеры",
+      items: [
+        {
+          title: 'Врачи-эксперты',
+          path: '/experts',
+          icon: Stethoscope,
+          description: 'Наша команда специалистов'
+        },
+        {
+          title: 'Блог экспертов',
+          path: '/expert-blog',
+          icon: BookOpen,
+          description: 'Статьи и рекомендации врачей'
+        },
+        {
+          title: 'Партнеры платформы',
+          path: '/partners',
+          icon: Building2,
+          description: 'Медицинские центры и клиники'
+        },
+        {
+          title: 'О команде',
+          path: '/team',
+          icon: Users,
+          description: 'Кто создает PREVENT'
+        }
+      ]
+    },
+    {
+      label: "Сообщество и поддержка",
+      items: [
+        {
+          title: 'Сообщество',
+          path: '/community-demo',
+          icon: Users,
+          description: 'Общение и взаимоподдержка'
+        },
+        {
+          title: 'Подписки и планы',
+          path: '/subscription',
+          icon: UserCheck,
+          description: 'Тарифные планы'
+        },
+        {
+          title: 'О платформе',
+          path: '/about',
+          icon: FileText,
+          description: 'Миссия и ценности PREVENT'
+        }
+      ]
+    }
+  ];
 
   const navigationItems: NavigationItem[] = [
     { title: 'Персональный план', path: '/personal-plan' },
@@ -96,12 +230,47 @@ const Navigation = () => {
         {/* Desktop Navigation */}
         {!isMobile && (
           <div className="flex items-center space-x-3">
-            <DesktopMenu
-              navigationItems={navigationItems}
-              currentLanguage={currentLanguage}
-              onLanguageChange={handleLanguageChange}
-              onNavClick={handleNavClick}
-            />
+            {/* Разделы Dropdown */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button 
+                  variant="ghost" 
+                  className="text-purple-700 hover:text-purple-800 hover:bg-purple-50/80 transition-all duration-200"
+                >
+                  Разделы
+                  <ChevronDown className="w-4 h-4 ml-1" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="w-80 max-h-[80vh] overflow-y-auto bg-white border border-purple-200/50 shadow-xl rounded-xl">
+                {navigationSections.map((section, sectionIndex) => (
+                  <div key={section.label}>
+                    <DropdownMenuLabel className="text-sm font-semibold text-gray-700 px-3 py-2 bg-gray-50/80">
+                      {section.label}
+                    </DropdownMenuLabel>
+                    {section.items.map((item) => (
+                      <DropdownMenuItem
+                        key={item.path}
+                        className="px-3 py-3 cursor-pointer transition-colors bg-white hover:bg-purple-50"
+                        onClick={() => handleNavClick(item.path)}
+                      >
+                        <div className="flex items-center space-x-3 w-full">
+                          <div className="prevent-icon-container bg-purple-100 w-8 h-8 shrink-0 rounded-lg flex items-center justify-center">
+                            <item.icon className="w-4 h-4 text-purple-600" />
+                          </div>
+                          <div className="min-w-0 flex-1">
+                            <div className="font-medium text-sm text-gray-900">{item.title}</div>
+                            <div className="text-xs text-gray-500 truncate">{item.description}</div>
+                          </div>
+                        </div>
+                      </DropdownMenuItem>
+                    ))}
+                    {sectionIndex < navigationSections.length - 1 && (
+                      <DropdownMenuSeparator className="my-2 bg-gray-200/50" />
+                    )}
+                  </div>
+                ))}
+              </DropdownMenuContent>
+            </DropdownMenu>
             
             <Button 
               onClick={handleAboutClick}
@@ -109,6 +278,14 @@ const Navigation = () => {
             >
               <Info className="w-4 h-4 mr-2" />
               О нас
+            </Button>
+
+            <Button 
+              onClick={() => handleNavClick('/experts')}
+              className={navigationButtonStyle}
+            >
+              <Stethoscope className="w-4 h-4 mr-2" />
+              Эксперты
             </Button>
 
             <Button 

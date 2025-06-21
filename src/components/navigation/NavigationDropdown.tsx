@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import {
@@ -25,7 +26,13 @@ import {
   Video,
   Leaf,
   Trophy,
-  Search
+  Search,
+  Database,
+  FileText,
+  Dna,
+  Stethoscope,
+  BookOpen,
+  Building2
 } from "lucide-react";
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -99,6 +106,29 @@ const NavigationDropdown = () => {
       ]
     },
     {
+      label: "Семейные данные",
+      items: [
+        { 
+          title: 'Семейный банк данных', 
+          path: '/family-data-bank', 
+          icon: Database,
+          description: 'База данных здоровья семьи'
+        },
+        { 
+          title: 'История здоровья семьи', 
+          path: '/family-health-history', 
+          icon: FileText,
+          description: 'Медицинская история родственников'
+        },
+        { 
+          title: 'Генетические риски', 
+          path: '/genetic-risks', 
+          icon: Dna,
+          description: 'Наследственные предрасположенности'
+        }
+      ]
+    },
+    {
       label: "Контроль и планирование",
       items: [
         { 
@@ -120,6 +150,35 @@ const NavigationDropdown = () => {
           icon: Pill,
           description: 'Управление приемом',
           status: 'new'
+        }
+      ]
+    },
+    {
+      label: "Эксперты и партнеры",
+      items: [
+        { 
+          title: 'Врачи-эксперты', 
+          path: '/experts', 
+          icon: Stethoscope,
+          description: 'Наша команда специалистов'
+        },
+        { 
+          title: 'Блог экспертов', 
+          path: '/expert-blog', 
+          icon: BookOpen,
+          description: 'Статьи и рекомендации врачей'
+        },
+        { 
+          title: 'Партнеры платформы', 
+          path: '/partners', 
+          icon: Building2,
+          description: 'Медицинские центры и клиники'
+        },
+        { 
+          title: 'О команде', 
+          path: '/team', 
+          icon: Users,
+          description: 'Кто создает PREVENT'
         }
       ]
     },

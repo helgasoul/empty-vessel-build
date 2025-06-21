@@ -40,6 +40,17 @@ import EnvironmentalHealth from "./pages/EnvironmentalHealth";
 import GamificationPage from "./pages/GamificationPage";
 import Community from "./pages/Community";
 
+// ✅ НОВЫЕ СТРАНИЦЫ: Семейные данные
+import FamilyDataBank from "./pages/FamilyDataBank";
+import FamilyHealthHistory from "./pages/FamilyHealthHistory";
+import GeneticRisks from "./pages/GeneticRisks";
+
+// ✅ НОВЫЕ СТРАНИЦЫ: Эксперты и партнеры
+import Experts from "./pages/Experts";
+import ExpertBlog from "./pages/ExpertBlog";
+import Partners from "./pages/Partners";
+import Team from "./pages/Team";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -72,11 +83,22 @@ const App = () => (
                 <Route path="/subscription" element={<Subscription />} />
                 <Route path="/auth" element={<Auth />} />
                 
-                {/* ✅ КРИТИЧЕСКИЕ МАРШРУТЫ: Демо-страницы для женского здоровья */}
+                {/* ✅ Демо-страницы для женского здоровья */}
                 <Route path="/hormonal-health-demo" element={<HormonalHealthDemo />} />
                 <Route path="/menopause-demo" element={<MenopauseDemo />} />
                 
-                {/* ✅ КРИТИЧЕСКИЕ МАРШРУТЫ: Временные заглушки для отсутствующих страниц */}
+                {/* ✅ НОВЫЕ МАРШРУТЫ: Семейные данные */}
+                <Route path="/family-data-bank" element={<FamilyDataBank />} />
+                <Route path="/family-health-history" element={<FamilyHealthHistory />} />
+                <Route path="/genetic-risks" element={<GeneticRisks />} />
+                
+                {/* ✅ НОВЫЕ МАРШРУТЫ: Эксперты и партнеры */}
+                <Route path="/experts" element={<Experts />} />
+                <Route path="/expert-blog" element={<ExpertBlog />} />
+                <Route path="/partners" element={<Partners />} />
+                <Route path="/team" element={<Team />} />
+                
+                {/* ✅ Временные заглушки для отсутствующих страниц */}
                 <Route path="/hormone-balance" element={
                   <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
                     <div className="text-center p-8 bg-white rounded-xl shadow-lg">
