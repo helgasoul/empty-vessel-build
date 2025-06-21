@@ -502,6 +502,54 @@ export type Database = {
         }
         Relationships: []
       }
+      data_relationships: {
+        Row: {
+          auto_detected: boolean | null
+          confidence_score: number | null
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          id: string
+          primary_id: string
+          primary_type: string
+          relationship_strength: number | null
+          relationship_type: string
+          secondary_id: string
+          secondary_type: string
+          user_id: string
+        }
+        Insert: {
+          auto_detected?: boolean | null
+          confidence_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          primary_id: string
+          primary_type: string
+          relationship_strength?: number | null
+          relationship_type: string
+          secondary_id: string
+          secondary_type: string
+          user_id: string
+        }
+        Update: {
+          auto_detected?: boolean | null
+          confidence_score?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          id?: string
+          primary_id?: string
+          primary_type?: string
+          relationship_strength?: number | null
+          relationship_type?: string
+          secondary_id?: string
+          secondary_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       diploma_files: {
         Row: {
           file_name: string
@@ -2357,6 +2405,93 @@ export type Database = {
         }
         Relationships: []
       }
+      lab_results: {
+        Row: {
+          created_at: string | null
+          flag: string | null
+          id: string
+          interpretation: string | null
+          lab_name: string | null
+          medical_event_id: string | null
+          methodology: string | null
+          notes: string | null
+          reference_range: string | null
+          result_numeric: number | null
+          result_value: string | null
+          source_file_id: string | null
+          status: string | null
+          test_category: string | null
+          test_code: string | null
+          test_date: string
+          test_name: string
+          test_panel: string | null
+          unit: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          flag?: string | null
+          id?: string
+          interpretation?: string | null
+          lab_name?: string | null
+          medical_event_id?: string | null
+          methodology?: string | null
+          notes?: string | null
+          reference_range?: string | null
+          result_numeric?: number | null
+          result_value?: string | null
+          source_file_id?: string | null
+          status?: string | null
+          test_category?: string | null
+          test_code?: string | null
+          test_date: string
+          test_name: string
+          test_panel?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          flag?: string | null
+          id?: string
+          interpretation?: string | null
+          lab_name?: string | null
+          medical_event_id?: string | null
+          methodology?: string | null
+          notes?: string | null
+          reference_range?: string | null
+          result_numeric?: number | null
+          result_value?: string | null
+          source_file_id?: string | null
+          status?: string | null
+          test_category?: string | null
+          test_code?: string | null
+          test_date?: string
+          test_name?: string
+          test_panel?: string | null
+          unit?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_results_medical_event_id_fkey"
+            columns: ["medical_event_id"]
+            isOneToOne: false
+            referencedRelation: "medical_events"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "lab_results_source_file_id_fkey"
+            columns: ["source_file_id"]
+            isOneToOne: false
+            referencedRelation: "medical_files"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       laboratory_profiles: {
         Row: {
           accreditation: string[] | null
@@ -2542,6 +2677,200 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      medical_events: {
+        Row: {
+          attached_files: Json | null
+          clinic_name: string | null
+          created_at: string | null
+          description: string | null
+          diagnosis: string | null
+          doctor_name: string | null
+          doctor_specialty: string | null
+          duration_minutes: number | null
+          event_date: string
+          event_subtype: string | null
+          event_time: string | null
+          event_type: string
+          follow_up_date: string | null
+          follow_up_required: boolean | null
+          icd_codes: Json | null
+          id: string
+          location: string | null
+          medications: Json | null
+          organ_system: string | null
+          priority: string | null
+          recommendations: string | null
+          results: Json | null
+          status: string | null
+          symptoms: Json | null
+          title: string
+          treatment: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          attached_files?: Json | null
+          clinic_name?: string | null
+          created_at?: string | null
+          description?: string | null
+          diagnosis?: string | null
+          doctor_name?: string | null
+          doctor_specialty?: string | null
+          duration_minutes?: number | null
+          event_date: string
+          event_subtype?: string | null
+          event_time?: string | null
+          event_type: string
+          follow_up_date?: string | null
+          follow_up_required?: boolean | null
+          icd_codes?: Json | null
+          id?: string
+          location?: string | null
+          medications?: Json | null
+          organ_system?: string | null
+          priority?: string | null
+          recommendations?: string | null
+          results?: Json | null
+          status?: string | null
+          symptoms?: Json | null
+          title: string
+          treatment?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          attached_files?: Json | null
+          clinic_name?: string | null
+          created_at?: string | null
+          description?: string | null
+          diagnosis?: string | null
+          doctor_name?: string | null
+          doctor_specialty?: string | null
+          duration_minutes?: number | null
+          event_date?: string
+          event_subtype?: string | null
+          event_time?: string | null
+          event_type?: string
+          follow_up_date?: string | null
+          follow_up_required?: boolean | null
+          icd_codes?: Json | null
+          id?: string
+          location?: string | null
+          medications?: Json | null
+          organ_system?: string | null
+          priority?: string | null
+          recommendations?: string | null
+          results?: Json | null
+          status?: string | null
+          symptoms?: Json | null
+          title?: string
+          treatment?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      medical_files: {
+        Row: {
+          ai_analysis_completed: boolean | null
+          clinic_name: string | null
+          created_at: string | null
+          custom_tags: Json | null
+          description: string | null
+          doctor_name: string | null
+          document_type: string | null
+          encryption_key_id: string | null
+          examination_date: string | null
+          file_hash: string | null
+          file_size: number
+          file_type: string
+          filename: string
+          id: string
+          is_encrypted: boolean | null
+          medical_category: string | null
+          mime_type: string | null
+          notes: string | null
+          ocr_completed: boolean | null
+          organ_system: string | null
+          original_filename: string
+          parent_file_id: string | null
+          processing_status: string | null
+          related_event_id: string | null
+          storage_path: string
+          tags: Json | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          ai_analysis_completed?: boolean | null
+          clinic_name?: string | null
+          created_at?: string | null
+          custom_tags?: Json | null
+          description?: string | null
+          doctor_name?: string | null
+          document_type?: string | null
+          encryption_key_id?: string | null
+          examination_date?: string | null
+          file_hash?: string | null
+          file_size: number
+          file_type: string
+          filename: string
+          id?: string
+          is_encrypted?: boolean | null
+          medical_category?: string | null
+          mime_type?: string | null
+          notes?: string | null
+          ocr_completed?: boolean | null
+          organ_system?: string | null
+          original_filename: string
+          parent_file_id?: string | null
+          processing_status?: string | null
+          related_event_id?: string | null
+          storage_path: string
+          tags?: Json | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          ai_analysis_completed?: boolean | null
+          clinic_name?: string | null
+          created_at?: string | null
+          custom_tags?: Json | null
+          description?: string | null
+          doctor_name?: string | null
+          document_type?: string | null
+          encryption_key_id?: string | null
+          examination_date?: string | null
+          file_hash?: string | null
+          file_size?: number
+          file_type?: string
+          filename?: string
+          id?: string
+          is_encrypted?: boolean | null
+          medical_category?: string | null
+          mime_type?: string | null
+          notes?: string | null
+          ocr_completed?: boolean | null
+          organ_system?: string | null
+          original_filename?: string
+          parent_file_id?: string | null
+          processing_status?: string | null
+          related_event_id?: string | null
+          storage_path?: string
+          tags?: Json | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_files_parent_file_id_fkey"
+            columns: ["parent_file_id"]
+            isOneToOne: false
+            referencedRelation: "medical_files"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       medical_procedures: {
         Row: {
@@ -4107,13 +4436,16 @@ export type Database = {
           access_token: string | null
           connection_status: string | null
           created_at: string
+          data_types: Json | null
           device_name: string
           device_settings: Json | null
           device_type: string
           id: string
           is_connected: boolean | null
           last_sync_at: string | null
+          last_sync_data: Json | null
           refresh_token: string | null
+          sync_frequency_minutes: number | null
           token_expires_at: string | null
           updated_at: string
           user_id: string
@@ -4122,13 +4454,16 @@ export type Database = {
           access_token?: string | null
           connection_status?: string | null
           created_at?: string
+          data_types?: Json | null
           device_name: string
           device_settings?: Json | null
           device_type: string
           id?: string
           is_connected?: boolean | null
           last_sync_at?: string | null
+          last_sync_data?: Json | null
           refresh_token?: string | null
+          sync_frequency_minutes?: number | null
           token_expires_at?: string | null
           updated_at?: string
           user_id: string
@@ -4137,13 +4472,16 @@ export type Database = {
           access_token?: string | null
           connection_status?: string | null
           created_at?: string
+          data_types?: Json | null
           device_name?: string
           device_settings?: Json | null
           device_type?: string
           id?: string
           is_connected?: boolean | null
           last_sync_at?: string | null
+          last_sync_data?: Json | null
           refresh_token?: string | null
+          sync_frequency_minutes?: number | null
           token_expires_at?: string | null
           updated_at?: string
           user_id?: string

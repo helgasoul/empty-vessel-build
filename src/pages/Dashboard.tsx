@@ -1,119 +1,222 @@
 
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Button } from "@/components/ui/button";
-import { useNavigate } from 'react-router-dom';
-import NavigationDropdown from '@/components/navigation/NavigationDropdown';
-import ProfileSection from '@/components/dashboard/ProfileSection';
-import DeviceIntegration from '@/components/dashboard/DeviceIntegration';
-import RiskAssessment from '@/components/dashboard/RiskAssessment';
-import QuickActions from '@/components/dashboard/QuickActions';
-import HealthDataDashboard from '@/components/health/HealthDataDashboard';
-import PersonalizedWelcome from '@/components/dashboard/PersonalizedWelcome';
-import ProgressIndicators from '@/components/dashboard/ProgressIndicators';
-import NotificationCenter from '@/components/notifications/NotificationCenter';
-import { ThemeToggle } from '@/components/ui/theme-toggle';
-import { MobileNavigation } from '@/components/navigation/MobileNavigation';
-import { DataSync } from '@/components/sync/DataSync';
-import { ActivityMonitor } from '@/components/activity/ActivityMonitor';
-import HealthMetricsCards from '@/components/dashboard/HealthMetricsCards';
-import { useIsMobile } from '@/hooks/use-mobile';
-import { Logo } from '@/components/ui/logo';
+import { Navigate } from 'react-router-dom';
+import { 
+  Card, 
+  CardContent, 
+  CardDescription, 
+  CardHeader, 
+  CardTitle 
+} from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { 
+  Activity, 
+  FileText, 
+  Heart, 
+  Calendar,
+  TrendingUp,
+  Shield,
+  Database,
+  Leaf,
+  Users,
+  Settings,
+  Bell
+} from 'lucide-react';
 
 const Dashboard = () => {
-  const { user, signOut } = useAuth();
-  const navigate = useNavigate();
-  const isMobile = useIsMobile();
+  const { user, loading, logout } = useAuth();
+
+  if (loading) {
+    return <div className="flex justify-center items-center min-h-screen">Загрузка...</div>;
+  }
+
+  if (!user) {
+    return <Navigate to="/auth" replace />;
+  }
+
+  const features = [
+    {
+      title: 'Оценка рисков здоровья',
+      description: 'Персонализированный анализ рисков заболеваний на основе ваших данных',
+      icon: <Heart className="h-6 w-6" />,
+      href: '/risk-assessment',
+      color: 'bg-red-50 border-red-200',
+      iconColor: 'text-red-600'
+    },
+    {
+      title: 'Медицинское хранилище',
+      description: 'Безопасное хранение и управление вашими медицинскими документами',
+      icon: <Database className="h-6 w-6" />,
+      href: '/health-vault',
+      color: 'bg-blue-50 border-blue-200',
+      iconColor: 'text-blue-600'
+    },
+    {
+      title: 'Экологическое здоровье',
+      description: 'Мониторинг влияния окружающей среды на ваше здоровье',
+      icon: <Leaf className="h-6 w-6" />,
+      href: '/environmental-health',
+      color: 'bg-green-50 border-green-200',
+      iconColor: 'text-green-600'
+    },
+    {
+      title: 'Семейная история',
+      description: 'Отслеживание наследственных рисков и семейной медицинской истории',
+      icon: <Users className="h-6 w-6" />,
+      href: '/family-history',
+      color: 'bg-purple-50 border-purple-200',
+      iconColor: 'text-purple-600',
+      comingSoon: true
+    },
+    {
+      title: 'Интеграции с устройствами',
+      description: 'Подключение носимых устройств и мониторинг показателей здоровья',
+      icon: <Activity className="h-6 w-6" />,
+      href: '/device-integrations',
+      color: 'bg-orange-50 border-orange-200',
+      iconColor: 'text-orange-600',
+      comingSoon: true
+    },
+    {
+      title: 'Медицинский календарь',
+      description: 'Планирование консультаций, анализов и медицинских процедур',
+      icon: <Calendar className="h-6 w-6" />,
+      href: '/medical-calendar',
+      color: 'bg-indigo-50 border-indigo-200',
+      iconColor: 'text-indigo-600',
+      comingSoon: true
+    }
+  ];
+
+  const quickStats = [
+    {
+      title: 'Последняя оценка рисков',
+      value: 'Не проводилась',
+      icon: <TrendingUp className="h-5 w-5" />,
+      href: '/risk-assessment'
+    },
+    {
+      title: 'Документов в хранилище',
+      value: '0',
+      icon: <FileText className="h-5 w-5" />,
+      href: '/health-vault'
+    },
+    {
+      title: 'Предстоящих событий',
+      value: '0',
+      icon: <Calendar className="h-5 w-5" />,
+      href: '/medical-calendar'
+    },
+    {
+      title: 'Уведомлений',
+      value: '0',
+      icon: <Bell className="h-5 w-5" />,
+      href: '/notifications'
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-purple-50/30">
-      {/* Header с улучшенной навигацией */}
-      <header className="bg-white/95 backdrop-blur-md border-b border-purple-200/30 sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <MobileNavigation />
-              <Logo size={isMobile ? 'sm' : 'md'} />
-            </div>
-            
-            {/* Центральная секция с выпадающим меню */}
-            <div className="flex-1 flex justify-center max-w-md mx-8">
-              <NavigationDropdown />
-            </div>
-            
-            <div className="flex items-center space-x-2 md:space-x-4">
-              <ThemeToggle />
-              <NotificationCenter />
-              
-              <Button 
-                variant="outline" 
-                onClick={signOut}
-                className="hover:bg-red-50 hover:border-red-200 transition-colors font-medium text-sm border-purple-200 shadow-sm"
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+      <div className="container mx-auto px-4 py-8">
+        {/* Header */}
+        <div className="flex justify-between items-center mb-8">
+          <div>
+            <h1 className="text-4xl font-bold text-gray-900">
+              Добро пожаловать в PREVENT
+            </h1>
+            <p className="text-lg text-gray-600 mt-2">
+              Ваша персональная платформа превентивной медицины
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm">
+              <Settings className="h-4 w-4 mr-2" />
+              Настройки
+            </Button>
+            <Button variant="outline" size="sm" onClick={logout}>
+              Выйти
+            </Button>
+          </div>
+        </div>
+
+        {/* Quick Stats */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          {quickStats.map((stat, index) => (
+            <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
+              <CardContent className="p-4">
+                <div className="flex items-center justify-between">
+                  <div>
+                    <p className="text-sm text-gray-600">{stat.title}</p>
+                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                  </div>
+                  <div className="text-gray-400">
+                    {stat.icon}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Features Grid */}
+        <div className="mb-8">
+          <h2 className="text-2xl font-bold text-gray-900 mb-6">Основные функции</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {features.map((feature, index) => (
+              <Card 
+                key={index} 
+                className={`${feature.color} hover:shadow-lg transition-all duration-300 cursor-pointer relative overflow-hidden ${feature.comingSoon ? 'opacity-75' : ''}`}
+                onClick={() => !feature.comingSoon && (window.location.href = feature.href)}
               >
-                Выйти
-              </Button>
-            </div>
+                {feature.comingSoon && (
+                  <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
+                    Скоро
+                  </div>
+                )}
+                <CardHeader>
+                  <div className={`${feature.iconColor} mb-2`}>
+                    {feature.icon}
+                  </div>
+                  <CardTitle className="text-lg">{feature.title}</CardTitle>
+                  <CardDescription className="text-sm">
+                    {feature.description}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <Button 
+                    variant="ghost" 
+                    size="sm" 
+                    disabled={feature.comingSoon}
+                    className="w-full justify-start"
+                  >
+                    {feature.comingSoon ? 'В разработке' : 'Открыть →'}
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
           </div>
         </div>
-      </header>
 
-      {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 md:px-6 py-6 md:py-8 w-full">
-        {/* Персонализированное приветствие */}
-        <div className="mb-6 md:mb-8 animate-fade-in">
-          <PersonalizedWelcome />
-        </div>
-
-        {/* Health Metrics Cards */}
-        <div className="mb-6 md:mb-8 animate-slide-up">
-          <HealthMetricsCards />
-        </div>
-
-        {/* Health Data Dashboard */}
-        <div className="mb-6 md:mb-8 animate-slide-up" style={{ animationDelay: '0.1s' }}>
-          <HealthDataDashboard />
-        </div>
-
-        {/* Main Grid Layout */}
-        <div className="grid lg:grid-cols-3 gap-6 md:gap-8">
-          {/* Left Column - Profile & Devices */}
-          <div className="lg:col-span-1 space-y-6 animate-slide-up" style={{ animationDelay: '0.2s' }}>
-            <ProfileSection />
-            <DeviceIntegration />
-            <DataSync />
-          </div>
-
-          {/* Right Column - Progress, Risk Assessment & Actions */}
-          <div className="lg:col-span-2 space-y-6 animate-slide-up" style={{ animationDelay: '0.3s' }}>
-            <ProgressIndicators />
-            <RiskAssessment />
-            <QuickActions />
-            <ActivityMonitor />
-          </div>
-        </div>
-      </main>
-
-      {/* Footer для дополнительной информации */}
-      <footer className="border-t border-gray-200/50 bg-white/30 backdrop-blur-sm mt-auto">
-        <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
-          <div className="flex flex-col md:flex-row items-center justify-between text-sm text-gray-600">
-            <div className="flex items-center space-x-4 mb-2 md:mb-0">
-              <span>© 2024 PREVENT Platform</span>
-              <span className="hidden md:inline">•</span>
-              <span className="text-xs bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent font-medium">
-                Ваше здоровье — наш приоритет
-              </span>
-            </div>
-            <div className="flex items-center space-x-4">
-              <span className="text-xs">Последнее обновление: {new Date().toLocaleTimeString('ru-RU')}</span>
-              <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
-                <span className="text-xs">Онлайн</span>
+        {/* Security Notice */}
+        <Card className="bg-yellow-50 border-yellow-200">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-3">
+              <Shield className="h-6 w-6 text-yellow-600 mt-1" />
+              <div>
+                <h3 className="font-semibold text-yellow-800 mb-2">
+                  Безопасность ваших данных
+                </h3>
+                <p className="text-sm text-yellow-700">
+                  Все ваши медицинские данные зашифрованы и хранятся в соответствии с международными 
+                  стандартами безопасности GDPR и HIPAA. Мы никогда не передаем ваши данные третьим лицам 
+                  без вашего явного согласия.
+                </p>
               </div>
             </div>
-          </div>
-        </div>
-      </footer>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 };
