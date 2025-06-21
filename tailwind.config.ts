@@ -36,86 +36,129 @@ export default {
 				'caption': [typography.fontSize.caption, { lineHeight: typography.lineHeight.normal }],
 			},
 			colors: {
-				// PREVENT Brand Colors - Using the structured tokens
-				primary: colors.primary,
-				gradient: colors.gradient,
-				accent: colors.accent,
+				// PREVENT Brand Colors - Direct color assignments
+				primary: {
+					50: '#F3F1FF',
+					100: '#E8E1FF',
+					200: '#D4C7FF',
+					300: '#B8A8FF',
+					400: '#9B7CFF',
+					500: '#7C3AED',
+					600: '#6D28D9',
+					700: '#5B21B6',
+					800: '#4C1D95',
+					900: '#3C1A78',
+					DEFAULT: '#7C3AED',
+					foreground: '#FFFFFF',
+				},
+				
+				gradient: {
+					50: '#FDF2F8',
+					100: '#FCE7F3',
+					200: '#FBCFE8',
+					300: '#F9A8D4',
+					400: '#F472B6',
+					500: '#EC4899',
+					600: '#DB2777',
+					700: '#BE185D',
+					800: '#9D174D',
+					900: '#831843',
+					DEFAULT: '#EC4899',
+				},
+				
+				accent: {
+					50: '#F0F9FF',
+					100: '#E0F2FE',
+					200: '#BAE6FD',
+					300: '#7DD3FC',
+					400: '#38BDF8',
+					500: '#0EA5E9',
+					600: '#0284C7',
+					700: '#0369A1',
+					800: '#075985',
+					900: '#0C4A6E',
+					DEFAULT: '#0EA5E9',
+					foreground: '#FFFFFF',
+				},
 				
 				// Background system
 				background: {
-					DEFAULT: colors.background.primary,
-					secondary: colors.background.secondary,
-					tertiary: colors.background.tertiary,
+					DEFAULT: '#FAFAFA',
+					secondary: '#F8FAFC',
+					tertiary: '#FFFFFF',
 				},
 				
 				// Text system
-				foreground: colors.text.primary,
-				text: colors.text,
+				foreground: '#1E293B',
+				text: {
+					primary: '#1E293B',
+					secondary: '#64748B',
+					tertiary: '#94A3B8',
+					inverse: '#FFFFFF',
+					brand: '#7C3AED',
+				},
 				
 				// Status colors
-				status: colors.status,
+				status: {
+					low: '#10B981',
+					medium: '#F59E0B',
+					high: '#EF4444',
+					success: '#10B981',
+					warning: '#F59E0B',
+					error: '#EF4444',
+					info: '#3B82F6',
+				},
 				
 				// Semantic health colors
-				health: colors.semantic,
+				health: {
+					menstruation: '#EC4899',
+					ovulation: '#F97316',
+					fertility: '#10B981',
+					pregnancy: '#F59E0B',
+					menopause: '#7C3AED',
+				},
 				
 				// UI colors
 				border: {
-					DEFAULT: colors.border.light,
-					medium: colors.border.medium,
-					dark: colors.border.dark,
+					DEFAULT: '#E2E8F0',
+					light: '#E2E8F0',
+					medium: '#CBD5E1',
+					dark: '#94A3B8',
 				},
 				
-				// shadcn/ui compatibility with new brand colors
-				primary: {
-					DEFAULT: colors.primary[500],
-					foreground: colors.text.inverse,
-					50: colors.primary[50],
-					100: colors.primary[100],
-					200: colors.primary[200],
-					300: colors.primary[300],
-					400: colors.primary[400],
-					500: colors.primary[500],
-					600: colors.primary[600],
-					700: colors.primary[700],
-					800: colors.primary[800],
-					900: colors.primary[900],
-				},
+				// shadcn/ui compatibility
 				secondary: {
-					DEFAULT: colors.primary[100],
-					foreground: colors.primary[900],
+					DEFAULT: '#F8FAFC',
+					foreground: '#1E293B',
 				},
 				destructive: {
-					DEFAULT: colors.status.error,
-					foreground: colors.text.inverse,
+					DEFAULT: '#EF4444',
+					foreground: '#FFFFFF',
 				},
 				muted: {
-					DEFAULT: colors.background.secondary,
-					foreground: colors.text.secondary,
-				},
-				accent: {
-					DEFAULT: colors.accent[500],
-					foreground: colors.text.inverse,
+					DEFAULT: '#F8FAFC',
+					foreground: '#64748B',
 				},
 				popover: {
-					DEFAULT: colors.background.tertiary,
-					foreground: colors.text.primary,
+					DEFAULT: '#FFFFFF',
+					foreground: '#1E293B',
 				},
 				card: {
-					DEFAULT: colors.background.secondary,
-					foreground: colors.text.primary,
+					DEFAULT: '#F8FAFC',
+					foreground: '#1E293B',
 				},
-				input: colors.border.medium,
-				ring: colors.primary[500],
+				input: '#CBD5E1',
+				ring: '#7C3AED',
 				
 				sidebar: {
-					DEFAULT: colors.background.secondary,
-					foreground: colors.text.primary,
-					primary: colors.primary[500],
-					'primary-foreground': colors.text.inverse,
-					accent: colors.background.tertiary,
-					'accent-foreground': colors.text.primary,
-					border: colors.border.light,
-					ring: colors.primary[500],
+					DEFAULT: '#F8FAFC',
+					foreground: '#1E293B',
+					primary: '#7C3AED',
+					'primary-foreground': '#FFFFFF',
+					accent: '#FFFFFF',
+					'accent-foreground': '#1E293B',
+					border: '#E2E8F0',
+					ring: '#7C3AED',
 				}
 			},
 			borderRadius: {
@@ -126,10 +169,10 @@ export default {
 			},
 			boxShadow: shadows,
 			backgroundImage: {
-				'gradient-brand': colors.gradients.primary,
-				'gradient-secondary': colors.gradients.secondary,
-				'gradient-accent': colors.gradients.accent,
-				'gradient-background': colors.gradients.background,
+				'gradient-brand': 'linear-gradient(135deg, #7C3AED 0%, #EC4899 50%, #0EA5E9 100%)',
+				'gradient-secondary': 'linear-gradient(135deg, #F3F1FF 0%, #FDF2F8 100%)',
+				'gradient-accent': 'linear-gradient(135deg, #EC4899 0%, #F472B6 100%)',
+				'gradient-background': 'linear-gradient(135deg, #FAFAFA 0%, #F8FAFC 100%)',
 			},
 			keyframes: {
 				'accordion-down': {
