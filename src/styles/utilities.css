@@ -1,95 +1,85 @@
 
 /* Utility Classes */
-@layer utilities {
-  .animate-fade-in {
-    animation: fadeIn 0.6s ease-out;
-  }
 
-  .animate-slide-up {
-    animation: slideUp 0.8s ease-out;
+/* Animation classes */
+@keyframes fadeIn {
+  from { 
+    opacity: 0; 
+    transform: translateY(20px); 
   }
-
-  .animate-pulse-slow {
-    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
-  }
-
-  .animate-bounce-gentle {
-    animation: bounceGentle 2s infinite;
-  }
-
-  .animate-glow {
-    animation: glow 2s ease-in-out infinite alternate;
-  }
-
-  /* Мобильные утилиты */
-  .mobile-padding {
-    @apply px-4 md:px-6;
-  }
-
-  .mobile-text {
-    @apply text-sm md:text-base;
-  }
-
-  .mobile-title {
-    @apply text-xl md:text-2xl;
-  }
-
-  /* Статус индикаторы в мягких тонах */
-  .status-online {
-    @apply w-2 h-2 bg-emerald-400 rounded-full animate-pulse;
-  }
-
-  .status-offline {
-    @apply w-2 h-2 bg-gray-300 rounded-full;
+  to { 
+    opacity: 1; 
+    transform: translateY(0); 
   }
 }
 
-/* Высокая контрастность для accessibility */
-@media (prefers-contrast: high) {
-  .prevent-card {
-    @apply border-2 border-purple-300;
+@keyframes slideIn {
+  from { 
+    transform: translateX(-100%); 
   }
-  
-  .text-gray-600 {
-    @apply text-gray-800;
-  }
-  
-  .text-gray-500 {
-    @apply text-gray-700;
+  to { 
+    transform: translateX(0); 
   }
 }
 
-/* Reduced motion для пользователей с ограниченными возможностями */
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
+.animate-fadeIn {
+  animation: fadeIn 0.6s ease-out;
 }
 
-/* Улучшенная поддержка мобильных устройств */
-@media (max-width: 768px) {
-  .prevent-card {
-    @apply rounded-lg;
-  }
-  
-  .prevent-icon-container {
-    @apply w-10 h-10;
-  }
-  
-  .grid-cols-2 {
-    gap: 1rem;
-  }
+.animate-slideIn {
+  animation: slideIn 0.4s ease-out;
+}
 
-  /* Оптимизация для touch-устройств */
-  .prevent-card {
-    @apply active:scale-[0.98] transition-transform;
-  }
+/* Кастомные градиенты для женского здоровья */
+.gradient-rose {
+  background: linear-gradient(135deg, #fb7185 0%, #f472b6 50%, #f97316 100%);
+}
 
-  button {
-    @apply min-h-[44px] min-w-[44px];
-    pointer-events: auto !important;
-    cursor: pointer !important;
-  }
+.gradient-soft {
+  background: linear-gradient(135deg, #fef7f7 0%, #fef3f4 50%, #fff7ed 100%);
+}
+
+/* Glassmorphism эффекты */
+.glass {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Hover effects */
+.hover-scale {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale:hover {
+  transform: scale(1.05);
+}
+
+/* Custom rose color variations */
+.bg-rose-25 {
+  background-color: rgba(251, 113, 133, 0.05);
+}
+
+.hover\:bg-rose-25:hover {
+  background-color: rgba(251, 113, 133, 0.05);
+}
+
+/* Button animations */
+.button-scale {
+  transition: all 0.2s ease-in-out;
+}
+
+.button-scale:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Card hover effects */
+.card-hover {
+  transition: all 0.3s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }

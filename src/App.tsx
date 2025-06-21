@@ -12,6 +12,9 @@ import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/Auth";
 import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
+import PatientsPage from "./pages/doctor/PatientsPage";
+import SchedulePage from "./pages/doctor/SchedulePage";
+import CalculatorsPage from "./pages/doctor/CalculatorsPage";
 
 // Import components
 import ProtectedRoute from "./components/auth/ProtectedRoute";
@@ -37,6 +40,32 @@ const App = () => (
                 element={
                   <ProtectedRoute>
                     <DashboardPage />
+                  </ProtectedRoute>
+                } 
+              />
+              
+              {/* Doctor routes */}
+              <Route 
+                path="/doctor/patients" 
+                element={
+                  <ProtectedRoute requireRole="doctor">
+                    <PatientsPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/doctor/schedule" 
+                element={
+                  <ProtectedRoute requireRole="doctor">
+                    <SchedulePage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/doctor/calculators" 
+                element={
+                  <ProtectedRoute requireRole="doctor">
+                    <CalculatorsPage />
                   </ProtectedRoute>
                 } 
               />
