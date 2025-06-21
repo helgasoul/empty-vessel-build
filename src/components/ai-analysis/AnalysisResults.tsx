@@ -53,12 +53,20 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
 }) => {
   const [activeSection, setActiveSection] = useState<'overview' | 'patterns' | 'correlations' | 'anomalies'>('overview');
 
-  // Transform recommendations if they are strings, otherwise use as-is
-  const transformedRecommendations: Recommendation[] = Array.isArray(results.recommendations) && 
-    results.recommendations.length > 0 && 
-    typeof results.recommendations[0] === 'string' 
-    ? transformRecommendations(results.recommendations as string[])
-    : results.recommendations as Recommendation[];
+  // Safely transform recommendations based on their actual type
+  const transformedRecommendations: Recommendation[] = (() => {
+    if (!Array.isArray(results.recommendations) || results.recommendations.length === 0) {
+      return [];
+    }
+    
+    // Check if the first item is a string to determine the array type
+    if (typeof results.recommendations[0] === 'string') {
+      return transformRecommendations(results.recommendations as string[]);
+    }
+    
+    // If it's already Recommendation objects, return as-is
+    return results.recommendations as Recommendation[];
+  })();
 
   return (
     <div className="space-y-6">
