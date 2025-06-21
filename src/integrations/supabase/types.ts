@@ -129,6 +129,83 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_chat_messages: {
+        Row: {
+          content: string
+          id: string
+          message_type: string
+          metadata: Json | null
+          model_version: string | null
+          session_id: string
+          timestamp: string
+          tokens_used: number | null
+        }
+        Insert: {
+          content: string
+          id?: string
+          message_type: string
+          metadata?: Json | null
+          model_version?: string | null
+          session_id: string
+          timestamp?: string
+          tokens_used?: number | null
+        }
+        Update: {
+          content?: string
+          id?: string
+          message_type?: string
+          metadata?: Json | null
+          model_version?: string | null
+          session_id?: string
+          timestamp?: string
+          tokens_used?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_chat_messages_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "ai_chat_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_chat_sessions: {
+        Row: {
+          context_data: Json | null
+          id: string
+          is_active: boolean | null
+          last_activity_at: string
+          session_name: string | null
+          session_type: string | null
+          started_at: string
+          summary: string | null
+          user_id: string
+        }
+        Insert: {
+          context_data?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_activity_at?: string
+          session_name?: string | null
+          session_type?: string | null
+          started_at?: string
+          summary?: string | null
+          user_id: string
+        }
+        Update: {
+          context_data?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_activity_at?: string
+          session_name?: string | null
+          session_type?: string | null
+          started_at?: string
+          summary?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       calculator_results: {
         Row: {
           calculated_at: string
@@ -574,6 +651,54 @@ export type Database = {
         }
         Relationships: []
       }
+      data_exports: {
+        Row: {
+          completed_at: string | null
+          date_range_end: string | null
+          date_range_start: string | null
+          download_expires_at: string | null
+          export_format: string
+          export_status: string | null
+          export_type: string
+          file_path: string | null
+          file_size: number | null
+          id: string
+          metadata: Json | null
+          requested_at: string
+          user_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          date_range_end?: string | null
+          date_range_start?: string | null
+          download_expires_at?: string | null
+          export_format: string
+          export_status?: string | null
+          export_type: string
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+          requested_at?: string
+          user_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          date_range_end?: string | null
+          date_range_start?: string | null
+          download_expires_at?: string | null
+          export_format?: string
+          export_status?: string | null
+          export_type?: string
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+          requested_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       data_relationships: {
         Row: {
           auto_detected: boolean | null
@@ -1015,6 +1140,54 @@ export type Database = {
           specialization?: string
           title?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      external_api_integrations: {
+        Row: {
+          access_token_encrypted: string | null
+          created_at: string
+          id: string
+          integration_status: string | null
+          integration_type: string
+          last_sync_at: string | null
+          provider_name: string
+          refresh_token_encrypted: string | null
+          sync_frequency: string | null
+          sync_settings: Json | null
+          token_expires_at: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          access_token_encrypted?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          integration_type: string
+          last_sync_at?: string | null
+          provider_name: string
+          refresh_token_encrypted?: string | null
+          sync_frequency?: string | null
+          sync_settings?: Json | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          access_token_encrypted?: string | null
+          created_at?: string
+          id?: string
+          integration_status?: string | null
+          integration_type?: string
+          last_sync_at?: string | null
+          provider_name?: string
+          refresh_token_encrypted?: string | null
+          sync_frequency?: string | null
+          sync_settings?: Json | null
+          token_expires_at?: string | null
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -3622,6 +3795,53 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_history: {
+        Row: {
+          delivery_method: string
+          delivery_status: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          notification_type: string
+          related_reminder_id: string | null
+          sent_at: string
+          title: string
+          user_id: string
+        }
+        Insert: {
+          delivery_method: string
+          delivery_status?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          notification_type: string
+          related_reminder_id?: string | null
+          sent_at?: string
+          title: string
+          user_id: string
+        }
+        Update: {
+          delivery_method?: string
+          delivery_status?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          notification_type?: string
+          related_reminder_id?: string | null
+          sent_at?: string
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_history_related_reminder_id_fkey"
+            columns: ["related_reminder_id"]
+            isOneToOne: false
+            referencedRelation: "user_reminders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           amount: number | null
@@ -4873,6 +5093,51 @@ export type Database = {
           id?: string
           points_to_next_level?: number | null
           total_points?: number | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_reminders: {
+        Row: {
+          created_at: string
+          description: string | null
+          frequency: string
+          frequency_data: Json | null
+          id: string
+          is_active: boolean | null
+          next_reminder_at: string
+          notification_methods: Json | null
+          reminder_type: string
+          title: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          frequency: string
+          frequency_data?: Json | null
+          id?: string
+          is_active?: boolean | null
+          next_reminder_at: string
+          notification_methods?: Json | null
+          reminder_type: string
+          title: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          frequency?: string
+          frequency_data?: Json | null
+          id?: string
+          is_active?: boolean | null
+          next_reminder_at?: string
+          notification_methods?: Json | null
+          reminder_type?: string
+          title?: string
           updated_at?: string
           user_id?: string
         }

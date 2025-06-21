@@ -13,6 +13,7 @@ import EnvironmentalHealth from "./pages/EnvironmentalHealth";
 import HealthVault from "./pages/HealthVault";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import Subscribe from "./pages/Subscribe";
+import NotificationsPage from "./pages/NotificationsPage";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,7 @@ const App = () => (
             <Route path="/risk-assessment" element={<RiskAssessment />} />
             <Route path="/environmental-health" element={<EnvironmentalHealth />} />
             <Route path="/health-vault" element={<HealthVault />} />
+            <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/subscribe" element={<Subscribe />} />
           </Routes>
