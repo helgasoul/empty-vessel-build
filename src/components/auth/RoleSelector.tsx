@@ -1,47 +1,60 @@
 
 import React from 'react';
-import { RadioGroup } from '@/components/ui/radio-group';
-import { UserRole } from '@/types/user';
-import RoleSelectorHeader from './RoleSelectorHeader';
-import RoleOptionCard from './RoleOptionCard';
-import AdminCodeInput from './AdminCodeInput';
-import { roleOptions } from './roleOptions';
+import { UserRole } from '@/types/auth';
 
 interface RoleSelectorProps {
   selectedRole: UserRole;
   onRoleChange: (role: UserRole) => void;
-  adminCode: string;
-  onAdminCodeChange: (code: string) => void;
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 
-const RoleSelector = ({ selectedRole, onRoleChange, adminCode, onAdminCodeChange, isLoading }: RoleSelectorProps) => {
-  return (
-    <div className="space-y-4">
-      <RoleSelectorHeader />
-      
-      <RadioGroup 
-        value={selectedRole} 
-        onValueChange={(value) => onRoleChange(value as UserRole)}
-        className="grid grid-cols-1 md:grid-cols-2 gap-4"
-      >
-        {roleOptions.map((option) => (
-          <RoleOptionCard
-            key={option.value}
-            option={option}
-            selectedRole={selectedRole}
-            onRoleChange={onRoleChange}
-          />
-        ))}
-      </RadioGroup>
+const RoleSelector = ({ selectedRole, onRoleChange, isLoading }: RoleSelectorProps) => {
+  const roles = [
+    {
+      value: 'patient' as UserRole,
+      icon: '👩‍💼',
+      title: 'Пациент',
+      description: 'Хочу следить за своим здоровьем'
+    },
+    {
+      value: 'doctor' as UserRole,
+      icon: '👩‍⚕️',
+      title: 'Врач',
+      description: 'Хочу работать с пациентами на платформе'
+    },
+    {
+      value: 'admin' as UserRole,
+      icon: '⚙️',
+      title: 'Администратор',
+      description: 'Управление платформой и пользователями'
+    }
+  ];
 
-      {selectedRole === 'admin' && (
-        <AdminCodeInput
-          adminCode={adminCode}
-          onAdminCodeChange={onAdminCodeChange}
-          isLoading={isLoading}
-        />
-      )}
+  return (
+    <div className="space-y-3">
+      <label className="text-sm font-medium text-gray-700">
+        Выберите роль:
+      </label>
+      <div className="grid grid-cols-1 gap-3">
+        {roles.map((role) => (
+          <button
+            key={role.value}
+            type="button"
+            disabled={isLoading}
+            onClick={() => onRoleChange(role.value)}
+            className={`p-4 border rounded-lg text-left transition-colors disabled:opacity-50 ${
+              selectedRole === role.value 
+                ? 'border-purple-500 bg-purple-50' 
+                : 'border-gray-200 hover:border-gray-300'
+            }`}
+          >
+            <div className="font-medium">{role.icon} {role.title}</div>
+            <div className="text-sm text-gray-500">
+              {role.description}
+            </div>
+          </button>
+        ))}
+      </div>
     </div>
   );
 };

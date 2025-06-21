@@ -1,7 +1,6 @@
 
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import { User } from '@supabase/supabase-js';
-import { supabase } from '@/integrations/supabase/client';
+import { User, UserRole } from '../types/auth';
 
 interface AuthContextType {
   user: User | null;
@@ -9,7 +8,9 @@ interface AuthContextType {
   loading: boolean; // Add alias for compatibility
   signOut: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<{ error: any }>;
-  signUp: (email: string, password: string, fullName: string) => Promise<{ error: any }>;
+  signUp: (email: string, password: string, name: string, role: UserRole) => Promise<{ error: any }>;
+  hasRole: (role: UserRole) => boolean;
+  switchRole: (role: UserRole) => void; // For testing
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -27,34 +28,29 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Get initial session
+    // Get initial session from localStorage
     const getInitialSession = async () => {
       try {
-        const { data: { session } } = await supabase.auth.getSession();
-        setUser(session?.user ?? null);
+        const savedUser = localStorage.getItem('prevent_user');
+        if (savedUser) {
+          const parsedUser = JSON.parse(savedUser);
+          setUser(parsedUser);
+        }
       } catch (error) {
         console.error('Error getting initial session:', error);
+        localStorage.removeItem('prevent_user');
       } finally {
         setIsLoading(false);
       }
     };
 
     getInitialSession();
-
-    // Listen for auth changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null);
-        setIsLoading(false);
-      }
-    );
-
-    return () => subscription.unsubscribe();
   }, []);
 
   const signOut = async () => {
     try {
-      await supabase.auth.signOut();
+      setUser(null);
+      localStorage.removeItem('prevent_user');
     } catch (error) {
       console.error('Error signing out:', error);
     }
@@ -62,31 +58,67 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const signIn = async (email: string, password: string) => {
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      setIsLoading(true);
+      
+      // Mock authentication - determine role based on email
+      let role: UserRole = 'patient';
+      if (email.includes('doctor')) role = 'doctor';
+      if (email.includes('admin')) role = 'admin';
+      
+      const mockUser: User = {
+        id: Date.now().toString(),
         email,
-        password,
-      });
-      return { error };
+        name: email.split('@')[0],
+        role,
+        isActive: true,
+        createdAt: new Date()
+      };
+      
+      setUser(mockUser);
+      localStorage.setItem('prevent_user', JSON.stringify(mockUser));
+      
+      return { error: null };
     } catch (error) {
       return { error };
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  const signUp = async (email: string, password: string, fullName: string) => {
+  const signUp = async (email: string, password: string, name: string, role: UserRole) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      setIsLoading(true);
+      
+      const newUser: User = {
+        id: Date.now().toString(),
         email,
-        password,
-        options: {
-          data: {
-            full_name: fullName,
-          },
-          emailRedirectTo: `${window.location.origin}/`,
-        },
-      });
-      return { error };
+        name,
+        role,
+        isActive: true,
+        createdAt: new Date()
+      };
+      
+      setUser(newUser);
+      localStorage.setItem('prevent_user', JSON.stringify(newUser));
+      
+      return { error: null };
     } catch (error) {
       return { error };
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const hasRole = (role: UserRole): boolean => {
+    return user?.role === role;
+  };
+
+  // For testing - role switching
+  const switchRole = (role: UserRole) => {
+    if (user) {
+      const updatedUser = { ...user, role };
+      setUser(updatedUser);
+      localStorage.setItem('prevent_user', JSON.stringify(updatedUser));
     }
   };
 
@@ -97,6 +129,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signOut,
     signIn,
     signUp,
+    hasRole,
+    switchRole,
   };
 
   return (
