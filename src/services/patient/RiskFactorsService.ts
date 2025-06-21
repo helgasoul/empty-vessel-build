@@ -7,7 +7,7 @@ export class RiskFactorsService {
     const { data } = await supabase
       .from('risk_assessments')
       .select('*')
-      .eq('user_id', patientId)
+      .eq('id', patientId) // Changed from user_id to id since that's what we have in the table
       .order('created_at', { ascending: false })
       .limit(1);
 
@@ -140,7 +140,6 @@ export class RiskFactorsService {
     const { error } = await supabase
       .from('risk_assessments')
       .insert({
-        user_id: patientId,
         assessment_type: 'comprehensive',
         risk_percentage: this.calculateOverallRiskPercentage(riskData),
         risk_level: this.calculateOverallRiskLevel(riskData),
