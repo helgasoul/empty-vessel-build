@@ -14,6 +14,7 @@ interface RoleContextType {
   isClinic: boolean;
   isLaboratory: boolean;
   isLoading: boolean;
+  setUserRole: (role: UserRole) => void;
 }
 
 const RoleContext = createContext<RoleContextType | undefined>(undefined);
@@ -29,12 +30,28 @@ export const useRole = () => {
 export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const { user } = useAuth();
   const { data: userRoles, isLoading } = useUserRoles();
+  const [localRole, setLocalRole] = useState<UserRole | null>(null);
   
   const roles: UserRole[] = userRoles?.map(r => r.role) || [];
-  const primaryRole = roles.length > 0 ? roles[0] : null;
+  const primaryRole = roles.length > 0 ? roles[0] : localRole;
+
+  // Load role from localStorage for demo purposes
+  useEffect(() => {
+    const savedRole = localStorage.getItem('userRole') as UserRole;
+    if (savedRole && !user) {
+      setLocalRole(savedRole);
+      console.log('🔄 Загружена роль из localStorage:', savedRole);
+    }
+  }, [user]);
 
   const hasRole = (role: UserRole): boolean => {
-    return roles.includes(role);
+    return roles.includes(role) || localRole === role;
+  };
+
+  const setUserRole = (role: UserRole) => {
+    setLocalRole(role);
+    localStorage.setItem('userRole', role);
+    console.log('🔄 Роль пользователя обновлена:', role);
   };
 
   const isAdmin = hasRole('admin');
@@ -52,7 +69,8 @@ export const RoleProvider: React.FC<{ children: React.ReactNode }> = ({ children
     isPatient,
     isClinic,
     isLaboratory,
-    isLoading
+    isLoading,
+    setUserRole
   };
 
   return (

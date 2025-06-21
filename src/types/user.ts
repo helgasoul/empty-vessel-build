@@ -2,6 +2,15 @@
 export type UserRole = 'patient' | 'doctor' | 'clinic' | 'laboratory' | 'admin';
 export type AppRole = UserRole; // Add this alias for consistency
 
+// Add enum for easier usage
+export enum UserRoleEnum {
+  PATIENT = 'patient',
+  DOCTOR = 'doctor', 
+  ADMIN = 'admin',
+  LABORATORY = 'laboratory',
+  CLINIC = 'clinic'
+}
+
 export interface User {
   id: string;
   email: string;
@@ -18,6 +27,12 @@ export interface UserRoleRecord {
   role: UserRole;
   created_at: string;
   updated_at: string;
+}
+
+export interface UserProfile {
+  age?: number;
+  location?: string;
+  healthGoals?: string[];
 }
 
 export interface DoctorProfile {
@@ -72,4 +87,9 @@ export interface LaboratoryProfile {
   api_access_enabled: boolean;
   created_at: string;
   updated_at: string;
+}
+
+export interface AdminProfile extends UserProfile {
+  permissions: string[];
+  department?: string;
 }

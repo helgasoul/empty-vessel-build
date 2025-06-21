@@ -52,6 +52,10 @@ import ExpertBlog from "./pages/ExpertBlog";
 import Partners from "./pages/Partners";
 import Team from "./pages/Team";
 
+// ✅ АДМИН И ДОКТОР ДАШБОРДЫ
+import AdminDashboardPage from "./pages/AdminDashboard";
+import DoctorDashboardPage from "./pages/DoctorDashboardPage";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -99,6 +103,10 @@ const App = () => (
                   <Route path="/expert-blog" element={<ExpertBlog />} />
                   <Route path="/partners" element={<Partners />} />
                   <Route path="/team" element={<Team />} />
+                  
+                  {/* ✅ АДМИН И ДОКТОР ДАШБОРДЫ */}
+                  <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+                  <Route path="/doctor-dashboard" element={<DoctorDashboardPage />} />
                   
                   {/* ✅ Временные заглушки для отсутствующих страниц */}
                   <Route path="/hormone-balance" element={
