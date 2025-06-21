@@ -308,7 +308,7 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
                     <div>
                       <p className="text-body-small text-text-secondary">Значимость</p>
                       <p className="text-body font-medium text-text-primary">
-                        p < {(correlation.statistical_significance || 0).toFixed(3)}
+                        p &lt; {(correlation.statistical_significance || 0).toFixed(3)}
                       </p>
                     </div>
                     <div>
