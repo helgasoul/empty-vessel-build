@@ -18,8 +18,21 @@ interface AnalysisResultsProps {
   onClose: () => void;
 }
 
+interface Recommendation {
+  id: string;
+  type: 'lifestyle' | 'medical' | 'nutrition' | 'exercise' | 'monitoring';
+  priority: 'high' | 'medium' | 'low';
+  title: string;
+  description: string;
+  rationale: string;
+  timeline: string;
+  actionable_steps: string[];
+  related_findings: string[];
+  confidence_level: number;
+}
+
 // Transform string recommendations to Recommendation objects
-const transformRecommendations = (recommendations: string[]) => {
+const transformRecommendations = (recommendations: string[]): Recommendation[] => {
   return recommendations.map((rec, index) => ({
     id: `rec_${index}`,
     type: 'lifestyle' as const,
@@ -40,11 +53,12 @@ export const AnalysisResults: React.FC<AnalysisResultsProps> = ({
 }) => {
   const [activeSection, setActiveSection] = useState<'overview' | 'patterns' | 'correlations' | 'anomalies'>('overview');
 
-  // Transform recommendations if they are strings
-  const transformedRecommendations = Array.isArray(results.recommendations) && 
+  // Transform recommendations if they are strings, otherwise use as-is
+  const transformedRecommendations: Recommendation[] = Array.isArray(results.recommendations) && 
+    results.recommendations.length > 0 && 
     typeof results.recommendations[0] === 'string' 
     ? transformRecommendations(results.recommendations as string[])
-    : results.recommendations;
+    : results.recommendations as Recommendation[];
 
   return (
     <div className="space-y-6">
