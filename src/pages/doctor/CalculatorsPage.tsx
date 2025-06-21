@@ -22,42 +22,48 @@ const CalculatorsPage = () => {
       name: 'FT3/FT4 ratio',
       description: 'Оценка конверсии T4 в T3',
       category: 'thyroid',
-      icon: '🦋'
+      icon: '🦋',
+      route: '/doctor/calculators/ft3-ft4-ratio'
     },
     {
       id: 2,
       name: 'HOMA-IR',
       description: 'Индекс инсулинорезистентности',
       category: 'metabolic',
-      icon: '🌸'
+      icon: '🌸',
+      route: '/doctor/calculators/homa-ir'
     },
     {
       id: 3,
       name: 'Free Androgen Index',
       description: 'Индекс свободных андрогенов',
       category: 'hormones',
-      icon: '💗'
+      icon: '💗',
+      route: '/doctor/calculators/fai'
     },
     {
       id: 4,
       name: 'NLR',
       description: 'Нейтрофильно-лимфоцитарное соотношение',
       category: 'inflammation',
-      icon: '🧠'
+      icon: '🧠',
+      route: '/doctor/calculators/nlr'
     },
     {
       id: 5,
       name: 'TSH/FT4 ratio',
       description: 'Соотношение ТТГ к свободному Т4',
       category: 'thyroid',
-      icon: '🦋'
+      icon: '🦋',
+      route: '/doctor/calculators/tsh-ft4-ratio'
     },
     {
       id: 6,
       name: 'TG/HDL ratio',
       description: 'Соотношение триглицеридов к ЛПВП',
       category: 'metabolic',
-      icon: '🌸'
+      icon: '🌸',
+      route: '/doctor/calculators/tg-hdl-ratio'
     }
   ];
 
@@ -67,6 +73,10 @@ const CalculatorsPage = () => {
     const matchesCategory = selectedCategory === 'all' || calc.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
+
+  const handleCalculatorClick = (calculator: typeof calculators[0]) => {
+    navigate(calculator.route);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-orange-50">
@@ -142,7 +152,10 @@ const CalculatorsPage = () => {
                 <p className="text-gray-600 mb-6">
                   {calculator.description}
                 </p>
-                <button className="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-200 font-medium">
+                <button 
+                  onClick={() => handleCalculatorClick(calculator)}
+                  className="w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white py-3 rounded-xl hover:from-rose-600 hover:to-pink-600 transition-all duration-200 font-medium"
+                >
                   Открыть калькулятор
                 </button>
               </div>
