@@ -61,11 +61,7 @@ export class MedicalFilesService {
     }
     
     // Convert JSON strings back to arrays
-    return {
-      ...data,
-      tags: Array.isArray(data.tags) ? data.tags : JSON.parse(data.tags || '[]'),
-      custom_tags: Array.isArray(data.custom_tags) ? data.custom_tags : JSON.parse(data.custom_tags || '[]')
-    };
+    return this.transformMedicalFileFromDb(data);
   }
   
   static async getUserFiles(userId: string): Promise<MedicalFile[]> {
@@ -80,11 +76,7 @@ export class MedicalFilesService {
     }
     
     // Convert JSON strings back to arrays
-    return (data || []).map(file => ({
-      ...file,
-      tags: Array.isArray(file.tags) ? file.tags : JSON.parse(file.tags || '[]'),
-      custom_tags: Array.isArray(file.custom_tags) ? file.custom_tags : JSON.parse(file.custom_tags || '[]')
-    }));
+    return (data || []).map(file => this.transformMedicalFileFromDb(file));
   }
   
   static async getFileById(fileId: string): Promise<MedicalFile | null> {
@@ -100,11 +92,7 @@ export class MedicalFilesService {
     }
     
     // Convert JSON strings back to arrays
-    return {
-      ...data,
-      tags: Array.isArray(data.tags) ? data.tags : JSON.parse(data.tags || '[]'),
-      custom_tags: Array.isArray(data.custom_tags) ? data.custom_tags : JSON.parse(data.custom_tags || '[]')
-    };
+    return this.transformMedicalFileFromDb(data);
   }
   
   static async getFileUrl(filePath: string): Promise<string> {
@@ -139,11 +127,7 @@ export class MedicalFilesService {
     }
     
     // Convert JSON strings back to arrays
-    return {
-      ...data,
-      tags: Array.isArray(data.tags) ? data.tags : JSON.parse(data.tags || '[]'),
-      custom_tags: Array.isArray(data.custom_tags) ? data.custom_tags : JSON.parse(data.custom_tags || '[]')
-    };
+    return this.transformMedicalFileFromDb(data);
   }
   
   static async deleteFile(fileId: string): Promise<void> {
@@ -186,10 +170,29 @@ export class MedicalFilesService {
     }
     
     // Convert JSON strings back to arrays
-    return (data || []).map(file => ({
-      ...file,
-      tags: Array.isArray(file.tags) ? file.tags : JSON.parse(file.tags || '[]'),
-      custom_tags: Array.isArray(file.custom_tags) ? file.custom_tags : JSON.parse(file.custom_tags || '[]')
-    }));
+    return (data || []).map(file => this.transformMedicalFileFromDb(file));
+  }
+
+  private static transformMedicalFileFromDb(data: any): MedicalFile {
+    return {
+      ...data,
+      tags: this.safeJsonParse(data.tags, []),
+      custom_tags: this.safeJsonParse(data.custom_tags, [])
+    };
+  }
+
+  private static safeJsonParse(value: any, defaultValue: string[] = []): string[] {
+    if (Array.isArray(value)) {
+      return value;
+    }
+    if (typeof value === 'string') {
+      try {
+        const parsed = JSON.parse(value);
+        return Array.isArray(parsed) ? parsed : defaultValue;
+      } catch {
+        return defaultValue;
+      }
+    }
+    return defaultValue;
   }
 }
