@@ -97,6 +97,7 @@ export const useDoctorPermissions = () => {
 export const useGrantPermission = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (permissionData: {
@@ -106,9 +107,16 @@ export const useGrantPermission = () => {
       data_types: string[];
       expires_at?: string;
     }) => {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
       const { data, error } = await supabase
         .from('patient_data_permissions')
-        .insert(permissionData)
+        .insert({
+          ...permissionData,
+          patient_id: user.id, // Add the missing patient_id
+        })
         .select()
         .single();
 

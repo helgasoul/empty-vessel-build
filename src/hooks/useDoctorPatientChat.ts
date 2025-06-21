@@ -53,6 +53,7 @@ export const useDoctorPatientMessages = (chatPartnerId: string, isDoctor: boolea
 export const useSendMessage = () => {
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { user } = useAuth();
 
   return useMutation({
     mutationFn: async (messageData: {
@@ -62,9 +63,16 @@ export const useSendMessage = () => {
       message_type?: 'text' | 'report' | 'file' | 'calculator_results';
       attachments?: any[];
     }) => {
+      if (!user) {
+        throw new Error('User not authenticated');
+      }
+
       const { data, error } = await supabase
         .from('doctor_patient_messages')
-        .insert(messageData)
+        .insert({
+          ...messageData,
+          sender_id: user.id, // Add the missing sender_id
+        })
         .select()
         .single();
 
