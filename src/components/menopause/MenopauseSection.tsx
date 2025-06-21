@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -28,10 +27,11 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContai
 
 interface MenopauseSectionProps {
   onConsultationClick?: () => void;
+  onSupportClick?: () => void;
   onSpecialistClick?: () => void;
 }
 
-const MenopauseSection = ({ onConsultationClick, onSpecialistClick }: MenopauseSectionProps) => {
+const MenopauseSection = ({ onConsultationClick, onSupportClick, onSpecialistClick }: MenopauseSectionProps) => {
   const [selectedPeriod, setSelectedPeriod] = useState('week');
 
   // Данные симптомов
@@ -373,7 +373,12 @@ const MenopauseSection = ({ onConsultationClick, onSpecialistClick }: MenopauseS
                         <Button size="sm" variant="outline" className="flex-1">
                           {program.isFavorite ? 'В избранном' : 'В избранное'}
                         </Button>
-                        <Button size="sm" className="flex-1" style={{ backgroundColor: program.color }}>
+                        <Button 
+                          size="sm" 
+                          className="flex-1" 
+                          style={{ backgroundColor: program.color }}
+                          onClick={onSupportClick}
+                        >
                           Выполнено
                         </Button>
                       </div>
@@ -424,7 +429,10 @@ const MenopauseSection = ({ onConsultationClick, onSpecialistClick }: MenopauseS
                     </ul>
                   </div>
 
-                  <Button className="w-full bg-amber-600 hover:bg-amber-700">
+                  <Button 
+                    className="w-full bg-amber-600 hover:bg-amber-700"
+                    onClick={onSupportClick}
+                  >
                     Продолжить программу
                   </Button>
                 </CardContent>
