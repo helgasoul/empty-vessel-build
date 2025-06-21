@@ -1,0 +1,61 @@
+
+/* Base Styles */
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-roboto;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-montserrat font-semibold;
+  }
+
+  /* ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Обеспечиваем что все кнопки кликабельны */
+  button, .button, [role="button"] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  /* Убираем любые блокирующие стили */
+  button:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
+}
+
+/* Скроллбары для WebKit браузеров в мягких тонах */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #E8C5D4;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #B8A8D8;
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: #B8A8D8;
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #E8C5D4;
+}
+
+/* Фокус для доступности в мягких тонах */
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  @apply outline-none ring-2 ring-purple-300 ring-offset-2 ring-offset-background;
+}
