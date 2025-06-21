@@ -142,6 +142,7 @@ export class RiskFactorsService {
       .from('risk_assessments')
       .insert({
         user_id: patientId,
+        assessment_type: 'comprehensive',
         risk_percentage: this.calculateOverallRiskPercentage(riskData),
         risk_level: this.calculateOverallRiskLevel(riskData),
         assessment_data: riskData,
