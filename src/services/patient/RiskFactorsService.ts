@@ -1,5 +1,4 @@
 
-
 import { supabase } from '@/integrations/supabase/client';
 
 // Define specific types here to avoid circular dependencies
@@ -204,6 +203,7 @@ export class RiskFactorsService {
       .from('risk_assessments')
       .insert({
         user_id: patientId,
+        assessment_type: 'comprehensive',
         risk_percentage: this.calculateOverallRiskPercentage(riskData),
         risk_level: this.calculateOverallRiskLevel(riskData),
         assessment_data: riskData,
@@ -258,4 +258,3 @@ export class RiskFactorsService {
     return recommendations;
   }
 }
-
