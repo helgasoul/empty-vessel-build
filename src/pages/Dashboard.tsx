@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
@@ -8,7 +9,6 @@ import {
   CardHeader, 
   CardTitle 
 } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { 
   Activity, 
   FileText, 
@@ -22,12 +22,20 @@ import {
   Settings,
   Bell
 } from 'lucide-react';
+import { Button, Badge, HealthCard } from '@/design-system/components';
 
 const Dashboard = () => {
   const { user, loading } = useAuth();
 
   if (loading) {
-    return <div className="flex justify-center items-center min-h-screen">Загрузка...</div>;
+    return (
+      <div className="flex justify-center items-center min-h-screen bg-background">
+        <div className="text-center">
+          <div className="w-8 h-8 border-3 border-coral-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-body text-text-secondary">Загрузка...</p>
+        </div>
+      </div>
+    );
   }
 
   if (!user) {
@@ -38,52 +46,58 @@ const Dashboard = () => {
     {
       title: 'Оценка рисков здоровья',
       description: 'Персонализированный анализ рисков заболеваний на основе ваших данных',
-      icon: <Heart className="h-6 w-6" />,
+      icon: Heart,
       href: '/risk-assessment',
-      color: 'bg-red-50 border-red-200',
-      iconColor: 'text-red-600'
+      status: 'medium' as const,
+      value: 'Требуется',
+      actionLabel: 'Начать оценку'
     },
     {
       title: 'Медицинское хранилище',
       description: 'Безопасное хранение и управление вашими медицинскими документами',
-      icon: <Database className="h-6 w-6" />,
+      icon: Database,
       href: '/health-vault',
-      color: 'bg-blue-50 border-blue-200',
-      iconColor: 'text-blue-600'
+      status: 'low' as const,
+      value: '0 файлов',
+      actionLabel: 'Загрузить'
     },
     {
       title: 'Экологическое здоровье',
       description: 'Мониторинг влияния окружающей среды на ваше здоровье',
-      icon: <Leaf className="h-6 w-6" />,
+      icon: Leaf,
       href: '/environmental-health',
-      color: 'bg-green-50 border-green-200',
-      iconColor: 'text-green-600'
+      status: 'low' as const,
+      value: 'Хорошо',
+      actionLabel: 'Подробнее'
     },
     {
       title: 'Семейная история',
       description: 'Отслеживание наследственных рисков и семейной медицинской истории',
-      icon: <Users className="h-6 w-6" />,
+      icon: Users,
       href: '/family-history',
-      color: 'bg-purple-50 border-purple-200',
-      iconColor: 'text-purple-600',
+      status: 'medium' as const,
+      value: 'Заполнить',
+      actionLabel: 'Настроить',
       comingSoon: true
     },
     {
       title: 'Интеграции с устройствами',
       description: 'Подключение носимых устройств и мониторинг показателей здоровья',
-      icon: <Activity className="h-6 w-6" />,
+      icon: Activity,
       href: '/device-integrations',
-      color: 'bg-orange-50 border-orange-200',
-      iconColor: 'text-orange-600',
+      status: 'low' as const,
+      value: 'Нет подключений',
+      actionLabel: 'Подключить',
       comingSoon: true
     },
     {
       title: 'Медицинский календарь',
       description: 'Планирование консультаций, анализов и медицинских процедур',
-      icon: <Calendar className="h-6 w-6" />,
+      icon: Calendar,
       href: '/medical-calendar',
-      color: 'bg-indigo-50 border-indigo-200',
-      iconColor: 'text-indigo-600',
+      status: 'low' as const,
+      value: '0 событий',
+      actionLabel: 'Добавить',
       comingSoon: true
     }
   ];
@@ -93,43 +107,47 @@ const Dashboard = () => {
       title: 'Последняя оценка рисков',
       value: 'Не проводилась',
       icon: <TrendingUp className="h-5 w-5" />,
-      href: '/risk-assessment'
+      href: '/risk-assessment',
+      status: 'warning' as const
     },
     {
       title: 'Документов в хранилище',
       value: '0',
       icon: <FileText className="h-5 w-5" />,
-      href: '/health-vault'
+      href: '/health-vault',
+      status: 'info' as const
     },
     {
       title: 'Предстоящих событий',
       value: '0',
       icon: <Calendar className="h-5 w-5" />,
-      href: '/medical-calendar'
+      href: '/medical-calendar',
+      status: 'info' as const
     },
     {
       title: 'Уведомлений',
       value: '0',
       icon: <Bell className="h-5 w-5" />,
-      href: '/notifications'
+      href: '/notifications',
+      status: 'success' as const
     }
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
-        <div className="flex justify-between items-center mb-8">
+        <div className="flex justify-between items-center mb-8 animate-fade-in">
           <div>
-            <h1 className="text-4xl font-bold text-gray-900">
+            <h1 className="text-h1 text-text-primary">
               Добро пожаловать в PREVENT
             </h1>
-            <p className="text-lg text-gray-600 mt-2">
+            <p className="text-body-large text-text-secondary mt-2">
               Ваша персональная платформа превентивной медицины
             </p>
           </div>
           <div className="flex gap-2">
-            <Button variant="outline" size="sm">
+            <Button variant="tertiary" size="sm">
               <Settings className="h-4 w-4 mr-2" />
               Настройки
             </Button>
@@ -137,17 +155,24 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 animate-slide-up">
           {quickStats.map((stat, index) => (
-            <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer">
+            <Card key={index} className="hover:shadow-md transition-shadow cursor-pointer bg-background-secondary border-border-light">
               <CardContent className="p-4">
                 <div className="flex items-center justify-between">
                   <div>
-                    <p className="text-sm text-gray-600">{stat.title}</p>
-                    <p className="text-2xl font-bold text-gray-900">{stat.value}</p>
+                    <p className="text-body-small text-text-secondary">{stat.title}</p>
+                    <p className="text-h3 text-text-primary font-medium">{stat.value}</p>
                   </div>
-                  <div className="text-gray-400">
-                    {stat.icon}
+                  <div className="flex flex-col items-end gap-2">
+                    <div className="text-sage-500">
+                      {stat.icon}
+                    </div>
+                    <Badge variant={stat.status} size="sm">
+                      {stat.status === 'warning' ? 'Требуется' : 
+                       stat.status === 'info' ? 'Норма' : 
+                       stat.status === 'success' ? 'Хорошо' : 'Внимание'}
+                    </Badge>
                   </div>
                 </div>
               </CardContent>
@@ -157,53 +182,42 @@ const Dashboard = () => {
 
         {/* Features Grid */}
         <div className="mb-8">
-          <h2 className="text-2xl font-bold text-gray-900 mb-6">Основные функции</h2>
+          <h2 className="text-h2 text-text-primary mb-6">Основные функции</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <Card 
-                key={index} 
-                className={`${feature.color} hover:shadow-lg transition-all duration-300 cursor-pointer relative overflow-hidden ${feature.comingSoon ? 'opacity-75' : ''}`}
-                onClick={() => !feature.comingSoon && (window.location.href = feature.href)}
-              >
+              <div key={index} className="relative">
+                <HealthCard
+                  title={feature.title}
+                  icon={feature.icon}
+                  status={feature.status}
+                  value={feature.value}
+                  subtitle={feature.description}
+                  actionLabel={feature.comingSoon ? 'В разработке' : feature.actionLabel}
+                  onAction={feature.comingSoon ? undefined : () => window.location.href = feature.href}
+                  className={feature.comingSoon ? 'opacity-75' : ''}
+                />
                 {feature.comingSoon && (
-                  <div className="absolute top-2 right-2 bg-yellow-500 text-white text-xs px-2 py-1 rounded-full">
-                    Скоро
+                  <div className="absolute top-3 right-3">
+                    <Badge variant="warning" size="sm">
+                      Скоро
+                    </Badge>
                   </div>
                 )}
-                <CardHeader>
-                  <div className={`${feature.iconColor} mb-2`}>
-                    {feature.icon}
-                  </div>
-                  <CardTitle className="text-lg">{feature.title}</CardTitle>
-                  <CardDescription className="text-sm">
-                    {feature.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <Button 
-                    variant="ghost" 
-                    size="sm" 
-                    disabled={feature.comingSoon}
-                    className="w-full justify-start"
-                  >
-                    {feature.comingSoon ? 'В разработке' : 'Открыть →'}
-                  </Button>
-                </CardContent>
-              </Card>
+              </div>
             ))}
           </div>
         </div>
 
         {/* Security Notice */}
-        <Card className="bg-yellow-50 border-yellow-200">
+        <Card className="bg-background-secondary border-border-light animate-fade-in">
           <CardContent className="p-6">
             <div className="flex items-start gap-3">
-              <Shield className="h-6 w-6 text-yellow-600 mt-1" />
+              <Shield className="h-6 w-6 text-sage-600 mt-1" />
               <div>
-                <h3 className="font-semibold text-yellow-800 mb-2">
+                <h3 className="text-h4 text-text-primary mb-2">
                   Безопасность ваших данных
                 </h3>
-                <p className="text-sm text-yellow-700">
+                <p className="text-body text-text-secondary">
                   Все ваши медицинские данные зашифрованы и хранятся в соответствии с международными 
                   стандартами безопасности GDPR и HIPAA. Мы никогда не передаем ваши данные третьим лицам 
                   без вашего явного согласия.

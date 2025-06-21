@@ -2,8 +2,8 @@
 import React from 'react';
 import BackButton from '@/components/ui/back-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Check } from 'lucide-react';
+import { Button, Badge } from '@/design-system/components';
 
 const Subscribe = () => {
   const plans = [
@@ -45,48 +45,55 @@ const Subscribe = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-50">
+    <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">
         <BackButton fallbackPath="/dashboard" className="mb-4" />
         
-        <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold text-gray-900 mb-4">
+        <div className="text-center mb-12 animate-fade-in">
+          <h1 className="text-h1 text-text-primary mb-4">
             Выберите свой план
           </h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+          <p className="text-body-large text-text-secondary max-w-2xl mx-auto">
             Получите доступ к полному спектру функций превентивной медицины
           </p>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
           {plans.map((plan, index) => (
-            <Card key={index} className={`relative ${plan.popular ? 'border-purple-500 shadow-lg scale-105' : ''}`}>
+            <Card 
+              key={index} 
+              className={`relative bg-background-secondary border-border-light hover:shadow-lg transition-all duration-300 animate-slide-up ${
+                plan.popular ? 'border-coral-300 shadow-lg scale-105' : ''
+              }`}
+              style={{ animationDelay: `${index * 100}ms` }}
+            >
               {plan.popular && (
                 <div className="absolute -top-4 left-1/2 transform -translate-x-1/2">
-                  <span className="bg-purple-500 text-white px-4 py-1 rounded-full text-sm font-medium">
+                  <Badge variant="ovulation" size="md">
                     Популярный
-                  </span>
+                  </Badge>
                 </div>
               )}
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">{plan.name}</CardTitle>
+                <CardTitle className="text-h2 text-text-primary">{plan.name}</CardTitle>
                 <div className="mt-4">
-                  <span className="text-4xl font-bold">{plan.price}</span>
-                  <span className="text-gray-600 ml-1">/{plan.period}</span>
+                  <span className="text-h1 font-bold text-text-primary">{plan.price}</span>
+                  <span className="text-text-secondary ml-1">/{plan.period}</span>
                 </div>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-3 mb-6">
                   {plan.features.map((feature, featureIndex) => (
                     <li key={featureIndex} className="flex items-center">
-                      <Check className="h-5 w-5 text-green-500 mr-3" />
-                      <span>{feature}</span>
+                      <Check className="h-5 w-5 text-status-success mr-3" />
+                      <span className="text-body text-text-primary">{feature}</span>
                     </li>
                   ))}
                 </ul>
                 <Button 
-                  className={`w-full ${plan.popular ? 'bg-purple-500 hover:bg-purple-600' : ''}`}
-                  variant={plan.popular ? 'default' : 'outline'}
+                  variant={plan.popular ? 'primary' : 'tertiary'}
+                  size="lg"
+                  fullWidth
                 >
                   {plan.price === '0₽' ? 'Текущий план' : 'Выбрать план'}
                 </Button>

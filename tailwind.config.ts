@@ -1,5 +1,6 @@
 
 import type { Config } from "tailwindcss";
+import { colors, typography, spacing, borderRadius, shadows } from './src/design-system/tokens';
 
 export default {
 	darkMode: ["class"],
@@ -20,119 +21,108 @@ export default {
 		},
 		extend: {
 			fontFamily: {
-				'montserrat': ['Montserrat', 'sans-serif'],
-				'roboto': ['Roboto', 'sans-serif'],
+				sans: typography.fontFamily.primary,
+				body: typography.fontFamily.secondary,
+			},
+			fontSize: {
+				'h1': [typography.fontSize.h1, { lineHeight: typography.lineHeight.tight, fontWeight: typography.fontWeight.semibold }],
+				'h2': [typography.fontSize.h2, { lineHeight: typography.lineHeight.normal, fontWeight: typography.fontWeight.medium }],
+				'h3': [typography.fontSize.h3, { lineHeight: typography.lineHeight.normal, fontWeight: typography.fontWeight.medium }],
+				'h4': [typography.fontSize.h4, { lineHeight: typography.lineHeight.normal, fontWeight: typography.fontWeight.medium }],
+				'body': [typography.fontSize.body, { lineHeight: typography.lineHeight.normal }],
+				'body-large': [typography.fontSize.bodyLarge, { lineHeight: typography.lineHeight.normal }],
+				'body-small': [typography.fontSize.bodySmall, { lineHeight: typography.lineHeight.normal }],
+				'label': [typography.fontSize.label, { lineHeight: typography.lineHeight.normal, fontWeight: typography.fontWeight.medium }],
+				'caption': [typography.fontSize.caption, { lineHeight: typography.lineHeight.normal }],
 			},
 			colors: {
-				border: 'hsl(var(--border))',
-				input: 'hsl(var(--input))',
-				ring: 'hsl(var(--ring))',
-				background: 'hsl(var(--background))',
-				foreground: 'hsl(var(--foreground))',
+				// PREVENT Brand Colors
+				coral: colors.coral,
+				berry: colors.berry,
+				sage: colors.sage,
+				
+				// Background system
+				background: {
+					DEFAULT: colors.background.primary,
+					secondary: colors.background.secondary,
+					tertiary: colors.background.tertiary,
+				},
+				
+				// Text system
+				foreground: colors.text.primary,
+				text: colors.text,
+				
+				// Status colors
+				status: colors.status,
+				
+				// Semantic health colors
+				health: colors.semantic,
+				
+				// UI colors
+				border: {
+					DEFAULT: colors.border.light,
+					medium: colors.border.medium,
+					dark: colors.border.dark,
+				},
+				
+				// shadcn/ui compatibility
 				primary: {
-					DEFAULT: 'hsl(var(--primary))',
-					foreground: 'hsl(var(--primary-foreground))'
+					DEFAULT: colors.coral[500],
+					foreground: colors.text.inverse,
 				},
 				secondary: {
-					DEFAULT: 'hsl(var(--secondary))',
-					foreground: 'hsl(var(--secondary-foreground))'
+					DEFAULT: colors.sage[500],
+					foreground: colors.text.inverse,
 				},
 				destructive: {
-					DEFAULT: 'hsl(var(--destructive))',
-					foreground: 'hsl(var(--destructive-foreground))'
+					DEFAULT: colors.status.error,
+					foreground: colors.text.inverse,
 				},
 				muted: {
-					DEFAULT: 'hsl(var(--muted))',
-					foreground: 'hsl(var(--muted-foreground))'
+					DEFAULT: colors.background.secondary,
+					foreground: colors.text.secondary,
 				},
 				accent: {
-					DEFAULT: 'hsl(var(--accent))',
-					foreground: 'hsl(var(--accent-foreground))'
+					DEFAULT: colors.berry[500],
+					foreground: colors.text.inverse,
 				},
 				popover: {
-					DEFAULT: 'hsl(var(--popover))',
-					foreground: 'hsl(var(--popover-foreground))'
+					DEFAULT: colors.background.tertiary,
+					foreground: colors.text.primary,
 				},
 				card: {
-					DEFAULT: 'hsl(var(--card))',
-					foreground: 'hsl(var(--card-foreground))'
+					DEFAULT: colors.background.secondary,
+					foreground: colors.text.primary,
 				},
+				input: colors.border.medium,
+				ring: colors.coral[500],
+				
 				sidebar: {
-					DEFAULT: 'hsl(var(--sidebar-background))',
-					foreground: 'hsl(var(--sidebar-foreground))',
-					primary: 'hsl(var(--sidebar-primary))',
-					'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
-					accent: 'hsl(var(--sidebar-accent))',
-					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
-					border: 'hsl(var(--sidebar-border))',
-					ring: 'hsl(var(--sidebar-ring))'
-				},
-				// Обновленные кастомные цвета PREVENT в мягких женственных тонах
-				prevent: {
-					lavender: '#B8A8D8',
-					'soft-pink': '#E8C5D4', 
-					peach: '#F5D5AE',
-					'light-gray': '#FAF9FC',
-					'risk-low': '#7BC4A4',
-					'risk-medium': '#E8B87A',
-					'risk-high': '#E8A07A'
-				},
-				// Дополнительная палитра для женственного дизайна
-				feminine: {
-					'lavender-50': '#FAF9FC',
-					'lavender-100': '#F0EDF5',
-					'lavender-200': '#E6E0EB',
-					'lavender-300': '#D1C7D8',
-					'lavender-400': '#B8A8D8',
-					'lavender-500': '#9F89C5',
-					'pink-50': '#FDF7F9',
-					'pink-100': '#F9EEF2',
-					'pink-200': '#F3DCE5',
-					'pink-300': '#E8C5D4',
-					'pink-400': '#DBACBF',
-					'pink-500': '#CE93AA',
-					'peach-50': '#FEFCF8',
-					'peach-100': '#FDF8F0',
-					'peach-200': '#FAF0E1',
-					'peach-300': '#F5E4CD',
-					'peach-400': '#F5D5AE',
-					'peach-500': '#F0C688'
-				},
-				// Добавляем мятные цвета
-				mint: {
-					'50': '#F0FFFE',
-					'100': '#CCFFFE',
-					'200': '#99FFFC',
-					'300': '#5FFFFF',
-					'400': '#1AFBFF',
-					'500': '#00E3E8',
-					'600': '#00B3B8',
-					'700': '#008B94',
-					'800': '#086A77',
-					'900': '#0A5963'
+					DEFAULT: colors.background.secondary,
+					foreground: colors.text.primary,
+					primary: colors.coral[500],
+					'primary-foreground': colors.text.inverse,
+					accent: colors.background.tertiary,
+					'accent-foreground': colors.text.primary,
+					border: colors.border.light,
+					ring: colors.coral[500],
 				}
 			},
 			borderRadius: {
+				...borderRadius,
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',
-				sm: 'calc(var(--radius) - 4px)'
+				sm: 'calc(var(--radius) - 4px)',
 			},
+			boxShadow: shadows,
 			keyframes: {
 				'accordion-down': {
-					from: {
-						height: '0'
-					},
-					to: {
-						height: 'var(--radix-accordion-content-height)'
-					}
+					from: { height: '0' },
+					to: { height: 'var(--radix-accordion-content-height)' },
 				},
 				'accordion-up': {
-					from: {
-						height: 'var(--radix-accordion-content-height)'
-					},
-					to: {
-						height: '0'
-					}
+					from: { height: 'var(--radix-accordion-content-height)' },
+					to: { height: '0' },
 				},
 				'fade-in': {
 					'0%': {
@@ -154,22 +144,23 @@ export default {
 						transform: 'translateY(0)'
 					}
 				},
-				'glow': {
-					'0%': {
-						boxShadow: '0 0 5px rgba(184, 168, 216, 0.2), 0 0 10px rgba(184, 168, 216, 0.2), 0 0 15px rgba(184, 168, 216, 0.2)'
+				'gentle-bounce': {
+					'0%, 100%': {
+						transform: 'translateY(0)',
 					},
-					'100%': {
-						boxShadow: '0 0 5px rgba(184, 168, 216, 0.5), 0 0 10px rgba(184, 168, 216, 0.5), 0 0 15px rgba(184, 168, 216, 0.5)'
+					'50%': {
+						transform: 'translateY(-4px)',
 					}
 				},
-				'scale-in': {
+				'pulse-soft': {
 					'0%': {
-						transform: 'scale(0.95)',
-						opacity: '0'
+						opacity: '1',
+					},
+					'50%': {
+						opacity: '0.7',
 					},
 					'100%': {
-						transform: 'scale(1)',
-						opacity: '1'
+						opacity: '1',
 					}
 				}
 			},
@@ -178,8 +169,8 @@ export default {
 				'accordion-up': 'accordion-up 0.2s ease-out',
 				'fade-in': 'fade-in 0.6s ease-out',
 				'slide-up': 'slide-up 0.8s ease-out',
-				'glow': 'glow 2s ease-in-out infinite alternate',
-				'scale-in': 'scale-in 0.2s ease-out'
+				'gentle-bounce': 'gentle-bounce 2s ease-in-out infinite',
+				'pulse-soft': 'pulse-soft 3s ease-in-out infinite'
 			}
 		}
 	},
