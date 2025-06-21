@@ -6,7 +6,7 @@ export const useAdminCheck = () => {
   const { user } = useAuth();
   const { data: userRoles, isLoading } = useUserRoles();
 
-  const isAdmin = userRoles?.some(role => role.role === 'admin') || false;
+  const isAdmin = userRoles?.some(userRole => userRole.role === 'admin') || false;
 
   return {
     isAdmin,

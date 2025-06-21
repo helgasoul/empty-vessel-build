@@ -2,18 +2,9 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { UserRole as UserRoleType } from '@/types/user';
+import { UserRole as UserRoleType, UserRoleRecord } from '@/types/user';
 
 export type AppRole = UserRoleType;
-export type UserRole = UserRoleType;
-
-export interface UserRole {
-  id: string;
-  user_id: string;
-  role: UserRoleType;
-  created_at: string;
-  updated_at: string;
-}
 
 export const useUserRoles = () => {
   const { user } = useAuth();
@@ -32,7 +23,7 @@ export const useUserRoles = () => {
         throw new Error(error.message);
       }
 
-      return data as UserRole[];
+      return data as UserRoleRecord[];
     },
     enabled: !!user,
   });
