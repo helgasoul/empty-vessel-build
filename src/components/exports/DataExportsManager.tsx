@@ -61,12 +61,15 @@ const DataExportsManager = () => {
   };
 
   const getStatusBadge = (status: string) => {
-    const variants = {
-      pending: 'secondary',
-      processing: 'default',
-      completed: 'success',
-      failed: 'destructive'
-    } as const;
+    const getVariant = (status: string) => {
+      switch (status) {
+        case 'pending': return 'secondary';
+        case 'processing': return 'default';
+        case 'completed': return 'default'; // Changed from 'success' to 'default'
+        case 'failed': return 'destructive';
+        default: return 'secondary';
+      }
+    };
     
     const labels = {
       pending: 'Ожидание',
@@ -76,7 +79,7 @@ const DataExportsManager = () => {
     };
     
     return (
-      <Badge variant={variants[status as keyof typeof variants] || 'secondary'}>
+      <Badge variant={getVariant(status)} className={status === 'completed' ? 'bg-green-100 text-green-800' : ''}>
         {labels[status as keyof typeof labels] || status}
       </Badge>
     );
