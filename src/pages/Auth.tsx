@@ -2,29 +2,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import { Badge } from '@/components/ui/badge';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import { UserRole, UserRoleEnum } from '@/types/user';
-import { 
-  User, 
-  Stethoscope, 
-  Settings, 
-  Building2, 
-  FlaskConical,
-  CheckCircle,
-  AlertCircle,
-  Crown,
-  Shield,
-  ArrowLeft
-} from 'lucide-react';
+import { UserRole } from '@/types/user';
 import AuthHeader from '@/components/auth/AuthHeader';
 import PasswordUpdateForm from '@/components/auth/PasswordUpdateForm';
+import AuthForm from '@/components/auth/AuthForm';
+import AuthModeToggle from '@/components/auth/AuthModeToggle';
+import AuthInfoSection from '@/components/auth/AuthInfoSection';
+import DebugInfoSection from '@/components/auth/DebugInfoSection';
 
 const Auth = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -74,79 +61,9 @@ const Auth = () => {
     }
   }, [user, navigate, type]);
 
-  // ✅ ПОЛНЫЙ список ролей
-  const roleOptions = [
-    {
-      value: 'patient' as UserRole,
-      label: 'Пациент',
-      description: 'Хочу следить за своим здоровьем',
-      icon: User,
-      color: 'bg-blue-500',
-      hoverColor: 'hover:bg-blue-600',
-      textColor: 'text-white',
-      borderColor: 'border-blue-500',
-      bgGradient: 'from-blue-50 to-cyan-50',
-      iconBg: 'bg-blue-100',
-      iconColor: 'text-blue-600'
-    },
-    {
-      value: 'doctor' as UserRole,
-      label: 'Врач',
-      description: 'Медицинский специалист',
-      icon: Stethoscope,
-      color: 'bg-green-500',
-      hoverColor: 'hover:bg-green-600',
-      textColor: 'text-white',
-      borderColor: 'border-green-500',
-      bgGradient: 'from-green-50 to-emerald-50',
-      iconBg: 'bg-green-100',
-      iconColor: 'text-green-600'
-    },
-    {
-      value: 'admin' as UserRole,
-      label: 'Администратор',
-      description: 'Управление платформой',
-      icon: Crown,
-      color: 'bg-red-500',
-      hoverColor: 'hover:bg-red-600',
-      textColor: 'text-white',
-      borderColor: 'border-red-500',
-      bgGradient: 'from-red-50 to-rose-50',
-      iconBg: 'bg-red-100',
-      iconColor: 'text-red-600',
-      requiresCode: true
-    },
-    {
-      value: 'clinic' as UserRole,
-      label: 'Клиника',
-      description: 'Медицинское учреждение',
-      icon: Building2,
-      color: 'bg-purple-500',
-      hoverColor: 'hover:bg-purple-600',
-      textColor: 'text-white',
-      borderColor: 'border-purple-500',
-      bgGradient: 'from-purple-50 to-violet-50',
-      iconBg: 'bg-purple-100',
-      iconColor: 'text-purple-600'
-    },
-    {
-      value: 'laboratory' as UserRole,
-      label: 'Лаборатория',
-      description: 'Лабораторные исследования',
-      icon: FlaskConical,
-      color: 'bg-orange-500',
-      hoverColor: 'hover:bg-orange-600',
-      textColor: 'text-white',
-      borderColor: 'border-orange-500',
-      bgGradient: 'from-orange-50 to-amber-50',
-      iconBg: 'bg-orange-100',
-      iconColor: 'text-orange-600'
-    }
-  ];
-
-  const handleRoleChange = (value: string) => {
+  const handleRoleChange = (value: UserRole) => {
     console.log('🔄 Роль изменена на:', value);
-    setSelectedRole(value as UserRole);
+    setSelectedRole(value);
     setError('');
   };
 
@@ -290,49 +207,6 @@ const Auth = () => {
     }
   };
 
-  const handlePasswordReset = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setIsResetLoading(true);
-
-    try {
-      const formData = new FormData(e.currentTarget);
-      const email = formData.get('resetEmail') as string;
-
-      if (!email) {
-        toast.error('Пожалуйста, введите email адрес');
-        setIsResetLoading(false);
-        return;
-      }
-
-      console.log('Sending password reset request for:', email);
-
-      const response = await supabase.functions.invoke('send-password-reset', {
-        body: { email }
-      });
-
-      console.log('Password reset response:', response);
-
-      if (response.error) {
-        console.error('Error sending password reset:', response.error);
-        toast.error('Ошибка при отправке письма для восстановления пароля. Попробуйте еще раз.');
-      } else if (response.data) {
-        if (response.data.testMode) {
-          toast.success('В тестовом режиме письма отправляются только на зарегистрированный email. Ссылка сгенерирована успешно.');
-          console.log('Test mode reset link:', response.data.resetLink);
-        } else {
-          toast.success('Письмо для восстановления пароля отправлено на ваш email');
-        }
-        setResetDialogOpen(false);
-        (e.target as HTMLFormElement).reset();
-      }
-    } catch (err) {
-      console.error('Unexpected error:', err);
-      toast.error('Произошла неожиданная ошибка. Попробуйте еще раз.');
-    } finally {
-      setIsResetLoading(false);
-    }
-  };
-
   const handlePasswordUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
@@ -379,6 +253,19 @@ const Auth = () => {
     }
   };
 
+  const handleModeToggle = () => {
+    setIsLogin(!isLogin);
+    setError('');
+    setSelectedRole('patient');
+    setAdminCode('');
+    setFormData({
+      email: '',
+      password: '',
+      fullName: '',
+      confirmPassword: ''
+    });
+  };
+
   // If this is a password recovery flow, show password update form
   if (type === 'recovery' && user) {
     return (
@@ -404,248 +291,31 @@ const Auth = () => {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            {error && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3 flex items-center space-x-2 text-red-800">
-                <AlertCircle className="w-4 h-4" />
-                <span className="text-sm">{error}</span>
-              </div>
-            )}
+            <AuthForm
+              isLogin={isLogin}
+              formData={formData}
+              setFormData={setFormData}
+              selectedRole={selectedRole}
+              onRoleChange={handleRoleChange}
+              adminCode={adminCode}
+              onAdminCodeChange={setAdminCode}
+              error={error}
+              isLoading={isLoading}
+              onSubmit={isLogin ? handleSignIn : handleSignUp}
+            />
 
-            <form onSubmit={isLogin ? handleSignIn : handleSignUp} className="space-y-6">
-              {!isLogin && (
-                <div className="space-y-2">
-                  <Label htmlFor="fullName" className="font-roboto">Полное имя</Label>
-                  <Input
-                    id="fullName"
-                    value={formData.fullName}
-                    onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                    placeholder="Анна Иванова"
-                    required={!isLogin}
-                    className="font-roboto"
-                    disabled={isLoading}
-                  />
-                </div>
-              )}
-              
-              <div className="space-y-2">
-                <Label htmlFor="email" className="font-roboto">Email</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({...formData, email: e.target.value})}
-                  placeholder="your@email.com"
-                  required
-                  className="font-roboto"
-                  disabled={isLoading}
-                />
-              </div>
-              
-              <div className="space-y-2">
-                <Label htmlFor="password" className="font-roboto">Пароль</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  value={formData.password}
-                  onChange={(e) => setFormData({...formData, password: e.target.value})}
-                  placeholder={isLogin ? "Введите пароль" : "Минимум 6 символов"}
-                  required
-                  className="font-roboto"
-                  disabled={isLoading}
-                  minLength={isLogin ? undefined : 6}
-                />
-              </div>
+            <AuthModeToggle
+              isLogin={isLogin}
+              onToggle={handleModeToggle}
+            />
 
-              {!isLogin && (
-                <>
-                  <div className="space-y-2">
-                    <Label htmlFor="confirmPassword" className="font-roboto">Подтвердите пароль</Label>
-                    <Input
-                      id="confirmPassword"
-                      type="password"
-                      value={formData.confirmPassword}
-                      onChange={(e) => setFormData({...formData, confirmPassword: e.target.value})}
-                      placeholder="Подтвердите пароль"
-                      required
-                      className="font-roboto"
-                      disabled={isLoading}
-                      minLength={6}
-                    />
-                  </div>
+            <DebugInfoSection
+              isLogin={isLogin}
+              selectedRole={selectedRole}
+              adminCode={adminCode}
+            />
 
-                  <div className="space-y-4">
-                    <div className="text-center">
-                      <Label className="text-xl font-bold text-gray-900 mb-2 block">
-                        Выберите вашу роль в системе
-                      </Label>
-                      <p className="text-sm text-gray-600 mb-4">
-                        Выберите роль, которая лучше всего описывает ваше положение
-                      </p>
-                    </div>
-                    
-                    {/* Отладочная информация */}
-                    <div className="text-xs text-gray-500 bg-gray-50 p-2 rounded">
-                      Выбрана роль: {selectedRole} | Всего ролей: {roleOptions.length}
-                    </div>
-                    
-                    <RadioGroup 
-                      value={selectedRole} 
-                      onValueChange={handleRoleChange}
-                      className="grid grid-cols-1 md:grid-cols-2 gap-4"
-                    >
-                      {roleOptions.map((option) => (
-                        <div key={option.value} className="relative">
-                          <RadioGroupItem 
-                            value={option.value} 
-                            id={option.value} 
-                            className="sr-only"
-                          />
-                          <Label 
-                            htmlFor={option.value} 
-                            className={`
-                              group flex flex-col items-center p-6 rounded-xl border-2 cursor-pointer transition-all duration-300
-                              ${selectedRole === option.value 
-                                ? `${option.borderColor} bg-gradient-to-br ${option.bgGradient} shadow-lg scale-105` 
-                                : 'border-gray-200 hover:border-gray-300 hover:shadow-md hover:scale-102'
-                              }
-                            `}
-                          >
-                            <div className={`
-                              w-16 h-16 rounded-full flex items-center justify-center mb-4 transition-all duration-300
-                              ${selectedRole === option.value 
-                                ? `${option.color} ${option.textColor} shadow-lg` 
-                                : `${option.iconBg} group-hover:scale-110`
-                              }
-                            `}>
-                              <option.icon className={`
-                                w-8 h-8 transition-all duration-300
-                                ${selectedRole === option.value 
-                                  ? option.textColor 
-                                  : option.iconColor
-                                }
-                              `} />
-                            </div>
-                            
-                            <div className="text-center">
-                              <div className={`
-                                font-bold text-lg mb-2 transition-colors duration-300
-                                ${selectedRole === option.value 
-                                  ? 'text-gray-900' 
-                                  : 'text-gray-700 group-hover:text-gray-900'
-                                }
-                              `}>
-                                {option.label}
-                              </div>
-                              <div className="text-sm text-gray-600 mb-3">
-                                {option.description}
-                              </div>
-                            </div>
-                            
-                            {selectedRole === option.value && (
-                              <div className="absolute -top-2 -right-2">
-                                <div className={`
-                                  w-8 h-8 rounded-full flex items-center justify-center
-                                  ${option.color} ${option.textColor} shadow-lg animate-scale-in
-                                `}>
-                                  <CheckCircle className="w-5 h-5" />
-                                </div>
-                              </div>
-                            )}
-                            
-                            {option.requiresCode && (
-                              <div className="absolute top-2 left-2">
-                                <div className="bg-red-500 text-white text-xs px-2 py-1 rounded-full font-medium shadow">
-                                  Код доступа
-                                </div>
-                              </div>
-                            )}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
-
-                    {/* Дополнительное поле для администраторов */}
-                    {selectedRole === 'admin' && (
-                      <div className="space-y-3 p-4 bg-red-50 border border-red-200 rounded-lg">
-                        <div className="flex items-center space-x-2">
-                          <Crown className="w-5 h-5 text-red-600" />
-                          <Label htmlFor="adminCode" className="font-roboto font-semibold text-red-800">
-                            Код администратора
-                          </Label>
-                        </div>
-                        <Input
-                          id="adminCode"
-                          type="password"
-                          placeholder="Введите код доступа администратора"
-                          value={adminCode}
-                          onChange={(e) => setAdminCode(e.target.value)}
-                          required
-                          className="font-roboto border-red-300 focus:border-red-500"
-                          disabled={isLoading}
-                        />
-                        <p className="text-xs text-red-600">
-                          Обратитесь к главному администратору для получения кода доступа
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                </>
-              )}
-
-              <Button 
-                type="submit" 
-                className="w-full prevent-button-primary text-lg py-3"
-                disabled={isLoading}
-              >
-                {isLoading ? (isLogin ? 'Вход...' : 'Регистрация...') : (isLogin ? 'Войти' : 'Создать аккаунт')}
-              </Button>
-            </form>
-
-            <div className="text-center">
-              <button
-                type="button"
-                onClick={() => {
-                  setIsLogin(!isLogin);
-                  setError('');
-                  setSelectedRole('patient');
-                  setAdminCode('');
-                  setFormData({
-                    email: '',
-                    password: '',
-                    fullName: '',
-                    confirmPassword: ''
-                  });
-                }}
-                className="text-purple-600 hover:text-purple-700 text-sm font-medium"
-              >
-                {isLogin ? 'Нет аккаунта? Зарегистрируйтесь' : 'Уже есть аккаунт? Войдите'}
-              </button>
-            </div>
-
-            {/* Отладочная панель */}
-            <div className="bg-gray-50 p-3 rounded-lg text-xs text-gray-600">
-              <div><strong>Debug info:</strong></div>
-              <div>Режим: {isLogin ? 'Вход' : 'Регистрация'}</div>
-              <div>Выбранная роль: {selectedRole}</div>
-              <div>Доступные роли: {roleOptions.map(r => r.value).join(', ')}</div>
-              {selectedRole === 'admin' && (
-                <div>Код админа введен: {adminCode ? 'Да' : 'Нет'}</div>
-              )}
-            </div>
-
-            {/* Информационный блок */}
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-3">
-              <div className="flex items-start space-x-2">
-                <AlertCircle className="w-4 h-4 text-blue-600 mt-0.5 flex-shrink-0" />
-                <div className="text-xs text-blue-800">
-                  <p className="font-medium mb-1">Информация для тестирования:</p>
-                  <p>Если у вас проблемы с входом, убедитесь что email и пароль введены корректно. При возникновении ошибок проверьте консоль браузера для получения детальной информации.</p>
-                  {selectedRole === 'admin' && (
-                    <p className="mt-1 font-medium">Тестовый код администратора: PREVENT_ADMIN_2024</p>
-                  )}
-                </div>
-              </div>
-            </div>
+            <AuthInfoSection selectedRole={selectedRole} />
           </CardContent>
         </Card>
       </div>
