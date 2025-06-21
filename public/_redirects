@@ -2,6 +2,21 @@
 # Netlify redirects для SPA
 /*    /index.html   200
 
+# Явные редиректы для основных маршрутов
+/profile    /index.html   200
+/womens-health    /index.html   200
+/risk-assessment    /index.html   200
+/medical-integrations    /index.html   200
+/menstrual-cycle-tracker    /index.html   200
+/pregnancy-planning    /index.html   200
+/medical-calendar    /index.html   200
+/medications    /index.html   200
+/ai-health    /index.html   200
+/family-data    /index.html   200
+/telemedicine-integrations    /index.html   200
+/environmental-health    /index.html   200
+/gamification    /index.html   200
+/community    /index.html   200
+
 # Дополнительные правила для API маршрутов (если будут)
 /api/*  /api/:splat  200
-

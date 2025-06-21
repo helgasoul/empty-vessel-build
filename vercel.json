@@ -2,6 +2,62 @@
 {
   "rewrites": [
     {
+      "source": "/profile",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/womens-health",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/risk-assessment",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/medical-integrations",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/menstrual-cycle-tracker",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/pregnancy-planning",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/medical-calendar",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/medications",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/ai-health",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/family-data",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/telemedicine-integrations",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/environmental-health",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/gamification",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/community",
+      "destination": "/index.html"
+    },
+    {
       "source": "/(.*)",
       "destination": "/index.html"
     }

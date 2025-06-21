@@ -20,6 +20,22 @@ import Subscription from "./pages/Subscription";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
+// Import dashboard pages
+import Profile from "./pages/Profile";
+import WomensHealth from "./pages/WomensHealth";
+import RiskAssessment from "./pages/RiskAssessment";
+import MedicalIntegrations from "./pages/MedicalIntegrations";
+import MenstrualCycleTracker from "./pages/MenstrualCycleTracker";
+import PregnancyPlanningPage from "./pages/PregnancyPlanningPage";
+import MedicalCalendar from "./pages/MedicalCalendar";
+import MedicationManager from "./pages/MedicationManager";
+import AIHealth from "./pages/AIHealth";
+import FamilyData from "./pages/FamilyData";
+import TelemedicineIntegrations from "./pages/TelemedicineIntegrations";
+import EnvironmentalHealth from "./pages/EnvironmentalHealth";
+import GamificationPage from "./pages/GamificationPage";
+import Community from "./pages/Community";
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -51,6 +67,22 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/subscription" element={<Subscription />} />
                 <Route path="/auth" element={<Auth />} />
+                
+                {/* Основные страницы приложения */}
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/womens-health" element={<WomensHealth />} />
+                <Route path="/risk-assessment" element={<RiskAssessment />} />
+                <Route path="/medical-integrations" element={<MedicalIntegrations />} />
+                <Route path="/menstrual-cycle-tracker" element={<MenstrualCycleTracker />} />
+                <Route path="/pregnancy-planning" element={<PregnancyPlanningPage />} />
+                <Route path="/medical-calendar" element={<MedicalCalendar />} />
+                <Route path="/medications" element={<MedicationManager />} />
+                <Route path="/ai-health" element={<AIHealth />} />
+                <Route path="/family-data" element={<FamilyData />} />
+                <Route path="/telemedicine-integrations" element={<TelemedicineIntegrations />} />
+                <Route path="/environmental-health" element={<EnvironmentalHealth />} />
+                <Route path="/gamification" element={<GamificationPage />} />
+                <Route path="/community" element={<Community />} />
                 
                 {/* 404 страница */}
                 <Route path="*" element={<NotFound />} />
