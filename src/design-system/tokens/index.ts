@@ -8,4 +8,6 @@ export { colors } from './colors';
 export { typography } from './typography';
 export { spacing, borderRadius, shadows } from './spacing';
 
-export type { ColorToken, TypographyToken, SpacingToken, BorderRadiusToken, ShadowToken } from './colors';
+export type { ColorToken } from './colors';
+export type { TypographyToken } from './typography';
+export type { SpacingToken, BorderRadiusToken, ShadowToken } from './spacing';

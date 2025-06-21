@@ -36,10 +36,10 @@ export default {
 				'caption': [typography.fontSize.caption, { lineHeight: typography.lineHeight.normal }],
 			},
 			colors: {
-				// PREVENT Brand Colors
-				coral: colors.coral,
-				berry: colors.berry,
-				sage: colors.sage,
+				// PREVENT Brand Colors - Updated with logo colors
+				primary: colors.primary,
+				gradient: colors.gradient,
+				accent: colors.accent,
 				
 				// Background system
 				background: {
@@ -65,14 +65,14 @@ export default {
 					dark: colors.border.dark,
 				},
 				
-				// shadcn/ui compatibility
+				// shadcn/ui compatibility with new brand colors
 				primary: {
-					DEFAULT: colors.coral[500],
+					DEFAULT: colors.primary[500],
 					foreground: colors.text.inverse,
 				},
 				secondary: {
-					DEFAULT: colors.sage[500],
-					foreground: colors.text.inverse,
+					DEFAULT: colors.primary[100],
+					foreground: colors.primary[900],
 				},
 				destructive: {
 					DEFAULT: colors.status.error,
@@ -83,7 +83,7 @@ export default {
 					foreground: colors.text.secondary,
 				},
 				accent: {
-					DEFAULT: colors.berry[500],
+					DEFAULT: colors.accent[500],
 					foreground: colors.text.inverse,
 				},
 				popover: {
@@ -95,17 +95,17 @@ export default {
 					foreground: colors.text.primary,
 				},
 				input: colors.border.medium,
-				ring: colors.coral[500],
+				ring: colors.primary[500],
 				
 				sidebar: {
 					DEFAULT: colors.background.secondary,
 					foreground: colors.text.primary,
-					primary: colors.coral[500],
+					primary: colors.primary[500],
 					'primary-foreground': colors.text.inverse,
 					accent: colors.background.tertiary,
 					'accent-foreground': colors.text.primary,
 					border: colors.border.light,
-					ring: colors.coral[500],
+					ring: colors.primary[500],
 				}
 			},
 			borderRadius: {
@@ -115,6 +115,12 @@ export default {
 				sm: 'calc(var(--radius) - 4px)',
 			},
 			boxShadow: shadows,
+			backgroundImage: {
+				'gradient-brand': colors.gradients.primary,
+				'gradient-secondary': colors.gradients.secondary,
+				'gradient-accent': colors.gradients.accent,
+				'gradient-background': colors.gradients.background,
+			},
 			keyframes: {
 				'accordion-down': {
 					from: { height: '0' },

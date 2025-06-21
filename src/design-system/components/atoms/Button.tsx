@@ -1,21 +1,20 @@
 
 /**
  * PREVENT Design System - Button Atom
- * Accessible button component with loading states and focus management
+ * Enhanced button component with gradient support and medical context
  */
 
 import React from 'react';
-import { LucideIcon, Loader2 } from 'lucide-react';
+import { LucideIcon } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'tertiary' | 'destructive' | 'ghost';
+  variant?: 'primary' | 'secondary' | 'tertiary' | 'outline' | 'ghost' | 'gradient';
   size?: 'sm' | 'md' | 'lg';
   icon?: LucideIcon;
   iconPosition?: 'left' | 'right';
   loading?: boolean;
   fullWidth?: boolean;
-  children: React.ReactNode;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -27,24 +26,25 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     loading = false,
     fullWidth = false,
     children, 
-    className,
+    className, 
     disabled,
     ...props 
   }, ref) => {
-    const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed';
+    const baseClasses = 'inline-flex items-center justify-center rounded-lg font-medium transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
     
     const sizeClasses = {
-      sm: 'px-3 py-2 text-body-small gap-1.5 h-8',
+      sm: 'px-3 py-2 text-label gap-2 h-9',
       md: 'px-4 py-2.5 text-body gap-2 h-10',
-      lg: 'px-6 py-3 text-body-large gap-2.5 h-12',
+      lg: 'px-6 py-3 text-body-large gap-3 h-12',
     };
     
     const variantClasses = {
-      primary: 'bg-coral-500 text-white hover:bg-coral-600 focus:ring-coral-500 shadow-sm hover:shadow-md',
+      primary: 'bg-primary-500 text-white hover:bg-primary-600 focus:ring-primary-500 shadow-sm hover:shadow-md',
       secondary: 'bg-sage-500 text-white hover:bg-sage-600 focus:ring-sage-500 shadow-sm hover:shadow-md',
-      tertiary: 'bg-background-secondary text-text-primary border border-border-medium hover:bg-background-tertiary focus:ring-coral-500',
-      destructive: 'bg-status-error text-white hover:bg-red-600 focus:ring-status-error shadow-sm hover:shadow-md',
-      ghost: 'text-text-primary hover:bg-background-secondary focus:ring-coral-500',
+      tertiary: 'bg-background-secondary text-text-primary hover:bg-background-tertiary border border-border-light focus:ring-primary-500 shadow-sm hover:shadow-md',
+      outline: 'border border-primary-500 text-primary-500 hover:bg-primary-50 focus:ring-primary-500',
+      ghost: 'text-text-primary hover:bg-background-secondary focus:ring-primary-500',
+      gradient: 'bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 text-white hover:shadow-lg hover:scale-105 focus:ring-purple-500 shadow-md',
     };
     
     const iconSize = {
@@ -53,7 +53,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       lg: 20,
     };
 
-    const isDisabled = disabled || loading;
+    const LoadingSpinner = () => (
+      <div className="animate-spin rounded-full border-2 border-transparent border-t-current" 
+           style={{ width: iconSize[size], height: iconSize[size] }} />
+    );
 
     return (
       <button
@@ -65,16 +68,16 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           fullWidth && 'w-full',
           className
         )}
-        disabled={isDisabled}
+        disabled={disabled || loading}
         {...props}
       >
         {loading ? (
-          <Loader2 size={iconSize[size]} className="animate-spin" aria-hidden="true" />
-        ) : (
-          Icon && iconPosition === 'left' && <Icon size={iconSize[size]} aria-hidden="true" />
-        )}
+          <LoadingSpinner />
+        ) : Icon && iconPosition === 'left' ? (
+          <Icon size={iconSize[size]} aria-hidden="true" />
+        ) : null}
         
-        <span>{children}</span>
+        {children}
         
         {!loading && Icon && iconPosition === 'right' && (
           <Icon size={iconSize[size]} aria-hidden="true" />
