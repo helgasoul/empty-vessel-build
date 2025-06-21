@@ -27,25 +27,25 @@ const CycleTrackerChip: React.FC<CycleTrackerChipProps> = ({
       label: 'Менструация',
       icon: Circle,
       variant: 'menstruation' as const,
-      color: 'border-berry-300 bg-berry-50',
+      color: 'border-gradient-300 bg-gradient-50',
     },
     follicular: {
       label: 'Фолликулярная',
       icon: Flower2,
       variant: 'fertility' as const,
-      color: 'border-sage-300 bg-sage-50',
+      color: 'border-primary-300 bg-primary-50',
     },
     ovulation: {
       label: 'Овуляция',
       icon: Heart,
       variant: 'ovulation' as const,
-      color: 'border-coral-300 bg-coral-50',
+      color: 'border-accent-300 bg-accent-50',
     },
     luteal: {
       label: 'Лютеиновая',
       icon: Moon,
       variant: 'info' as const,
-      color: 'border-sage-300 bg-sage-50',
+      color: 'border-primary-300 bg-primary-50',
     },
   };
 

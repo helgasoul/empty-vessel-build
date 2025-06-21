@@ -33,9 +33,9 @@ const Badge = React.forwardRef<HTMLDivElement, BadgeProps>(
       success: 'bg-status-success/10 text-status-success border border-status-success/20',
       warning: 'bg-status-warning/10 text-amber-700 border border-status-warning/20',
       error: 'bg-status-error/10 text-status-error border border-status-error/20',
-      info: 'bg-sage-100 text-sage-700 border border-sage-200',
-      menstruation: 'bg-berry-100 text-berry-700 border border-berry-200',
-      ovulation: 'bg-coral-100 text-coral-700 border border-coral-200',
+      info: 'bg-primary-100 text-primary-700 border border-primary-200',
+      menstruation: 'bg-gradient-100 text-gradient-700 border border-gradient-200',
+      ovulation: 'bg-accent-100 text-accent-700 border border-accent-200',
       fertility: 'bg-status-success/10 text-status-success border border-status-success/20',
     };
     
