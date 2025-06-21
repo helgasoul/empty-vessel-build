@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Home, LayoutDashboard } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 
 interface BackButtonProps {
@@ -15,7 +15,7 @@ interface BackButtonProps {
 const BackButton = ({ 
   fallbackPath = "/", 
   className = "", 
-  variant = "ghost",
+  variant = "outline",
   size = "default",
   children = "Назад"
 }: BackButtonProps) => {
@@ -34,7 +34,7 @@ const BackButton = ({
       variant={variant}
       size={size}
       onClick={handleBack}
-      className={`flex items-center gap-2 ${className}`}
+      className={`flex items-center gap-2 transition-all duration-200 hover:shadow-md border-gray-300 hover:border-purple-300 hover:bg-purple-50 ${className}`}
     >
       <ArrowLeft className="w-4 h-4" />
       {children}

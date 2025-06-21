@@ -1,26 +1,16 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, User } from "lucide-react";
-import { useNavigate } from 'react-router-dom';
+import { User } from "lucide-react";
 import ProfileEditForm from '@/components/profile/ProfileEditForm';
+import BackButton from '@/components/ui/back-button';
 
 const Profile = () => {
-  const navigate = useNavigate();
-
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-4xl mx-auto">
-        <div className="mb-6 flex items-center space-x-4">
-          <Button
-            variant="outline"
-            onClick={() => navigate('/dashboard')}
-            className="flex items-center space-x-2"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span>Назад в панель</span>
-          </Button>
+        <div className="mb-6">
+          <BackButton fallbackPath="/dashboard" className="mb-4" />
         </div>
 
         <Card>

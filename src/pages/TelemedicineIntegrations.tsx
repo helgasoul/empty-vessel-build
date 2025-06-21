@@ -2,12 +2,13 @@
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Video } from "lucide-react";
+import { Video } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import VideoConferenceIntegrations from '@/components/medical/VideoConferenceIntegrations';
 import CalendarIntegrations from '@/components/medical/CalendarIntegrations';
+import BackButton from '@/components/ui/back-button';
 
 const TelemedicineIntegrations = () => {
   const { user, signOut } = useAuth();
@@ -20,14 +21,9 @@ const TelemedicineIntegrations = () => {
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => navigate('/medical-integrations')}
-                className="hover:bg-primary/10"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </Button>
+              <BackButton fallbackPath="/medical-integrations" variant="ghost" size="icon" className="hover:bg-primary/10">
+                <span className="sr-only">Назад</span>
+              </BackButton>
               <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
                 <Video className="w-6 h-6 text-white" />
               </div>

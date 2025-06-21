@@ -5,17 +5,22 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import SubscriptionPlans from '@/components/subscription/SubscriptionPlans';
 import SubscriptionStatus from '@/components/subscription/SubscriptionStatus';
 import { CreditCard, History, Settings } from "lucide-react";
+import BackButton from '@/components/ui/back-button';
 
 const Subscription = () => {
   return (
     <div className="container mx-auto px-4 py-8 space-y-8">
-      <div className="text-center">
-        <h1 className="text-4xl font-montserrat font-bold text-gray-900 dark:text-white mb-4">
-          Управление подпиской
-        </h1>
-        <p className="text-xl text-gray-600 dark:text-gray-300 font-roboto max-w-2xl mx-auto">
-          Выберите план, который подходит именно вам, и получите полный доступ к возможностям YTime
-        </p>
+      <div className="mb-8">
+        <BackButton fallbackPath="/" className="mb-6" />
+        
+        <div className="text-center">
+          <h1 className="text-4xl font-montserrat font-bold text-gray-900 dark:text-white mb-4">
+            Управление подпиской
+          </h1>
+          <p className="text-xl text-gray-600 dark:text-gray-300 font-roboto max-w-2xl mx-auto">
+            Выберите план, который подходит именно вам, и получите полный доступ к возможностям YTime
+          </p>
+        </div>
       </div>
 
       <Tabs defaultValue="status" className="w-full">
