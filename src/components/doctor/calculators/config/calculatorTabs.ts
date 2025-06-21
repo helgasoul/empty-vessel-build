@@ -58,3 +58,8 @@ export const calculatorTabs: CalculatorTab[] = [
     component: 'PsychologicalScales'
   }
 ];
+
+// Добавляем функцию для получения табов
+export const getCalculatorTabs = async (): Promise<CalculatorTab[]> => {
+  return Promise.resolve(calculatorTabs);
+};
