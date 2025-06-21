@@ -1,4 +1,3 @@
-
 /**
  * AI Analysis Service
  * Manages AI health analysis operations
@@ -86,22 +85,21 @@ class AIAnalysisService {
    * Start a new AI analysis session
    */
   async startAnalysis(request: AnalysisRequest): Promise<string> {
-    const sessionId = crypto.randomUUID();
-    
     try {
-      // Create analysis session - remove 'id' from insert as it's auto-generated
+      // Create analysis session with proper data structure
+      const sessionData = {
+        session_type: request.sessionType,
+        analysis_scope: request.scope as any,
+        data_timeframe: request.timeframe as any,
+        input_data_sources: ['wearable_data', 'health_records', 'lab_results'] as any,
+        key_findings: [] as any,
+        processing_status: 'processing',
+        ai_model_version: 'v2.1.0'
+      };
+
       const { data: session, error: sessionError } = await supabase
         .from('ai_analysis_sessions')
-        .insert({
-          user_id: request.userId,
-          session_type: request.sessionType,
-          analysis_scope: request.scope,
-          data_timeframe: request.timeframe,
-          input_data_sources: ['wearable_data', 'health_records', 'lab_results'],
-          key_findings: [],
-          processing_status: 'processing',
-          ai_model_version: 'v2.1.0'
-        })
+        .insert(sessionData)
         .select()
         .single();
 
@@ -256,10 +254,10 @@ class AIAnalysisService {
           processing_duration_ms: processingTime,
           confidence_score: mockResults.confidenceScore,
           data_completeness: mockResults.dataCompleteness,
-          key_findings: mockResults.keyFindings,
-          patterns_detected: patternsDetected,
-          correlations_found: correlationsFound,
-          anomalies_detected: anomaliesDetected
+          key_findings: mockResults.keyFindings as any,
+          patterns_detected: patternsDetected as any,
+          correlations_found: correlationsFound as any,
+          anomalies_detected: anomaliesDetected as any
         })
         .eq('id', sessionId);
 
