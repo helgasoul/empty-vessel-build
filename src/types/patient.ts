@@ -168,6 +168,7 @@ export interface CardiovascularRisk {
 export interface CancerRisk {
   score: number;
   level: 'low' | 'moderate' | 'high' | 'very-high';
+  factors: string[];
   types: CancerTypeRisk[];
   geneticFactors: string[];
   recommendations: string[];
