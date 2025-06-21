@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -8,24 +9,63 @@ import { useNavigate } from 'react-router-dom';
 const TargetSegments = () => {
   const navigate = useNavigate();
 
-  const handleButtonClick = () => {
+  // Specific handlers for each segment's main CTA button
+  const handleRiskAssessment = () => {
+    console.log('Кнопка "Узнать мои риски за 5 минут" нажата');
+    try {
+      navigate('/risk-assessment-demo');
+    } catch (error) {
+      console.error('Ошибка навигации к оценке рисков:', error);
+    }
+  };
+
+  const handlePregnancyPlanning = () => {
+    console.log('Кнопка "Начать подготовку к беременности" нажата');
+    try {
+      navigate('/womens-health-demo');
+    } catch (error) {
+      console.error('Ошибка навигации к планированию беременности:', error);
+    }
+  };
+
+  const handleMenopauseSupport = () => {
+    console.log('Кнопка "Получить план поддержки" нажата');
+    try {
+      navigate('/womens-health-demo');
+    } catch (error) {
+      console.error('Ошибка навигации к поддержке менопаузы:', error);
+    }
+  };
+
+  const handleChronicMonitoring = () => {
+    console.log('Кнопка "Создать план мониторинга" нажата');
+    try {
+      navigate('/environmental-health-demo');
+    } catch (error) {
+      console.error('Ошибка навигации к мониторингу:', error);
+    }
+  };
+
+  // Handler for auth button (registration)
+  const handleAuthClick = () => {
     console.log('Navigating to auth page...');
     navigate('/auth');
   };
 
   const segments = [
     {
-      title: "Осознанная забота",
+      title: "Забочусь о себе заранее",
       subtitle: "30-45 лет",
       icon: Brain,
       emoji: "🧠",
       color: "from-purple-400 to-indigo-500",
       bgColor: "bg-gradient-to-br from-purple-50 to-indigo-50",
       borderColor: "border-purple-200",
-      description: "Хочу знать свои риски и действовать заранее",
-      features: ["Оценка рисков рака груди", "Сердечно-сосудистые риски", "Профилактика диабета"],
-      cta: "Узнать свои риски",
-      demoPath: "/risk-assessment-demo"
+      description: "Хочу знать, что делаю все возможное для своего здоровья",
+      features: ["Оценка рисков рака груди и яичников", "Проверка здоровья сердца и сосудов", "План профилактики диабета"],
+      cta: "Узнать мои риски за 5 минут",
+      demoPath: "/risk-assessment-demo",
+      onCtaClick: handleRiskAssessment
     },
     {
       title: "Планирую стать мамой",
@@ -35,36 +75,39 @@ const TargetSegments = () => {
       color: "from-pink-400 to-rose-500",
       bgColor: "bg-gradient-to-br from-pink-50 to-rose-50",
       borderColor: "border-pink-200",
-      description: "Готовлюсь к беременности и думаю о будущем",
-      features: ["Подготовка к зачатию", "Генетические риски", "Фертильность"],
-      cta: "Подготовиться к беременности",
-      demoPath: "/womens-health-demo"
+      description: "Мечтаю родить здорового малыша",
+      features: ["Подготовка организма к зачатию", "Анализ генетических рисков", "Оптимизация фертильности"],
+      cta: "Начать подготовку к беременности",
+      demoPath: "/womens-health-demo",
+      onCtaClick: handlePregnancyPlanning
     },
     {
-      title: "Навигирую менопаузу",
+      title: "Прохожу менопаузу",
       subtitle: "45-60 лет",
       icon: Zap,
       emoji: "🌸",
       color: "from-orange-400 to-amber-500",
       bgColor: "bg-gradient-to-br from-orange-50 to-amber-50",
       borderColor: "border-orange-200",
-      description: "Хочу комфортно пройти этот период",
-      features: ["Гормональная поддержка", "Профилактика остеопороза", "Когнитивное здоровье"],
-      cta: "Получить поддержку",
-      demoPath: "/womens-health-demo"
+      description: "Хочу чувствовать себя уверенно и энергично",
+      features: ["Поддержка гормонального баланса", "Защита костей от остеопороза", "Сохранение ясности ума"],
+      cta: "Получить план поддержки",
+      demoPath: "/womens-health-demo",
+      onCtaClick: handleMenopauseSupport
     },
     {
-      title: "Живу с хроническими состояниями",
+      title: "Управляю хроническими заболеваниями",
       subtitle: "Любой возраст",
       icon: Heart,
       emoji: "💚",
       color: "from-emerald-400 to-teal-500",
       bgColor: "bg-gradient-to-br from-emerald-50 to-teal-50",
       borderColor: "border-emerald-200",
-      description: "Контролирую здоровье и предотвращаю осложнения",
-      features: ["Персональный мониторинг", "Связь с врачами", "Управление рисками"],
-      cta: "Начать мониторинг",
-      demoPath: "/environmental-health-demo"
+      description: "Стремлюсь жить полноценной жизнью, несмотря на диагноз",
+      features: ["Персональный мониторинг показателей", "Прямая связь с врачами", "Предотвращение обострений"],
+      cta: "Создать план мониторинга",
+      demoPath: "/environmental-health-demo",
+      onCtaClick: handleChronicMonitoring
     }
   ];
 
@@ -123,7 +166,7 @@ const TargetSegments = () => {
                   <div className="space-y-3">
                     <Button 
                       className={`w-full bg-gradient-to-r ${segment.color} hover:opacity-90 transition-all duration-200 hover:shadow-lg font-semibold`}
-                      onClick={handleButtonClick}
+                      onClick={segment.onCtaClick}
                       aria-label={`${segment.cta} - начать использование PREVENT`}
                     >
                       {segment.cta}
@@ -160,7 +203,7 @@ const TargetSegments = () => {
                 size="lg" 
                 variant="secondary" 
                 className="text-purple-600 hover:text-purple-700 font-semibold hover:scale-105 transition-all duration-200"
-                onClick={handleButtonClick}
+                onClick={handleAuthClick}
                 aria-label="Начать персональную оценку рисков здоровья"
               >
                 Пройти оценку рисков за 5 минут
