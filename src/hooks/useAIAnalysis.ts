@@ -6,7 +6,8 @@
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { aiAnalysisService, AnalysisRequest, AnalysisResults } from '@/services/aiAnalysisService';
+import { aiAnalysisService } from '@/services/aiAnalysisService';
+import type { AnalysisRequest, AnalysisResults } from '@/services/aiAnalysisService';
 
 export const useAIAnalysis = () => {
   const { user } = useAuth();
