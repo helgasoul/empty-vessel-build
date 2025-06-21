@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
-import { UserRole } from '@/types/user';
+import { UserRole } from '@/types/auth';
 import { validateAuthForm, getAuthErrorMessage } from '@/utils/authValidation';
 
 interface FormData {
@@ -57,8 +57,7 @@ export const useAuthHandlers = () => {
   const handleSignUp = async (
     e: React.FormEvent<HTMLFormElement>,
     formData: FormData,
-    selectedRole: UserRole,
-    adminCode: string
+    selectedRole: UserRole
   ) => {
     e.preventDefault();
     setIsLoading(true);
@@ -67,11 +66,10 @@ export const useAuthHandlers = () => {
     console.log('📝 Отправка формы регистрации:', {
       email: formData.email,
       fullName: formData.fullName,
-      selectedRole,
-      hasAdminCode: !!adminCode
+      selectedRole
     });
 
-    const validationError = validateAuthForm(formData, false, selectedRole, adminCode);
+    const validationError = validateAuthForm(formData, false, selectedRole, '');
     if (validationError) {
       setError(validationError);
       setIsLoading(false);
@@ -85,7 +83,7 @@ export const useAuthHandlers = () => {
         return;
       }
 
-      const { error } = await signUp(formData.email, formData.password, formData.fullName);
+      const { error } = await signUp(formData.email, formData.password, formData.fullName, selectedRole);
 
       if (error) {
         console.error('Ошибка регистрации:', error);

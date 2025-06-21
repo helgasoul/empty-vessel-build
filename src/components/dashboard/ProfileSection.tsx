@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
@@ -113,7 +112,7 @@ const ProfileSection = () => {
     return frequencies[frequency as keyof typeof frequencies] || frequency;
   };
 
-  const userName = profile?.full_name || user?.user_metadata?.full_name || user?.email || 'Пользователь';
+  const userName = profile?.full_name || user?.user_metadata?.full_name || user?.name || user?.email || 'Пользователь';
   const userAge = profile?.date_of_birth ? calculateAge(profile.date_of_birth) : profile?.age;
 
   if (isEditing) {
@@ -267,7 +266,7 @@ const ProfileSection = () => {
                 Регистрация:
               </span>
               <span className="text-gray-900">
-                {user?.created_at ? new Date(user.created_at).toLocaleDateString('ru-RU') : 'Недавно'}
+                {user?.createdAt ? new Date(user.createdAt).toLocaleDateString('ru-RU') : 'Недавно'}
               </span>
             </div>
           </div>
@@ -311,7 +310,6 @@ const ProfileSection = () => {
         </CardContent>
       </Card>
       
-      {/* Добавляем компонент проверки данных в development mode */}
       {process.env.NODE_ENV === 'development' && <DataSaveVerifier />}
     </div>
   );

@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AlertCircle } from 'lucide-react';
-import { UserRole } from '@/types/user';
+import { UserRole } from '@/types/auth';
 import RoleSelector from './RoleSelector';
 
 interface AuthFormProps {
@@ -116,8 +116,6 @@ const AuthForm = ({
             <RoleSelector
               selectedRole={selectedRole}
               onRoleChange={onRoleChange}
-              adminCode={adminCode}
-              onAdminCodeChange={onAdminCodeChange}
               isLoading={isLoading}
             />
           </>

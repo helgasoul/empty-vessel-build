@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -22,7 +21,7 @@ const PersonalizedWelcome = () => {
 
   const getGreeting = () => {
     const timeOfDay = getTimeOfDay();
-    const userName = user?.user_metadata?.full_name || 'пользователь';
+    const userName = user?.user_metadata?.full_name || user?.name || 'пользователь';
     
     switch (timeOfDay) {
       case 'morning':

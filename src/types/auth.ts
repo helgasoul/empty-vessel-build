@@ -1,5 +1,5 @@
 
-export type UserRole = 'patient' | 'doctor' | 'admin';
+export type UserRole = 'patient' | 'doctor' | 'clinic' | 'laboratory' | 'admin';
 
 export interface User {
   id: string;
@@ -9,6 +9,10 @@ export interface User {
   avatar?: string;
   isActive: boolean;
   createdAt: Date;
+  user_metadata?: {
+    full_name?: string;
+    [key: string]: any;
+  };
 }
 
 export interface AuthState {

@@ -4,7 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { UserRole } from '@/types/user';
+import { UserRole } from '@/types/auth';
 import RoleSelector from './RoleSelector';
 import PasswordResetDialog from './PasswordResetDialog';
 
@@ -131,8 +131,6 @@ const AuthTabs = ({
           <RoleSelector
             selectedRole={selectedRole}
             onRoleChange={setSelectedRole}
-            adminCode={adminCode}
-            onAdminCodeChange={setAdminCode}
             isLoading={isLoading}
           />
 
