@@ -198,7 +198,7 @@ export class RiskFactorsService {
   }
 
   static async saveRiskAssessment(patientId: string, riskData: Partial<RiskFactors>): Promise<void> {
-    // Insert into risk_assessments table with the correct column names according to database schema
+    // Insert into risk_assessments table with the correct column names according to updated database schema
     const { error } = await supabase
       .from('risk_assessments')
       .insert({
