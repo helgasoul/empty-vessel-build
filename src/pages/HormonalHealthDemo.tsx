@@ -1,22 +1,42 @@
 
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
 import BackButton from '@/components/ui/back-button';
 import HormonalHealthSection from '@/components/hormonal-health/HormonalHealthSection';
 
 const HormonalHealthDemo = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const handleConsultationClick = () => {
-    navigate('/auth', { 
-      state: { redirectTo: '/hormonal-health-demo' } 
-    });
+    console.log('🔥 Кнопка консультации нажата');
+    console.log('👤 Пользователь авторизован:', !!user);
+    
+    if (user) {
+      console.log('✅ Переход к консультациям для авторизованного пользователя');
+      navigate('/telemedicine-integrations');
+    } else {
+      console.log('🔐 Переход на авторизацию с редиректом');
+      navigate('/auth', { 
+        state: { redirectTo: '/telemedicine-integrations' } 
+      });
+    }
   };
 
   const handleTrackingClick = () => {
-    navigate('/auth', { 
-      state: { redirectTo: '/hormonal-health-demo' } 
-    });
+    console.log('🔥 Кнопка отслеживания нажата');
+    console.log('👤 Пользователь авторизован:', !!user);
+    
+    if (user) {
+      console.log('✅ Переход к трекеру для авторизованного пользователя');
+      navigate('/womens-health');
+    } else {
+      console.log('🔐 Переход на авторизацию с редиректом');
+      navigate('/auth', { 
+        state: { redirectTo: '/womens-health' } 
+      });
+    }
   };
 
   return (

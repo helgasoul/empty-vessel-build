@@ -20,6 +20,10 @@ import Subscription from "./pages/Subscription";
 import Auth from "./pages/Auth";
 import NotFound from "./pages/NotFound";
 
+// Import demo pages that were missing
+import HormonalHealthDemo from "./pages/HormonalHealthDemo";
+import MenopauseDemo from "./pages/MenopauseDemo";
+
 // Import dashboard pages
 import Profile from "./pages/Profile";
 import WomensHealth from "./pages/WomensHealth";
@@ -67,6 +71,41 @@ const App = () => (
                 <Route path="/about" element={<About />} />
                 <Route path="/subscription" element={<Subscription />} />
                 <Route path="/auth" element={<Auth />} />
+                
+                {/* ✅ КРИТИЧЕСКИЕ МАРШРУТЫ: Демо-страницы для женского здоровья */}
+                <Route path="/hormonal-health-demo" element={<HormonalHealthDemo />} />
+                <Route path="/menopause-demo" element={<MenopauseDemo />} />
+                
+                {/* ✅ КРИТИЧЕСКИЕ МАРШРУТЫ: Временные заглушки для отсутствующих страниц */}
+                <Route path="/hormone-balance" element={
+                  <div className="min-h-screen bg-gradient-to-br from-purple-50 to-pink-50 flex items-center justify-center">
+                    <div className="text-center p-8 bg-white rounded-xl shadow-lg">
+                      <h1 className="text-2xl font-bold text-gray-800 mb-4">Гормональный баланс</h1>
+                      <p className="text-gray-600 mb-6">Эта функция находится в разработке</p>
+                      <button 
+                        onClick={() => window.history.back()}
+                        className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-2 rounded-lg transition-colors"
+                      >
+                        Вернуться назад
+                      </button>
+                    </div>
+                  </div>
+                } />
+                
+                <Route path="/menopause-support" element={
+                  <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 flex items-center justify-center">
+                    <div className="text-center p-8 bg-white rounded-xl shadow-lg">
+                      <h1 className="text-2xl font-bold text-gray-800 mb-4">Поддержка менопаузы</h1>
+                      <p className="text-gray-600 mb-6">Эта функция находится в разработке</p>
+                      <button 
+                        onClick={() => window.history.back()}
+                        className="bg-orange-500 hover:bg-orange-600 text-white px-6 py-2 rounded-lg transition-colors"
+                      >
+                        Вернуться назад
+                      </button>
+                    </div>
+                  </div>
+                } />
                 
                 {/* Основные страницы приложения */}
                 <Route path="/profile" element={<Profile />} />

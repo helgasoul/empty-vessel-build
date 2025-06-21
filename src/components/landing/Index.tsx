@@ -7,6 +7,7 @@ import Navigation from '@/components/landing/Navigation';
 import HeroSection from '@/components/landing/HeroSection';
 import TargetSegments from '@/components/landing/TargetSegments';
 import FeaturesGrid from '@/components/landing/FeaturesGrid';
+import InteractiveFeaturesGrid from '@/components/landing/InteractiveFeaturesGrid';
 import SocialProofSection from '@/components/landing/SocialProofSection';
 import Footer from '@/components/landing/Footer';
 import PlatformMission from '@/components/landing/PlatformMission';
@@ -21,6 +22,7 @@ const Index = () => {
         <PlatformMission />
         <HeroSection />
         <TargetSegments />
+        <InteractiveFeaturesGrid />
         <FeaturesGrid />
         <TrustBlock />
         <UserTestimonials />

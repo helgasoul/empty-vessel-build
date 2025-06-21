@@ -120,6 +120,18 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-montserrat font-semibold;
   }
+
+  /* ✅ КРИТИЧЕСКОЕ ИСПРАВЛЕНИЕ: Обеспечиваем что все кнопки кликабельны */
+  button, .button, [role="button"] {
+    pointer-events: auto !important;
+    cursor: pointer !important;
+  }
+
+  /* Убираем любые блокирующие стили */
+  button:disabled {
+    pointer-events: none;
+    cursor: not-allowed;
+  }
 }
 
 /* Обновленные кастомные классы для PREVENT */
@@ -152,14 +164,21 @@
 
   .prevent-button-primary {
     @apply bg-gradient-to-r from-purple-300 to-pink-300 hover:from-purple-400 hover:to-pink-400 text-gray-700 font-medium px-6 py-3 rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-lg;
+    /* ✅ Обеспечиваем кликабельность */
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
 
   .prevent-button-secondary {
     @apply bg-gradient-to-r from-pink-200 to-peach-200 hover:from-pink-300 hover:to-peach-300 text-gray-700 font-medium px-6 py-3 rounded-xl transition-all duration-200 hover:scale-105 hover:shadow-lg;
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
 
   .prevent-button-soft {
     @apply bg-gradient-to-r from-purple-100 to-pink-100 hover:from-purple-200 hover:to-pink-200 text-gray-600 font-medium px-4 py-2 rounded-lg transition-all duration-200 hover:shadow-md border border-purple-100/50;
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
 
   .prevent-risk-low {
@@ -215,6 +234,7 @@
   /* Мягкие инпуты */
   .prevent-input-soft {
     @apply bg-white/80 border border-purple-200/50 rounded-lg px-3 py-2 text-gray-700 placeholder-gray-400 focus:border-purple-300 focus:ring-2 focus:ring-purple-200/50 transition-all duration-200;
+    pointer-events: auto !important;
   }
 }
 
@@ -327,6 +347,9 @@
 
   button {
     @apply min-h-[44px] min-w-[44px];
+    /* ✅ Убеждаемся что мобильные кнопки кликабельны */
+    pointer-events: auto !important;
+    cursor: pointer !important;
   }
 }
 

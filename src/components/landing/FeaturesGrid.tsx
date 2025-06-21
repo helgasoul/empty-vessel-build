@@ -2,6 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { 
   ClipboardList, 
   Smartphone, 
@@ -11,8 +12,28 @@ import {
   ArrowRight,
   CheckCircle
 } from "lucide-react";
+import { useNavigate } from 'react-router-dom';
 
 const FeaturesGrid = () => {
+  const navigate = useNavigate();
+
+  // Функция для обработки кликов по кнопкам с отладкой
+  const handleButtonClick = (stepName: string, targetPath: string) => {
+    return () => {
+      console.log(`🔥 Шаг "${stepName}" - кнопка нажата`);
+      console.log(`📍 Переход на: ${targetPath}`);
+      
+      try {
+        navigate(targetPath);
+        console.log(`✅ Навигация успешна к ${targetPath}`);
+      } catch (error) {
+        console.error(`❌ Ошибка навигации:`, error);
+        // Fallback для опубликованных сайтов
+        window.location.href = targetPath;
+      }
+    };
+  };
+
   const journeySteps = [
     {
       step: "1️⃣",
@@ -22,7 +43,9 @@ const FeaturesGrid = () => {
       icon: ClipboardList,
       color: "from-blue-500 to-cyan-600",
       bgColor: "bg-blue-50",
-      details: ["Базовые показатели здоровья", "История семьи", "Текущий образ жизни"]
+      details: ["Базовые показатели здоровья", "История семьи", "Текущий образ жизни"],
+      buttonText: "Заполнить анкету",
+      targetPath: "/auth"
     },
     {
       step: "2️⃣",
@@ -32,7 +55,9 @@ const FeaturesGrid = () => {
       icon: Smartphone,
       color: "from-green-500 to-emerald-600",
       bgColor: "bg-green-50",
-      details: ["Данные фитнес-трекеров", "Результаты анализов", "Генетические тесты"]
+      details: ["Данные фитнес-трекеров", "Результаты анализов", "Генетические тесты"],
+      buttonText: "Интеграции",
+      targetPath: "/medical-integrations"
     },
     {
       step: "3️⃣",
@@ -42,7 +67,9 @@ const FeaturesGrid = () => {
       icon: Brain,
       color: "from-purple-500 to-indigo-600",
       bgColor: "bg-purple-50",
-      details: ["Персональная оценка рисков", "Научно-обоснованные алгоритмы", "Понятные объяснения"]
+      details: ["Персональная оценка рисков", "Научно-обоснованные алгоритмы", "Понятные объяснения"],
+      buttonText: "Демо анализа",
+      targetPath: "/risk-assessment-demo"
     },
     {
       step: "4️⃣",
@@ -52,7 +79,9 @@ const FeaturesGrid = () => {
       icon: Calendar,
       color: "from-orange-500 to-red-600",
       bgColor: "bg-orange-50",
-      details: ["План медицинских обследований", "Рекомендации по питанию", "Профилактические меры"]
+      details: ["План медицинских обследований", "Рекомендации по питанию", "Профилактические меры"],
+      buttonText: "Персональный план",
+      targetPath: "/personal-plan"
     },
     {
       step: "5️⃣",
@@ -62,7 +91,9 @@ const FeaturesGrid = () => {
       icon: TrendingUp,
       color: "from-teal-500 to-blue-600",
       bgColor: "bg-teal-50",
-      details: ["Динамика показателей", "Отчеты о прогрессе", "Мотивация и поддержка"]
+      details: ["Динамика показателей", "Отчеты о прогрессе", "Мотивация и поддержка"],
+      buttonText: "Посмотреть прогресс",
+      targetPath: "/auth"
     }
   ];
 
@@ -95,11 +126,11 @@ const FeaturesGrid = () => {
           {journeySteps.map((step, index) => {
             const IconComponent = step.icon;
             return (
-              <Card key={index} className={`${step.bgColor} border-none hover:shadow-lg transition-all duration-300 hover:scale-105 relative`}>
+              <Card key={index} className={`${step.bgColor} border-none hover:shadow-lg transition-all duration-300 hover:scale-105 relative group`}>
                 <CardHeader className="pb-4">
                   <div className="flex items-center space-x-3 mb-3">
                     <span className="text-2xl">{step.step}</span>
-                    <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center`}>
+                    <div className={`w-10 h-10 rounded-full bg-gradient-to-r ${step.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-200`}>
                       <IconComponent className="w-5 h-5 text-white" />
                     </div>
                   </div>
@@ -115,7 +146,7 @@ const FeaturesGrid = () => {
                 </CardHeader>
                 
                 <CardContent>
-                  <div className="space-y-2">
+                  <div className="space-y-2 mb-4">
                     {step.details.map((detail, detailIndex) => (
                       <div key={detailIndex} className="flex items-center space-x-2">
                         <div className="w-1.5 h-1.5 bg-gray-400 rounded-full"></div>
@@ -123,6 +154,15 @@ const FeaturesGrid = () => {
                       </div>
                     ))}
                   </div>
+
+                  <Button 
+                    className={`w-full bg-gradient-to-r ${step.color} hover:opacity-90 text-white font-medium transition-all duration-200 hover:shadow-lg hover:scale-105`}
+                    onClick={handleButtonClick(step.title, step.targetPath)}
+                    aria-label={`${step.buttonText} - ${step.title}`}
+                  >
+                    {step.buttonText}
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
                 </CardContent>
 
                 {/* Arrow for desktop */}
@@ -170,9 +210,16 @@ const FeaturesGrid = () => {
                 <div className={`w-12 h-12 ${step.color.replace('from-', 'bg-').replace(' to-', '-').replace('-600', '-500').replace('-500', '')} rounded-full flex items-center justify-center shadow-md`}>
                   <step.icon className="w-6 h-6 text-white" />
                 </div>
-                <div>
+                <div className="flex-1">
                   <span className="text-base font-medium text-gray-800">{step.title}</span>
                   <p className="text-sm text-gray-600">{step.description}</p>
+                  <Button 
+                    size="sm"
+                    className="mt-2 text-xs"
+                    onClick={handleButtonClick(step.title, step.targetPath)}
+                  >
+                    {step.buttonText}
+                  </Button>
                 </div>
               </div>
             ))}
