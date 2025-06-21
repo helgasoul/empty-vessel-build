@@ -74,8 +74,53 @@ export class PatientDataManager {
 
   // Загрузка данных окружающей среды
   private async loadEnvironmentalHealth(patientId: string): Promise<EnvironmentalHealth | undefined> {
-    // В будущем можно добавить таблицу environmental_health
-    return undefined;
+    // Возвращаем демонстрационные данные
+    return {
+      livingEnvironment: {
+        housingType: 'apartment',
+        proximityToIndustrial: 'moderate',
+        airPollutionLevel: 'moderate',
+        noiseLevel: 'moderate',
+        greenSpaceAccess: 'moderate'
+      },
+      workEnvironment: {
+        type: 'office',
+        chemicalExposure: false,
+        radiationExposure: false,
+        physicalHazards: [],
+        stressLevel: 5,
+        workHours: 8
+      },
+      exposures: [
+        {
+          substance: 'Выхлопные газы',
+          exposureLevel: 'moderate',
+          duration: 'ежедневно',
+          source: 'городской транспорт',
+          protectiveMeasures: []
+        }
+      ],
+      airQuality: {
+        pm25: 25.5,
+        pm10: 45.2,
+        o3: 120.3,
+        no2: 38.7,
+        measurementDate: new Date(),
+        location: 'Москва'
+      },
+      waterQuality: {
+        source: 'municipal',
+        contaminants: [],
+        qualityRating: 'good'
+      },
+      lifestyle: {
+        organicFoodConsumption: 'sometimes',
+        plasticUsage: 'moderate',
+        naturalProductUsage: 'often',
+        exerciseOutdoors: true,
+        stressFromEnvironment: 4
+      }
+    };
   }
 
   // Загрузка медицинской истории
@@ -125,7 +170,7 @@ export class PatientDataManager {
       language: 'ru',
       timezone: 'Europe/Moscow',
       units: 'metric' as const,
-      dashboardLayout: ['overview', 'health-assessment', 'risk-factors', 'lab-results']
+      dashboardLayout: ['overview', 'health-assessment', 'risk-factors', 'environmental', 'lab-results']
     };
   }
 
@@ -144,6 +189,24 @@ export class PatientDataManager {
     } catch (error) {
       console.error('Error saving health assessment:', error);
       toast.error('Ошибка сохранения данных о здоровье');
+    }
+  }
+
+  // Сохранение экологических данных
+  async saveEnvironmentalHealth(data: Partial<EnvironmentalHealth>): Promise<void> {
+    try {
+      if (this.patientData) {
+        this.patientData.environmentalHealth = { 
+          ...this.patientData.environmentalHealth, 
+          ...data 
+        };
+        await this.persistEnvironmentalData();
+        await this.triggerAIAnalysis();
+        toast.success('Экологические данные обновлены');
+      }
+    } catch (error) {
+      console.error('Error saving environmental health:', error);
+      toast.error('Ошибка сохранения экологических данных');
     }
   }
 
@@ -179,6 +242,13 @@ export class PatientDataManager {
     if (!this.userId) return;
     // Здесь можно реализовать сохранение в Supabase
     // Например, в таблицу health_assessments
+  }
+
+  // Сохранение экологических данных в базу
+  private async persistEnvironmentalData(): Promise<void> {
+    if (!this.userId) return;
+    // Здесь можно реализовать сохранение в Supabase
+    // Например, в таблицу environmental_health
   }
 
   // Получение данных для врача

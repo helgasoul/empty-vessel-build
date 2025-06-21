@@ -18,7 +18,8 @@ import {
   Shield,
   Stethoscope,
   Plus,
-  Settings
+  Settings,
+  Leaf
 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -28,12 +29,14 @@ import HealthStatusWidget from './widgets/HealthStatusWidget';
 import LabResultsWidget from './widgets/LabResultsWidget';
 import AIRecommendationsWidget from './widgets/AIRecommendationsWidget';
 import QuickActionsWidget from './widgets/QuickActionsWidget';
+import EnvironmentalWidget from './widgets/EnvironmentalWidget';
 
 // Импорт секций
 import HealthAssessmentSection from './sections/HealthAssessmentSection';
 import RiskFactorsSection from './sections/RiskFactorsSection';
 import LabResultsSection from './sections/LabResultsSection';
 import AIRecommendationsSection from './sections/AIRecommendationsSection';
+import EnvironmentalHealthSection from './sections/EnvironmentalHealthSection';
 
 export default function IntegratedPatientDashboard() {
   const { user } = useAuth();
@@ -47,6 +50,14 @@ export default function IntegratedPatientDashboard() {
       loadPatientData();
     }
   }, [user]);
+
+  // Проверяем hash в URL для переключения секций
+  useEffect(() => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && hash !== activeSection) {
+      setActiveSection(hash);
+    }
+  }, []);
 
   const loadPatientData = async () => {
     try {
@@ -65,6 +76,7 @@ export default function IntegratedPatientDashboard() {
     { id: 'overview', name: 'Обзор', icon: TrendingUp },
     { id: 'health-assessment', name: 'Оценка здоровья', icon: Heart },
     { id: 'risk-factors', name: 'Факторы риска', icon: AlertTriangle },
+    { id: 'environmental', name: 'Экология', icon: Leaf },
     { id: 'lab-results', name: 'Анализы', icon: FileText },
     { id: 'ai-recommendations', name: 'Рекомендации ИИ', icon: Brain },
     { id: 'family-history', name: 'Семейная история', icon: Users },
@@ -202,6 +214,7 @@ export default function IntegratedPatientDashboard() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               <RiskAssessmentWidget data={patientData?.riskFactors} />
               <HealthStatusWidget data={patientData?.healthAssessment} />
+              <EnvironmentalWidget data={patientData?.environmentalHealth} />
               <LabResultsWidget data={patientData?.labResults} />
               <AIRecommendationsWidget data={patientData?.aiRecommendations} />
               <QuickActionsWidget onActionClick={(action) => console.log('Quick action:', action)} />
@@ -278,6 +291,13 @@ export default function IntegratedPatientDashboard() {
           <RiskFactorsSection 
             data={patientData?.riskFactors}
             onUpdate={(data) => console.log('Update risk factors:', data)}
+          />
+        )}
+
+        {activeSection === 'environmental' && (
+          <EnvironmentalHealthSection 
+            data={patientData?.environmentalHealth}
+            onUpdate={(data) => console.log('Update environmental health:', data)}
           />
         )}
 
