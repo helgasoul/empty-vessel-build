@@ -15,6 +15,7 @@ import NotFound from "./pages/NotFound";
 import PatientsPage from "./pages/doctor/PatientsPage";
 import SchedulePage from "./pages/doctor/SchedulePage";
 import CalculatorsPage from "./pages/doctor/CalculatorsPage";
+import PatientDetailPage from "./pages/doctor/PatientDetailPage";
 
 // Import calculator pages
 import FT3FT4Calculator from "./pages/calculators/FT3FT4Calculator";
@@ -58,6 +59,14 @@ const App = () => (
                 element={
                   <ProtectedRoute requireRole="doctor">
                     <PatientsPage />
+                  </ProtectedRoute>
+                } 
+              />
+              <Route 
+                path="/doctor/patient/:patientId" 
+                element={
+                  <ProtectedRoute requireRole="doctor">
+                    <PatientDetailPage />
                   </ProtectedRoute>
                 } 
               />
