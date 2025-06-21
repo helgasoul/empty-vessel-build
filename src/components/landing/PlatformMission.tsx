@@ -13,7 +13,7 @@ const PlatformMission = () => {
     <section id="ai-analysis" className="py-16 px-4 md:px-6 bg-gradient-to-br from-white via-purple-50/30 to-pink-50/30">
       <div className="max-w-6xl mx-auto">
         <div className="text-center mb-12">
-          <h2 className="text-3xl md:text-4xl font-bold bg-gradient-to-br from-gray-800 via-gray-700 to-gray-600 bg-clip-text text-transparent mb-6">
+          <h2 className="text-4xl md:text-5xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-6">
             Миссия PREVENT
           </h2>
           <p className="text-lg text-gray-700 max-w-4xl mx-auto leading-relaxed">

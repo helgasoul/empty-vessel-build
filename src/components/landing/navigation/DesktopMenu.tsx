@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Crown } from "lucide-react";
+import { Menu } from "lucide-react";
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -10,7 +10,6 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu";
-import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageSelector } from './LanguageSelector';
 import { DesktopMenuProps } from './types';
 
@@ -20,12 +19,16 @@ export const DesktopMenu: React.FC<DesktopMenuProps> = ({
   onLanguageChange,
   onNavClick
 }) => {
+  // Единый стиль для навигационных кнопок
+  const navigationButtonStyle = "bg-white/80 hover:bg-white border border-purple-200/50 text-purple-700 hover:text-purple-800 transition-all duration-200 hover:shadow-md backdrop-blur-sm font-medium";
+
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-3">
       <NavigationMenu>
         <NavigationMenuList>
           <NavigationMenuItem>
-            <NavigationMenuTrigger className="text-gray-700 hover:text-purple-700">
+            <NavigationMenuTrigger className={navigationButtonStyle}>
+              <Menu className="w-4 h-4 mr-2" />
               Разделы
             </NavigationMenuTrigger>
             <NavigationMenuContent>
@@ -44,37 +47,11 @@ export const DesktopMenu: React.FC<DesktopMenuProps> = ({
           </NavigationMenuItem>
         </NavigationMenuList>
       </NavigationMenu>
-      
-      <Button 
-        variant="ghost" 
-        onClick={() => onNavClick('/about')}
-        className="text-gray-700 hover:text-purple-700 hover:bg-purple-50 transition-all duration-200 font-medium"
-      >
-        О нас
-      </Button>
-
-      <Button 
-        variant="outline" 
-        onClick={() => onNavClick('/subscription')}
-        className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 hover:text-purple-700 transition-all duration-200 font-medium flex items-center gap-2"
-      >
-        <Crown className="w-4 h-4" />
-        Планы
-      </Button>
 
       <LanguageSelector 
         currentLanguage={currentLanguage}
         onLanguageChange={onLanguageChange}
       />
-      
-      <ThemeToggle />
-      <Button 
-        variant="outline" 
-        onClick={() => onNavClick('/auth')}
-        className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 transition-all duration-200 font-medium"
-      >
-        Войти
-      </Button>
     </div>
   );
 };

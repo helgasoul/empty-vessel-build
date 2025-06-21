@@ -1,7 +1,7 @@
 
 import React, { useState } from 'react';
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Crown, Info, User } from "lucide-react";
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -24,6 +24,9 @@ const Navigation = () => {
     { title: 'Экология здоровья', path: '/environmental-health-demo' },
     { title: 'Сообщество', path: '/community-demo' }
   ];
+
+  // Единый стиль для навигационных кнопок
+  const navigationButtonStyle = "bg-white/80 hover:bg-white border border-purple-200/50 text-purple-700 hover:text-purple-800 transition-all duration-200 hover:shadow-md backdrop-blur-sm font-medium";
 
   const handleLanguageChange = (language: string) => {
     setCurrentLanguage(language);
@@ -51,6 +54,26 @@ const Navigation = () => {
     }
   };
 
+  const handleAboutClick = () => {
+    console.log('Переход на страницу "О нас"');
+    try {
+      navigate('/about');
+    } catch (error) {
+      console.error('About navigation error:', error);
+      window.location.href = '/about';
+    }
+  };
+
+  const handleSubscriptionClick = () => {
+    console.log('Переход на страницу планов');
+    try {
+      navigate('/subscription');
+    } catch (error) {
+      console.error('Subscription navigation error:', error);
+      window.location.href = '/subscription';
+    }
+  };
+
   return (
     <nav className="w-full px-4 md:px-6 py-4 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-purple-200/30 dark:border-gray-700/50">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -72,12 +95,40 @@ const Navigation = () => {
         
         {/* Desktop Navigation */}
         {!isMobile && (
-          <DesktopMenu
-            navigationItems={navigationItems}
-            currentLanguage={currentLanguage}
-            onLanguageChange={handleLanguageChange}
-            onNavClick={handleNavClick}
-          />
+          <div className="flex items-center space-x-3">
+            <DesktopMenu
+              navigationItems={navigationItems}
+              currentLanguage={currentLanguage}
+              onLanguageChange={handleLanguageChange}
+              onNavClick={handleNavClick}
+            />
+            
+            <Button 
+              onClick={handleAboutClick}
+              className={navigationButtonStyle}
+            >
+              <Info className="w-4 h-4 mr-2" />
+              О нас
+            </Button>
+
+            <Button 
+              onClick={handleSubscriptionClick}
+              className={navigationButtonStyle}
+            >
+              <Crown className="w-4 h-4 mr-2" />
+              Планы
+            </Button>
+
+            <ThemeToggle />
+            
+            <Button 
+              onClick={handleAuthClick}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 transition-all duration-200 hover:shadow-lg font-medium"
+            >
+              <User className="w-4 h-4 mr-2" />
+              Войти
+            </Button>
+          </div>
         )}
 
         {/* Mobile Actions - when menu is closed */}
@@ -85,10 +136,8 @@ const Navigation = () => {
           <div className="flex items-center space-x-2">
             <ThemeToggle />
             <Button 
-              variant="outline" 
-              size="sm"
               onClick={handleAuthClick}
-              className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700 transition-all duration-200 font-medium"
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 transition-all duration-200 hover:shadow-lg font-medium text-sm"
             >
               Войти
             </Button>

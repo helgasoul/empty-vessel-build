@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Button } from "@/components/ui/button";
-import { Crown } from "lucide-react";
+import { Crown, Info, User } from "lucide-react";
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { LanguageSelector } from './LanguageSelector';
 import { MobileMenuProps } from './types';
@@ -19,6 +19,21 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
     onClose();
   };
 
+  const handleAboutClick = () => {
+    console.log('Переход на страницу "О нас"');
+    handleNavClick('/about');
+  };
+
+  const handleSubscriptionClick = () => {
+    console.log('Переход на страницу планов');
+    handleNavClick('/subscription');
+  };
+
+  const handleAuthClick = () => {
+    console.log('Переход на страницу входа');
+    handleNavClick('/auth');
+  };
+
   if (!isOpen) return null;
 
   return (
@@ -34,18 +49,20 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
             {item.title}
           </Button>
         ))}
+        
         <Button
           variant="ghost"
-          className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50"
-          onClick={() => handleNavClick('/about')}
+          className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-2"
+          onClick={handleAboutClick}
         >
+          <Info className="w-4 h-4" />
           О нас
         </Button>
         
         <Button
           variant="ghost"
           className="w-full justify-start text-gray-700 hover:text-purple-700 hover:bg-purple-50 flex items-center gap-2"
-          onClick={() => handleNavClick('/subscription')}
+          onClick={handleSubscriptionClick}
         >
           <Crown className="w-4 h-4" />
           Планы подписки
@@ -60,10 +77,10 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         <div className="pt-4 border-t border-purple-200/30 flex items-center justify-between">
           <ThemeToggle />
           <Button 
-            variant="outline" 
-            onClick={() => handleNavClick('/auth')}
-            className="prevent-button-soft border-purple-200 hover:border-purple-300 text-gray-700"
+            onClick={handleAuthClick}
+            className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white border-0 transition-all duration-200 hover:shadow-lg font-medium flex items-center gap-2"
           >
+            <User className="w-4 h-4" />
             Войти
           </Button>
         </div>
