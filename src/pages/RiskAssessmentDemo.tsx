@@ -6,10 +6,13 @@ import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from "@/comp
 import { Badge } from "@/components/ui/badge";
 import { Shield, Heart, Brain, Activity, ArrowRight, Info, CheckCircle, Play } from "lucide-react";
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/contexts/AuthContext';
+import { toast } from 'sonner';
 import BackButton from '@/components/ui/back-button';
 
 const RiskAssessmentDemo = () => {
   const navigate = useNavigate();
+  const { user } = useAuth();
 
   const assessmentTypes = [
     {
@@ -21,7 +24,8 @@ const RiskAssessmentDemo = () => {
       color: "from-red-500 to-pink-500",
       bgColor: "from-red-50 to-pink-50",
       validation: "Рекомендован NHS и ESC",
-      accuracy: "92% точность"
+      accuracy: "92% точность",
+      route: "/risk-assessment"
     },
     {
       title: "BCSC v3",
@@ -32,7 +36,8 @@ const RiskAssessmentDemo = () => {
       color: "from-pink-500 to-rose-500",
       bgColor: "from-pink-50 to-rose-50",
       validation: "Одобрен FDA",
-      accuracy: "88% точность"
+      accuracy: "88% точность",
+      route: "/risk-assessment"
     },
     {
       title: "DemPoRT",
@@ -43,7 +48,8 @@ const RiskAssessmentDemo = () => {
       color: "from-purple-500 to-indigo-500",
       bgColor: "from-purple-50 to-indigo-50",
       validation: "Валидирован международно",
-      accuracy: "85% точность"
+      accuracy: "85% точность",
+      route: "/risk-assessment"
     },
     {
       title: "Cancer Risk",
@@ -54,13 +60,53 @@ const RiskAssessmentDemo = () => {
       color: "from-blue-500 to-cyan-500",
       bgColor: "from-blue-50 to-cyan-50",
       validation: "Научно подтверждено",
-      accuracy: "89% точность"
+      accuracy: "89% точность",
+      route: "/risk-assessment"
     }
   ];
 
-  const handleStartTest = (algorithmName: string) => {
-    // В реальном приложении здесь был бы переход к конкретному тесту
-    navigate('/auth');
+  const handleStartTest = (assessment: typeof assessmentTypes[0]) => {
+    // Проверяем авторизацию пользователя
+    if (!user) {
+      toast.info('Для прохождения тестов необходимо авторизоваться');
+      
+      // Используем fallback для деплоя
+      try {
+        navigate('/auth');
+      } catch (error) {
+        console.log('Navigation fallback for deployment');
+        window.location.href = '/auth';
+      }
+      return;
+    }
+
+    // Если пользователь авторизован, переходим к тестированию
+    toast.success(`Начинаем тест: ${assessment.displayName}`);
+    
+    try {
+      navigate(assessment.route);
+    } catch (error) {
+      console.log('Navigation fallback for deployment');
+      window.location.href = assessment.route;
+    }
+  };
+
+  const handleFullAssessment = () => {
+    if (!user) {
+      try {
+        navigate('/auth');
+      } catch (error) {
+        console.log('Navigation fallback for deployment');
+        window.location.href = '/auth';
+      }
+    } else {
+      try {
+        navigate('/risk-assessment');
+      } catch (error) {
+        console.log('Navigation fallback for deployment');
+        window.location.href = '/risk-assessment';
+      }
+    }
   };
 
   return (
@@ -136,7 +182,7 @@ const RiskAssessmentDemo = () => {
                     
                     <Button 
                       className={`w-full bg-gradient-to-r ${assessment.color} hover:opacity-90 text-white font-semibold py-3 mt-4 group-hover:shadow-lg transition-all duration-300`}
-                      onClick={() => handleStartTest(assessment.title)}
+                      onClick={() => handleStartTest(assessment)}
                       aria-label={`Начать тест ${assessment.displayName}`}
                     >
                       <Play className="w-4 h-4 mr-2" />
@@ -154,16 +200,18 @@ const RiskAssessmentDemo = () => {
                 Готовы узнать свои риски?
               </h3>
               <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto leading-relaxed">
-                Зарегистрируйтесь и получите доступ к полной оценке рисков здоровья 
-                на основе ведущих международных алгоритмов
+                {user 
+                  ? "Перейдите к полной оценке рисков здоровья на основе ведущих международных алгоритмов"
+                  : "Зарегистрируйтесь и получите доступ к полной оценке рисков здоровья на основе ведущих международных алгоритмов"
+                }
               </p>
               <Button 
                 size="lg" 
                 variant="secondary" 
                 className="text-purple-600 hover:text-purple-700 font-semibold px-8 py-4 text-lg hover:scale-105 transition-all duration-300 shadow-lg"
-                onClick={() => navigate('/auth')}
+                onClick={handleFullAssessment}
               >
-                Начать полную оценку
+                {user ? "Перейти к полной оценке" : "Начать полную оценку"}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Button>
             </CardContent>
