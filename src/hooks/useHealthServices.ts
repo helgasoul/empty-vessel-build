@@ -37,16 +37,22 @@ export const useHealthServiceOrders = () => {
     queryFn: async () => {
       if (!user) return [];
 
-      const { data, error } = await supabase
-        .from('health_service_orders' as any)
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await (supabase as any)
+          .from('health_service_orders')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (error) {
-        throw new Error(error.message);
+        if (error) {
+          console.error('Error fetching health service orders:', error);
+          return [];
+        }
+
+        return (data || []) as HealthServiceOrder[];
+      } catch (error) {
+        console.error('Database error:', error);
+        return [];
       }
-
-      return (data || []) as HealthServiceOrder[];
     },
     enabled: !!user?.id,
   });
@@ -70,20 +76,25 @@ export const useCreateHealthServiceOrder = () => {
         throw new Error('User not authenticated');
       }
 
-      const { data, error } = await supabase
-        .from('health_service_orders' as any)
-        .insert({
-          ...orderData,
-          user_id: user.id,
-        })
-        .select()
-        .single();
+      try {
+        const { data, error } = await (supabase as any)
+          .from('health_service_orders')
+          .insert({
+            ...orderData,
+            user_id: user.id,
+          })
+          .select()
+          .single();
 
-      if (error) {
-        throw new Error(error.message);
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        return data as HealthServiceOrder;
+      } catch (error) {
+        console.error('Error creating health service order:', error);
+        throw error;
       }
-
-      return data as HealthServiceOrder;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['health-service-orders'] });
@@ -110,16 +121,22 @@ export const useHealthServiceIntegrations = () => {
     queryFn: async () => {
       if (!user) return [];
 
-      const { data, error } = await supabase
-        .from('health_service_integrations' as any)
-        .select('*')
-        .order('created_at', { ascending: false });
+      try {
+        const { data, error } = await (supabase as any)
+          .from('health_service_integrations')
+          .select('*')
+          .order('created_at', { ascending: false });
 
-      if (error) {
-        throw new Error(error.message);
+        if (error) {
+          console.error('Error fetching health service integrations:', error);
+          return [];
+        }
+
+        return (data || []) as HealthServiceIntegration[];
+      } catch (error) {
+        console.error('Database error:', error);
+        return [];
       }
-
-      return (data || []) as HealthServiceIntegration[];
     },
     enabled: !!user?.id,
   });
@@ -140,20 +157,25 @@ export const useCreateHealthServiceIntegration = () => {
         throw new Error('User not authenticated');
       }
 
-      const { data, error } = await supabase
-        .from('health_service_integrations' as any)
-        .insert({
-          ...integrationData,
-          user_id: user.id,
-        })
-        .select()
-        .single();
+      try {
+        const { data, error } = await (supabase as any)
+          .from('health_service_integrations')
+          .insert({
+            ...integrationData,
+            user_id: user.id,
+          })
+          .select()
+          .single();
 
-      if (error) {
-        throw new Error(error.message);
+        if (error) {
+          throw new Error(error.message);
+        }
+
+        return data as HealthServiceIntegration;
+      } catch (error) {
+        console.error('Error creating health service integration:', error);
+        throw error;
       }
-
-      return data as HealthServiceIntegration;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['health-service-integrations'] });
