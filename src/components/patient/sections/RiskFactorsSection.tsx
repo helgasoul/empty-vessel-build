@@ -1,12 +1,18 @@
 
 import React from 'react';
-import { AlertTriangle, TrendingUp } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { RiskFactors } from '@/types/patient';
-import RiskCard from './risk-factors/RiskCard';
+import CardiovascularRiskCard from './risk-factors/CardiovascularRiskCard';
 import CancerRiskCard from './risk-factors/CancerRiskCard';
+import BreastCancerRiskCard from './risk-factors/BreastCancerRiskCard';
+import NeurodegenerativeRiskCard from './risk-factors/NeurodegenerativeRiskCard';
+import RiskCard from './risk-factors/RiskCard';
 import EmptyRiskState from './risk-factors/EmptyRiskState';
 import LastUpdatedCard from './risk-factors/LastUpdatedCard';
 import RiskFactorsHeader from './risk-factors/RiskFactorsHeader';
+import RiskSummaryCard from './risk-factors/RiskSummaryCard';
+import RiskAssessmentActions from './risk-factors/RiskAssessmentActions';
+import { TrendingUp } from 'lucide-react';
 
 interface RiskFactorsSectionProps {
   data?: RiskFactors;
@@ -14,14 +20,35 @@ interface RiskFactorsSectionProps {
 }
 
 export default function RiskFactorsSection({ data, onUpdate }: RiskFactorsSectionProps) {
+  const navigate = useNavigate();
+
   const handleRecalculate = () => {
-    console.log('Recalculate risks');
-    // TODO: Implement risk recalculation logic
+    navigate('/risk-assessment');
   };
 
   const handleStartAssessment = () => {
-    console.log('Start risk assessment');
-    // TODO: Implement risk assessment start logic
+    navigate('/risk-assessment');
+  };
+
+  const handleViewHistory = () => {
+    navigate('/risk-assessment', { state: { activeTab: 'history' } });
+  };
+
+  const handleBookConsultation = () => {
+    // TODO: Navigate to doctor consultation booking
+    console.log('Book consultation');
+  };
+
+  const handleShareWithFamily = () => {
+    // TODO: Navigate to family sharing
+    console.log('Share with family');
+  };
+
+  const getBreastCancerRisk = () => {
+    return data?.cancer.types.find(type => 
+      type.type.toLowerCase().includes('breast') || 
+      type.type.toLowerCase().includes('молочной')
+    );
   };
 
   return (
@@ -30,20 +57,24 @@ export default function RiskFactorsSection({ data, onUpdate }: RiskFactorsSectio
 
       {data ? (
         <>
+          {/* Общий анализ рисков */}
+          <RiskSummaryCard data={data} />
+
+          {/* Основные карточки рисков */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {/* Сердечно-сосудистые риски */}
-            <RiskCard
-              title="Сердечно-сосудистые заболевания"
-              icon={AlertTriangle}
-              iconColor="text-rose-600"
-              level={data.cardiovascular.level}
-              score={data.cardiovascular.score}
-              factors={data.cardiovascular.factors}
-              recommendations={data.cardiovascular.recommendations}
-            />
+            <CardiovascularRiskCard data={data.cardiovascular} />
 
             {/* Онкологические риски */}
             <CancerRiskCard data={data.cancer} />
+
+            {/* Рак молочной железы (если есть данные) */}
+            {getBreastCancerRisk() && (
+              <BreastCancerRiskCard data={getBreastCancerRisk()!} />
+            )}
+
+            {/* Нейродегенеративные заболевания */}
+            <NeurodegenerativeRiskCard data={data.mentalHealth} />
 
             {/* Диабет */}
             <RiskCard
@@ -59,7 +90,7 @@ export default function RiskFactorsSection({ data, onUpdate }: RiskFactorsSectio
             {/* Остеопороз */}
             <RiskCard
               title="Остеопороз"
-              icon={AlertTriangle}
+              icon={TrendingUp}
               iconColor="text-gray-600"
               level={data.osteoporosis.level}
               score={data.osteoporosis.score}
@@ -68,6 +99,15 @@ export default function RiskFactorsSection({ data, onUpdate }: RiskFactorsSectio
             />
           </div>
 
+          {/* Действия с оценкой рисков */}
+          <RiskAssessmentActions
+            onStartNewAssessment={handleStartAssessment}
+            onViewHistory={handleViewHistory}
+            onBookConsultation={handleBookConsultation}
+            onShareWithFamily={handleShareWithFamily}
+          />
+
+          {/* Информация о последнем обновлении */}
           <LastUpdatedCard lastUpdated={data.lastUpdated} />
         </>
       ) : (

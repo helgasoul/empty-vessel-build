@@ -1,4 +1,3 @@
-
 export interface PatientProfile {
   id: string;
   personalInfo: PersonalInfo;
@@ -163,6 +162,10 @@ export interface CardiovascularRisk {
   level: 'low' | 'moderate' | 'high' | 'very-high';
   factors: string[];
   recommendations: string[];
+  calculatedScores?: {
+    framinghamScore?: number;
+    reynoldsScore?: number;
+  };
 }
 
 export interface CancerRisk {

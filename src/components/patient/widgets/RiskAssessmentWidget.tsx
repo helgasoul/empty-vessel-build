@@ -2,9 +2,10 @@
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { AlertTriangle, Shield, TrendingUp } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { AlertTriangle, Shield, TrendingUp, Calculator } from 'lucide-react';
 import { RiskFactors } from '@/types/patient';
+import { useNavigate } from 'react-router-dom';
 
 interface RiskAssessmentWidgetProps {
   data?: RiskFactors;
@@ -65,6 +66,8 @@ const RiskIndicator = ({
 };
 
 export default function RiskAssessmentWidget({ data }: RiskAssessmentWidgetProps) {
+  const navigate = useNavigate();
+
   const calculateOverallRisk = (riskData?: RiskFactors) => {
     if (!riskData) {
       return { level: 'low' as const, message: 'Пройдите оценку рисков для получения персонализированных рекомендаций' };
@@ -73,14 +76,16 @@ export default function RiskAssessmentWidget({ data }: RiskAssessmentWidgetProps
     const scores = [
       riskData.cardiovascular.score,
       riskData.cancer.score,
-      riskData.diabetes.score
+      riskData.diabetes.score,
+      riskData.osteoporosis.score,
+      (riskData.mentalHealth.stressScore + riskData.mentalHealth.depressionScore + riskData.mentalHealth.anxietyScore) / 3
     ];
 
     const averageScore = scores.reduce((sum, score) => sum + score, 0) / scores.length;
 
     if (averageScore < 2) {
       return { level: 'low' as const, message: 'Ваш общий риск заболеваний находится в пределах нормы' };
-    } else if (averageScore < 4) {
+    } else if (averageScore < 3.5) {
       return { level: 'moderate' as const, message: 'Рекомендуется профилактическое наблюдение' };
     } else {
       return { level: 'high' as const, message: 'Необходима консультация с врачом' };
@@ -88,6 +93,14 @@ export default function RiskAssessmentWidget({ data }: RiskAssessmentWidgetProps
   };
 
   const overallRisk = calculateOverallRisk(data);
+
+  const handleStartAssessment = () => {
+    navigate('/risk-assessment');
+  };
+
+  const handleViewDetails = () => {
+    navigate('/dashboard', { state: { activeSection: 'risk-factors' } });
+  };
 
   return (
     <Card className="bg-white/80 backdrop-blur-sm border border-rose-100 shadow-lg">
@@ -118,9 +131,9 @@ export default function RiskAssessmentWidget({ data }: RiskAssessmentWidgetProps
                 level={data.diabetes.level}
               />
               <RiskIndicator 
-                label="Остеопороз"
-                score={data.osteoporosis.score}
-                level={data.osteoporosis.level}
+                label="Нейродегенеративные"
+                score={(data.mentalHealth.stressScore + data.mentalHealth.depressionScore + data.mentalHealth.anxietyScore) / 3}
+                level={data.mentalHealth.level}
               />
             </div>
             
@@ -137,6 +150,26 @@ export default function RiskAssessmentWidget({ data }: RiskAssessmentWidgetProps
               </p>
             </div>
 
+            {/* Кнопки действий */}
+            <div className="flex gap-2 pt-2">
+              <Button 
+                size="sm"
+                onClick={handleStartAssessment}
+                className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600 flex-1"
+              >
+                <Calculator className="w-3 h-3 mr-1" />
+                Новая оценка
+              </Button>
+              <Button 
+                size="sm"
+                variant="outline"
+                onClick={handleViewDetails}
+                className="border-rose-200 text-rose-600 hover:bg-rose-50"
+              >
+                Подробнее
+              </Button>
+            </div>
+
             {/* Последнее обновление */}
             <div className="text-xs text-gray-500 flex items-center gap-1">
               <TrendingUp className="w-3 h-3" />
@@ -147,11 +180,15 @@ export default function RiskAssessmentWidget({ data }: RiskAssessmentWidgetProps
           <div className="text-center py-6">
             <AlertTriangle className="w-12 h-12 text-gray-400 mx-auto mb-3" />
             <p className="text-sm text-gray-600 mb-3">
-              Пройдите оценку рисков для получения персонализированных рекомендаций
+              Пройдите комплексную оценку рисков для получения персонализированных рекомендаций
             </p>
-            <button className="text-rose-600 hover:text-rose-700 text-sm font-medium">
-              Начать оценку →
-            </button>
+            <Button 
+              onClick={handleStartAssessment}
+              className="bg-gradient-to-r from-rose-500 to-pink-500 hover:from-rose-600 hover:to-pink-600"
+            >
+              <Calculator className="w-4 h-4 mr-2" />
+              Начать оценку
+            </Button>
           </div>
         )}
       </CardContent>
