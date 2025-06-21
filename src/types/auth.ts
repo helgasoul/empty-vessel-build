@@ -1,14 +1,19 @@
 
+
 // Export for consistency with existing usage
 export type UserRole = 'patient' | 'doctor' | 'clinic' | 'laboratory' | 'admin';
 
 export interface User {
   id: string;
   email: string;
-  name: string;
-  role: UserRole;
-  isActive: boolean;
-  createdAt: Date;
+  name?: string;
+  user_metadata?: {
+    full_name?: string;
+    [key: string]: any;
+  };
+  role?: UserRole;
+  isActive?: boolean;
+  createdAt?: Date;
 }
 
 export interface LoginFormData {
@@ -32,3 +37,4 @@ export interface AuthContextType {
   signOut: () => Promise<void>;
   isLoading: boolean;
 }
+

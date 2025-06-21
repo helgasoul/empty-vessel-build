@@ -1,4 +1,5 @@
 
+
 import { supabase } from '@/integrations/supabase/client';
 
 // Define specific types here to avoid circular dependencies
@@ -64,10 +65,10 @@ interface RiskFactors {
 
 export class RiskFactorsService {
   static async loadRiskFactors(patientId: string): Promise<RiskFactors> {
+    // First try to find an existing assessment for this user
     const { data } = await supabase
       .from('risk_assessments')
       .select('*')
-      .eq('user_id', patientId)
       .order('created_at', { ascending: false })
       .limit(1);
 
@@ -201,7 +202,6 @@ export class RiskFactorsService {
     const { error } = await supabase
       .from('risk_assessments')
       .insert({
-        user_id: patientId, // Changed from patient_id to user_id to match schema
         assessment_type: 'comprehensive',
         risk_percentage: this.calculateOverallRiskPercentage(riskData),
         risk_level: this.calculateOverallRiskLevel(riskData),
@@ -257,3 +257,4 @@ export class RiskFactorsService {
     return recommendations;
   }
 }
+
