@@ -17,6 +17,10 @@ export interface PatientDataPermission {
   revoked_at?: string;
   created_at: string;
   updated_at: string;
+  patient?: {
+    full_name?: string;
+    email?: string;
+  };
 }
 
 export const usePatientPermissions = () => {
@@ -27,7 +31,7 @@ export const usePatientPermissions = () => {
     queryFn: async () => {
       if (!user) return [];
 
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('patient_data_permissions')
         .select('*')
         .eq('patient_id', user.id)
@@ -51,24 +55,40 @@ export const useDoctorPermissions = () => {
     queryFn: async () => {
       if (!user) return [];
 
-      const { data, error } = await supabase
+      // Get permissions first
+      const { data: permissions, error: permissionsError } = await (supabase as any)
         .from('patient_data_permissions')
-        .select(`
-          *,
-          patient:profiles!patient_id(
-            full_name,
-            email
-          )
-        `)
+        .select('*')
         .eq('granted_to_id', user.id)
         .eq('is_active', true)
         .order('created_at', { ascending: false });
 
-      if (error) {
-        throw new Error(error.message);
+      if (permissionsError) {
+        throw new Error(permissionsError.message);
       }
 
-      return data;
+      // Get patient profiles separately
+      if (permissions && permissions.length > 0) {
+        const patientIds = permissions.map((p: any) => p.patient_id);
+        const { data: profiles, error: profilesError } = await supabase
+          .from('profiles')
+          .select('id, full_name, email')
+          .in('id', patientIds);
+
+        if (profilesError) {
+          console.error('Error fetching profiles:', profilesError);
+        }
+
+        // Combine permissions with profiles
+        const permissionsWithProfiles = permissions.map((permission: any) => ({
+          ...permission,
+          patient: profiles?.find((profile: any) => profile.id === permission.patient_id) || null
+        }));
+
+        return permissionsWithProfiles as PatientDataPermission[];
+      }
+
+      return permissions as PatientDataPermission[];
     },
     enabled: !!user,
   });
@@ -86,7 +106,7 @@ export const useGrantPermission = () => {
       data_types: string[];
       expires_at?: string;
     }) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('patient_data_permissions')
         .insert(permissionData)
         .select()
@@ -121,7 +141,7 @@ export const useRevokePermission = () => {
 
   return useMutation({
     mutationFn: async (permissionId: string) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('patient_data_permissions')
         .update({ 
           is_active: false, 

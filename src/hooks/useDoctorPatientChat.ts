@@ -27,7 +27,7 @@ export const useDoctorPatientMessages = (chatPartnerId: string, isDoctor: boolea
     queryFn: async () => {
       if (!user || !chatPartnerId) return [];
 
-      const query = supabase
+      const query = (supabase as any)
         .from('doctor_patient_messages')
         .select('*')
         .order('created_at', { ascending: true });
@@ -62,7 +62,7 @@ export const useSendMessage = () => {
       message_type?: 'text' | 'report' | 'file' | 'calculator_results';
       attachments?: any[];
     }) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('doctor_patient_messages')
         .insert(messageData)
         .select()
@@ -92,7 +92,7 @@ export const useMarkMessageAsRead = () => {
 
   return useMutation({
     mutationFn: async (messageId: string) => {
-      const { data, error } = await supabase
+      const { data, error } = await (supabase as any)
         .from('doctor_patient_messages')
         .update({ 
           is_read: true, 

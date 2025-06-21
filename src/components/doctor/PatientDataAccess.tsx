@@ -71,7 +71,7 @@ const PatientDataAccess = () => {
                           {permission.patient?.full_name || 'Не указано'}
                         </p>
                         <p className="text-sm text-gray-500 truncate">
-                          {permission.patient?.email}
+                          {permission.patient?.email || 'Email не указан'}
                         </p>
                       </div>
                     </div>
