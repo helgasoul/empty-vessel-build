@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { CalculatorTab, getCalculatorTabs } from '../config/calculatorTabs';
+import { getCalculatorTabs, CalculatorTab } from '../config/calculatorTabs';
 
 export const useCalculatorTabs = () => {
   const [tabs, setTabs] = useState<CalculatorTab[]>([]);
@@ -14,8 +14,7 @@ export const useCalculatorTabs = () => {
         const calculatorTabs = await getCalculatorTabs();
         setTabs(calculatorTabs);
       } catch (err) {
-        setError('Failed to load calculator tabs');
-        console.error('Error loading calculator tabs:', err);
+        setError(err instanceof Error ? err.message : 'Failed to load calculator tabs');
       } finally {
         setLoading(false);
       }
