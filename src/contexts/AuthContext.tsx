@@ -60,6 +60,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setIsLoading(true);
       
+      // Симуляция API вызова
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
       // Mock authentication - determine role based on email
       let role: UserRole = 'patient';
       if (email.includes('doctor')) role = 'doctor';
@@ -88,6 +91,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const signUp = async (email: string, password: string, name: string, role: UserRole) => {
     try {
       setIsLoading(true);
+      
+      // Симуляция API вызова  
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
       const newUser: User = {
         id: Date.now().toString(),

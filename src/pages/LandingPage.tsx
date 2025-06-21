@@ -14,7 +14,7 @@ const LandingPage = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-2">
               <h1 className="text-2xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-                PREVENT
+                YTime PREVENT
               </h1>
             </div>
             
@@ -28,10 +28,10 @@ const LandingPage = () => {
                 </div>
               ) : (
                 <div className="flex items-center space-x-2">
-                  <Link to="/auth">
+                  <Link to="/login">
                     <Button variant="outline">Войти</Button>
                   </Link>
-                  <Link to="/auth">
+                  <Link to="/register">
                     <Button>Регистрация</Button>
                   </Link>
                 </div>
@@ -51,7 +51,7 @@ const LandingPage = () => {
           </h1>
           
           <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            PREVENT помогает женщинам управлять своим здоровьем через персонализированные 
+            YTime PREVENT помогает женщинам управлять своим здоровьем через персонализированные 
             рекомендации, анализ рисков и интеграцию с медицинскими сервисами.
           </p>
 
@@ -83,12 +83,12 @@ const LandingPage = () => {
 
           {!user && (
             <div className="space-x-4">
-              <Link to="/auth">
+              <Link to="/register">
                 <Button size="lg" className="text-lg px-8 py-4">
                   Начать бесплатно
                 </Button>
               </Link>
-              <Link to="/auth">
+              <Link to="/login">
                 <Button variant="outline" size="lg" className="text-lg px-8 py-4">
                   Войти в систему
                 </Button>

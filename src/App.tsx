@@ -3,13 +3,15 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { ThemeProvider } from "@/components/theme-provider";
 
 // Import pages
 import LandingPage from "./pages/LandingPage";
 import Auth from "./pages/Auth";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import NotFound from "./pages/NotFound";
 import PatientsPage from "./pages/doctor/PatientsPage";
@@ -27,6 +29,7 @@ import TGHDLCalculator from "./pages/calculators/TGHDLCalculator";
 
 // Import components
 import ProtectedRoute from "./components/auth/ProtectedRoute";
+import AuthRedirect from "./components/auth/AuthRedirect";
 
 const queryClient = new QueryClient();
 
@@ -39,11 +42,43 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <Routes>
-              {/* Public routes */}
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/auth" element={<Auth />} />
+              {/* Главная страница - лендинг */}
+              <Route 
+                path="/" 
+                element={
+                  <AuthRedirect>
+                    <LandingPage />
+                  </AuthRedirect>
+                } 
+              />
               
-              {/* Protected routes */}
+              {/* Аутентификация */}
+              <Route 
+                path="/login" 
+                element={
+                  <AuthRedirect>
+                    <LoginPage />
+                  </AuthRedirect>
+                } 
+              />
+              <Route 
+                path="/register" 
+                element={
+                  <AuthRedirect>
+                    <RegisterPage />
+                  </AuthRedirect>
+                } 
+              />
+              <Route 
+                path="/auth" 
+                element={
+                  <AuthRedirect>
+                    <Auth />
+                  </AuthRedirect>
+                } 
+              />
+              
+              {/* Защищенные маршруты */}
               <Route 
                 path="/dashboard" 
                 element={
@@ -53,7 +88,7 @@ const App = () => (
                 } 
               />
               
-              {/* Doctor routes */}
+              {/* Врачебные маршруты */}
               <Route 
                 path="/doctor/patients" 
                 element={
@@ -87,7 +122,7 @@ const App = () => (
                 } 
               />
               
-              {/* Calculator routes */}
+              {/* Калькуляторы */}
               <Route 
                 path="/doctor/calculators/ft3-ft4-ratio" 
                 element={
@@ -137,7 +172,7 @@ const App = () => (
                 } 
               />
               
-              {/* Admin only routes */}
+              {/* Админ маршруты */}
               <Route 
                 path="/admin/*" 
                 element={
@@ -147,8 +182,9 @@ const App = () => (
                 } 
               />
               
-              {/* 404 page */}
-              <Route path="*" element={<NotFound />} />
+              {/* 404 - редирект на главную */}
+              <Route path="/404" element={<NotFound />} />
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Routes>
           </AuthProvider>
         </BrowserRouter>
