@@ -28,7 +28,7 @@ export const useDoctorNotifications = () => {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('doctor_notifications')
+        .from('doctor_notifications' as any)
         .select('*')
         .eq('doctor_id', user.id)
         .order('created_at', { ascending: false });
@@ -52,7 +52,7 @@ export const useUnreadNotificationsCount = () => {
       if (!user) return 0;
 
       const { count, error } = await supabase
-        .from('doctor_notifications')
+        .from('doctor_notifications' as any)
         .select('*', { count: 'exact', head: true })
         .eq('doctor_id', user.id)
         .eq('is_read', false);
@@ -73,7 +73,7 @@ export const useMarkNotificationAsRead = () => {
   return useMutation({
     mutationFn: async (notificationId: string) => {
       const { data, error } = await supabase
-        .from('doctor_notifications')
+        .from('doctor_notifications' as any)
         .update({ 
           is_read: true, 
           read_at: new Date().toISOString() 
@@ -110,7 +110,7 @@ export const useCreateNotification = () => {
       related_data?: Record<string, any>;
     }) => {
       const { data, error } = await supabase
-        .from('doctor_notifications')
+        .from('doctor_notifications' as any)
         .insert(notificationData)
         .select()
         .single();

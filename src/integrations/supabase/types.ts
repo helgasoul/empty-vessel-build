@@ -57,6 +57,66 @@ export type Database = {
         }
         Relationships: []
       }
+      calculator_results: {
+        Row: {
+          calculated_at: string
+          calculated_by: string | null
+          calculator_name: string
+          calculator_type: string
+          created_at: string
+          id: string
+          input_parameters: Json
+          interpretation: string
+          is_critical: boolean | null
+          lab_result_id: string | null
+          notes: string | null
+          patient_id: string
+          reference_range: string | null
+          result_text: string | null
+          result_value: number | null
+          units: string | null
+          updated_at: string
+        }
+        Insert: {
+          calculated_at?: string
+          calculated_by?: string | null
+          calculator_name: string
+          calculator_type: string
+          created_at?: string
+          id?: string
+          input_parameters?: Json
+          interpretation: string
+          is_critical?: boolean | null
+          lab_result_id?: string | null
+          notes?: string | null
+          patient_id: string
+          reference_range?: string | null
+          result_text?: string | null
+          result_value?: number | null
+          units?: string | null
+          updated_at?: string
+        }
+        Update: {
+          calculated_at?: string
+          calculated_by?: string | null
+          calculator_name?: string
+          calculator_type?: string
+          created_at?: string
+          id?: string
+          input_parameters?: Json
+          interpretation?: string
+          is_critical?: boolean | null
+          lab_result_id?: string | null
+          notes?: string | null
+          patient_id?: string
+          reference_range?: string | null
+          result_text?: string | null
+          result_value?: number | null
+          units?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       calendar_integrations: {
         Row: {
           access_token: string | null
@@ -554,6 +614,90 @@ export type Database = {
           updated_at?: string
           used_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      doctor_notifications: {
+        Row: {
+          created_at: string
+          doctor_id: string
+          id: string
+          is_critical: boolean | null
+          is_read: boolean | null
+          message: string
+          notification_type: string
+          patient_id: string
+          read_at: string | null
+          related_data: Json | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          doctor_id: string
+          id?: string
+          is_critical?: boolean | null
+          is_read?: boolean | null
+          message: string
+          notification_type: string
+          patient_id: string
+          read_at?: string | null
+          related_data?: Json | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          is_critical?: boolean | null
+          is_read?: boolean | null
+          message?: string
+          notification_type?: string
+          patient_id?: string
+          read_at?: string | null
+          related_data?: Json | null
+          title?: string
+        }
+        Relationships: []
+      }
+      doctor_patient_messages: {
+        Row: {
+          attachments: Json | null
+          created_at: string
+          doctor_id: string
+          id: string
+          is_read: boolean | null
+          message_text: string
+          message_type: string | null
+          patient_id: string
+          read_at: string | null
+          sender_id: string
+          updated_at: string
+        }
+        Insert: {
+          attachments?: Json | null
+          created_at?: string
+          doctor_id: string
+          id?: string
+          is_read?: boolean | null
+          message_text: string
+          message_type?: string | null
+          patient_id: string
+          read_at?: string | null
+          sender_id: string
+          updated_at?: string
+        }
+        Update: {
+          attachments?: Json | null
+          created_at?: string
+          doctor_id?: string
+          id?: string
+          is_read?: boolean | null
+          message_text?: string
+          message_type?: string | null
+          patient_id?: string
+          read_at?: string | null
+          sender_id?: string
+          updated_at?: string
         }
         Relationships: []
       }

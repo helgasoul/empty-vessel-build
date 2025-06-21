@@ -31,8 +31,8 @@ export const usePatientPermissions = () => {
     queryFn: async () => {
       if (!user) return [];
 
-      const { data, error } = await (supabase as any)
-        .from('patient_data_permissions')
+      const { data, error } = await supabase
+        .from('patient_data_permissions' as any)
         .select('*')
         .eq('patient_id', user.id)
         .order('created_at', { ascending: false });
@@ -56,8 +56,8 @@ export const useDoctorPermissions = () => {
       if (!user) return [];
 
       // Get permissions first
-      const { data: permissions, error: permissionsError } = await (supabase as any)
-        .from('patient_data_permissions')
+      const { data: permissions, error: permissionsError } = await supabase
+        .from('patient_data_permissions' as any)
         .select('*')
         .eq('granted_to_id', user.id)
         .eq('is_active', true)
@@ -106,8 +106,8 @@ export const useGrantPermission = () => {
       data_types: string[];
       expires_at?: string;
     }) => {
-      const { data, error } = await (supabase as any)
-        .from('patient_data_permissions')
+      const { data, error } = await supabase
+        .from('patient_data_permissions' as any)
         .insert(permissionData)
         .select()
         .single();
@@ -141,8 +141,8 @@ export const useRevokePermission = () => {
 
   return useMutation({
     mutationFn: async (permissionId: string) => {
-      const { data, error } = await (supabase as any)
-        .from('patient_data_permissions')
+      const { data, error } = await supabase
+        .from('patient_data_permissions' as any)
         .update({ 
           is_active: false, 
           revoked_at: new Date().toISOString() 

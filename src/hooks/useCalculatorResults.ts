@@ -33,8 +33,8 @@ export const usePatientCalculatorResults = (patientId?: string) => {
     queryFn: async () => {
       if (!targetPatientId) return [];
 
-      const { data, error } = await (supabase as any)
-        .from('calculator_results')
+      const { data, error } = await supabase
+        .from('calculator_results' as any)
         .select('*')
         .eq('patient_id', targetPatientId)
         .order('calculated_at', { ascending: false });
@@ -68,8 +68,8 @@ export const useSaveCalculatorResult = () => {
       lab_result_id?: string;
       notes?: string;
     }) => {
-      const { data, error } = await (supabase as any)
-        .from('calculator_results')
+      const { data, error } = await supabase
+        .from('calculator_results' as any)
         .insert(resultData)
         .select()
         .single();
@@ -108,8 +108,8 @@ export const useCalculatorResultsByType = (calculatorType: string, patientId?: s
     queryFn: async () => {
       if (!targetPatientId) return [];
 
-      const { data, error } = await (supabase as any)
-        .from('calculator_results')
+      const { data, error } = await supabase
+        .from('calculator_results' as any)
         .select('*')
         .eq('patient_id', targetPatientId)
         .eq('calculator_type', calculatorType)
