@@ -89,11 +89,10 @@ class AIAnalysisService {
     const sessionId = crypto.randomUUID();
     
     try {
-      // Create analysis session
+      // Create analysis session - remove 'id' from insert as it's auto-generated
       const { data: session, error: sessionError } = await supabase
         .from('ai_analysis_sessions')
         .insert({
-          id: sessionId,
           user_id: request.userId,
           session_type: request.sessionType,
           analysis_scope: request.scope,
@@ -111,9 +110,9 @@ class AIAnalysisService {
       }
 
       // Start background processing
-      this.processAnalysis(sessionId, request);
+      this.processAnalysis(session.id, request);
 
-      return sessionId;
+      return session.id;
     } catch (error) {
       console.error('Error starting analysis:', error);
       throw error;
@@ -191,7 +190,7 @@ class AIAnalysisService {
 
       return {
         sessionId: session.id,
-        keyFindings: Array.isArray(session.key_findings) ? session.key_findings : [],
+        keyFindings: Array.isArray(session.key_findings) ? session.key_findings as string[] : [],
         patterns,
         correlations,
         anomalies,
@@ -245,6 +244,11 @@ class AIAnalysisService {
       // Update session with results
       const processingTime = Date.now() - startTime;
       
+      // Convert string arrays to proper format for database
+      const patternsDetected = mockResults.patterns.map(p => p.id);
+      const correlationsFound = mockResults.correlations.map(c => c.id);
+      const anomaliesDetected = mockResults.anomalies.map(a => a.id);
+      
       await supabase
         .from('ai_analysis_sessions')
         .update({
@@ -253,9 +257,9 @@ class AIAnalysisService {
           confidence_score: mockResults.confidenceScore,
           data_completeness: mockResults.dataCompleteness,
           key_findings: mockResults.keyFindings,
-          patterns_detected: mockResults.patterns.map(p => p.id),
-          correlations_found: mockResults.correlations.map(c => c.id),
-          anomalies_detected: mockResults.anomalies.map(a => a.id)
+          patterns_detected: patternsDetected,
+          correlations_found: correlationsFound,
+          anomalies_detected: anomaliesDetected
         })
         .eq('id', sessionId);
 
