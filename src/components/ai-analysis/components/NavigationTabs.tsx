@@ -1,23 +1,22 @@
 
 /**
  * Navigation Tabs Component
- * Tab navigation for different sections of analysis results
+ * Tab navigation for different analysis sections
  */
 
 import React from 'react';
+import { Button } from '@/design-system/components';
 import { Badge } from '@/design-system/components';
-
-type TabId = 'overview' | 'patterns' | 'correlations' | 'anomalies';
-
-interface Tab {
-  id: TabId;
-  label: string;
-  count: number | null;
-}
+import { 
+  BarChart3,
+  Activity,
+  TrendingUp,
+  AlertTriangle
+} from 'lucide-react';
 
 interface NavigationTabsProps {
-  activeSection: TabId;
-  onSectionChange: (section: TabId) => void;
+  activeSection: 'overview' | 'patterns' | 'correlations' | 'anomalies';
+  onSectionChange: (section: 'overview' | 'patterns' | 'correlations' | 'anomalies') => void;
   patternsCount: number;
   correlationsCount: number;
   anomaliesCount: number;
@@ -30,31 +29,59 @@ export const NavigationTabs: React.FC<NavigationTabsProps> = ({
   correlationsCount,
   anomaliesCount
 }) => {
-  const tabs: Tab[] = [
-    { id: 'overview', label: 'Обзор', count: null },
-    { id: 'patterns', label: 'Паттерны', count: patternsCount },
-    { id: 'correlations', label: 'Корреляции', count: correlationsCount },
-    { id: 'anomalies', label: 'Аномалии', count: anomaliesCount }
+  const tabs = [
+    {
+      id: 'overview' as const,
+      label: 'Обзор',
+      icon: BarChart3,
+      count: null
+    },
+    {
+      id: 'patterns' as const,
+      label: 'Паттерны',
+      icon: Activity,
+      count: patternsCount
+    },
+    {
+      id: 'correlations' as const,
+      label: 'Корреляции',
+      icon: TrendingUp,
+      count: correlationsCount
+    },
+    {
+      id: 'anomalies' as const,
+      label: 'Аномалии',
+      icon: AlertTriangle,
+      count: anomaliesCount
+    }
   ];
 
   return (
     <div className="flex space-x-1 bg-white/60 backdrop-blur-sm p-1 rounded-lg">
-      {tabs.map((tab) => (
-        <button
-          key={tab.id}
-          onClick={() => onSectionChange(tab.id)}
-          className={`flex-1 py-2 px-4 rounded-md text-body font-medium transition-colors flex items-center justify-center gap-2 ${
-            activeSection === tab.id
-              ? 'bg-white text-purple-600 shadow-sm'
-              : 'text-text-secondary hover:text-text-primary'
-          }`}
-        >
-          {tab.label}
-          {tab.count !== null && (
-            <Badge variant="info" size="sm">{tab.count}</Badge>
-          )}
-        </button>
-      ))}
+      {tabs.map((tab) => {
+        const IconComponent = tab.icon;
+        const isActive = activeSection === tab.id;
+        
+        return (
+          <button
+            key={tab.id}
+            onClick={() => onSectionChange(tab.id)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md text-body font-medium transition-colors flex-1 justify-center ${
+              isActive
+                ? 'bg-white text-purple-600 shadow-sm'
+                : 'text-text-secondary hover:text-text-primary'
+            }`}
+          >
+            <IconComponent className="h-4 w-4" />
+            <span>{tab.label}</span>
+            {tab.count !== null && (
+              <Badge variant="info" size="sm">
+                {tab.count}
+              </Badge>
+            )}
+          </button>
+        );
+      })}
     </div>
   );
 };
