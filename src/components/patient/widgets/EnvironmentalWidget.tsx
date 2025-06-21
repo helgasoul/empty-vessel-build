@@ -73,6 +73,19 @@ export default function EnvironmentalWidget({ data }: EnvironmentalWidgetProps) 
     window.location.reload();
   };
 
+  // Calculate air quality index from PM2.5 values if available
+  const getAirQualityIndex = () => {
+    if (!data?.airQuality?.pm25) return null;
+    
+    const pm25 = data.airQuality.pm25;
+    // Simple AQI calculation based on PM2.5
+    if (pm25 <= 12) return 'Хорошо';
+    if (pm25 <= 35.4) return 'Умеренно';
+    if (pm25 <= 55.4) return 'Нездорово для чувствительных';
+    if (pm25 <= 150.4) return 'Нездорово';
+    return 'Очень нездорово';
+  };
+
   return (
     <Card className="bg-white/80 backdrop-blur-sm border-green-100 shadow-lg hover:shadow-xl transition-all duration-300">
       <CardHeader>
@@ -150,7 +163,7 @@ export default function EnvironmentalWidget({ data }: EnvironmentalWidgetProps) 
                     <span className="text-gray-600">Воздух</span>
                   </div>
                   <Badge variant="outline" className="text-xs">
-                    AQI {data.airQuality.aqi}
+                    {getAirQualityIndex() || `PM2.5: ${data.airQuality.pm25}`}
                   </Badge>
                 </div>
               )}
