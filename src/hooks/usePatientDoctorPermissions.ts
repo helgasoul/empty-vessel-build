@@ -32,7 +32,7 @@ export const usePatientPermissions = () => {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('patient_data_permissions' as any)
+        .from('patient_data_permissions')
         .select('*')
         .eq('patient_id', user.id)
         .order('created_at', { ascending: false });
@@ -41,7 +41,7 @@ export const usePatientPermissions = () => {
         throw new Error(error.message);
       }
 
-      return data as PatientDataPermission[];
+      return (data || []) as PatientDataPermission[];
     },
     enabled: !!user,
   });
@@ -57,7 +57,7 @@ export const useDoctorPermissions = () => {
 
       // Get permissions first
       const { data: permissions, error: permissionsError } = await supabase
-        .from('patient_data_permissions' as any)
+        .from('patient_data_permissions')
         .select('*')
         .eq('granted_to_id', user.id)
         .eq('is_active', true)
@@ -88,7 +88,7 @@ export const useDoctorPermissions = () => {
         return permissionsWithProfiles as PatientDataPermission[];
       }
 
-      return permissions as PatientDataPermission[];
+      return (permissions || []) as PatientDataPermission[];
     },
     enabled: !!user,
   });
@@ -107,7 +107,7 @@ export const useGrantPermission = () => {
       expires_at?: string;
     }) => {
       const { data, error } = await supabase
-        .from('patient_data_permissions' as any)
+        .from('patient_data_permissions')
         .insert(permissionData)
         .select()
         .single();
@@ -116,7 +116,7 @@ export const useGrantPermission = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as PatientDataPermission;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient-permissions'] });
@@ -142,7 +142,7 @@ export const useRevokePermission = () => {
   return useMutation({
     mutationFn: async (permissionId: string) => {
       const { data, error } = await supabase
-        .from('patient_data_permissions' as any)
+        .from('patient_data_permissions')
         .update({ 
           is_active: false, 
           revoked_at: new Date().toISOString() 
@@ -155,7 +155,7 @@ export const useRevokePermission = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as PatientDataPermission;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['patient-permissions'] });

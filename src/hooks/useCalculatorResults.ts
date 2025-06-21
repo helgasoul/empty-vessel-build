@@ -34,7 +34,7 @@ export const usePatientCalculatorResults = (patientId?: string) => {
       if (!targetPatientId) return [];
 
       const { data, error } = await supabase
-        .from('calculator_results' as any)
+        .from('calculator_results')
         .select('*')
         .eq('patient_id', targetPatientId)
         .order('calculated_at', { ascending: false });
@@ -43,7 +43,7 @@ export const usePatientCalculatorResults = (patientId?: string) => {
         throw new Error(error.message);
       }
 
-      return data as CalculatorResult[];
+      return (data || []) as CalculatorResult[];
     },
     enabled: !!targetPatientId,
   });
@@ -69,7 +69,7 @@ export const useSaveCalculatorResult = () => {
       notes?: string;
     }) => {
       const { data, error } = await supabase
-        .from('calculator_results' as any)
+        .from('calculator_results')
         .insert(resultData)
         .select()
         .single();
@@ -78,7 +78,7 @@ export const useSaveCalculatorResult = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as CalculatorResult;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ 
@@ -109,7 +109,7 @@ export const useCalculatorResultsByType = (calculatorType: string, patientId?: s
       if (!targetPatientId) return [];
 
       const { data, error } = await supabase
-        .from('calculator_results' as any)
+        .from('calculator_results')
         .select('*')
         .eq('patient_id', targetPatientId)
         .eq('calculator_type', calculatorType)
@@ -119,7 +119,7 @@ export const useCalculatorResultsByType = (calculatorType: string, patientId?: s
         throw new Error(error.message);
       }
 
-      return data as CalculatorResult[];
+      return (data || []) as CalculatorResult[];
     },
     enabled: !!targetPatientId,
   });

@@ -28,7 +28,7 @@ export const useDoctorNotifications = () => {
       if (!user) return [];
 
       const { data, error } = await supabase
-        .from('doctor_notifications' as any)
+        .from('doctor_notifications')
         .select('*')
         .eq('doctor_id', user.id)
         .order('created_at', { ascending: false });
@@ -37,7 +37,7 @@ export const useDoctorNotifications = () => {
         throw new Error(error.message);
       }
 
-      return data as DoctorNotification[];
+      return (data || []) as DoctorNotification[];
     },
     enabled: !!user,
   });
@@ -52,7 +52,7 @@ export const useUnreadNotificationsCount = () => {
       if (!user) return 0;
 
       const { count, error } = await supabase
-        .from('doctor_notifications' as any)
+        .from('doctor_notifications')
         .select('*', { count: 'exact', head: true })
         .eq('doctor_id', user.id)
         .eq('is_read', false);
@@ -73,7 +73,7 @@ export const useMarkNotificationAsRead = () => {
   return useMutation({
     mutationFn: async (notificationId: string) => {
       const { data, error } = await supabase
-        .from('doctor_notifications' as any)
+        .from('doctor_notifications')
         .update({ 
           is_read: true, 
           read_at: new Date().toISOString() 
@@ -86,7 +86,7 @@ export const useMarkNotificationAsRead = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as DoctorNotification;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctor-notifications'] });
@@ -110,7 +110,7 @@ export const useCreateNotification = () => {
       related_data?: Record<string, any>;
     }) => {
       const { data, error } = await supabase
-        .from('doctor_notifications' as any)
+        .from('doctor_notifications')
         .insert(notificationData)
         .select()
         .single();
@@ -119,7 +119,7 @@ export const useCreateNotification = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as DoctorNotification;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctor-notifications'] });

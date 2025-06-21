@@ -28,7 +28,7 @@ export const useDoctorPatientMessages = (chatPartnerId: string, isDoctor: boolea
       if (!user || !chatPartnerId) return [];
 
       const query = supabase
-        .from('doctor_patient_messages' as any)
+        .from('doctor_patient_messages')
         .select('*')
         .order('created_at', { ascending: true });
 
@@ -44,7 +44,7 @@ export const useDoctorPatientMessages = (chatPartnerId: string, isDoctor: boolea
         throw new Error(error.message);
       }
 
-      return data as DoctorPatientMessage[];
+      return (data || []) as DoctorPatientMessage[];
     },
     enabled: !!user && !!chatPartnerId,
   });
@@ -63,7 +63,7 @@ export const useSendMessage = () => {
       attachments?: any[];
     }) => {
       const { data, error } = await supabase
-        .from('doctor_patient_messages' as any)
+        .from('doctor_patient_messages')
         .insert(messageData)
         .select()
         .single();
@@ -72,7 +72,7 @@ export const useSendMessage = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as DoctorPatientMessage;
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['doctor-patient-messages'] });
@@ -93,7 +93,7 @@ export const useMarkMessageAsRead = () => {
   return useMutation({
     mutationFn: async (messageId: string) => {
       const { data, error } = await supabase
-        .from('doctor_patient_messages' as any)
+        .from('doctor_patient_messages')
         .update({ 
           is_read: true, 
           read_at: new Date().toISOString() 
@@ -106,7 +106,7 @@ export const useMarkMessageAsRead = () => {
         throw new Error(error.message);
       }
 
-      return data;
+      return data as DoctorPatientMessage;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['doctor-patient-messages'] });
