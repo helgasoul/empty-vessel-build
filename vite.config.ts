@@ -29,8 +29,4 @@ export default defineConfig(({ mode }) => ({
     },
   },
   base: "/",
-  // Ensure proper SPA configuration
-  preview: {
-    historyApiFallback: true,
-  },
 }));
