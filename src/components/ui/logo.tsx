@@ -28,7 +28,7 @@ export const Logo: React.FC<LogoProps> = ({
     <div className={`flex items-center space-x-4 ${className}`}>
       <div className={`${sizeClasses[size]} flex items-center justify-center`}>
         <img
-          src="/lovable-uploads/5ac94c15-2b2b-47a6-89ea-9e0163d76e7b.png"
+          src="/lovable-uploads/532d80ed-2c10-4c8a-8315-d7e3f7122ebb.png"
           alt="PREVENT Logo"
           className="w-full h-full object-contain rounded-lg"
           style={{ 
