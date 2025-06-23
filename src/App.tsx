@@ -16,6 +16,7 @@ import Subscribe from "./pages/Subscribe";
 import NotificationsPage from "./pages/NotificationsPage";
 import HealthServicesPage from "./pages/HealthServicesPage";
 import AutomationPage from "./pages/AutomationPage";
+import GynecologyPartnersPage from "./pages/GynecologyPartnersPage";
 
 const queryClient = new QueryClient();
 
@@ -36,6 +37,7 @@ const App = () => (
             <Route path="/notifications" element={<NotificationsPage />} />
             <Route path="/health-services" element={<HealthServicesPage />} />
             <Route path="/automation" element={<AutomationPage />} />
+            <Route path="/gynecology-partners" element={<GynecologyPartnersPage />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/subscribe" element={<Subscribe />} />
           </Routes>

@@ -2524,6 +2524,119 @@ export type Database = {
           },
         ]
       }
+      gynecology_appointments: {
+        Row: {
+          actual_cost: number | null
+          appointment_date: string
+          appointment_notes: string | null
+          appointment_time: string
+          appointment_type: string
+          booking_confirmation: string | null
+          booking_status: string | null
+          created_at: string
+          cycle_considerations: Json | null
+          cycle_day: number | null
+          cycle_phase: string | null
+          doctor_id: string | null
+          doctor_name: string | null
+          doctor_specialization: string | null
+          estimated_cost: number | null
+          estimated_duration: number | null
+          external_appointment_id: string | null
+          follow_up_date: string | null
+          follow_up_required: boolean | null
+          id: string
+          insurance_covered: boolean | null
+          partner_id: string | null
+          preparation_completed: boolean | null
+          preparation_instructions: Json | null
+          preparation_required: boolean | null
+          results_available: boolean | null
+          results_summary: Json | null
+          service_code: string | null
+          service_name: string | null
+          timezone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          actual_cost?: number | null
+          appointment_date: string
+          appointment_notes?: string | null
+          appointment_time: string
+          appointment_type: string
+          booking_confirmation?: string | null
+          booking_status?: string | null
+          created_at?: string
+          cycle_considerations?: Json | null
+          cycle_day?: number | null
+          cycle_phase?: string | null
+          doctor_id?: string | null
+          doctor_name?: string | null
+          doctor_specialization?: string | null
+          estimated_cost?: number | null
+          estimated_duration?: number | null
+          external_appointment_id?: string | null
+          follow_up_date?: string | null
+          follow_up_required?: boolean | null
+          id?: string
+          insurance_covered?: boolean | null
+          partner_id?: string | null
+          preparation_completed?: boolean | null
+          preparation_instructions?: Json | null
+          preparation_required?: boolean | null
+          results_available?: boolean | null
+          results_summary?: Json | null
+          service_code?: string | null
+          service_name?: string | null
+          timezone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          actual_cost?: number | null
+          appointment_date?: string
+          appointment_notes?: string | null
+          appointment_time?: string
+          appointment_type?: string
+          booking_confirmation?: string | null
+          booking_status?: string | null
+          created_at?: string
+          cycle_considerations?: Json | null
+          cycle_day?: number | null
+          cycle_phase?: string | null
+          doctor_id?: string | null
+          doctor_name?: string | null
+          doctor_specialization?: string | null
+          estimated_cost?: number | null
+          estimated_duration?: number | null
+          external_appointment_id?: string | null
+          follow_up_date?: string | null
+          follow_up_required?: boolean | null
+          id?: string
+          insurance_covered?: boolean | null
+          partner_id?: string | null
+          preparation_completed?: boolean | null
+          preparation_instructions?: Json | null
+          preparation_required?: boolean | null
+          results_available?: boolean | null
+          results_summary?: Json | null
+          service_code?: string | null
+          service_name?: string | null
+          timezone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "gynecology_appointments_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "medical_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       habit_completions: {
         Row: {
           completed_date: string
@@ -3247,6 +3360,80 @@ export type Database = {
           },
         ]
       }
+      lab_tests: {
+        Row: {
+          collection_date: string | null
+          collection_time: string | null
+          cost: number | null
+          created_at: string
+          id: string
+          interpretation: string | null
+          optimal_cycle_phase: string | null
+          partner_id: string | null
+          preparation_completed: boolean | null
+          preparation_instructions: Json | null
+          processing_duration: string | null
+          reference_ranges: Json | null
+          results: Json | null
+          status: string | null
+          test_category: string
+          test_code: string
+          test_name: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          collection_date?: string | null
+          collection_time?: string | null
+          cost?: number | null
+          created_at?: string
+          id?: string
+          interpretation?: string | null
+          optimal_cycle_phase?: string | null
+          partner_id?: string | null
+          preparation_completed?: boolean | null
+          preparation_instructions?: Json | null
+          processing_duration?: string | null
+          reference_ranges?: Json | null
+          results?: Json | null
+          status?: string | null
+          test_category: string
+          test_code: string
+          test_name: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          collection_date?: string | null
+          collection_time?: string | null
+          cost?: number | null
+          created_at?: string
+          id?: string
+          interpretation?: string | null
+          optimal_cycle_phase?: string | null
+          partner_id?: string | null
+          preparation_completed?: boolean | null
+          preparation_instructions?: Json | null
+          processing_duration?: string | null
+          reference_ranges?: Json | null
+          results?: Json | null
+          status?: string | null
+          test_category?: string
+          test_code?: string
+          test_name?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "lab_tests_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "medical_partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       laboratory_profiles: {
         Row: {
           accreditation: string[] | null
@@ -3627,6 +3814,96 @@ export type Database = {
           },
         ]
       }
+      medical_partners: {
+        Row: {
+          address: Json
+          age_groups_served: Json | null
+          api_endpoint: string | null
+          api_version: string | null
+          appointment_booking_available: boolean | null
+          available_services: Json
+          coordinates: unknown | null
+          created_at: string
+          email: string | null
+          id: string
+          integration_status: string | null
+          last_sync: string | null
+          legal_entity: string | null
+          license_number: string | null
+          online_results_available: boolean | null
+          partner_name: string
+          partner_type: string
+          patient_reviews_count: number | null
+          phone: string | null
+          quality_rating: number | null
+          service_areas: Json | null
+          specializations: Json
+          telemedicine_available: boolean | null
+          updated_at: string
+          website: string | null
+          women_health_expertise: number | null
+          women_health_focus: boolean | null
+        }
+        Insert: {
+          address?: Json
+          age_groups_served?: Json | null
+          api_endpoint?: string | null
+          api_version?: string | null
+          appointment_booking_available?: boolean | null
+          available_services?: Json
+          coordinates?: unknown | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          integration_status?: string | null
+          last_sync?: string | null
+          legal_entity?: string | null
+          license_number?: string | null
+          online_results_available?: boolean | null
+          partner_name: string
+          partner_type: string
+          patient_reviews_count?: number | null
+          phone?: string | null
+          quality_rating?: number | null
+          service_areas?: Json | null
+          specializations?: Json
+          telemedicine_available?: boolean | null
+          updated_at?: string
+          website?: string | null
+          women_health_expertise?: number | null
+          women_health_focus?: boolean | null
+        }
+        Update: {
+          address?: Json
+          age_groups_served?: Json | null
+          api_endpoint?: string | null
+          api_version?: string | null
+          appointment_booking_available?: boolean | null
+          available_services?: Json
+          coordinates?: unknown | null
+          created_at?: string
+          email?: string | null
+          id?: string
+          integration_status?: string | null
+          last_sync?: string | null
+          legal_entity?: string | null
+          license_number?: string | null
+          online_results_available?: boolean | null
+          partner_name?: string
+          partner_type?: string
+          patient_reviews_count?: number | null
+          phone?: string | null
+          quality_rating?: number | null
+          service_areas?: Json | null
+          specializations?: Json
+          telemedicine_available?: boolean | null
+          updated_at?: string
+          website?: string | null
+          women_health_expertise?: number | null
+          women_health_focus?: boolean | null
+        }
+        Relationships: []
+      }
       medical_procedures: {
         Row: {
           clinic_name: string | null
@@ -3740,6 +4017,75 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      medical_reminders: {
+        Row: {
+          appointment_id: string | null
+          available_actions: Json | null
+          created_at: string
+          id: string
+          lab_test_id: string | null
+          message: string
+          read_at: string | null
+          reminder_type: string
+          sent_at: string | null
+          status: string | null
+          title: string
+          trigger_date: string
+          trigger_time: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          appointment_id?: string | null
+          available_actions?: Json | null
+          created_at?: string
+          id?: string
+          lab_test_id?: string | null
+          message: string
+          read_at?: string | null
+          reminder_type: string
+          sent_at?: string | null
+          status?: string | null
+          title: string
+          trigger_date: string
+          trigger_time?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          appointment_id?: string | null
+          available_actions?: Json | null
+          created_at?: string
+          id?: string
+          lab_test_id?: string | null
+          message?: string
+          read_at?: string | null
+          reminder_type?: string
+          sent_at?: string | null
+          status?: string | null
+          title?: string
+          trigger_date?: string
+          trigger_time?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "medical_reminders_appointment_id_fkey"
+            columns: ["appointment_id"]
+            isOneToOne: false
+            referencedRelation: "gynecology_appointments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "medical_reminders_lab_test_id_fkey"
+            columns: ["lab_test_id"]
+            isOneToOne: false
+            referencedRelation: "lab_tests"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       medication_logs: {
         Row: {
@@ -4726,6 +5072,63 @@ export type Database = {
           results_data?: Json
           risk_level?: string
           risk_percentage?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      screening_plans: {
+        Row: {
+          age_considerations: Json | null
+          completion_percentage: number | null
+          completion_status: string | null
+          created_at: string
+          cycle_considerations: Json | null
+          id: string
+          next_appointment_date: string | null
+          plan_name: string
+          plan_type: string
+          priority_level: string | null
+          recommended_frequency: string | null
+          recommended_services: Json
+          risk_factors: Json | null
+          total_estimated_cost: number | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          age_considerations?: Json | null
+          completion_percentage?: number | null
+          completion_status?: string | null
+          created_at?: string
+          cycle_considerations?: Json | null
+          id?: string
+          next_appointment_date?: string | null
+          plan_name: string
+          plan_type: string
+          priority_level?: string | null
+          recommended_frequency?: string | null
+          recommended_services?: Json
+          risk_factors?: Json | null
+          total_estimated_cost?: number | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          age_considerations?: Json | null
+          completion_percentage?: number | null
+          completion_status?: string | null
+          created_at?: string
+          cycle_considerations?: Json | null
+          id?: string
+          next_appointment_date?: string | null
+          plan_name?: string
+          plan_type?: string
+          priority_level?: string | null
+          recommended_frequency?: string | null
+          recommended_services?: Json
+          risk_factors?: Json | null
+          total_estimated_cost?: number | null
           updated_at?: string
           user_id?: string
         }
