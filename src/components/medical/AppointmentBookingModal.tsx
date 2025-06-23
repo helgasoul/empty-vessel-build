@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useCreateGynecologyAppointment } from '@/hooks/useMedicalPartners';
+import { useCreateGynecologyAppointment } from '@/hooks/medical';
 import { Calendar } from 'lucide-react';
 import AppointmentTypeSection from './appointment-booking/AppointmentTypeSection';
 import AppointmentDateTimeSection from './appointment-booking/AppointmentDateTimeSection';

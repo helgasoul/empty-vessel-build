@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { useCreateLabTest } from '@/hooks/useMedicalPartners';
+import { useCreateLabTest } from '@/hooks/medical';
 import { TestTube } from 'lucide-react';
 import TestSelectionSection, { commonTests } from './lab-test-booking/TestSelectionSection';
 import TestCategorySection from './lab-test-booking/TestCategorySection';

@@ -4,7 +4,12 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { useMedicalPartners, useGynecologyAppointments, useLabTests, useScreeningPlans } from '@/hooks/useMedicalPartners';
+import { 
+  useMedicalPartners, 
+  useGynecologyAppointments, 
+  useLabTests, 
+  useScreeningPlans 
+} from '@/hooks/medical';
 import { Building, TestTube, Calendar, Star, Phone, MapPin, Globe, Clock, Users } from 'lucide-react';
 import AppointmentBookingModal from './AppointmentBookingModal';
 import LabTestBookingModal from './LabTestBookingModal';
