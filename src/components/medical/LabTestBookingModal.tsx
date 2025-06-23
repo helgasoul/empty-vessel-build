@@ -16,6 +16,9 @@ interface LabTestBookingModalProps {
   partner: any;
 }
 
+type TestCategory = 'hormones' | 'oncology_markers' | 'genetics' | 'microbiome' | 'general';
+type CyclePhase = 'menstrual' | 'follicular' | 'ovulation' | 'luteal';
+
 const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
   open,
   onOpenChange,
@@ -24,12 +27,11 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
   const [formData, setFormData] = useState({
     test_code: '',
     test_name: '',
-    test_category: 'general',
+    test_category: 'general' as TestCategory,
     collection_date: '',
     collection_time: '',
-    optimal_cycle_phase: '',
+    optimal_cycle_phase: '' as CyclePhase | '',
     cost: '',
-    preparation_instructions: [] as string[],
   });
 
   const [preparationNotes, setPreparationNotes] = useState('');
@@ -37,14 +39,14 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
   const createLabTest = useCreateLabTest();
 
   const commonTests = [
-    { code: 'HORMONES_BASIC', name: 'Базовая панель гормонов', category: 'hormones' },
-    { code: 'THYROID_PANEL', name: 'Гормоны щитовидной железы', category: 'hormones' },
-    { code: 'REPRODUCTIVE_HORMONES', name: 'Репродуктивные гормоны', category: 'hormones' },
-    { code: 'ONCO_MARKERS_F', name: 'Онкомаркеры (женские)', category: 'oncology_markers' },
-    { code: 'MICROBIOME_VAGINAL', name: 'Микробиом влагалища', category: 'microbiome' },
-    { code: 'GENETIC_BRCA', name: 'Генетический тест BRCA1/BRCA2', category: 'genetics' },
-    { code: 'GENERAL_BLOOD', name: 'Общий анализ крови', category: 'general' },
-    { code: 'BIOCHEMISTRY', name: 'Биохимический анализ крови', category: 'general' },
+    { code: 'HORMONES_BASIC', name: 'Базовая панель гормонов', category: 'hormones' as TestCategory },
+    { code: 'THYROID_PANEL', name: 'Гормоны щитовидной железы', category: 'hormones' as TestCategory },
+    { code: 'REPRODUCTIVE_HORMONES', name: 'Репродуктивные гормоны', category: 'hormones' as TestCategory },
+    { code: 'ONCO_MARKERS_F', name: 'Онкомаркеры (женские)', category: 'oncology_markers' as TestCategory },
+    { code: 'MICROBIOME_VAGINAL', name: 'Микробиом влагалища', category: 'microbiome' as TestCategory },
+    { code: 'GENETIC_BRCA', name: 'Генетический тест BRCA1/BRCA2', category: 'genetics' as TestCategory },
+    { code: 'GENERAL_BLOOD', name: 'Общий анализ крови', category: 'general' as TestCategory },
+    { code: 'BIOCHEMISTRY', name: 'Биохимический анализ крови', category: 'general' as TestCategory },
   ];
 
   const handleTestSelect = (testCode: string) => {
@@ -62,6 +64,10 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.test_code || !formData.test_name) {
+      return;
+    }
+
     const preparationInstructions = preparationNotes
       .split('\n')
       .filter(note => note.trim())
@@ -69,8 +75,13 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
 
     try {
       await createLabTest.mutateAsync({
-        ...formData,
+        test_code: formData.test_code,
+        test_name: formData.test_name,
+        test_category: formData.test_category,
         partner_id: partner?.id,
+        collection_date: formData.collection_date || undefined,
+        collection_time: formData.collection_time || undefined,
+        optimal_cycle_phase: formData.optimal_cycle_phase || undefined,
         cost: formData.cost ? parseFloat(formData.cost) : undefined,
         preparation_instructions: preparationInstructions,
         preparation_completed: false,
@@ -87,7 +98,6 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
         collection_time: '',
         optimal_cycle_phase: '',
         cost: '',
-        preparation_instructions: [],
       });
       setPreparationNotes('');
     } catch (error) {
@@ -154,7 +164,7 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
               <Label htmlFor="test_category">Категория</Label>
               <Select 
                 value={formData.test_category} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, test_category: value }))}
+                onValueChange={(value: TestCategory) => setFormData(prev => ({ ...prev, test_category: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Выберите категорию" />
@@ -207,7 +217,7 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
             <Label htmlFor="optimal_cycle_phase">Оптимальная фаза цикла (для гормональных анализов)</Label>
             <Select 
               value={formData.optimal_cycle_phase} 
-              onValueChange={(value) => setFormData(prev => ({ ...prev, optimal_cycle_phase: value }))}
+              onValueChange={(value: CyclePhase) => setFormData(prev => ({ ...prev, optimal_cycle_phase: value }))}
             >
               <SelectTrigger>
                 <SelectValue placeholder="Выберите фазу цикла" />

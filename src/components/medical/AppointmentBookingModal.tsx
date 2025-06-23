@@ -17,20 +17,23 @@ interface AppointmentBookingModalProps {
   partner: any;
 }
 
+type AppointmentType = 'consultation' | 'screening' | 'procedure' | 'diagnostics';
+type CyclePhase = 'menstrual' | 'follicular' | 'ovulation' | 'luteal';
+
 const AppointmentBookingModal: React.FC<AppointmentBookingModalProps> = ({
   open,
   onOpenChange,
   partner
 }) => {
   const [formData, setFormData] = useState({
-    appointment_type: 'consultation',
+    appointment_type: 'consultation' as AppointmentType,
     appointment_date: '',
     appointment_time: '',
     doctor_name: '',
     service_name: '',
     appointment_notes: '',
     cycle_day: '',
-    cycle_phase: '',
+    cycle_phase: '' as CyclePhase | '',
     preparation_required: false,
   });
 
@@ -39,14 +42,25 @@ const AppointmentBookingModal: React.FC<AppointmentBookingModalProps> = ({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
+    if (!formData.appointment_date || !formData.appointment_time) {
+      return;
+    }
+
     try {
       await createAppointment.mutateAsync({
-        ...formData,
+        appointment_type: formData.appointment_type,
+        appointment_date: formData.appointment_date,
+        appointment_time: formData.appointment_time,
         partner_id: partner?.id,
+        doctor_name: formData.doctor_name || undefined,
+        service_name: formData.service_name || undefined,
+        appointment_notes: formData.appointment_notes || undefined,
+        cycle_day: formData.cycle_day ? parseInt(formData.cycle_day) : undefined,
+        cycle_phase: formData.cycle_phase || undefined,
         estimated_duration: 30,
         timezone: 'Europe/Moscow',
-        cycle_day: formData.cycle_day ? parseInt(formData.cycle_day) : undefined,
         cycle_considerations: {},
+        preparation_required: formData.preparation_required,
         preparation_instructions: [],
         preparation_completed: false,
         results_available: false,
@@ -93,7 +107,7 @@ const AppointmentBookingModal: React.FC<AppointmentBookingModalProps> = ({
               <Label htmlFor="appointment_type">Тип приема</Label>
               <Select 
                 value={formData.appointment_type} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, appointment_type: value }))}
+                onValueChange={(value: AppointmentType) => setFormData(prev => ({ ...prev, appointment_type: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Выберите тип приема" />
@@ -168,7 +182,7 @@ const AppointmentBookingModal: React.FC<AppointmentBookingModalProps> = ({
               <Label htmlFor="cycle_phase">Фаза цикла</Label>
               <Select 
                 value={formData.cycle_phase} 
-                onValueChange={(value) => setFormData(prev => ({ ...prev, cycle_phase: value }))}
+                onValueChange={(value: CyclePhase) => setFormData(prev => ({ ...prev, cycle_phase: value }))}
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Выберите фазу цикла" />

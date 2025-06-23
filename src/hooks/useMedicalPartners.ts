@@ -1,4 +1,3 @@
-
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
@@ -185,7 +184,7 @@ export const useCreateGynecologyAppointment = () => {
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async (appointmentData: Partial<GynecologyAppointment>) => {
+    mutationFn: async (appointmentData: Omit<GynecologyAppointment, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'booking_status'>) => {
       if (!user) {
         throw new Error('User not authenticated');
       }
@@ -193,8 +192,34 @@ export const useCreateGynecologyAppointment = () => {
       const { data, error } = await supabase
         .from('gynecology_appointments')
         .insert({
-          ...appointmentData,
           user_id: user.id,
+          appointment_type: appointmentData.appointment_type,
+          appointment_date: appointmentData.appointment_date,
+          appointment_time: appointmentData.appointment_time,
+          partner_id: appointmentData.partner_id,
+          service_code: appointmentData.service_code,
+          service_name: appointmentData.service_name,
+          estimated_duration: appointmentData.estimated_duration,
+          timezone: appointmentData.timezone,
+          doctor_id: appointmentData.doctor_id,
+          doctor_name: appointmentData.doctor_name,
+          doctor_specialization: appointmentData.doctor_specialization,
+          cycle_day: appointmentData.cycle_day,
+          cycle_phase: appointmentData.cycle_phase,
+          cycle_considerations: appointmentData.cycle_considerations,
+          preparation_required: appointmentData.preparation_required,
+          preparation_instructions: appointmentData.preparation_instructions,
+          preparation_completed: appointmentData.preparation_completed,
+          booking_confirmation: appointmentData.booking_confirmation,
+          external_appointment_id: appointmentData.external_appointment_id,
+          appointment_notes: appointmentData.appointment_notes,
+          results_available: appointmentData.results_available,
+          results_summary: appointmentData.results_summary,
+          follow_up_required: appointmentData.follow_up_required,
+          follow_up_date: appointmentData.follow_up_date,
+          estimated_cost: appointmentData.estimated_cost,
+          actual_cost: appointmentData.actual_cost,
+          insurance_covered: appointmentData.insurance_covered,
         })
         .select()
         .single();
@@ -255,7 +280,7 @@ export const useCreateLabTest = () => {
   const { user } = useAuth();
 
   return useMutation({
-    mutationFn: async (testData: Partial<LabTest>) => {
+    mutationFn: async (testData: Omit<LabTest, 'id' | 'user_id' | 'created_at' | 'updated_at' | 'status'>) => {
       if (!user) {
         throw new Error('User not authenticated');
       }
@@ -263,8 +288,21 @@ export const useCreateLabTest = () => {
       const { data, error } = await supabase
         .from('lab_tests')
         .insert({
-          ...testData,
           user_id: user.id,
+          test_code: testData.test_code,
+          test_name: testData.test_name,
+          test_category: testData.test_category,
+          partner_id: testData.partner_id,
+          collection_date: testData.collection_date,
+          collection_time: testData.collection_time,
+          optimal_cycle_phase: testData.optimal_cycle_phase,
+          preparation_instructions: testData.preparation_instructions,
+          preparation_completed: testData.preparation_completed,
+          results: testData.results,
+          reference_ranges: testData.reference_ranges,
+          interpretation: testData.interpretation,
+          cost: testData.cost,
+          processing_duration: testData.processing_duration,
         })
         .select()
         .single();
