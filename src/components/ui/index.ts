@@ -21,8 +21,8 @@ export { Separator } from './separator';
 export { Toaster } from './toaster';
 export { ThemeToggle } from './theme-toggle';
 
-// Types
-export type { ButtonProps } from './button';
+// Re-export Button from Button.tsx for lowercase compatibility
+export { Button as button } from './Button';
 
 // Re-export components from lowercase files for compatibility
 export * from './badge';

@@ -2,7 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 
-interface BadgeProps {
+interface BadgeProps extends React.HTMLAttributes<HTMLSpanElement> {
   variant?: 'default' | 'primary' | 'secondary' | 'warm' | 'cool' | 'soft' | 'success' | 'warning' | 'error' | 'outline' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
@@ -15,11 +15,13 @@ export const Badge: React.FC<BadgeProps> = ({
   size = 'md',
   children,
   className,
-  pulse = false
+  pulse = false,
+  ...props
 }) => {
   const baseClasses = `
     inline-flex items-center justify-center font-medium rounded-full 
     transition-all duration-300 border backdrop-blur-sm
+    ${props.onClick ? 'cursor-pointer hover:scale-105' : ''}
   `;
 
   const variantClasses = {
@@ -78,6 +80,7 @@ export const Badge: React.FC<BadgeProps> = ({
         pulseClass,
         className
       )}
+      {...props}
     >
       {children}
     </span>
