@@ -1,6 +1,8 @@
 
-/* Animation Keyframes and Classes */
-@keyframes fadeIn {
+/* Кастомные анимации для женского дизайна */
+
+/* Плавные появления */
+@keyframes gentle-fade-in {
   from {
     opacity: 0;
     transform: translateY(20px);
@@ -11,18 +13,34 @@
   }
 }
 
-@keyframes slideUp {
+@keyframes gentle-fade-out {
   from {
-    opacity: 0;
-    transform: translateY(40px);
-  }
-  to {
     opacity: 1;
     transform: translateY(0);
   }
+  to {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
 }
 
-@keyframes bounceGentle {
+/* Сердечки и женские элементы */
+@keyframes floating-hearts {
+  0%, 100% {
+    transform: translateY(0px) rotate(0deg);
+  }
+  25% {
+    transform: translateY(-10px) rotate(5deg);
+  }
+  50% {
+    transform: translateY(-5px) rotate(-5deg);
+  }
+  75% {
+    transform: translateY(-15px) rotate(3deg);
+  }
+}
+
+@keyframes gentle-bounce {
   0%, 20%, 50%, 80%, 100% {
     transform: translateY(0);
   }
@@ -34,90 +52,141 @@
   }
 }
 
-@keyframes glow {
-  from {
-    box-shadow: 0 0 5px rgba(184, 168, 216, 0.2), 0 0 10px rgba(184, 168, 216, 0.2), 0 0 15px rgba(184, 168, 216, 0.2);
-  }
-  to {
-    box-shadow: 0 0 5px rgba(184, 168, 216, 0.5), 0 0 10px rgba(184, 168, 216, 0.5), 0 0 15px rgba(184, 168, 216, 0.5);
-  }
-}
-
-/* Blob animations */
-@keyframes blob {
+/* Теплые пульсации */
+@keyframes warm-pulse {
   0% {
-    transform: translate(0px, 0px) scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0.7);
   }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
+  70% {
+    box-shadow: 0 0 0 10px rgba(255, 107, 157, 0);
   }
   100% {
-    transform: translate(0px, 0px) scale(1);
+    box-shadow: 0 0 0 0 rgba(255, 107, 157, 0);
   }
 }
 
-.animate-blob {
-  animation: blob 7s infinite;
+@keyframes cool-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(38, 208, 206, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(38, 208, 206, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(38, 208, 206, 0);
+  }
 }
 
-.animation-delay-2000 {
-  animation-delay: 2s;
+/* Мягкие масштабирования */
+@keyframes gentle-scale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
 }
 
-.animation-delay-4000 {
-  animation-delay: 4s;
+/* Волновые эффекты */
+@keyframes wave-gentle {
+  0% {
+    transform: rotate(0.0deg);
+  }
+  10% {
+    transform: rotate(14.0deg);
+  }
+  20% {
+    transform: rotate(-8.0deg);
+  }
+  30% {
+    transform: rotate(14.0deg);
+  }
+  40% {
+    transform: rotate(-4.0deg);
+  }
+  50% {
+    transform: rotate(10.0deg);
+  }
+  60% {
+    transform: rotate(0.0deg);
+  }
+  100% {
+    transform: rotate(0.0deg);
+  }
 }
 
-/* Плавные переходы для роутинга */
-.page-transition {
-  transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out;
+/* Нежное покачивание */
+@keyframes gentle-sway {
+  0%, 100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(5px);
+  }
 }
 
-.page-enter {
-  opacity: 0;
-  transform: translateY(20px);
+/* Классы для применения анимаций */
+.animate-gentle-fade-in {
+  animation: gentle-fade-in 0.6s ease-out;
 }
 
-.page-enter-active {
-  opacity: 1;
-  transform: translateY(0);
+.animate-gentle-fade-out {
+  animation: gentle-fade-out 0.6s ease-out;
 }
 
-/* Улучшенные градиенты */
-.gradient-mesh {
-  background: linear-gradient(135deg, #fef7f7 0%, #fef3f4 25%, #fff7ed 50%, #fef7f7 75%, #fef3f4 100%);
-  background-size: 400% 400%;
-  animation: gradientShift 15s ease infinite;
+.animate-floating-hearts {
+  animation: floating-hearts 3s ease-in-out infinite;
 }
 
-@keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+.animate-gentle-bounce {
+  animation: gentle-bounce 1s ease-in-out infinite;
 }
 
-/* Стили для dropdown меню */
-.dropdown-enter {
-  opacity: 0;
-  transform: translateY(-10px);
+.animate-warm-pulse {
+  animation: warm-pulse 2s infinite;
 }
 
-.dropdown-enter-active {
-  opacity: 1;
-  transform: translateY(0);
-  transition: opacity 200ms, transform 200ms;
+.animate-cool-pulse {
+  animation: cool-pulse 2s infinite;
 }
 
-.dropdown-exit {
-  opacity: 1;
-  transform: translateY(0);
+.animate-gentle-scale {
+  animation: gentle-scale 2s ease-in-out infinite;
 }
 
-.dropdown-exit-active {
-  opacity: 0;
-  transform: translateY(-10px);
-  transition: opacity 200ms, transform 200ms;
+.animate-wave-gentle {
+  animation: wave-gentle 2.5s ease-in-out infinite;
+}
+
+.animate-gentle-sway {
+  animation: gentle-sway 3s ease-in-out infinite;
+}
+
+/* Hover эффекты */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hover-glow {
+  transition: box-shadow 0.3s ease;
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 25px rgba(255, 107, 157, 0.4);
+}
+
+.hover-scale-gentle {
+  transition: transform 0.2s ease;
+}
+
+.hover-scale-gentle:hover {
+  transform: scale(1.02);
 }

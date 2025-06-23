@@ -1,0 +1,130 @@
+
+/* Темы для YTime платформы */
+
+/* Светлая тема (по умолчанию) */
+.theme-light {
+  --bg-primary: var(--neutral-100);
+  --bg-secondary: var(--neutral-200);
+  --bg-tertiary: #FFFFFF;
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-700);
+  --text-muted: var(--neutral-500);
+  --border-color: var(--neutral-300);
+  --accent-bg: rgba(255, 107, 157, 0.1);
+}
+
+/* Темная тема */
+.theme-dark {
+  --bg-primary: var(--neutral-100);
+  --bg-secondary: var(--neutral-200);
+  --bg-tertiary: var(--neutral-300);
+  --text-primary: var(--neutral-900);
+  --text-secondary: var(--neutral-700);
+  --text-muted: var(--neutral-500);
+  --border-color: var(--neutral-300);
+  --accent-bg: rgba(255, 143, 174, 0.2);
+}
+
+/* Теплая тема для менструального цикла */
+.theme-warm {
+  --primary-color: var(--secondary-coral);
+  --secondary-color: var(--accent-gold);
+  --accent-bg: rgba(255, 154, 139, 0.1);
+  --gradient-theme: var(--gradient-warm);
+}
+
+/* Прохладная тема для беременности */
+.theme-cool {
+  --primary-color: var(--secondary-teal);
+  --secondary-color: var(--accent-mint);
+  --accent-bg: rgba(38, 208, 206, 0.1);
+  --gradient-theme: var(--gradient-cool);
+}
+
+/* Мягкая тема для периода восстановления */
+.theme-soft {
+  --primary-color: var(--accent-mint);
+  --secondary-color: var(--secondary-teal);
+  --accent-bg: rgba(168, 230, 207, 0.1);
+  --gradient-theme: var(--gradient-soft);
+}
+
+/* Закатная тема для менопаузы */
+.theme-sunset {
+  --primary-color: var(--accent-gold);
+  --secondary-color: var(--secondary-coral);
+  --accent-bg: rgba(243, 156, 18, 0.1);
+  --gradient-theme: var(--gradient-sunset);
+}
+
+/* Утилитарные классы для тем */
+.theme-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+
+/* Адаптивные медиа-запросы для тем */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme]) {
+    color-scheme: dark;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Специальные классы для женского дизайна */
+.feminine-card {
+  background: linear-gradient(145deg, #ffffff 0%, #fef7f7 100%);
+  border: 1px solid rgba(255, 107, 157, 0.1);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all 0.3s ease;
+}
+
+.feminine-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+.feminine-input {
+  border: 2px solid var(--neutral-300);
+  border-radius: var(--radius-md);
+  padding: 12px 16px;
+  font-family: var(--font-primary);
+  transition: all 0.3s ease;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+}
+
+.feminine-input:focus {
+  border-color: var(--primary-rose);
+  box-shadow: 0 0 0 3px rgba(255, 107, 157, 0.1);
+  outline: none;
+}
+
+.feminine-button-primary {
+  background: var(--primary-gradient);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  padding: 12px 24px;
+  font-weight: 500;
+  font-family: var(--font-primary);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: var(--shadow-sm);
+}
+
+.feminine-button-primary:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.feminine-button-primary:active {
+  transform: translateY(0);
+}
