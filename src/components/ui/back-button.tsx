@@ -8,7 +8,7 @@ interface BackButtonProps {
   fallbackPath?: string;
   className?: string;
   variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
-  size?: "default" | "sm" | "lg" | "icon";
+  size?: "default" | "sm" | "md" | "lg" | "xl" | "icon";
   children?: React.ReactNode;
 }
 
@@ -16,7 +16,7 @@ const BackButton = ({
   fallbackPath = "/", 
   className = "", 
   variant = "outline",
-  size = "default",
+  size = "md",
   children = "Назад"
 }: BackButtonProps) => {
   const navigate = useNavigate();

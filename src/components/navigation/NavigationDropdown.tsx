@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Button } from "@/components/ui/button";
 import {
@@ -250,7 +249,7 @@ const NavigationDropdown = () => {
       <DropdownMenuTrigger asChild>
         <Button 
           variant="outline" 
-          size="default" 
+          size="md"
           className="bg-white hover:bg-purple-50 border-purple-200 shadow-sm hover:shadow-md transition-all duration-200 z-50 w-full max-w-xs"
           title="Навигация по разделам"
         >

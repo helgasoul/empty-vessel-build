@@ -117,9 +117,9 @@ interface PriorityBadgeProps {
 
 export const PriorityBadge: React.FC<PriorityBadgeProps> = ({ priority, children }) => {
   const priorityConfig = {
-    low: { variant: 'soft' as const, text: 'Низкий' },
-    medium: { variant: 'warm' as const, text: 'Средний' },
-    high: { variant: 'primary' as const, text: 'Высокий' },
+    low: { variant: 'soft' as const, text: 'Низкий', pulse: false },
+    medium: { variant: 'warm' as const, text: 'Средний', pulse: false },
+    high: { variant: 'primary' as const, text: 'Высокий', pulse: false },
     critical: { variant: 'error' as const, text: 'Критический', pulse: true }
   };
 
