@@ -206,6 +206,153 @@ export type Database = {
         }
         Relationships: []
       }
+      automation_user_settings: {
+        Row: {
+          automation_enabled: boolean | null
+          created_at: string
+          cycle_length: number | null
+          cycle_tracking_enabled: boolean | null
+          dietary_restrictions: Json | null
+          id: string
+          notification_preferences: Json | null
+          period_length: number | null
+          preferred_workout_types: Json | null
+          quiet_hours_end: string | null
+          quiet_hours_start: string | null
+          supplement_preferences: Json | null
+          timezone: string | null
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          automation_enabled?: boolean | null
+          created_at?: string
+          cycle_length?: number | null
+          cycle_tracking_enabled?: boolean | null
+          dietary_restrictions?: Json | null
+          id?: string
+          notification_preferences?: Json | null
+          period_length?: number | null
+          preferred_workout_types?: Json | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          supplement_preferences?: Json | null
+          timezone?: string | null
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          automation_enabled?: boolean | null
+          created_at?: string
+          cycle_length?: number | null
+          cycle_tracking_enabled?: boolean | null
+          dietary_restrictions?: Json | null
+          id?: string
+          notification_preferences?: Json | null
+          period_length?: number | null
+          preferred_workout_types?: Json | null
+          quiet_hours_end?: string | null
+          quiet_hours_start?: string | null
+          supplement_preferences?: Json | null
+          timezone?: string | null
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      automation_workflows: {
+        Row: {
+          action_sequence: Json | null
+          actions: Json
+          age_related_customization: boolean | null
+          average_execution_time: number | null
+          created_at: string
+          cycle_phase_awareness: boolean | null
+          execution_count: number | null
+          execution_window: Json | null
+          hormonal_adaptation: boolean | null
+          id: string
+          last_error_message: string | null
+          last_execution: string | null
+          life_stage_adaptation: boolean | null
+          max_executions_per_day: number | null
+          next_scheduled_execution: string | null
+          parallel_execution: boolean | null
+          retry_policy: Json | null
+          success_rate: number | null
+          timeout_seconds: number | null
+          total_errors: number | null
+          trigger_conditions: Json
+          trigger_type: string
+          updated_at: string
+          user_id: string
+          workflow_description: string | null
+          workflow_name: string
+          workflow_status: string | null
+          workflow_type: string
+        }
+        Insert: {
+          action_sequence?: Json | null
+          actions?: Json
+          age_related_customization?: boolean | null
+          average_execution_time?: number | null
+          created_at?: string
+          cycle_phase_awareness?: boolean | null
+          execution_count?: number | null
+          execution_window?: Json | null
+          hormonal_adaptation?: boolean | null
+          id?: string
+          last_error_message?: string | null
+          last_execution?: string | null
+          life_stage_adaptation?: boolean | null
+          max_executions_per_day?: number | null
+          next_scheduled_execution?: string | null
+          parallel_execution?: boolean | null
+          retry_policy?: Json | null
+          success_rate?: number | null
+          timeout_seconds?: number | null
+          total_errors?: number | null
+          trigger_conditions?: Json
+          trigger_type: string
+          updated_at?: string
+          user_id: string
+          workflow_description?: string | null
+          workflow_name: string
+          workflow_status?: string | null
+          workflow_type: string
+        }
+        Update: {
+          action_sequence?: Json | null
+          actions?: Json
+          age_related_customization?: boolean | null
+          average_execution_time?: number | null
+          created_at?: string
+          cycle_phase_awareness?: boolean | null
+          execution_count?: number | null
+          execution_window?: Json | null
+          hormonal_adaptation?: boolean | null
+          id?: string
+          last_error_message?: string | null
+          last_execution?: string | null
+          life_stage_adaptation?: boolean | null
+          max_executions_per_day?: number | null
+          next_scheduled_execution?: string | null
+          parallel_execution?: boolean | null
+          retry_policy?: Json | null
+          success_rate?: number | null
+          timeout_seconds?: number | null
+          total_errors?: number | null
+          trigger_conditions?: Json
+          trigger_type?: string
+          updated_at?: string
+          user_id?: string
+          workflow_description?: string | null
+          workflow_name?: string
+          workflow_status?: string | null
+          workflow_type?: string
+        }
+        Relationships: []
+      }
       calculator_results: {
         Row: {
           calculated_at: string
@@ -5283,6 +5430,83 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      workflow_executions: {
+        Row: {
+          action_results: Json | null
+          completed_at: string | null
+          created_at: string
+          cycle_context: Json | null
+          error_details: Json | null
+          executed_actions: Json | null
+          execution_duration_seconds: number | null
+          execution_log: Json | null
+          execution_status: string | null
+          failed_actions: number | null
+          id: string
+          resource_usage: Json | null
+          started_at: string | null
+          successful_actions: number | null
+          total_actions: number | null
+          trigger_event: Json | null
+          updated_at: string
+          user_context: Json | null
+          user_id: string
+          workflow_id: string | null
+        }
+        Insert: {
+          action_results?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          cycle_context?: Json | null
+          error_details?: Json | null
+          executed_actions?: Json | null
+          execution_duration_seconds?: number | null
+          execution_log?: Json | null
+          execution_status?: string | null
+          failed_actions?: number | null
+          id?: string
+          resource_usage?: Json | null
+          started_at?: string | null
+          successful_actions?: number | null
+          total_actions?: number | null
+          trigger_event?: Json | null
+          updated_at?: string
+          user_context?: Json | null
+          user_id: string
+          workflow_id?: string | null
+        }
+        Update: {
+          action_results?: Json | null
+          completed_at?: string | null
+          created_at?: string
+          cycle_context?: Json | null
+          error_details?: Json | null
+          executed_actions?: Json | null
+          execution_duration_seconds?: number | null
+          execution_log?: Json | null
+          execution_status?: string | null
+          failed_actions?: number | null
+          id?: string
+          resource_usage?: Json | null
+          started_at?: string | null
+          successful_actions?: number | null
+          total_actions?: number | null
+          trigger_event?: Json | null
+          updated_at?: string
+          user_context?: Json | null
+          user_id?: string
+          workflow_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "workflow_executions_workflow_id_fkey"
+            columns: ["workflow_id"]
+            isOneToOne: false
+            referencedRelation: "automation_workflows"
+            referencedColumns: ["id"]
+          },
+        ]
       }
     }
     Views: {
