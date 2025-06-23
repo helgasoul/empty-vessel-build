@@ -21,9 +21,7 @@ export { Separator } from './separator';
 export { Toaster } from './toaster';
 export { ThemeToggle } from './theme-toggle';
 
-// Re-export Button from Button.tsx for lowercase compatibility
-export { Button as button } from './Button';
-
 // Re-export components from lowercase files for compatibility
+export * from './button';
 export * from './badge';
 export * from './avatar';
