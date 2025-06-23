@@ -3,12 +3,13 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'gradient' | 'warm' | 'cool';
-  size?: 'sm' | 'md' | 'lg' | 'xl';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost' | 'gradient' | 'warm' | 'cool' | 'default' | 'destructive' | 'link';
+  size?: 'sm' | 'md' | 'lg' | 'xl' | 'icon';
   shape?: 'rounded' | 'pill' | 'square';
   loading?: boolean;
   icon?: React.ReactNode;
   children: React.ReactNode;
+  asChild?: boolean;
 }
 
 export const Button: React.FC<ButtonProps> = ({
@@ -20,6 +21,7 @@ export const Button: React.FC<ButtonProps> = ({
   children,
   className,
   disabled,
+  asChild = false,
   ...props
 }) => {
   const baseClasses = `
@@ -60,6 +62,18 @@ export const Button: React.FC<ButtonProps> = ({
     cool: `
       bg-gradient-to-r from-[#26D0CE] to-[#A8E6CF] text-white 
       hover:shadow-lg focus:ring-[#26D0CE] shadow-md animate-cool-pulse
+    `,
+    default: `
+      bg-gray-900 text-white hover:bg-gray-800 
+      shadow-md hover:shadow-lg focus:ring-gray-900
+    `,
+    destructive: `
+      bg-red-600 text-white hover:bg-red-700 
+      shadow-md hover:shadow-lg focus:ring-red-600
+    `,
+    link: `
+      text-[#FF6B9D] underline-offset-4 hover:underline 
+      focus:ring-[#FF6B9D] bg-transparent p-0 h-auto
     `
   };
   
@@ -67,7 +81,8 @@ export const Button: React.FC<ButtonProps> = ({
     sm: 'px-3 py-1.5 text-sm',
     md: 'px-4 py-2 text-base',
     lg: 'px-6 py-3 text-lg',
-    xl: 'px-8 py-4 text-xl'
+    xl: 'px-8 py-4 text-xl',
+    icon: 'h-10 w-10 p-0'
   };
   
   const shapeClasses = {
@@ -75,6 +90,22 @@ export const Button: React.FC<ButtonProps> = ({
     pill: 'rounded-full',
     square: 'rounded-none'
   };
+
+  // Handle asChild pattern
+  if (asChild) {
+    const child = React.Children.only(children) as React.ReactElement;
+    return React.cloneElement(child, {
+      className: cn(
+        baseClasses,
+        variantClasses[variant],
+        sizeClasses[size],
+        shapeClasses[shape],
+        className,
+        child.props.className
+      ),
+      ...props
+    });
+  }
 
   return (
     <button
@@ -91,7 +122,8 @@ export const Button: React.FC<ButtonProps> = ({
       {loading ? (
         <div className="w-4 h-4 border-2 border-current border-t-transparent rounded-full animate-spin" />
       ) : icon}
-      <span className="relative z-10">{children}</span>
+      {size !== 'icon' && <span className="relative z-10">{children}</span>}
+      {size === 'icon' && !loading && !icon && children}
     </button>
   );
 };
