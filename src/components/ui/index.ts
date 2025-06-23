@@ -23,3 +23,7 @@ export { ThemeToggle } from './theme-toggle';
 
 // Types
 export type { ButtonProps } from './button';
+
+// Re-export Avatar and Badge components with both naming conventions for compatibility
+export { Avatar as AvatarImage, Avatar as AvatarFallback } from './Avatar';
+export { Badge as BadgeVariants } from './Badge';
