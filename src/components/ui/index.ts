@@ -21,12 +21,17 @@ export {
   SkeletonLoader 
 } from './Loading';
 
-// Re-export existing components for compatibility
+// Re-export existing shadcn/ui components for compatibility
 export { Progress } from './progress';
 export { Skeleton } from './skeleton';
 export { Separator } from './separator';
 export { Toaster } from './toaster';
 export { ThemeToggle } from './theme-toggle';
+export { useToast, toast } from './use-toast';
+export { Textarea as ShadcnTextarea } from './textarea';
+export { Slider } from './slider';
 
-// Re-export components from lowercase files for compatibility
-export * from './button';
+// Re-export Button for lowercase compatibility
+export { Button as button } from './Button';
+export { Badge as badge } from './Badge';
+export { Avatar as avatar } from './Avatar';
