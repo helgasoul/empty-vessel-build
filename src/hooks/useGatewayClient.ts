@@ -1,5 +1,5 @@
 
-import { useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { gatewayClient } from '@/lib/gateway/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -23,7 +23,7 @@ export const useGatewayClient = () => {
     try {
       const result = await requestFn();
       return result;
-    } catch (error) {
+    } catch (error: any) {
       console.error('Gateway request failed:', error);
       toast({
         title: 'Ошибка запроса',

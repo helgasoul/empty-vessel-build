@@ -20,22 +20,22 @@ export class AuthMiddleware {
         throw new Error('Invalid authentication token');
       }
 
-      // Получаем профиль пользователя
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', user.id)
+      // Получаем роль пользователя из user_roles таблицы
+      const { data: userRole } = await supabase
+        .from('user_roles')
+        .select('role')
+        .eq('user_id', user.id)
         .single();
 
       // Добавляем пользователя в запрос
       req.user = {
         id: user.id,
         email: user.email!,
-        role: profile?.role || 'patient'
+        role: userRole?.role || 'patient'
       };
 
       return req;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error('Authentication failed: ' + error.message);
     }
   }

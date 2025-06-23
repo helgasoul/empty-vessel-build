@@ -6,7 +6,7 @@ export const medicalModule: ApiModule = {
   name: 'medical',
   version: '1.0.0',
   routes: {
-    'GET:partners': async (req: GatewayRequest) => {
+    'GET:partners': async (req: GatewayRequest): Promise<any> => {
       const { data: partners, error } = await supabase
         .from('medical_partners')
         .select('*')
@@ -20,7 +20,7 @@ export const medicalModule: ApiModule = {
       return partners;
     },
 
-    'POST:appointments/gynecology': async (req: GatewayRequest) => {
+    'POST:appointments/gynecology': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -43,7 +43,7 @@ export const medicalModule: ApiModule = {
       return data;
     },
 
-    'GET:appointments/gynecology': async (req: GatewayRequest) => {
+    'GET:appointments/gynecology': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -64,7 +64,7 @@ export const medicalModule: ApiModule = {
       return appointments;
     },
 
-    'POST:lab-tests': async (req: GatewayRequest) => {
+    'POST:lab-tests': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -87,7 +87,7 @@ export const medicalModule: ApiModule = {
       return data;
     },
 
-    'GET:lab-tests': async (req: GatewayRequest) => {
+    'GET:lab-tests': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -108,7 +108,7 @@ export const medicalModule: ApiModule = {
       return tests;
     },
 
-    'GET:reminders': async (req: GatewayRequest) => {
+    'GET:reminders': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -126,7 +126,7 @@ export const medicalModule: ApiModule = {
       return reminders;
     },
 
-    'GET:screening-plans': async (req: GatewayRequest) => {
+    'GET:screening-plans': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -158,7 +158,7 @@ export const medicalModule: ApiModule = {
       }
 
       return { status: 'healthy' };
-    } catch (error) {
+    } catch (error: any) {
       return { status: 'unhealthy', details: error.message };
     }
   }

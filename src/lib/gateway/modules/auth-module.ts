@@ -1,12 +1,13 @@
 
-import { ApiModule, GatewayRequest } from '../types';
+import { ApiModule, GatewayRequest, GatewayResponse } from '../types';
 import { supabase } from '@/integrations/supabase/client';
+import { GatewayMiddleware } from '../middleware';
 
 export const authModule: ApiModule = {
   name: 'auth',
   version: '1.0.0',
   routes: {
-    'POST:login': async (req: GatewayRequest) => {
+    'POST:login': async (req: GatewayRequest): Promise<any> => {
       const { email, password } = req.body;
       
       if (!email || !password) {
@@ -28,7 +29,7 @@ export const authModule: ApiModule = {
       };
     },
 
-    'POST:register': async (req: GatewayRequest) => {
+    'POST:register': async (req: GatewayRequest): Promise<any> => {
       const { email, password, firstName, lastName } = req.body;
       
       if (!email || !password) {
@@ -56,7 +57,7 @@ export const authModule: ApiModule = {
       };
     },
 
-    'POST:logout': async (req: GatewayRequest) => {
+    'POST:logout': async (req: GatewayRequest): Promise<any> => {
       const { error } = await supabase.auth.signOut();
       
       if (error) {
@@ -66,7 +67,7 @@ export const authModule: ApiModule = {
       return { success: true };
     },
 
-    'POST:reset-password': async (req: GatewayRequest) => {
+    'POST:reset-password': async (req: GatewayRequest): Promise<any> => {
       const { email } = req.body;
       
       if (!email) {
@@ -82,7 +83,7 @@ export const authModule: ApiModule = {
       return { message: 'Password reset email sent' };
     },
 
-    'GET:me': async (req: GatewayRequest) => {
+    'GET:me': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('User not authenticated');
       }
@@ -116,7 +117,7 @@ export const authModule: ApiModule = {
       }
 
       return { status: 'healthy' };
-    } catch (error) {
+    } catch (error: any) {
       return { status: 'unhealthy', details: error.message };
     }
   }

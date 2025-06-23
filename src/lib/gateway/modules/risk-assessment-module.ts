@@ -6,7 +6,7 @@ export const riskAssessmentModule: ApiModule = {
   name: 'risk-assessment',
   version: '1.0.0',
   routes: {
-    'POST:calculate': async (req: GatewayRequest) => {
+    'POST:calculate': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -55,7 +55,7 @@ export const riskAssessmentModule: ApiModule = {
       return data;
     },
 
-    'GET:history': async (req: GatewayRequest) => {
+    'GET:history': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -73,7 +73,7 @@ export const riskAssessmentModule: ApiModule = {
       return assessments;
     },
 
-    'GET:latest': async (req: GatewayRequest) => {
+    'GET:latest': async (req: GatewayRequest): Promise<any> => {
       if (!req.user) {
         throw new Error('Authentication required');
       }
@@ -106,7 +106,7 @@ export const riskAssessmentModule: ApiModule = {
       }
 
       return { status: 'healthy' };
-    } catch (error) {
+    } catch (error: any) {
       return { status: 'unhealthy', details: error.message };
     }
   }
