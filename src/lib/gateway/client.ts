@@ -1,99 +1,71 @@
 
-import { GatewayResponse } from './types';
+// Updated client to use the new API client
+import { apiClient } from './api-client';
 
 export class GatewayClient {
-  private baseUrl: string;
   private authToken: string | null = null;
-
-  constructor(baseUrl = '/api/gateway') {
-    this.baseUrl = baseUrl;
-  }
 
   setAuthToken(token: string) {
     this.authToken = token;
-  }
-
-  private async makeRequest(method: string, endpoint: string, data?: any): Promise<any> {
-    const url = `${this.baseUrl}/${endpoint}`;
-    
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json'
-    };
-
-    if (this.authToken) {
-      headers.Authorization = `Bearer ${this.authToken}`;
-    }
-
-    const config: RequestInit = {
-      method,
-      headers
-    };
-
-    if (data && method !== 'GET') {
-      config.body = JSON.stringify(data);
-    }
-
-    const response = await fetch(url, config);
-    const result: GatewayResponse = await response.json();
-
-    if (result.status >= 400) {
-      throw new Error(result.error || 'Request failed');
-    }
-
-    return result.data;
+    apiClient.setAuthToken(token);
   }
 
   // Auth methods
   async login(email: string, password: string) {
-    return this.makeRequest('POST', 'auth/login', { email, password });
+    return apiClient.login(email, password);
   }
 
   async register(email: string, password: string, firstName?: string, lastName?: string) {
-    return this.makeRequest('POST', 'auth/register', { email, password, firstName, lastName });
+    return apiClient.register(email, password, firstName, lastName);
   }
 
   async logout() {
-    return this.makeRequest('POST', 'auth/logout');
+    return apiClient.logout();
   }
 
   async getProfile() {
-    return this.makeRequest('GET', 'auth/me');
+    return apiClient.getProfile();
   }
 
   // Medical methods
   async getMedicalPartners() {
-    return this.makeRequest('GET', 'medical/partners');
+    return apiClient.getMedicalPartners();
   }
 
   async createGynecologyAppointment(appointmentData: any) {
-    return this.makeRequest('POST', 'medical/appointments/gynecology', appointmentData);
+    return apiClient.createGynecologyAppointment(appointmentData);
   }
 
   async getGynecologyAppointments() {
-    return this.makeRequest('GET', 'medical/appointments/gynecology');
+    return apiClient.getGynecologyAppointments();
   }
 
   async createLabTest(testData: any) {
-    return this.makeRequest('POST', 'medical/lab-tests', testData);
+    return apiClient.createLabTest(testData);
   }
 
   async getLabTests() {
-    return this.makeRequest('GET', 'medical/lab-tests');
+    return apiClient.getLabTests();
   }
 
   // Risk assessment methods
   async calculateRisk(assessmentType: string, assessmentData: any) {
-    return this.makeRequest('POST', 'risk-assessment/calculate', { assessmentType, assessmentData });
+    return apiClient.calculateRisk(assessmentType, assessmentData);
   }
 
   async getRiskHistory() {
-    return this.makeRequest('GET', 'risk-assessment/history');
+    return apiClient.getRiskHistory();
   }
 
   async getLatestRiskAssessment() {
-    return this.makeRequest('GET', 'risk-assessment/latest');
+    return apiClient.getLatestRiskAssessment();
+  }
+
+  // Health check
+  async healthCheck() {
+    return apiClient.healthCheck();
   }
 }
 
-// Создаем глобальный экземпляр клиента
+// Export the singleton instance
 export const gatewayClient = new GatewayClient();
