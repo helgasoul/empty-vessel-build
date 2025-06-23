@@ -8,14 +8,7 @@ export {
   CardContent, 
   CardFooter,
   CardDescription 
-} from './card'; // Export shadcn card components as primary
-export { 
-  Card as YTimeCard,
-  CardHeader as YTimeCardHeader,
-  CardTitle as YTimeCardTitle,
-  CardContent as YTimeCardContent,
-  CardFooter as YTimeCardFooter
-} from './Card'; // Export custom YTime card components with different names
+} from './card'; // Export shadcn card components
 export { Input, Textarea } from './Input';
 export { Badge, StatusBadge, PriorityBadge } from './Badge';
 export { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from './Avatar';
