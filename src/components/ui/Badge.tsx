@@ -3,7 +3,7 @@ import React from 'react';
 import { cn } from '@/lib/utils';
 
 interface BadgeProps {
-  variant?: 'default' | 'primary' | 'secondary' | 'warm' | 'cool' | 'soft' | 'success' | 'warning' | 'error';
+  variant?: 'default' | 'primary' | 'secondary' | 'warm' | 'cool' | 'soft' | 'success' | 'warning' | 'error' | 'outline' | 'destructive';
   size?: 'sm' | 'md' | 'lg';
   children: React.ReactNode;
   className?: string;
@@ -52,6 +52,12 @@ export const Badge: React.FC<BadgeProps> = ({
     `,
     error: `
       bg-red-100/80 text-red-700 border-red-200
+    `,
+    destructive: `
+      bg-red-100/80 text-red-700 border-red-200
+    `,
+    outline: `
+      bg-transparent text-gray-700 border-gray-300 hover:bg-gray-50
     `
   };
 

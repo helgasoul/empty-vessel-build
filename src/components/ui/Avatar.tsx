@@ -10,6 +10,7 @@ interface AvatarProps {
   fallback?: string;
   online?: boolean;
   className?: string;
+  children?: React.ReactNode;
 }
 
 export const Avatar: React.FC<AvatarProps> = ({
@@ -19,7 +20,8 @@ export const Avatar: React.FC<AvatarProps> = ({
   variant = 'circular',
   fallback,
   online,
-  className
+  className,
+  children
 }) => {
   const sizeClasses = {
     xs: 'w-6 h-6',
@@ -66,20 +68,24 @@ export const Avatar: React.FC<AvatarProps> = ({
       variantClasses[variant],
       className
     )}>
-      {src ? (
-        <img
-          src={src}
-          alt={alt}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            const target = e.target as HTMLImageElement;
-            target.style.display = 'none';
-          }}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FF6B9D] to-[#9B59B6] text-white font-medium">
-          {fallback ? getInitials(fallback) : '?'}
-        </div>
+      {children || (
+        <>
+          {src ? (
+            <img
+              src={src}
+              alt={alt}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                const target = e.target as HTMLImageElement;
+                target.style.display = 'none';
+              }}
+            />
+          ) : (
+            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FF6B9D] to-[#9B59B6] text-white font-medium">
+              {fallback ? getInitials(fallback) : '?'}
+            </div>
+          )}
+        </>
       )}
       
       {online !== undefined && (
@@ -92,6 +98,37 @@ export const Avatar: React.FC<AvatarProps> = ({
     </div>
   );
 };
+
+// Compatibility components for shadcn/ui usage patterns
+interface AvatarImageProps extends React.ImgHTMLAttributes<HTMLImageElement> {
+  src?: string;
+  alt?: string;
+}
+
+export const AvatarImage: React.FC<AvatarImageProps> = ({ src, alt, className, ...props }) => (
+  <img
+    src={src}
+    alt={alt}
+    className={cn("w-full h-full object-cover", className)}
+    {...props}
+  />
+);
+
+interface AvatarFallbackProps extends React.HTMLAttributes<HTMLDivElement> {
+  children: React.ReactNode;
+}
+
+export const AvatarFallback: React.FC<AvatarFallbackProps> = ({ children, className, ...props }) => (
+  <div 
+    className={cn(
+      "w-full h-full flex items-center justify-center bg-gradient-to-br from-[#FF6B9D] to-[#9B59B6] text-white font-medium",
+      className
+    )}
+    {...props}
+  >
+    {children}
+  </div>
+);
 
 interface AvatarGroupProps {
   avatars: Array<{

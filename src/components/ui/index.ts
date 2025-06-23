@@ -4,7 +4,7 @@ export { Button } from './Button';
 export { Card, CardHeader, CardTitle, CardContent, CardFooter } from './Card';
 export { Input, Textarea } from './Input';
 export { Badge, StatusBadge, PriorityBadge } from './Badge';
-export { Avatar, AvatarGroup } from './Avatar';
+export { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from './Avatar';
 export { 
   FloatingHearts, 
   GentleSpinner, 
