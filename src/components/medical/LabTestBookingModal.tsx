@@ -2,13 +2,14 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Checkbox } from '@/components/ui/checkbox';
 import { useCreateLabTest } from '@/hooks/useMedicalPartners';
-import { TestTube, Calendar, FileText, AlertTriangle } from 'lucide-react';
+import { TestTube } from 'lucide-react';
+import TestSelectionSection, { commonTests } from './lab-test-booking/TestSelectionSection';
+import TestCategorySection from './lab-test-booking/TestCategorySection';
+import TestSchedulingSection from './lab-test-booking/TestSchedulingSection';
+import CyclePhaseSection from './lab-test-booking/CyclePhaseSection';
+import TestPreparationSection from './lab-test-booking/TestPreparationSection';
+import HormoneTestTips from './lab-test-booking/HormoneTestTips';
 
 interface LabTestBookingModalProps {
   open: boolean;
@@ -38,17 +39,6 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
 
   const createLabTest = useCreateLabTest();
 
-  const commonTests = [
-    { code: 'HORMONES_BASIC', name: 'Базовая панель гормонов', category: 'hormones' as TestCategory },
-    { code: 'THYROID_PANEL', name: 'Гормоны щитовидной железы', category: 'hormones' as TestCategory },
-    { code: 'REPRODUCTIVE_HORMONES', name: 'Репродуктивные гормоны', category: 'hormones' as TestCategory },
-    { code: 'ONCO_MARKERS_F', name: 'Онкомаркеры (женские)', category: 'oncology_markers' as TestCategory },
-    { code: 'MICROBIOME_VAGINAL', name: 'Микробиом влагалища', category: 'microbiome' as TestCategory },
-    { code: 'GENETIC_BRCA', name: 'Генетический тест BRCA1/BRCA2', category: 'genetics' as TestCategory },
-    { code: 'GENERAL_BLOOD', name: 'Общий анализ крови', category: 'general' as TestCategory },
-    { code: 'BIOCHEMISTRY', name: 'Биохимический анализ крови', category: 'general' as TestCategory },
-  ];
-
   const handleTestSelect = (testCode: string) => {
     const selectedTest = commonTests.find(t => t.code === testCode);
     if (selectedTest) {
@@ -56,7 +46,7 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
         ...prev,
         test_code: selectedTest.code,
         test_name: selectedTest.name,
-        test_category: selectedTest.category,
+        test_category: selectedTest.category as TestCategory,
       }));
     }
   };
@@ -105,6 +95,10 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
     }
   };
 
+  const updateFormData = (field: keyof typeof formData, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
   if (!partner) return null;
 
   return (
@@ -121,144 +115,39 @@ const LabTestBookingModal: React.FC<LabTestBookingModalProps> = ({
         </DialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="common_tests">Выберите анализ</Label>
-            <Select onValueChange={handleTestSelect}>
-              <SelectTrigger>
-                <SelectValue placeholder="Выберите из часто назначаемых анализов" />
-              </SelectTrigger>
-              <SelectContent>
-                {commonTests.map((test) => (
-                  <SelectItem key={test.code} value={test.code}>
-                    {test.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <TestSelectionSection
+            testCode={formData.test_code}
+            testName={formData.test_name}
+            onTestCodeChange={(value) => updateFormData('test_code', value)}
+            onTestNameChange={(value) => updateFormData('test_name', value)}
+            onCommonTestSelect={handleTestSelect}
+          />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="test_code">Код анализа</Label>
-              <Input
-                id="test_code"
-                value={formData.test_code}
-                onChange={(e) => setFormData(prev => ({ ...prev, test_code: e.target.value }))}
-                placeholder="Например: HORMONES_BASIC"
-                required
-              />
-            </div>
+          <TestCategorySection
+            testCategory={formData.test_category}
+            cost={formData.cost}
+            onTestCategoryChange={(value) => updateFormData('test_category', value)}
+            onCostChange={(value) => updateFormData('cost', value)}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="test_name">Название анализа</Label>
-              <Input
-                id="test_name"
-                value={formData.test_name}
-                onChange={(e) => setFormData(prev => ({ ...prev, test_name: e.target.value }))}
-                placeholder="Например: Базовая панель гормонов"
-                required
-              />
-            </div>
+          <TestSchedulingSection
+            collectionDate={formData.collection_date}
+            collectionTime={formData.collection_time}
+            onCollectionDateChange={(value) => updateFormData('collection_date', value)}
+            onCollectionTimeChange={(value) => updateFormData('collection_time', value)}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="test_category">Категория</Label>
-              <Select 
-                value={formData.test_category} 
-                onValueChange={(value: TestCategory) => setFormData(prev => ({ ...prev, test_category: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите категорию" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="hormones">Гормоны</SelectItem>
-                  <SelectItem value="oncology_markers">Онкомаркеры</SelectItem>
-                  <SelectItem value="genetics">Генетика</SelectItem>
-                  <SelectItem value="microbiome">Микробиом</SelectItem>
-                  <SelectItem value="general">Общие анализы</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+          <CyclePhaseSection
+            optimalCyclePhase={formData.optimal_cycle_phase}
+            onOptimalCyclePhaseChange={(value) => updateFormData('optimal_cycle_phase', value)}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="cost">Стоимость (руб.)</Label>
-              <Input
-                id="cost"
-                type="number"
-                min="0"
-                step="0.01"
-                value={formData.cost}
-                onChange={(e) => setFormData(prev => ({ ...prev, cost: e.target.value }))}
-                placeholder="0.00"
-              />
-            </div>
+          <TestPreparationSection
+            preparationNotes={preparationNotes}
+            onPreparationNotesChange={setPreparationNotes}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="collection_date">Дата сдачи</Label>
-              <Input
-                id="collection_date"
-                type="date"
-                value={formData.collection_date}
-                onChange={(e) => setFormData(prev => ({ ...prev, collection_date: e.target.value }))}
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="collection_time">Время сдачи</Label>
-              <Input
-                id="collection_time"
-                type="time"
-                value={formData.collection_time}
-                onChange={(e) => setFormData(prev => ({ ...prev, collection_time: e.target.value }))}
-              />
-            </div>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="optimal_cycle_phase">Оптимальная фаза цикла (для гормональных анализов)</Label>
-            <Select 
-              value={formData.optimal_cycle_phase} 
-              onValueChange={(value: CyclePhase) => setFormData(prev => ({ ...prev, optimal_cycle_phase: value }))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Выберите фазу цикла" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">Любая фаза</SelectItem>
-                <SelectItem value="menstrual">Менструальная (1-5 день)</SelectItem>
-                <SelectItem value="follicular">Фолликулярная (6-14 день)</SelectItem>
-                <SelectItem value="ovulation">Овуляция (14-16 день)</SelectItem>
-                <SelectItem value="luteal">Лютеиновая (17-28 день)</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
-
-          <div className="space-y-2">
-            <Label htmlFor="preparation_notes">Подготовка к анализам</Label>
-            <Textarea
-              id="preparation_notes"
-              value={preparationNotes}
-              onChange={(e) => setPreparationNotes(e.target.value)}
-              placeholder="Каждую инструкцию с новой строки, например:&#10;Натощак (не есть 8-12 часов)&#10;Исключить алкоголь за 24 часа&#10;Исключить физические нагрузки за 24 часа"
-              rows={4}
-            />
-          </div>
-
-          {formData.test_category === 'hormones' && (
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-              <div className="flex items-start gap-2">
-                <AlertTriangle className="w-5 h-5 text-blue-600 mt-0.5" />
-                <div className="text-sm text-blue-800">
-                  <p className="font-medium">Важно для гормональных анализов:</p>
-                  <ul className="mt-1 list-disc list-inside space-y-1">
-                    <li>ФСГ, ЛГ: 3-5 день цикла</li>
-                    <li>Прогестерон: 20-22 день цикла (при 28-дневном цикле)</li>
-                    <li>Эстрадиол: 5-7 день или 20-22 день цикла</li>
-                    <li>Пролактин: любой день цикла, натощак, в утренние часы</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          )}
+          <HormoneTestTips testCategory={formData.test_category} />
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
