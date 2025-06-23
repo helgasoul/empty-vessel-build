@@ -2,14 +2,12 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useCreateGynecologyAppointment } from '@/hooks/useMedicalPartners';
-import { Calendar, Clock, User, FileText } from 'lucide-react';
-import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import { Calendar } from 'lucide-react';
+import AppointmentTypeSection from './appointment-booking/AppointmentTypeSection';
+import AppointmentDateTimeSection from './appointment-booking/AppointmentDateTimeSection';
+import CycleTrackingSection from './appointment-booking/CycleTrackingSection';
+import AppointmentNotesSection from './appointment-booking/AppointmentNotesSection';
 
 interface AppointmentBookingModalProps {
   open: boolean;
@@ -86,6 +84,10 @@ const AppointmentBookingModal: React.FC<AppointmentBookingModalProps> = ({
     }
   };
 
+  const updateFormData = (field: keyof typeof formData, value: any) => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+  };
+
   if (!partner) return null;
 
   return (
@@ -101,112 +103,34 @@ const AppointmentBookingModal: React.FC<AppointmentBookingModalProps> = ({
           </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="space-y-2">
-              <Label htmlFor="appointment_type">Тип приема</Label>
-              <Select 
-                value={formData.appointment_type} 
-                onValueChange={(value: AppointmentType) => setFormData(prev => ({ ...prev, appointment_type: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите тип приема" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="consultation">Консультация</SelectItem>
-                  <SelectItem value="screening">Скрининг</SelectItem>
-                  <SelectItem value="procedure">Процедура</SelectItem>
-                  <SelectItem value="diagnostics">Диагностика</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <AppointmentTypeSection
+            appointmentType={formData.appointment_type}
+            serviceName={formData.service_name}
+            doctorName={formData.doctor_name}
+            onAppointmentTypeChange={(value) => updateFormData('appointment_type', value)}
+            onServiceNameChange={(value) => updateFormData('service_name', value)}
+            onDoctorNameChange={(value) => updateFormData('doctor_name', value)}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="service_name">Название услуги</Label>
-              <Input
-                id="service_name"
-                value={formData.service_name}
-                onChange={(e) => setFormData(prev => ({ ...prev, service_name: e.target.value }))}
-                placeholder="Например: Гинекологический осмотр"
-              />
-            </div>
+          <AppointmentDateTimeSection
+            appointmentDate={formData.appointment_date}
+            appointmentTime={formData.appointment_time}
+            onDateChange={(value) => updateFormData('appointment_date', value)}
+            onTimeChange={(value) => updateFormData('appointment_time', value)}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="appointment_date">Дата приема</Label>
-              <Input
-                id="appointment_date"
-                type="date"
-                value={formData.appointment_date}
-                onChange={(e) => setFormData(prev => ({ ...prev, appointment_date: e.target.value }))}
-                required
-              />
-            </div>
+          <CycleTrackingSection
+            cycleDay={formData.cycle_day}
+            cyclePhase={formData.cycle_phase}
+            onCycleDayChange={(value) => updateFormData('cycle_day', value)}
+            onCyclePhaseChange={(value) => updateFormData('cycle_phase', value)}
+          />
 
-            <div className="space-y-2">
-              <Label htmlFor="appointment_time">Время приема</Label>
-              <Input
-                id="appointment_time"
-                type="time"
-                value={formData.appointment_time}
-                onChange={(e) => setFormData(prev => ({ ...prev, appointment_time: e.target.value }))}
-                required
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="doctor_name">Врач (по желанию)</Label>
-              <Input
-                id="doctor_name"
-                value={formData.doctor_name}
-                onChange={(e) => setFormData(prev => ({ ...prev, doctor_name: e.target.value }))}
-                placeholder="Имя врача"
-              />
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="cycle_day">День цикла (по желанию)</Label>
-              <Input
-                id="cycle_day"
-                type="number"
-                min="1"
-                max="35"
-                value={formData.cycle_day}
-                onChange={(e) => setFormData(prev => ({ ...prev, cycle_day: e.target.value }))}
-                placeholder="1-35"
-              />
-            </div>
-          </div>
-
-          {formData.cycle_day && (
-            <div className="space-y-2">
-              <Label htmlFor="cycle_phase">Фаза цикла</Label>
-              <Select 
-                value={formData.cycle_phase} 
-                onValueChange={(value: CyclePhase) => setFormData(prev => ({ ...prev, cycle_phase: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Выберите фазу цикла" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="menstrual">Менструальная</SelectItem>
-                  <SelectItem value="follicular">Фолликулярная</SelectItem>
-                  <SelectItem value="ovulation">Овуляция</SelectItem>
-                  <SelectItem value="luteal">Лютеиновая</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-          )}
-
-          <div className="space-y-2">
-            <Label htmlFor="appointment_notes">Дополнительные заметки</Label>
-            <Textarea
-              id="appointment_notes"
-              value={formData.appointment_notes}
-              onChange={(e) => setFormData(prev => ({ ...prev, appointment_notes: e.target.value }))}
-              placeholder="Опишите жалобы или пожелания к приему"
-              rows={3}
-            />
-          </div>
+          <AppointmentNotesSection
+            appointmentNotes={formData.appointment_notes}
+            onNotesChange={(value) => updateFormData('appointment_notes', value)}
+          />
 
           <div className="flex justify-end gap-2">
             <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
