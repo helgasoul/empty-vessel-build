@@ -1,7 +1,21 @@
 
 // YTime Design System - UI Components Export
 export { Button } from './Button';
-export { Card, CardHeader, CardTitle, CardContent, CardFooter } from './Card';
+export { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardContent, 
+  CardFooter,
+  CardDescription 
+} from './card'; // Export shadcn card components as primary
+export { 
+  Card as YTimeCard,
+  CardHeader as YTimeCardHeader,
+  CardTitle as YTimeCardTitle,
+  CardContent as YTimeCardContent,
+  CardFooter as YTimeCardFooter
+} from './Card'; // Export custom YTime card components with different names
 export { Input, Textarea } from './Input';
 export { Badge, StatusBadge, PriorityBadge } from './Badge';
 export { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from './Avatar';
