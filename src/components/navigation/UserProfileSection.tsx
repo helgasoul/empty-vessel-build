@@ -1,7 +1,8 @@
+
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 
-const UserProfileSection: React.FC = () => {
+export const UserProfileSection: React.FC = () => {
   const { user } = useAuth();
 
   return (

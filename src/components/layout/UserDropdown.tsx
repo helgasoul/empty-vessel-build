@@ -1,7 +1,8 @@
+
 import React, { useState } from 'react';
 import { User, Settings, LogOut, HelpCircle, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 export const UserDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -43,7 +44,7 @@ export const UserDropdown: React.FC = () => {
         aria-label="Меню пользователя"
       >
         <Avatar className="w-8 h-8">
-          <AvatarImage src={user?.avatar_url || ''} alt={user?.email || 'Пользователь'} />
+          <AvatarImage src={user?.user_metadata?.avatar_url || ''} alt={user?.email || 'Пользователь'} />
           <AvatarFallback className="bg-gradient-to-r from-[#FF6B9D] to-[#9B59B6] text-white text-sm">
             {user?.email?.charAt(0).toUpperCase() || 'П'}
           </AvatarFallback>
