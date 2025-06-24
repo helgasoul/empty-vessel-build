@@ -1,11 +1,25 @@
+
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { LandingPage } from './components/landing/LandingPage';
-import { PatientDashboard } from './components/dashboards/PatientDashboard';
-import { DoctorDashboard } from './components/dashboards/DoctorDashboard';
-import { ClinicDashboard } from './components/dashboards/ClinicDashboard';
-import { LaboratoryDashboard } from './components/dashboards/LaboratoryDashboard';
-import { AdminDashboard } from './components/dashboards/AdminDashboard';
+import PatientDashboard from './components/dashboards/PatientDashboard';
+import DoctorDashboard from './components/dashboards/DoctorDashboard';
+import AdminDashboard from './components/admin/AdminDashboard';
+
+// Создаем заглушки для недостающих компонентов
+const ClinicDashboard = () => (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold">Clinic Dashboard</h1>
+    <p>Coming soon...</p>
+  </div>
+);
+
+const LaboratoryDashboard = () => (
+  <div className="p-6">
+    <h1 className="text-2xl font-bold">Laboratory Dashboard</h1>
+    <p>Coming soon...</p>
+  </div>
+);
 
 function AppRouter() {
   return (

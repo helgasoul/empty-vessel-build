@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { User, Settings, LogOut, HelpCircle, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -6,7 +5,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/Avatar';
 
 export const UserDropdown: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
   
   const menuItems = [
     { 
@@ -31,13 +30,9 @@ export const UserDropdown: React.FC = () => {
     }
   ];
   
-  const handleLogout = async () => {
-    try {
-      await logout();
-      setIsOpen(false);
-    } catch (error) {
-      console.error('Ошибка при выходе:', error);
-    }
+  const handleLogout = () => {
+    // Placeholder for logout function
+    console.log('Logout functionality to be implemented');
   };
   
   return (
@@ -65,18 +60,25 @@ export const UserDropdown: React.FC = () => {
             {/* User Info */}
             <div className="p-4 border-b border-neutral-200">
               <div className="flex items-center space-x-3">
-                <Avatar className="w-10 h-10">
-                  <AvatarImage src={user?.avatar_url || ''} alt={user?.email || 'Пользователь'} />
-                  <AvatarFallback className="bg-gradient-to-r from-[#FF6B9D] to-[#9B59B6] text-white">
-                    {user?.email?.charAt(0).toUpperCase() || 'П'}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="min-w-0 flex-1">
-                  <p className="text-sm font-medium text-neutral-900 truncate">
-                    {user?.email || 'Пользователь'}
+                <div className="w-8 h-8 bg-gradient-to-r from-blue-400 to-purple-500 rounded-full flex items-center justify-center">
+                  {user?.user_metadata?.avatar_url ? (
+                    <img 
+                      src={user.user_metadata.avatar_url} 
+                      alt="Avatar" 
+                      className="w-8 h-8 rounded-full"
+                    />
+                  ) : (
+                    <span className="text-white text-sm font-medium">
+                      {user?.email?.[0]?.toUpperCase() || 'U'}
+                    </span>
+                  )}
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">
+                    {user?.user_metadata?.full_name || user?.email || 'Пользователь'}
                   </p>
-                  <p className="text-xs text-neutral-500">
-                    Персональный аккаунт
+                  <p className="text-xs text-gray-500">
+                    {user?.email || 'email@example.com'}
                   </p>
                 </div>
               </div>
@@ -101,7 +103,7 @@ export const UserDropdown: React.FC = () => {
             <div className="border-t border-neutral-200 py-2">
               <button
                 onClick={handleLogout}
-                className="flex items-center space-x-3 px-4 py-2 text-sm text-red-600 hover:bg-red-50 w-full text-left transition-colors"
+                className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center space-x-2"
               >
                 <LogOut className="w-4 h-4" />
                 <span>Выйти</span>
