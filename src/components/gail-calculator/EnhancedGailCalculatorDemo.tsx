@@ -1,399 +1,316 @@
 
 import React, { useState } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Progress } from '@/components/ui/progress';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Calculator, 
-  DNA, 
-  Smartphone, 
-  Heart,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  TrendingUp
-} from 'lucide-react';
-import { 
-  useGailCalculator, 
-  useGeneticData, 
-  useWearableSync, 
-  usePersonalizedRecommendations 
-} from '@/hooks';
-import type { GailCalculatorInput } from '@/types/gail-calculator';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Progress } from "@/components/ui/progress";
+import { AlertTriangle, Calculator, Dna, Heart, Info, TrendingUp } from "lucide-react";
+import { useEnhancedGailCalculator, type GailInputs } from '../../hooks/useEnhancedGailCalculator';
 
-export const EnhancedGailCalculatorDemo: React.FC = () => {
-  const [activeDemo, setActiveDemo] = useState<'calculator' | 'genetic' | 'wearable' | 'recommendations'>('calculator');
-
-  // Initialize all hooks
-  const gailCalculator = useGailCalculator({
-    autoSaveHistory: true,
-    enableEnhancedAnalysis: true,
-    onProgress: (progress) => console.log('Gail Calculator Progress:', progress),
-    onCalculationComplete: (result) => console.log('Calculation Complete:', result),
+const EnhancedGailCalculatorDemo: React.FC = () => {
+  const { calculateRisk, isCalculating, results } = useEnhancedGailCalculator();
+  const [formData, setFormData] = useState<GailInputs>({
+    age: 35,
+    ageFirstPeriod: 13,
+    ageFirstBirth: null,
+    numRelatives: 0,
+    numBiopsies: 0,
+    hasAtypicalHyperplasia: false,
+    race: 'white'
   });
 
-  const geneticData = useGeneticData();
-  const wearableSync = useWearableSync('demo-user-id');
-  const recommendations = usePersonalizedRecommendations();
+  const [errors, setErrors] = useState<Partial<Record<keyof GailInputs, string>>>({});
 
-  // Demo data
-  const demoPatientData: GailCalculatorInput = {
-    personalInfo: {
-      age: 45,
-      race: 'caucasian',
-    },
-    medicalHistory: {
-      ageAtMenarche: 12,
-      ageAtFirstBirth: 28,
-      numberOfBiopsies: 1,
-      atypicalHyperplasia: false,
-    },
-    familyHistory: {
-      breastCancerRelatives: 1,
-    },
+  const validateForm = (): boolean => {
+    const newErrors: Partial<Record<keyof GailInputs, string>> = {};
+
+    if (formData.age < 35) {
+      newErrors.age = 'Модель Gail применима для женщин от 35 лет';
+    }
+
+    if (formData.ageFirstPeriod < 7 || formData.ageFirstPeriod > 17) {
+      newErrors.ageFirstPeriod = 'Возраст должен быть от 7 до 17 лет';
+    }
+
+    if (formData.ageFirstBirth !== null && (formData.ageFirstBirth < 15 || formData.ageFirstBirth > 50)) {
+      newErrors.ageFirstBirth = 'Возраст должен быть от 15 до 50 лет';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
-  const handleCalculateRisk = async () => {
-    await gailCalculator.calculateRisk(demoPatientData);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (validateForm()) {
+      await calculateRisk(formData);
+    }
   };
 
-  const handleEnhancedCalculation = async () => {
-    const geneticFactors = {
-      brca1: 'negative' as const,
-      brca2: 'negative' as const,
-      polygeneticScore: 0.6,
-    };
-
-    const environmentalFactors = {
-      airQuality: {
-        aqi: 45,
-        mainPollutant: 'PM2.5',
-      },
-    };
-
-    await gailCalculator.calculateEnhancedRisk(demoPatientData, geneticFactors, environmentalFactors);
+  const getRiskColor = (category: string) => {
+    switch (category) {
+      case 'low': return 'text-green-600';
+      case 'moderate': return 'text-yellow-600';
+      case 'high': return 'text-red-600';
+      default: return 'text-gray-600';
+    }
   };
 
-  const handleConnectDevice = async () => {
-    await wearableSync.connectDevice('apple_health', 'iPhone 15 Pro');
+  const getRiskBgColor = (category: string) => {
+    switch (category) {
+      case 'low': return 'bg-green-50 border-green-200';
+      case 'moderate': return 'bg-yellow-50 border-yellow-200';
+      case 'high': return 'bg-red-50 border-red-200';
+      default: return 'bg-gray-50 border-gray-200';
+    }
   };
 
-  const renderCalculatorDemo = () => (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Calculator className="h-5 w-5" />
-              Базовый расчет
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={handleCalculateRisk} 
-              disabled={gailCalculator.isCalculating}
-              className="w-full"
-            >
-              {gailCalculator.isCalculating ? 'Расчет...' : 'Рассчитать риск'}
-            </Button>
-            
-            {gailCalculator.progress && (
-              <div className="mt-4">
-                <Progress 
-                  value={(gailCalculator.progress.current / gailCalculator.progress.total) * 100} 
+  return (
+    <div className="max-w-4xl mx-auto space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center space-x-2">
+            <Calculator className="w-6 h-6 text-pink-600" />
+            <span>Калькулятор риска рака молочной железы (Модель Gail)</span>
+          </CardTitle>
+          <CardDescription>
+            Оценка персонального риска развития рака молочной железы на основе клинически валидированной модели NCI
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-6">
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Age */}
+              <div className="space-y-2">
+                <Label htmlFor="age" className="flex items-center space-x-1">
+                  <span>Возраст</span>
+                  <Info className="w-4 h-4 text-gray-400" />
+                </Label>
+                <Input
+                  id="age"
+                  type="number"
+                  value={formData.age}
+                  onChange={(e) => setFormData(prev => ({ ...prev, age: parseInt(e.target.value) || 0 }))}
+                  min="35"
+                  max="85"
+                  className={errors.age ? 'border-red-500' : ''}
                 />
-                <p className="text-sm text-gray-600 mt-2">
-                  {gailCalculator.progress.message}
-                </p>
+                {errors.age && <p className="text-sm text-red-600">{errors.age}</p>}
               </div>
-            )}
-          </CardContent>
-        </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
-              Расширенный анализ
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Button 
-              onClick={handleEnhancedCalculation} 
-              disabled={gailCalculator.isCalculating}
-              variant="outline"
-              className="w-full"
-            >
-              Расширенный анализ
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+              {/* Age at first period */}
+              <div className="space-y-2">
+                <Label htmlFor="ageFirstPeriod">Возраст первой менструации</Label>
+                <Input
+                  id="ageFirstPeriod"
+                  type="number"
+                  value={formData.ageFirstPeriod}
+                  onChange={(e) => setFormData(prev => ({ ...prev, ageFirstPeriod: parseInt(e.target.value) || 0 }))}
+                  min="7"
+                  max="17"
+                  className={errors.ageFirstPeriod ? 'border-red-500' : ''}
+                />
+                {errors.ageFirstPeriod && <p className="text-sm text-red-600">{errors.ageFirstPeriod}</p>}
+              </div>
 
-      {gailCalculator.currentResult && (
-        <Card>
-          <CardHeader>
-            <CardTitle>Результаты расчета</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="text-center">
-                <p className="text-2xl font-bold text-blue-600">
-                  {gailCalculator.utils.formatRiskPercentage(gailCalculator.currentResult.fiveYearRisk)}
-                </p>
-                <p className="text-sm text-gray-600">5-летний риск</p>
-              </div>
-              <div className="text-center">
-                <p className="text-2xl font-bold text-purple-600">
-                  {gailCalculator.utils.formatRiskPercentage(gailCalculator.currentResult.lifetimeRisk)}
-                </p>
-                <p className="text-sm text-gray-600">Пожизненный риск</p>
-              </div>
-              <div className="text-center">
-                <Badge 
-                  style={{ 
-                    backgroundColor: gailCalculator.utils.getRiskLevelColor(gailCalculator.currentResult.riskCategory),
-                    color: 'white'
+              {/* Age at first birth */}
+              <div className="space-y-2">
+                <Label>Возраст первых родов</Label>
+                <RadioGroup
+                  value={formData.ageFirstBirth?.toString() || 'nulliparous'}
+                  onValueChange={(value) => {
+                    if (value === 'nulliparous') {
+                      setFormData(prev => ({ ...prev, ageFirstBirth: null }));
+                    } else {
+                      setFormData(prev => ({ ...prev, ageFirstBirth: parseInt(value) }));
+                    }
                   }}
                 >
-                  {gailCalculator.utils.getRiskLevelText(gailCalculator.currentResult.riskCategory)}
-                </Badge>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="nulliparous" id="nulliparous" />
+                    <Label htmlFor="nulliparous">Нерожавшая</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="20" id="age20" />
+                    <Label htmlFor="age20">До 20 лет</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="25" id="age25" />
+                    <Label htmlFor="age25">20-24 года</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="30" id="age30" />
+                    <Label htmlFor="age30">25-29 лет</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="35" id="age35" />
+                    <Label htmlFor="age35">30+ лет</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Number of relatives */}
+              <div className="space-y-2">
+                <Label htmlFor="relatives">Родственники первой линии с раком молочной железы</Label>
+                <Select value={formData.numRelatives.toString()} onValueChange={(value) => setFormData(prev => ({ ...prev, numRelatives: parseInt(value) }))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">0</SelectItem>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2</SelectItem>
+                    <SelectItem value="3">3 или более</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Number of biopsies */}
+              <div className="space-y-2">
+                <Label htmlFor="biopsies">Количество биопсий молочной железы</Label>
+                <Select value={formData.numBiopsies.toString()} onValueChange={(value) => setFormData(prev => ({ ...prev, numBiopsies: parseInt(value) }))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0">0</SelectItem>
+                    <SelectItem value="1">1</SelectItem>
+                    <SelectItem value="2">2 или более</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Atypical hyperplasia */}
+              <div className="space-y-2">
+                <Label>Атипичная гиперплазия в анамнезе</Label>
+                <RadioGroup
+                  value={formData.hasAtypicalHyperplasia.toString()}
+                  onValueChange={(value) => setFormData(prev => ({ ...prev, hasAtypicalHyperplasia: value === 'true' }))}
+                >
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="false" id="no-hyperplasia" />
+                    <Label htmlFor="no-hyperplasia">Нет</Label>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <RadioGroupItem value="true" id="has-hyperplasia" />
+                    <Label htmlFor="has-hyperplasia">Да</Label>
+                  </div>
+                </RadioGroup>
+              </div>
+
+              {/* Race */}
+              <div className="space-y-2">
+                <Label htmlFor="race">Раса/этническая принадлежность</Label>
+                <Select value={formData.race} onValueChange={(value: any) => setFormData(prev => ({ ...prev, race: value }))}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="white">Европеоидная</SelectItem>
+                    <SelectItem value="black">Негроидная</SelectItem>
+                    <SelectItem value="hispanic">Латиноамериканская</SelectItem>
+                    <SelectItem value="asian">Азиатская</SelectItem>
+                    <SelectItem value="other">Другая</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <Button type="submit" disabled={isCalculating} className="w-full">
+              {isCalculating ? (
+                <>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  Вычисляем риск...
+                </>
+              ) : (
+                <>
+                  <Calculator className="w-4 h-4 mr-2" />
+                  Рассчитать риск
+                </>
+              )}
+            </Button>
+          </form>
+        </CardContent>
+      </Card>
+
+      {results && (
+        <Card className={`border-2 ${getRiskBgColor(results.riskCategory)}`}>
+          <CardHeader>
+            <CardTitle className="flex items-center space-x-2">
+              <TrendingUp className={`w-6 h-6 ${getRiskColor(results.riskCategory)}`} />
+              <span>Результаты оценки риска</span>
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="grid md:grid-cols-3 gap-4">
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className={`text-2xl font-bold ${getRiskColor(results.riskCategory)}`}>
+                  {(results.fiveYearRisk * 100).toFixed(1)}%
+                </div>
+                <div className="text-sm text-gray-600">5-летний риск</div>
+              </div>
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className={`text-2xl font-bold ${getRiskColor(results.riskCategory)}`}>
+                  {(results.lifetimeRisk * 100).toFixed(1)}%
+                </div>
+                <div className="text-sm text-gray-600">Пожизненный риск</div>
+              </div>
+              <div className="text-center p-4 bg-white rounded-lg border">
+                <div className="text-lg font-semibold text-gray-600">
+                  {(results.averageRisk * 100).toFixed(1)}%
+                </div>
+                <div className="text-sm text-gray-600">Средний популяционный риск</div>
+              </div>
+            </div>
+
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span>Категория риска:</span>
+                <span className={`font-semibold ${getRiskColor(results.riskCategory)}`}>
+                  {results.riskCategory === 'low' ? 'Низкий' : 
+                   results.riskCategory === 'moderate' ? 'Умеренный' : 'Высокий'}
+                </span>
+              </div>
+              <Progress 
+                value={results.fiveYearRisk * 100} 
+                className="h-2"
+              />
+            </div>
+
+            <div className="space-y-3">
+              <h4 className="font-semibold flex items-center space-x-2">
+                <Heart className="w-4 h-4 text-pink-600" />
+                <span>Рекомендации</span>
+              </h4>
+              <ul className="space-y-2">
+                {results.recommendations.map((rec, index) => (
+                  <li key={index} className="flex items-start space-x-2">
+                    <div className="w-1.5 h-1.5 bg-pink-600 rounded-full mt-2 flex-shrink-0"></div>
+                    <span className="text-sm">{rec}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex items-start space-x-2">
+                <Info className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
+                <div className="text-sm text-blue-800">
+                  <p className="font-semibold mb-1">Важное примечание:</p>
+                  <p>
+                    Модель Gail предназначена для оценки риска у женщин без мутаций BRCA1/2 
+                    и без отягощенного семейного анамнеза. Результаты следует обсуждать с врачом 
+                    в контексте индивидуальной клинической ситуации.
+                  </p>
+                </div>
               </div>
             </div>
           </CardContent>
         </Card>
       )}
-    </div>
-  );
-
-  const renderGeneticDemo = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <DNA className="h-5 w-5" />
-            Генетические данные
-          </CardTitle>
-          <CardDescription>
-            Поддерживаемые форматы: {geneticData.utils.getSupportedFormats().join(', ')}
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-              <DNA className="h-12 w-12 mx-auto text-gray-400 mb-4" />
-              <p className="text-gray-600">Перетащите файл с генетическими данными сюда</p>
-              <p className="text-sm text-gray-500 mt-2">
-                Поддерживаемые лаборатории: {geneticData.utils.getSupportedLaboratories().join(', ')}
-              </p>
-            </div>
-
-            {geneticData.isUploading && (
-              <div>
-                <Progress value={geneticData.uploadProgress} />
-                <p className="text-sm text-gray-600 mt-2">
-                  Загрузка: {geneticData.uploadProgress}%
-                </p>
-              </div>
-            )}
-
-            {geneticData.currentAnalysis && (
-              <div className="bg-green-50 p-4 rounded-lg">
-                <h4 className="font-semibold text-green-800 mb-2">Анализ завершен</h4>
-                <p className="text-sm text-green-700">
-                  Найдено {geneticData.currentAnalysis.riskVariants.length} факторов риска
-                  и {geneticData.currentAnalysis.protectiveVariants.length} защитных факторов
-                </p>
-              </div>
-            )}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderWearableDemo = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Smartphone className="h-5 w-5" />
-            Носимые устройства
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {wearableSync.utils.getSupportedDevices().map((device) => (
-              <div key={device.type} className="border rounded-lg p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="text-2xl">{device.icon}</span>
-                    <span className="font-medium">{device.name}</span>
-                  </div>
-                  <Button 
-                    size="sm" 
-                    onClick={handleConnectDevice}
-                    disabled={wearableSync.isSyncing}
-                  >
-                    Подключить
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-
-          {wearableSync.connectedDevices.length > 0 && (
-            <div className="mt-6">
-              <h4 className="font-semibold mb-4">Подключенные устройства</h4>
-              {wearableSync.connectedDevices.map((device) => (
-                <div key={device.id} className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle className="h-5 w-5 text-green-600" />
-                    <span>{device.deviceName}</span>
-                  </div>
-                  <span className="text-sm text-gray-600">
-                    {device.lastSyncAt ? wearableSync.utils.formatLastSync(device.lastSyncAt) : 'Не синхронизировано'}
-                  </span>
-                </div>
-              ))}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  const renderRecommendationsDemo = () => (
-    <div className="space-y-6">
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Heart className="h-5 w-5" />
-            Персональные рекомендации
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
-            <div className="text-center">
-              <p className="text-2xl font-bold text-blue-600">{recommendations.stats.total}</p>
-              <p className="text-sm text-gray-600">Всего рекомендаций</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-green-600">{recommendations.stats.completed}</p>
-              <p className="text-sm text-gray-600">Выполнено</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-red-600">{recommendations.stats.high_priority}</p>
-              <p className="text-sm text-gray-600">Высокий приоритет</p>
-            </div>
-            <div className="text-center">
-              <p className="text-2xl font-bold text-purple-600">{recommendations.stats.completion_rate.toFixed(0)}%</p>
-              <p className="text-sm text-gray-600">Процент выполнения</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {recommendations.recommendations.slice(0, 3).map((recommendation) => (
-              <div key={recommendation.id} className="border rounded-lg p-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start gap-3 flex-1">
-                    <span className="text-2xl">
-                      {recommendations.utils.getTypeIcon(recommendation.type)}
-                    </span>
-                    <div className="flex-1">
-                      <div className="flex items-center gap-2 mb-2">
-                        <h4 className="font-semibold">{recommendation.title}</h4>
-                        <Badge 
-                          style={{ 
-                            backgroundColor: recommendations.utils.getPriorityColor(recommendation.priority),
-                            color: 'white'
-                          }}
-                          className="text-xs"
-                        >
-                          {recommendation.priority}
-                        </Badge>
-                      </div>
-                      <p className="text-sm text-gray-600 mb-2">{recommendation.description}</p>
-                      <div className="flex items-center gap-2 text-xs text-gray-500">
-                        <Clock className="h-4 w-4" />
-                        <span>{recommendation.timeline}</span>
-                      </div>
-                    </div>
-                  </div>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => recommendations.markAsCompleted(recommendation.id)}
-                  >
-                    Выполнено
-                  </Button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-    </div>
-  );
-
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50 p-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-purple-600 via-pink-600 to-blue-600 bg-clip-text text-transparent mb-4">
-            Enhanced Gail Calculator Demo
-          </h1>
-          <p className="text-xl text-gray-600">
-            Демонстрация React хуков для платформы женского здоровья
-          </p>
-        </div>
-
-        {/* Navigation */}
-        <div className="flex justify-center mb-8">
-          <div className="flex space-x-1 bg-white/60 backdrop-blur-sm p-1 rounded-lg">
-            {[
-              { key: 'calculator', label: 'Калькулятор', icon: Calculator },
-              { key: 'genetic', label: 'Генетика', icon: DNA },
-              { key: 'wearable', label: 'Устройства', icon: Smartphone },
-              { key: 'recommendations', label: 'Рекомендации', icon: Heart },
-            ].map(({ key, label, icon: Icon }) => (
-              <button
-                key={key}
-                onClick={() => setActiveDemo(key as any)}
-                className={`flex items-center gap-2 px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-                  activeDemo === key
-                    ? 'bg-white text-purple-600 shadow-sm'
-                    : 'text-gray-600 hover:text-gray-900'
-                }`}
-              >
-                <Icon className="h-4 w-4" />
-                {label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Demo Content */}
-        {activeDemo === 'calculator' && renderCalculatorDemo()}
-        {activeDemo === 'genetic' && renderGeneticDemo()}
-        {activeDemo === 'wearable' && renderWearableDemo()}
-        {activeDemo === 'recommendations' && renderRecommendationsDemo()}
-
-        {/* Error Display */}
-        {(gailCalculator.error || geneticData.error || wearableSync.error || recommendations.error) && (
-          <Card className="mt-6 border-red-200 bg-red-50">
-            <CardContent className="p-4">
-              <div className="flex items-center gap-2 text-red-600">
-                <AlertTriangle className="h-5 w-5" />
-                <span className="font-medium">
-                  {gailCalculator.error || geneticData.error || wearableSync.error || recommendations.error}
-                </span>
-              </div>
-            </CardContent>
-          </Card>
-        )}
-      </div>
     </div>
   );
 };
