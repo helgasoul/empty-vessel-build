@@ -1,161 +1,136 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { CheckCircle, Clock, BarChart3 } from 'lucide-react';
-import * as Icons from 'lucide-react';
+import { CheckCircle, Clock, Star, Users } from 'lucide-react';
 import { Calculator, UserRole } from '../../types/risk-calculator.types';
+import { adaptContentForRole, getRequiredDataForRole } from '../../utils/role-adaptations';
 
 interface CalculatorCardProps {
   calculator: Calculator;
   userRole: UserRole;
-  isCompleted: boolean;
+  isCompleted?: boolean;
   onClick: () => void;
 }
 
-export const CalculatorCard: React.FC<CalculatorCardProps> = ({ 
-  calculator, 
-  userRole, 
-  isCompleted, 
-  onClick 
+export const CalculatorCard: React.FC<CalculatorCardProps> = ({
+  calculator,
+  userRole,
+  isCompleted = false,
+  onClick
 }) => {
-  const IconComponent = Icons[calculator.icon as keyof typeof Icons] as React.ComponentType<any>;
+  const description = adaptContentForRole(calculator.description, userRole);
+  const requiredData = getRequiredDataForRole(calculator, userRole);
   
-  const getEvidenceBadge = () => {
-    const badges = {
-      high: { bg: 'bg-green-100', text: 'text-green-800', label: 'Высокая доказательность' },
-      moderate: { bg: 'bg-yellow-100', text: 'text-yellow-800', label: 'Умеренная доказательность' },
-      low: { bg: 'bg-gray-100', text: 'text-gray-800', label: 'Ограниченная доказательность' }
-    };
-    return badges[calculator.evidenceLevel];
+  const evidenceLevelColors = {
+    high: 'bg-green-100 text-green-800',
+    moderate: 'bg-yellow-100 text-yellow-800',
+    low: 'bg-red-100 text-red-800'
   };
 
-  const getCategoryName = (category: string) => {
-    const categories = {
-      oncology: 'Онкология',
-      cardiovascular: 'Кардиология',
-      bone: 'Остеопороз',
-      neurological: 'Неврология'
-    };
-    return categories[category as keyof typeof categories] || category;
+  const complexityIcons = {
+    simple: '●',
+    moderate: '●●',
+    complex: '●●●'
   };
-
-  const badge = getEvidenceBadge();
 
   return (
     <motion.div
-      whileHover={{ scale: 1.02, y: -4 }}
+      whileHover={{ y: -4, scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
+      className="cursor-pointer"
       onClick={onClick}
-      className="bg-white rounded-2xl border border-gray-200 p-6 cursor-pointer hover:shadow-xl transition-all duration-300 relative overflow-hidden group"
     >
-      {/* Background gradient */}
       <div 
-        className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity duration-300"
-        style={{ background: `linear-gradient(135deg, ${calculator.color.primary}, transparent)` }}
-      />
-      
-      {/* Header */}
-      <div className="flex items-start justify-between mb-4 relative z-10">
-        <motion.div 
-          whileHover={{ scale: 1.1, rotate: 5 }}
-          className="w-12 h-12 rounded-xl flex items-center justify-center"
-          style={{ backgroundColor: calculator.color.bg }}
-        >
-          <IconComponent 
-            className="w-6 h-6" 
-            style={{ color: calculator.color.text }} 
-          />
-        </motion.div>
-        
-        <div className="flex flex-col items-end space-y-2">
-          <div className={`px-2 py-1 rounded-full text-xs font-medium ${badge.bg} ${badge.text}`}>
-            {badge.label}
+        className="bg-white rounded-xl p-6 shadow-lg border border-gray-200 h-full transition-all duration-300 hover:shadow-xl relative overflow-hidden"
+        style={{ 
+          borderTop: `4px solid ${calculator.color.primary}`,
+          backgroundColor: isCompleted ? `${calculator.color.bg}20` : 'white'
+        }}
+      >
+        {/* Completion Badge */}
+        {isCompleted && (
+          <div className="absolute top-4 right-4">
+            <CheckCircle className="w-6 h-6 text-green-500" />
           </div>
-          {isCompleted && (
-            <motion.div 
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              className="flex items-center space-x-1 px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800"
-            >
-              <CheckCircle className="w-3 h-3" />
-              <span>Завершен</span>
-            </motion.div>
-          )}
-        </div>
-      </div>
+        )}
 
-      {/* Content */}
-      <div className="relative z-10">
-        <h3 className="text-xl font-semibold text-gray-800 mb-2">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <div 
+            className="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg"
+            style={{ backgroundColor: calculator.color.primary }}
+          >
+            {calculator.name.charAt(0)}
+          </div>
+          
+          <div className="text-right">
+            <span 
+              className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${evidenceLevelColors[calculator.evidenceLevel]}`}
+            >
+              {calculator.evidenceLevel === 'high' ? 'Высокая достоверность' : 
+               calculator.evidenceLevel === 'moderate' ? 'Средняя достоверность' : 'Низкая достоверность'}
+            </span>
+          </div>
+        </div>
+
+        {/* Title & Description */}
+        <h3 className="text-lg font-semibold text-gray-800 mb-2">
           {calculator.name}
         </h3>
-        
-        <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-          {calculator.description[userRole]}
+        <p className="text-sm text-gray-600 mb-4 line-clamp-3">
+          {description}
         </p>
 
         {/* Metadata */}
         <div className="space-y-2 mb-4">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-gray-500">Временной горизонт:</span>
-            <span className="font-medium text-gray-700">{calculator.timeframe}</span>
+          <div className="flex items-center text-sm text-gray-500">
+            <Clock className="w-4 h-4 mr-2" />
+            <span>{calculator.estimatedTime} • {calculator.timeframe}</span>
           </div>
           
-          <div className="flex items-center justify-between text-sm">
-            <div className="flex items-center space-x-1 text-gray-500">
-              <Clock className="w-3 h-3" />
-              <span>Время заполнения:</span>
-            </div>
-            <span className="font-medium text-gray-700">{calculator.estimatedTime}</span>
+          <div className="flex items-center text-sm text-gray-500">
+            <Users className="w-4 h-4 mr-2" />
+            <span>Сложность: {complexityIcons[calculator.complexity]}</span>
           </div>
         </div>
 
-        {/* Required data tags for doctors/specialists */}
-        {userRole !== 'patient' && (
-          <div className="mb-4">
-            <span className="text-xs text-gray-500 mb-2 block">Требуемые данные:</span>
-            <div className="flex flex-wrap gap-1">
-              {calculator.requiredData[userRole === 'specialist' ? 'advanced' : 'standard']
-                .slice(0, 3)
-                .map((data, index) => (
-                  <span 
-                    key={index}
-                    className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full"
-                  >
-                    {data}
-                  </span>
-                ))
-              }
-              {calculator.requiredData[userRole === 'specialist' ? 'advanced' : 'standard'].length > 3 && (
-                <span className="px-2 py-1 bg-gray-100 text-gray-600 text-xs rounded-full">
-                  +{calculator.requiredData[userRole === 'specialist' ? 'advanced' : 'standard'].length - 3}
-                </span>
-              )}
-            </div>
+        {/* Required Data Preview */}
+        <div className="mb-4">
+          <h4 className="text-xs font-medium text-gray-700 mb-2">Необходимые данные:</h4>
+          <div className="flex flex-wrap gap-1">
+            {requiredData.slice(0, 3).map((item, index) => (
+              <span 
+                key={index}
+                className="inline-flex px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600"
+              >
+                {item}
+              </span>
+            ))}
+            {requiredData.length > 3 && (
+              <span className="inline-flex px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600">
+                +{requiredData.length - 3}
+              </span>
+            )}
           </div>
-        )}
+        </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center space-x-2">
-            <BarChart3 className="w-4 h-4 text-gray-400" />
-            <span className="text-xs text-gray-500">
-              {getCategoryName(calculator.category)}
-            </span>
-          </div>
-          
+        {/* Guidelines */}
+        <div className="flex items-center text-xs text-gray-500">
+          <Star className="w-3 h-3 mr-1" />
+          <span>Основано на: {calculator.guidelines.join(', ')}</span>
+        </div>
+
+        {/* Action Button Area */}
+        <div className="mt-4 pt-4 border-t border-gray-100">
           <motion.button 
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-            className="px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200"
-            style={{ 
-              backgroundColor: calculator.color.primary,
-              color: 'white'
-            }}
+            whileHover={{ scale: 1.02 }}
+            className={`w-full py-2 px-4 rounded-lg font-medium text-sm transition-colors ${
+              isCompleted 
+                ? 'bg-green-100 text-green-700 hover:bg-green-200' 
+                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+            }`}
           >
-            {userRole === 'patient' ? 'Пройти тест' : 'Открыть калькулятор'}
+            {isCompleted ? 'Просмотреть результат' : 'Начать оценку'}
           </motion.button>
         </div>
       </div>

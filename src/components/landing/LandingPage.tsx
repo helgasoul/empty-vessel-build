@@ -1,236 +1,211 @@
+
 import React, { useState } from 'react';
-import { Heart, Shield, Users, Calendar, FlaskConical, Building2, UserCog, ArrowRight, CheckCircle, Star, Lock, Zap } from 'lucide-react';
-import { RegisterModal } from './RegisterModal';
-
-interface UserRole {
-  id: string;
-  title: string;
-  description: string;
-  icon: React.ReactNode;
-  features: string[];
-  color: string;
-  accent: string;
-}
-
-const userRoles: UserRole[] = [
-  {
-    id: 'patient',
-    title: 'Пациент',
-    description: 'Персональная забота о вашем здоровье',
-    icon: <Heart className="w-8 h-8" />,
-    features: [
-      'Персональная оценка рисков здоровья',
-      'ИИ-рекомендации по профилактике',
-      'Трекинг женского здоровья и цикла',
-      'Интеграция с носимыми устройствами',
-      'Календарь обследований',
-      'Семейная история здоровья'
-    ],
-    color: 'from-rose-400 to-pink-500',
-    accent: 'rose'
-  },
-  {
-    id: 'doctor',
-    title: 'Врач',
-    description: 'Инструменты для качественной медицинской помощи',
-    icon: <Shield className="w-8 h-8" />,
-    features: [
-      'Доступ к комплексным данным пациентов',
-      'ИИ-ассистент для диагностики',
-      'Персонализированные рекомендации',
-      'Система записи и календарь приемов',
-      'Телемедицинские консультации',
-      'Аналитика эффективности лечения'
-    ],
-    color: 'from-blue-400 to-indigo-500',
-    accent: 'blue'
-  },
-  {
-    id: 'clinic',
-    title: 'Клиника',
-    description: 'Управление медицинской организацией',
-    icon: <Building2 className="w-8 h-8" />,
-    features: [
-      'Управление расписанием врачей',
-      'Система электронных записей',
-      'Аналитика работы клиники',
-      'Интеграция с лабораториями',
-      'Финансовая отчетность',
-      'Программы скрининга для женщин'
-    ],
-    color: 'from-emerald-400 to-teal-500',
-    accent: 'emerald'
-  },
-  {
-    id: 'laboratory',
-    title: 'Лаборатория',
-    description: 'Цифровая трансформация лабораторных услуг',
-    icon: <FlaskConical className="w-8 h-8" />,
-    features: [
-      'Интеграция результатов анализов',
-      'Автоматическая интерпретация данных',
-      'Персонализированные панели тестов',
-      'Система контроля качества',
-      'API для медицинских организаций',
-      'Генетическое тестирование'
-    ],
-    color: 'from-purple-400 to-violet-500',
-    accent: 'purple'
-  },
-  {
-    id: 'admin',
-    title: 'Администратор',
-    description: 'Управление платформой и безопасностью',
-    icon: <UserCog className="w-8 h-8" />,
-    features: [
-      'Управление пользователями и ролями',
-      'Мониторинг безопасности данных',
-      'Аналитика использования платформы',
-      'Настройка интеграций',
-      'Управление контентом',
-      'Техническая поддержка'
-    ],
-    color: 'from-gray-400 to-slate-500',
-    accent: 'gray'
-  }
-];
+import { motion } from 'framer-motion';
+import { Heart, Calculator, Brain, Database, Users, ArrowRight } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { UnifiedDashboard } from '../platform/UnifiedDashboard';
 
 export const LandingPage: React.FC = () => {
-  const [isRegisterModalOpen, setIsRegisterModalOpen] = useState(false);
-  const [selectedRole, setSelectedRole] = useState<string | null>(null);
+  const [showDashboard, setShowDashboard] = useState(false);
 
-  const handleRoleSelect = (roleId: string) => {
-    setSelectedRole(roleId);
-    setIsRegisterModalOpen(true);
-  };
+  if (showDashboard) {
+    return <UnifiedDashboard />;
+  }
+
+  const features = [
+    {
+      icon: Calculator,
+      title: 'Калькуляторы рисков',
+      description: '5 специализированных калькуляторов для оценки медицинских рисков',
+      color: 'from-pink-500 to-rose-500'
+    },
+    {
+      icon: Heart,
+      title: 'Женское здоровье',
+      description: 'Комплексный мониторинг репродуктивного и гормонального здоровья',
+      color: 'from-purple-500 to-violet-500'
+    },
+    {
+      icon: Database,
+      title: 'Медицинские данные',
+      description: 'Безопасное хранение и анализ ваших медицинских записей',
+      color: 'from-blue-500 to-cyan-500'
+    },
+    {
+      icon: Brain,
+      title: 'ИИ-ассистент',
+      description: 'Персональные рекомендации на основе анализа ваших данных',
+      color: 'from-emerald-500 to-teal-500'
+    }
+  ];
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-purple-50">
-      {/* Header */}
-      <header className="relative z-10 px-6 py-4">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-rose-400 to-pink-500 rounded-xl flex items-center justify-center">
-              <Heart className="w-6 h-6 text-white" />
-            </div>
-            <span className="text-2xl font-bold bg-gradient-to-r from-rose-600 to-pink-600 bg-clip-text text-transparent">
-              Prevent
-            </span>
-          </div>
-          <nav className="hidden md:flex items-center space-x-8">
-            <a href="#features" className="text-gray-600 hover:text-rose-600 transition-colors">
-              Возможности
-            </a>
-            <a href="#roles" className="text-gray-600 hover:text-rose-600 transition-colors">
-              Для кого
-            </a>
-            <a href="#about" className="text-gray-600 hover:text-rose-600 transition-colors">
-              О платформе
-            </a>
-            <button 
-              onClick={() => setIsRegisterModalOpen(true)}
-              className="bg-gradient-to-r from-rose-500 to-pink-600 text-white px-6 py-2 rounded-full hover:from-rose-600 hover:to-pink-700 transition-all duration-300 shadow-lg hover:shadow-xl"
-            >
-              Войти
-            </button>
-          </nav>
-        </div>
-      </header>
-
+    <div className="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-blue-50">
       {/* Hero Section */}
-      <section className="relative px-6 py-20">
+      <section className="relative overflow-hidden py-20 px-6">
         <div className="max-w-7xl mx-auto text-center">
-          <h1 className="text-5xl md:text-7xl font-bold text-gray-800 mb-6 leading-tight">
-            Ваше здоровье —{' '}
-            <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">
-              наша забота
-            </span>
-          </h1>
-          <p className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed mb-12">
-            Персональная платформа женского здоровья с ИИ-анализом, 
-            генетическим тестированием и индивидуальными рекомендациями 
-            для каждого этапа вашей жизни
-          </p>
-          
-          <button 
-            onClick={() => setIsRegisterModalOpen(true)}
-            className="bg-gradient-to-r from-rose-500 to-pink-600 text-white px-8 py-4 rounded-full text-lg font-semibold hover:from-rose-600 hover:to-pink-700 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:-translate-y-1"
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
           >
-            Начать заботу о здоровье
-            <ArrowRight className="w-5 h-5 ml-2 inline-block" />
-          </button>
+            <div className="flex items-center justify-center space-x-3 mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center">
+                <Heart className="w-8 h-8 text-white" />
+              </div>
+              <h1 className="text-5xl md:text-6xl font-bold">
+                <span className="bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+                  YTime
+                </span>
+                <span className="text-gray-800 ml-2">PREVENT</span>
+              </h1>
+            </div>
+            
+            <p className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto">
+              Персональная платформа для управления женским здоровьем с инновационными 
+              инструментами оценки рисков и ИИ-анализом
+            </p>
+            
+            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+              <Button 
+                size="lg"
+                onClick={() => setShowDashboard(true)}
+                className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-8 py-4 text-lg"
+              >
+                Начать оценку здоровья
+                <ArrowRight className="ml-2 w-5 h-5" />
+              </Button>
+              
+              <Button 
+                variant="outline" 
+                size="lg"
+                className="px-8 py-4 text-lg border-purple-300 text-purple-700 hover:bg-purple-50"
+              >
+                Узнать больше
+              </Button>
+            </div>
+          </motion.div>
+        </div>
+        
+        {/* Background decorations */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+          <div className="absolute top-20 left-10 w-20 h-20 bg-purple-200 rounded-full opacity-50 animate-pulse"></div>
+          <div className="absolute top-40 right-20 w-16 h-16 bg-pink-200 rounded-full opacity-40 animate-pulse delay-1000"></div>
+          <div className="absolute bottom-20 left-20 w-12 h-12 bg-blue-200 rounded-full opacity-60 animate-pulse delay-2000"></div>
         </div>
       </section>
 
-      {/* Roles Section */}
-      <section id="roles" className="px-6 py-20">
+      {/* Features Section */}
+      <section className="py-16 px-6">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-4xl font-bold text-gray-800 mb-6">
-              Prevent для каждого{' '}
-              <span className="bg-gradient-to-r from-rose-500 to-pink-600 bg-clip-text text-transparent">
-                участника
-              </span>
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 0.8 }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+              Комплексный подход к женскому здоровью
             </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Выберите свою роль и получите доступ к персонализированному функционалу
+            <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+              Объединяем медицинскую науку, технологии ИИ и персонализированный подход 
+              для создания индивидуального плана заботы о вашем здоровье
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {userRoles.map((role) => (
-              <div 
-                key={role.id} 
-                className="bg-white rounded-2xl shadow-lg p-8 border border-gray-100 hover:border-rose-200 transition-all duration-300 hover:shadow-xl transform hover:-translate-y-2 cursor-pointer"
-                onClick={() => handleRoleSelect(role.id)}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {features.map((feature, index) => (
+              <motion.div
+                key={feature.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+                whileHover={{ y: -5 }}
               >
-                <div className={`w-16 h-16 bg-gradient-to-r ${role.color} rounded-2xl flex items-center justify-center text-white mb-6`}>
-                  {role.icon}
-                </div>
-                
-                <h3 className="text-2xl font-bold text-gray-800 mb-3">
-                  {role.title}
-                </h3>
-                
-                <p className="text-gray-600 mb-6">
-                  {role.description}
-                </p>
-                
-                <ul className="space-y-3 mb-8">
-                  {role.features.slice(0, 4).map((feature, index) => (
-                    <li key={index} className="flex items-start">
-                      <CheckCircle className="w-5 h-5 text-rose-500 mr-3 mt-0.5 flex-shrink-0" />
-                      <span className="text-gray-700 text-sm">{feature}</span>
-                    </li>
-                  ))}
-                  {role.features.length > 4 && (
-                    <li className="text-gray-500 text-sm italic">
-                      +{role.features.length - 4} дополнительных возможностей
-                    </li>
-                  )}
-                </ul>
-                
-                <button className={`w-full bg-gradient-to-r ${role.color} text-white py-3 px-6 rounded-full font-semibold hover:shadow-lg transition-all duration-300 transform hover:scale-105`}>
-                  Зарегистрироваться как {role.title}
-                  <ArrowRight className="w-4 h-4 ml-2 inline-block" />
-                </button>
-              </div>
+                <Card className="h-full bg-white/80 backdrop-blur-sm border border-gray-200 hover:shadow-xl transition-all duration-300">
+                  <CardHeader>
+                    <div className={`w-12 h-12 bg-gradient-to-r ${feature.color} rounded-xl flex items-center justify-center mb-4`}>
+                      <feature.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <CardTitle className="text-lg font-semibold text-gray-800">
+                      {feature.title}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-gray-600">
+                      {feature.description}
+                    </CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Register Modal */}
-      {isRegisterModalOpen && (
-        <RegisterModal 
-          isOpen={isRegisterModalOpen}
-          onClose={() => {
-            setIsRegisterModalOpen(false);
-            setSelectedRole(null);
-          }}
-          preselectedRole={selectedRole}
-        />
-      )}
+      {/* Statistics Section */}
+      <section className="py-16 px-6 bg-white/50 backdrop-blur-sm">
+        <div className="max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="text-4xl font-bold text-purple-600 mb-2">5</div>
+              <p className="text-gray-600">Валидированных калькуляторов риска</p>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+            >
+              <div className="text-4xl font-bold text-pink-600 mb-2">50+</div>
+              <p className="text-gray-600">Параметров здоровья для анализа</p>
+            </motion.div>
+            
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+            >
+              <div className="text-4xl font-bold text-blue-600 mb-2">24/7</div>
+              <p className="text-gray-600">ИИ-поддержка и рекомендации</p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* CTA Section */}
+      <section className="py-20 px-6">
+        <div className="max-w-4xl mx-auto text-center">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+              Начните заботиться о своем здоровье уже сегодня
+            </h2>
+            <p className="text-lg text-gray-600 mb-8">
+              Получите персональную оценку рисков и рекомендации от ведущих медицинских экспертов
+            </p>
+            
+            <Button 
+              size="lg"
+              onClick={() => setShowDashboard(true)}
+              className="bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 text-white px-12 py-6 text-xl"
+            >
+              Попробовать платформу
+              <Heart className="ml-3 w-6 h-6" />
+            </Button>
+          </motion.div>
+        </div>
+      </section>
     </div>
   );
 };
+
+export default LandingPage;

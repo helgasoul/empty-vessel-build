@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Heart, Activity, Bone, Brain, Grid3X3 } from 'lucide-react';
+import { Heart, Brain, Shield, Bone } from 'lucide-react';
 import { Category } from '../../types/risk-calculator.types';
 
 interface CategoryFilterProps {
@@ -9,15 +9,15 @@ interface CategoryFilterProps {
   onCategoryChange: (category: Category | 'all') => void;
 }
 
-export const CategoryFilter: React.FC<CategoryFilterProps> = ({ 
-  selectedCategory, 
-  onCategoryChange 
+export const CategoryFilter: React.FC<CategoryFilterProps> = ({
+  selectedCategory,
+  onCategoryChange
 }) => {
   const categories = [
-    { id: 'all', label: 'Все категории', icon: Grid3X3, color: 'gray' },
+    { id: 'all', label: 'Все категории', icon: Shield, color: 'gray' },
     { id: 'oncology', label: 'Онкология', icon: Heart, color: 'pink' },
-    { id: 'cardiovascular', label: 'Кардиология', icon: Activity, color: 'red' },
-    { id: 'bone', label: 'Остеопороз', icon: Bone, color: 'orange' },
+    { id: 'cardiovascular', label: 'Сердце и сосуды', icon: Heart, color: 'red' },
+    { id: 'bone', label: 'Костная система', icon: Bone, color: 'orange' },
     { id: 'neurological', label: 'Неврология', icon: Brain, color: 'purple' }
   ];
 
@@ -25,27 +25,27 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
     if (isActive) {
       switch (color) {
         case 'pink':
-          return 'bg-pink-600 text-white shadow-md shadow-pink-200';
+          return 'bg-pink-500 text-white shadow-lg shadow-pink-200';
         case 'red':
-          return 'bg-red-600 text-white shadow-md shadow-red-200';
+          return 'bg-red-500 text-white shadow-lg shadow-red-200';
         case 'orange':
-          return 'bg-orange-600 text-white shadow-md shadow-orange-200';
+          return 'bg-orange-500 text-white shadow-lg shadow-orange-200';
         case 'purple':
-          return 'bg-purple-600 text-white shadow-md shadow-purple-200';
+          return 'bg-purple-500 text-white shadow-lg shadow-purple-200';
         case 'gray':
-          return 'bg-gray-700 text-white shadow-md shadow-gray-200';
+          return 'bg-gray-700 text-white shadow-lg shadow-gray-200';
         default:
-          return 'bg-gray-600 text-white shadow-md';
+          return 'bg-gray-500 text-white shadow-lg';
       }
     }
-    return 'text-gray-600 hover:bg-gray-100 border border-gray-200';
+    return 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200';
   };
 
   return (
     <motion.div 
-      initial={{ opacity: 0, y: -20 }}
+      initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="flex flex-wrap gap-2 mb-6"
+      className="flex flex-wrap gap-2 justify-center mb-6"
     >
       {categories.map(({ id, label, icon: Icon, color }) => (
         <motion.button
@@ -54,7 +54,7 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className={`
-            flex items-center space-x-2 px-4 py-2 rounded-lg transition-all duration-200
+            flex items-center space-x-2 px-4 py-2 rounded-full transition-all duration-200
             ${getColorClasses(color, selectedCategory === id)}
           `}
         >

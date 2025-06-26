@@ -4,136 +4,132 @@ import { Calculator } from '../types/risk-calculator.types';
 export const calculatorsConfig: Calculator[] = [
   {
     id: 'gail',
-    name: 'Модель Gail',
+    name: 'Gail Model',
     description: {
-      patient: 'Оценка вашего персонального риска развития рака молочной железы',
-      doctor: 'Валидированная модель оценки 5-летнего риска рака молочной железы',
-      specialist: 'Статистическая модель NCI на основе данных BCDDP и SEER программ'
+      patient: 'Оценка риска рака молочной железы на основе личных факторов',
+      doctor: 'Валидированная модель для оценки 5-летнего риска рака молочной железы',
+      specialist: 'Модель Gail с учетом семейного анамнеза и биопсий'
     },
-    icon: 'Heart',
+    icon: 'heart',
     color: {
       primary: '#EC4899',
-      bg: '#FDF2F8', 
+      bg: '#FED7E2',
       text: '#BE185D'
     },
     category: 'oncology',
-    timeframe: '5 лет / пожизненно',
+    timeframe: '5 лет',
     estimatedTime: '5-7 минут',
     evidenceLevel: 'high',
     complexity: 'moderate',
     requiredData: {
-      basic: ['Возраст', 'Возраст первой менструации', 'Семейная история'],
-      standard: ['Возраст первых родов', 'Количество биопсий', 'Раса/этничность'],
-      advanced: ['Плотность молочной железы', 'Генетические мутации', 'Гормональная терапия']
+      basic: ['возраст', 'возраст первой менструации'],
+      standard: ['возраст первых родов', 'количество биопсий'],
+      advanced: ['атипичная гиперплазия', 'семейный анамнез', 'этническая принадлежность']
     },
-    guidelines: ['USPSTF 2019', 'NCCN 2023', 'ACS 2023']
+    guidelines: ['NCCN', 'ASCO', 'ACS']
   },
-  
   {
     id: 'prevent',
     name: 'PREVENT Calculator',
     description: {
-      patient: 'Определение риска сердечно-сосудистых заболеваний в ближайшие 10 лет',
-      doctor: 'Современная модель оценки ССЗ с учетом социальных детерминант здоровья',
-      specialist: 'AHA 2023 PREVENT модель с интеграцией почечной функции и СДЗ'
+      patient: 'Оценка риска сердечно-сосудистых заболеваний в течение 10 лет',
+      doctor: 'Новейший калькулятор ACC/AHA для первичной профилактики',
+      specialist: 'PREVENT с учетом социальных детерминант здоровья'
     },
-    icon: 'Activity',
+    icon: 'heart',
     color: {
       primary: '#EF4444',
-      bg: '#FEF2F2',
+      bg: '#FEE2E2',
       text: '#DC2626'
     },
     category: 'cardiovascular',
     timeframe: '10 лет',
-    estimatedTime: '3-5 минут',
+    estimatedTime: '8-10 минут',
     evidenceLevel: 'high',
-    complexity: 'moderate',
+    complexity: 'complex',
     requiredData: {
-      basic: ['Возраст', 'Артериальное давление', 'Курение', 'Диабет'],
-      standard: ['Общий холестерин', 'HDL холестерин', 'ИМТ', 'Физическая активность'],
-      advanced: ['Функция почек (eGFR)', 'Социально-экономические факторы', 'Женские факторы риска']
+      basic: ['возраст', 'пол', 'артериальное давление'],
+      standard: ['холестерин', 'диабет', 'курение'],
+      advanced: ['почечная функция', 'социальный статус', 'ZIP код']
     },
-    guidelines: ['AHA/ACC 2023', 'ESC 2021', 'CCS 2022']
+    guidelines: ['ACC/AHA 2023', 'ESC 2021']
   },
-
   {
     id: 'frax',
     name: 'FRAX Calculator',
     description: {
       patient: 'Оценка риска переломов костей в ближайшие 10 лет',
-      doctor: 'Инструмент ВОЗ для оценки 10-летнего риска остеопоротических переломов',
-      specialist: 'Алгоритм FRAX с интеграцией DXA и трабекулярного костного индекса'
+      doctor: 'Международный инструмент оценки остеопоротических переломов',
+      specialist: 'FRAX с учетом плотности костной ткани и корректировкой'
     },
-    icon: 'Bone',
+    icon: 'bone',
     color: {
       primary: '#F97316',
-      bg: '#FFF7ED',
+      bg: '#FED7AA',
       text: '#EA580C'
     },
     category: 'bone',
     timeframe: '10 лет',
-    estimatedTime: '2-3 минуты',
+    estimatedTime: '6-8 минут',
     evidenceLevel: 'high',
-    complexity: 'simple',
+    complexity: 'moderate',
     requiredData: {
-      basic: ['Возраст', 'Вес', 'Рост', 'Переломы в анамнезе'],
-      standard: ['Курение', 'Алкоголь', 'Ревматоидный артрит', 'Глюкокортикоиды'],
-      advanced: ['T-score DXA', 'Трабекулярный костный индекс', 'Падения в анамнезе']
+      basic: ['возраст', 'пол', 'вес', 'рост'],
+      standard: ['переломы в анамнезе', 'семейный анамнез'],
+      advanced: ['плотность костной ткани', 'глюкокортикоиды']
     },
-    guidelines: ['WHO 2019', 'IOF 2020', 'ISCD 2019']
+    guidelines: ['IOF', 'ISCD', 'NOGG']
   },
-
   {
     id: 'framingham',
     name: 'Framingham Dementia',
     description: {
-      patient: 'Оценка риска развития проблем с памятью и мышлением',
-      doctor: 'Модель оценки риска деменции на основе Framingham Heart Study',
-      specialist: 'Интегрированная модель с биомаркерами ЦСЖ и нейровизуализацией'
+      patient: 'Оценка риска развития деменции и болезни Альцгеймера',
+      doctor: 'Фрамингемская модель риска деменции',
+      specialist: 'Расширенная модель с генетическими и биомаркерами'
     },
-    icon: 'Brain',
+    icon: 'brain',
     color: {
       primary: '#8B5CF6',
-      bg: '#FAF5FF',
+      bg: '#E9D5FF',
       text: '#7C3AED'
     },
     category: 'neurological',
     timeframe: '10 лет',
-    estimatedTime: '4-6 минут',
+    estimatedTime: '10-12 минут',
     evidenceLevel: 'moderate',
-    complexity: 'moderate',
+    complexity: 'complex',
     requiredData: {
-      basic: ['Возраст', 'Образование', 'Когнитивные тесты'],
-      standard: ['APOE генотип', 'Сердечно-сосудистые факторы', 'Депрессия'],
-      advanced: ['Биомаркеры ЦСЖ', 'МРТ головного мозга', 'ПЭТ-амилоид']
+      basic: ['возраст', 'образование', 'когнитивные тесты'],
+      standard: ['сосудистые факторы', 'депрессия'],
+      advanced: ['APOE генотип', 'биомаркеры', 'нейровизуализация']
     },
-    guidelines: ['AA/NIA 2018', 'EAN 2020', 'AAN 2018']
+    guidelines: ['Alzheimer\'s Association', 'NIA-AA']
   },
-
   {
     id: 'crat',
-    name: 'CRAT Calculator',
+    name: 'Colorectal Cancer Risk',
     description: {
-      patient: 'Оценка риска развития рака кишечника',
-      doctor: 'NCI инструмент оценки риска колоректального рака',
-      specialist: 'Модель с интеграцией генетических и эпигенетических маркеров'
+      patient: 'Оценка риска колоректального рака на основе образа жизни',
+      doctor: 'Валидированный инструмент для скрининга колоректального рака',
+      specialist: 'CRAT с молекулярными маркерами и семейным анамнезом'
     },
-    icon: 'Target',
+    icon: 'shield',
     color: {
       primary: '#3B82F6',
-      bg: '#EFF6FF',
+      bg: '#DBEAFE',
       text: '#1D4ED8'
     },
     category: 'oncology',
-    timeframe: '5 лет',
-    estimatedTime: '3-4 минуты',
+    timeframe: '10 лет',
+    estimatedTime: '7-9 минут',
     evidenceLevel: 'high',
-    complexity: 'simple',
+    complexity: 'moderate',
     requiredData: {
-      basic: ['Возраст', 'Семейная история', 'Полипы в анамнезе'],
-      standard: ['Образ жизни', 'Диета', 'Скрининговые исследования'],
-      advanced: ['Генетическое тестирование', 'Микросателлитная нестабильность', 'Воспалительные маркеры']
+      basic: ['возраст', 'пол', 'семейный анамнез'],
+      standard: ['курение', 'ИМТ', 'физическая активность'],
+      advanced: ['полипы в анамнезе', 'ВЗК', 'генетические синдромы']
     },
-    guidelines: ['USPSTF 2021', 'NCCN 2023', 'ACG 2021']
+    guidelines: ['USPSTF', 'ACS', 'NCCN']
   }
 ];
