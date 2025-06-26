@@ -1,4 +1,4 @@
 
-// Re-export from Avatar.tsx for compatibility with lowercase imports
+// Fixed lowercase export for compatibility
 export * from './Avatar';
 export { Avatar as default } from './Avatar';

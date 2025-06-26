@@ -1,5 +1,8 @@
 
-// YTime Design System - UI Components Export
+// YTime PREVENT Design System - UI Components Export
+// Стандартизированные экспорты без дублирования
+
+// Core shadcn/ui components
 export { Button } from './Button';
 export { 
   Card, 
@@ -8,10 +11,22 @@ export {
   CardContent, 
   CardFooter,
   CardDescription 
-} from './card'; // Export shadcn card components
+} from './card';
 export { Input, Textarea } from './Input';
 export { Badge, StatusBadge, PriorityBadge } from './Badge';
-export { Avatar, AvatarGroup, AvatarImage, AvatarFallback } from './Avatar';
+export { Avatar, AvatarImage, AvatarFallback } from './Avatar';
+export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
+export { Progress } from './progress';
+
+// Additional shadcn/ui components
+export { Skeleton } from './skeleton';
+export { Separator } from './separator';
+export { Toaster } from './toaster';
+export { ThemeToggle } from './theme-toggle';
+export { useToast, toast } from './use-toast';
+export { Slider } from './slider';
+
+// Специализированные компоненты для женского здоровья
 export { 
   FloatingHearts, 
   GentleSpinner, 
@@ -20,18 +35,3 @@ export {
   WaveLoader, 
   SkeletonLoader 
 } from './Loading';
-
-// Re-export existing shadcn/ui components for compatibility
-export { Progress } from './progress';
-export { Skeleton } from './skeleton';
-export { Separator } from './separator';
-export { Toaster } from './toaster';
-export { ThemeToggle } from './theme-toggle';
-export { useToast, toast } from './use-toast';
-export { Textarea as ShadcnTextarea } from './textarea';
-export { Slider } from './slider';
-
-// Re-export Button for lowercase compatibility
-export { Button as button } from './Button';
-export { Badge as badge } from './Badge';
-export { Avatar as avatar } from './Avatar';

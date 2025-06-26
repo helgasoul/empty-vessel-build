@@ -1,292 +1,112 @@
 
-import { useState, useCallback, useRef } from 'react';
-import { enhancedGailService } from '../services/enhanced-gail-calculator.service';
-import { useCalculationProgress } from './internal/useCalculationProgress';
-import { useCalculationCache } from './internal/useCalculationCache';
-import { useCalculationHistory } from './internal/useCalculationHistory';
-import { useCalculationValidation } from './internal/useCalculationValidation';
-import type {
-  GailCalculatorInput,
-  GailCalculatorResult,
-  EnhancedRiskAssessment,
-  GeneticRiskFactors,
-  EnvironmentalFactors,
-  ApiResponse,
-} from '../types/gail-calculator';
+import { useState } from 'react';
 
-interface UseGailCalculatorOptions {
-  autoSaveHistory?: boolean;
-  enableCache?: boolean;
-  enableEnhancedAnalysis?: boolean;
-  onProgress?: (progress: { current: number; total: number; message?: string }) => void;
-  onCalculationComplete?: (result: GailCalculatorResult) => void;
-  onEnhancedComplete?: (result: EnhancedRiskAssessment) => void;
-  onError?: (error: string) => void;
+export interface GailInputs {
+  age: number;
+  raceEthnicity: string;
+  ageAtMenarche: number;
+  ageAtFirstBirth: number | null;
+  numberOfRelatives: number;
+  numberOfBiopsies: number;
+  atypicalHyperplasia: boolean;
 }
 
-interface UseGailCalculatorReturn {
-  // Core calculation methods
-  calculateRisk: (input: GailCalculatorInput) => Promise<GailCalculatorResult | null>;
-  calculateEnhancedRisk: (
-    input: GailCalculatorInput,
-    geneticData?: GeneticRiskFactors,
-    environmentalData?: EnvironmentalFactors
-  ) => Promise<EnhancedRiskAssessment | null>;
-  
-  // State
-  currentResult: GailCalculatorResult | null;
-  enhancedResult: EnhancedRiskAssessment | null;
-  isCalculating: boolean;
-  error: string | null;
-  progress: { current: number; total: number; message?: string } | null;
-  validationErrors: Array<{ field: string; message: string }>;
-  
-  // History and cache
-  calculationHistory: Array<GailCalculatorResult | EnhancedRiskAssessment>;
-  clearHistory: () => void;
-  clearCache: () => void;
-  
-  // Utilities
-  utils: {
-    formatRiskPercentage: (risk: number) => string;
-    getRiskLevelText: (level: string) => string;
-    getRiskLevelColor: (level: string) => string;
-    exportResults: (format: 'pdf' | 'json' | 'csv') => Promise<void>;
+export interface GailResults {
+  fiveYearRisk: number;
+  lifetimeRisk: number;
+  riskCategory: 'low' | 'moderate' | 'high';
+  recommendations: string[];
+  comparisonToAverage: {
+    fiveYear: number;
+    lifetime: number;
   };
 }
 
-export const useGailCalculator = (options: UseGailCalculatorOptions = {}): UseGailCalculatorReturn => {
-  const {
-    autoSaveHistory = true,
-    enableCache = true,
-    enableEnhancedAnalysis = true,
-    onProgress,
-    onCalculationComplete,
-    onEnhancedComplete,
-    onError,
-  } = options;
+export const useGailCalculator = () => {
+  const [isCalculating, setIsCalculating] = useState(false);
+  const [results, setResults] = useState<GailResults>({
+    fiveYearRisk: 0,
+    lifetimeRisk: 0,
+    riskCategory: 'low',
+    recommendations: [],
+    comparisonToAverage: { fiveYear: 0, lifetime: 0 }
+  });
 
-  // State management
-  const [currentResult, setCurrentResult] = useState<GailCalculatorResult | null>(null);
-  const [enhancedResult, setEnhancedResult] = useState<EnhancedRiskAssessment | null>(null);
-  const [error, setError] = useState<string | null>(null);
-
-  // Internal hooks
-  const { isCalculating, progress, setProgress, startCalculation, finishCalculation } = useCalculationProgress(onProgress);
-  const { getCachedResult, setCachedResult, clearCache } = useCalculationCache(enableCache);
-  const { calculationHistory, addToHistory, clearHistory } = useCalculationHistory(autoSaveHistory);
-  const { validateInput, validationErrors, clearValidationErrors } = useCalculationValidation();
-
-  // Refs for cleanup
-  const abortControllerRef = useRef<AbortController | null>(null);
-
-  // Main calculation method
-  const calculateRisk = useCallback(async (input: GailCalculatorInput): Promise<GailCalculatorResult | null> => {
+  const calculateRisk = async (inputs: GailInputs): Promise<GailResults> => {
+    setIsCalculating(true);
+    
     try {
-      setError(null);
-      clearValidationErrors();
-
-      // Validate input
-      const isValid = await validateInput(input);
-      if (!isValid) {
-        onError?.('Пожалуйста, исправьте ошибки в форме');
-        return null;
-      }
-
-      // Check cache first
-      const cachedResult = getCachedResult(input);
-      if (cachedResult) {
-        setCurrentResult(cachedResult);
-        onCalculationComplete?.(cachedResult);
-        return cachedResult;
-      }
-
-      // Start calculation
-      startCalculation();
-      setProgress(1, 3, 'Валидация данных...');
-
-      // Create abort controller for cancellation
-      abortControllerRef.current = new AbortController();
-
-      setProgress(2, 3, 'Расчет рисков...');
-
-      // Call service
-      const response: ApiResponse<GailCalculatorResult> = await enhancedGailService.calculateRisk(input);
+      // Simplified Gail model calculation
+      await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (!response.success || !response.data) {
-        throw new Error(response.message || 'Не удалось рассчитать риски');
-      }
-
-      setProgress(3, 3, 'Завершение...');
-
-      const result = response.data;
-
-      // Cache and save result
-      setCachedResult(input, result);
-      setCurrentResult(result);
+      let baseRisk = 1.2; // Base 5-year risk percentage
       
-      if (autoSaveHistory) {
-        addToHistory(result);
-      }
-
-      onCalculationComplete?.(result);
-      return result;
-
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Произошла неизвестная ошибка';
-      setError(errorMessage);
-      onError?.(errorMessage);
-      return null;
-    } finally {
-      finishCalculation();
-      abortControllerRef.current = null;
-    }
-  }, [
-    validateInput,
-    clearValidationErrors,
-    getCachedResult,
-    setCachedResult,
-    startCalculation,
-    setProgress,
-    finishCalculation,
-    autoSaveHistory,
-    addToHistory,
-    onCalculationComplete,
-    onError,
-  ]);
-
-  // Enhanced calculation method
-  const calculateEnhancedRisk = useCallback(async (
-    input: GailCalculatorInput,
-    geneticData?: GeneticRiskFactors,
-    environmentalData?: EnvironmentalFactors
-  ): Promise<EnhancedRiskAssessment | null> => {
-    if (!enableEnhancedAnalysis) {
-      throw new Error('Расширенный анализ отключен');
-    }
-
-    try {
-      setError(null);
-      clearValidationErrors();
-
-      // Validate input
-      const isValid = await validateInput(input);
-      if (!isValid) {
-        onError?.('Пожалуйста, исправьте ошибки в форме');
-        return null;
-      }
-
-      startCalculation();
-      setProgress(1, 5, 'Валидация данных...');
-
-      // Create abort controller
-      abortControllerRef.current = new AbortController();
-
-      setProgress(2, 5, 'Базовый расчет рисков...');
-      setProgress(3, 5, 'Анализ генетических данных...');
-      setProgress(4, 5, 'Анализ экологических факторов...');
-
-      // Call enhanced service
-      const response: ApiResponse<EnhancedRiskAssessment> = await enhancedGailService.calculateEnhancedRisk(
-        input,
-        geneticData,
-        environmentalData
-      );
-
-      if (!response.success || !response.data) {
-        throw new Error(response.message || 'Не удалось выполнить расширенный анализ');
-      }
-
-      setProgress(5, 5, 'Завершение...');
-
-      const result = response.data;
-      setEnhancedResult(result);
+      // Age factor
+      if (inputs.age >= 60) baseRisk *= 1.5;
+      else if (inputs.age >= 50) baseRisk *= 1.2;
       
-      if (autoSaveHistory) {
-        addToHistory(result);
+      // Age at menarche
+      if (inputs.ageAtMenarche < 12) baseRisk *= 1.1;
+      
+      // Age at first birth
+      if (inputs.ageAtFirstBirth === null || inputs.ageAtFirstBirth > 30) {
+        baseRisk *= 1.3;
+      } else if (inputs.ageAtFirstBirth < 20) {
+        baseRisk *= 0.8;
       }
-
-      onEnhancedComplete?.(result);
-      return result;
-
-    } catch (err) {
-      const errorMessage = err instanceof Error ? err.message : 'Произошла неизвестная ошибка';
-      setError(errorMessage);
-      onError?.(errorMessage);
-      return null;
-    } finally {
-      finishCalculation();
-      abortControllerRef.current = null;
-    }
-  }, [
-    enableEnhancedAnalysis,
-    validateInput,
-    clearValidationErrors,
-    startCalculation,
-    setProgress,
-    finishCalculation,
-    autoSaveHistory,
-    addToHistory,
-    onEnhancedComplete,
-    onError,
-  ]);
-
-  // Utility functions
-  const utils = {
-    formatRiskPercentage: (risk: number): string => {
-      return `${(risk * 100).toFixed(1)}%`;
-    },
-
-    getRiskLevelText: (level: string): string => {
-      const levelTexts = {
-        low: 'Низкий риск',
-        average: 'Средний риск',
-        high: 'Высокий риск',
-        very_high: 'Очень высокий риск',
+      
+      // Family history
+      baseRisk *= (1 + inputs.numberOfRelatives * 0.4);
+      
+      // Biopsy history
+      if (inputs.numberOfBiopsies > 0) {
+        baseRisk *= (1 + inputs.numberOfBiopsies * 0.2);
+      }
+      
+      // Atypical hyperplasia
+      if (inputs.atypicalHyperplasia) {
+        baseRisk *= 1.8;
+      }
+      
+      const fiveYearRisk = Math.min(baseRisk, 15); // Cap at 15%
+      const lifetimeRisk = fiveYearRisk * 6; // Approximate lifetime risk
+      
+      const riskCategory: 'low' | 'moderate' | 'high' = 
+        fiveYearRisk < 1.7 ? 'low' : 
+        fiveYearRisk < 3.0 ? 'moderate' : 'high';
+      
+      const recommendations = [
+        'Регулярные маммографические исследования',
+        'Самообследование молочных желез',
+        'Консультация с онкологом-маммологом'
+      ];
+      
+      if (riskCategory === 'high') {
+        recommendations.push('Рассмотреть возможность генетического консультирования');
+        recommendations.push('Обсудить возможность химиопрофилактики');
+      }
+      
+      const calculatedResults: GailResults = {
+        fiveYearRisk: Number(fiveYearRisk.toFixed(2)),
+        lifetimeRisk: Number(lifetimeRisk.toFixed(1)),
+        riskCategory,
+        recommendations,
+        comparisonToAverage: {
+          fiveYear: Number((fiveYearRisk / 1.2).toFixed(1)),
+          lifetime: Number((lifetimeRisk / 12.5).toFixed(1))
+        }
       };
-      return levelTexts[level as keyof typeof levelTexts] || 'Неизвестный уровень';
-    },
-
-    getRiskLevelColor: (level: string): string => {
-      const levelColors = {
-        low: '#27AE60',
-        average: '#FFB347',
-        high: '#E74C3C',
-        very_high: '#8B0000',
-      };
-      return levelColors[level as keyof typeof levelColors] || '#6B7280';
-    },
-
-    exportResults: async (format: 'pdf' | 'json' | 'csv'): Promise<void> => {
-      const results = currentResult || enhancedResult;
-      if (!results) {
-        throw new Error('Нет результатов для экспорта');
-      }
-
-      // Implementation would depend on your export service
-      console.log(`Экспорт в формате ${format}:`, results);
-    },
+      
+      setResults(calculatedResults);
+      return calculatedResults;
+    } finally {
+      setIsCalculating(false);
+    }
   };
 
   return {
-    // Core methods
     calculateRisk,
-    calculateEnhancedRisk,
-    
-    // State
-    currentResult,
-    enhancedResult,
     isCalculating,
-    error,
-    progress,
-    validationErrors,
-    
-    // History and cache
-    calculationHistory,
-    clearHistory,
-    clearCache,
-    
-    // Utilities
-    utils,
+    results
   };
 };

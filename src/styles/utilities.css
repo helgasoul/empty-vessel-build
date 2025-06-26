@@ -1,85 +1,209 @@
 
-/* Utility Classes */
+/* Утилитарные классы для YTime PREVENT */
 
-/* Animation classes */
-@keyframes fadeIn {
-  from { 
-    opacity: 0; 
-    transform: translateY(20px); 
+/* Spacing утилиты */
+.space-prevent-xs { gap: 4px; }
+.space-prevent-sm { gap: 8px; }
+.space-prevent-md { gap: 16px; }
+.space-prevent-lg { gap: 24px; }
+.space-prevent-xl { gap: 32px; }
+
+/* Текстовые утилиты */
+.text-prevent-xs { font-size: 0.75rem; line-height: 1.5; }
+.text-prevent-sm { font-size: 0.875rem; line-height: 1.5; }
+.text-prevent-base { font-size: 1rem; line-height: 1.6; }
+.text-prevent-lg { font-size: 1.125rem; line-height: 1.6; }
+.text-prevent-xl { font-size: 1.25rem; line-height: 1.5; }
+.text-prevent-2xl { font-size: 1.5rem; line-height: 1.4; }
+.text-prevent-3xl { font-size: 1.875rem; line-height: 1.3; }
+
+.text-prevent-heading {
+  @apply prevent-heading;
+}
+
+.text-prevent-body {
+  @apply prevent-body;
+}
+
+.text-prevent-caption {
+  @apply prevent-caption;
+}
+
+/* Цветовые утилиты */
+.text-primary-prevent { color: var(--text-dark); }
+.text-secondary-prevent { color: rgba(44, 62, 80, 0.7); }
+.text-muted-prevent { color: rgba(44, 62, 80, 0.5); }
+
+.bg-primary-prevent { background: var(--primary-pink); }
+.bg-secondary-prevent { background: var(--primary-lavender); }
+.bg-accent-prevent { background: var(--accent-copper); }
+
+.bg-gradient-warm-prevent { background: var(--gradient-warm); }
+.bg-gradient-care-prevent { background: var(--gradient-care); }
+
+/* Flexbox утилиты */
+.flex-center-prevent {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flex-between-prevent {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flex-start-prevent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.flex-end-prevent {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+/* Grid утилиты */
+.grid-2-prevent { 
+  display: grid; 
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 16px; 
+}
+
+.grid-3-prevent { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 16px; 
+}
+
+.grid-4-prevent { 
+  display: grid; 
+  grid-template-columns: repeat(4, 1fr); 
+  gap: 16px; 
+}
+
+@media (max-width: 768px) {
+  .grid-2-prevent,
+  .grid-3-prevent,
+  .grid-4-prevent {
+    grid-template-columns: 1fr;
   }
-  to { 
-    opacity: 1; 
-    transform: translateY(0); 
+}
+
+/* Позиционирование */
+.sticky-top-prevent {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.fixed-bottom-prevent {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+}
+
+/* Видимость */
+.sr-only-prevent {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.hidden-mobile-prevent {
+  @media (max-width: 768px) {
+    display: none;
   }
 }
 
-@keyframes slideIn {
-  from { 
-    transform: translateX(-100%); 
-  }
-  to { 
-    transform: translateX(0); 
+.hidden-desktop-prevent {
+  @media (min-width: 769px) {
+    display: none;
   }
 }
 
-.animate-fadeIn {
-  animation: fadeIn 0.6s ease-out;
+/* Интерактивность */
+.interactive-prevent {
+  cursor: pointer;
+  transition: all 0.2s ease;
 }
 
-.animate-slideIn {
-  animation: slideIn 0.4s ease-out;
+.interactive-prevent:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-medium);
 }
 
-/* Кастомные градиенты для женского здоровья */
-.gradient-rose {
-  background: linear-gradient(135deg, #fb7185 0%, #f472b6 50%, #f97316 100%);
+.interactive-prevent:active {
+  transform: translateY(0);
 }
 
-.gradient-soft {
-  background: linear-gradient(135deg, #fef7f7 0%, #fef3f4 50%, #fff7ed 100%);
+/* Скролл */
+.scroll-smooth-prevent {
+  scroll-behavior: smooth;
 }
 
-/* Glassmorphism эффекты */
-.glass {
-  background: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+.scroll-hidden-prevent {
+  overflow: hidden;
 }
 
-/* Hover effects */
-.hover-scale {
+.scroll-y-prevent {
+  overflow-y: auto;
+}
+
+/* Тени */
+.shadow-soft-prevent { box-shadow: var(--shadow-soft); }
+.shadow-medium-prevent { box-shadow: var(--shadow-medium); }
+.shadow-strong-prevent { box-shadow: var(--shadow-strong); }
+
+/* Закругления */
+.rounded-soft-prevent { border-radius: var(--radius-soft); }
+.rounded-medium-prevent { border-radius: var(--radius-medium); }
+.rounded-small-prevent { border-radius: var(--radius-small); }
+
+/* Состояния загрузки */
+.loading-prevent {
+  position: relative;
+  pointer-events: none;
+}
+
+.loading-prevent::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border: 2px solid rgba(212, 165, 116, 0.3);
+  border-radius: 50%;
+  border-top-color: var(--accent-copper);
+  animation: spin 1s linear infinite;
+}
+
+/* Эффекты при наведении */
+.hover-lift-prevent {
   transition: transform 0.2s ease;
 }
 
-.hover-scale:hover {
-  transform: scale(1.05);
-}
-
-/* Custom rose color variations */
-.bg-rose-25 {
-  background-color: rgba(251, 113, 133, 0.05);
-}
-
-.hover\:bg-rose-25:hover {
-  background-color: rgba(251, 113, 133, 0.05);
-}
-
-/* Button animations */
-.button-scale {
-  transition: all 0.2s ease-in-out;
-}
-
-.button-scale:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
-
-/* Card hover effects */
-.card-hover {
-  transition: all 0.3s ease;
-}
-
-.card-hover:hover {
+.hover-lift-prevent:hover {
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+}
+
+.hover-glow-prevent {
+  transition: box-shadow 0.2s ease;
+}
+
+.hover-glow-prevent:hover {
+  box-shadow: 0 0 20px rgba(212, 165, 116, 0.3);
 }
