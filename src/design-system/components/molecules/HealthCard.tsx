@@ -1,86 +1,76 @@
 
-/**
- * PREVENT Design System - HealthCard Molecule
- * Organ system status card with CTA
- */
-
 import React from 'react';
-import { LucideIcon } from 'lucide-react';
-import { Badge } from '../atoms/Badge';
-import { Button } from '../atoms/Button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
+import { LucideIcon } from 'lucide-react';
 
-export interface HealthCardProps {
+interface HealthCardProps {
   title: string;
-  icon: LucideIcon;
-  status: 'low' | 'medium' | 'high';
+  description?: string;
   value?: string | number;
-  subtitle?: string;
-  lastUpdated?: string;
-  actionLabel?: string;
-  onAction?: () => void;
+  unit?: string;
+  status?: 'normal' | 'warning' | 'critical';
+  icon?: LucideIcon;
+  action?: {
+    label: string;
+    onClick: () => void;
+  };
   className?: string;
 }
 
-const HealthCard: React.FC<HealthCardProps> = ({
+export const HealthCard: React.FC<HealthCardProps> = ({
   title,
-  icon: Icon,
-  status,
+  description,
   value,
-  subtitle,
-  lastUpdated,
-  actionLabel,
-  onAction,
+  unit,
+  status = 'normal',
+  icon: Icon,
+  action,
   className
 }) => {
+  const statusColors = {
+    normal: 'bg-green-50 border-green-200',
+    warning: 'bg-yellow-50 border-yellow-200',
+    critical: 'bg-red-50 border-red-200'
+  };
+
+  const statusBadgeColors = {
+    normal: 'success' as const,
+    warning: 'warning' as const,
+    critical: 'destructive' as const
+  };
+
   return (
-    <div
-      className={cn(
-        'bg-background-secondary rounded-lg p-6 shadow-sm hover:shadow-md transition-all duration-300 border border-border-light animate-fade-in',
-        className
-      )}
-    >
-      <div className="flex items-start justify-between mb-4">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-background-tertiary rounded-lg">
-            <Icon className="w-6 h-6 text-coral-500" aria-hidden="true" />
+    <Card className={cn(statusColors[status], className)}>
+      <CardHeader className="pb-2">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-2">
+            {Icon && <Icon className="w-5 h-5" />}
+            <CardTitle className="text-base">{title}</CardTitle>
           </div>
-          <div>
-            <h3 className="text-h4 text-text-primary font-medium">{title}</h3>
-            {subtitle && (
-              <p className="text-body-small text-text-secondary">{subtitle}</p>
-            )}
-          </div>
+          <Badge variant={statusBadgeColors[status]} size="sm">
+            {status}
+          </Badge>
         </div>
-        <Badge variant={status} size="sm">
-          {status === 'low' ? 'Низкий' : status === 'medium' ? 'Средний' : 'Высокий'}
-        </Badge>
-      </div>
-
-      {value && (
-        <div className="mb-4">
-          <div className="text-h2 font-semibold text-text-primary">{value}</div>
-        </div>
-      )}
-
-      <div className="flex items-center justify-between">
-        {lastUpdated && (
-          <p className="text-caption text-text-secondary">
-            Обновлено: {lastUpdated}
-          </p>
+        {description && (
+          <CardDescription>{description}</CardDescription>
         )}
-        {actionLabel && onAction && (
-          <Button
-            variant="tertiary"
-            size="sm"
-            onClick={onAction}
-          >
-            {actionLabel}
+      </CardHeader>
+      <CardContent>
+        {value && (
+          <div className="flex items-baseline space-x-1 mb-2">
+            <span className="text-2xl font-bold">{value}</span>
+            {unit && <span className="text-sm text-gray-500">{unit}</span>}
+          </div>
+        )}
+        {action && (
+          <Button variant="outline" size="sm" onClick={action.onClick}>
+            {action.label}
           </Button>
         )}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
-
-export { HealthCard };

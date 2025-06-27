@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -189,7 +188,7 @@ const HealthQuestionnaire: React.FC = () => {
           </CardHeader>
           <CardContent>
             <StepComponent
-              data={formData[currentStepData.id as keyof HealthQuestionnaireData]}
+              data={formData[currentStepData.id as keyof HealthQuestionnaireData] || {}}
               onComplete={handleStepComplete}
             />
           </CardContent>

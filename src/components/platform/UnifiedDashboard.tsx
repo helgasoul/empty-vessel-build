@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { 
@@ -14,7 +13,7 @@ import {
   Activity
 } from 'lucide-react';
 import { RiskCalculatorHub } from '../risk-calculators/RiskCalculatorHub';
-import { MenstrualCycleDashboard } from '../menstrual/MenstrualCycleDashboard';
+import MenstrualCycleDashboard from '../menstrual/MenstrualCycleDashboard';
 import { UserRole } from '../../types/risk-calculator.types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';

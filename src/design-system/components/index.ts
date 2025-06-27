@@ -1,23 +1,25 @@
 
-/**
- * PREVENT Design System - Component Library
- * Centralized exports for all design system components
- */
+// YTime PREVENT Design System - Components Export
+// Standardized exports without duplication
 
-// Atoms
-export { Badge } from './atoms/Badge';
-export { Button } from './atoms/Button';
-export { Tooltip } from './atoms/Tooltip';
+// Core UI components
+export { Button } from '../../components/ui/button';
+export { 
+  Card, 
+  CardHeader, 
+  CardTitle, 
+  CardContent, 
+  CardFooter,
+  CardDescription 
+} from '../../components/ui/card';
+export { Input } from '../../components/ui/input';
+export { Badge } from '../../components/ui/badge';
+export { Avatar, AvatarImage, AvatarFallback } from '../../components/ui/avatar';
 
 // Molecules
-export { HealthCard } from './molecules/HealthCard';
-export { DataRow } from './molecules/DataRow';
 export { CycleTrackerChip } from './molecules/CycleTrackerChip';
+export { DataRow } from './molecules/DataRow';
+export { HealthCard } from './molecules/HealthCard';
 
-// Re-export types
-export type { BadgeProps } from './atoms/Badge';
-export type { ButtonProps } from './atoms/Button';
-export type { TooltipProps } from './atoms/Tooltip';
-export type { HealthCardProps } from './molecules/HealthCard';
-export type { DataRowProps } from './molecules/DataRow';
-export type { CycleTrackerChipProps } from './molecules/CycleTrackerChip';
+// Atoms
+export { Tooltip } from './atoms/Tooltip';
