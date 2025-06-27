@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -83,7 +84,7 @@ const HealthQuestionnaire: React.FC = () => {
   const progress = ((currentStep + 1) / STEPS.length) * 100;
 
   const handleStepComplete = (stepData: any) => {
-    const stepKey = currentStepData.id;
+    const stepKey = currentStepData.id as keyof HealthQuestionnaireData;
     setFormData(prev => ({
       ...prev,
       [stepKey]: stepData
@@ -112,7 +113,14 @@ const HealthQuestionnaire: React.FC = () => {
       await new Promise(resolve => setTimeout(resolve, 2000));
       
       const completedQuestionnaire: HealthQuestionnaireData = {
-        ...formData as HealthQuestionnaireData,
+        personal: formData.personal || {} as any,
+        gynecological: formData.gynecological || {} as any,
+        breast: formData.breast || {} as any,
+        cardiovascular: formData.cardiovascular || {} as any,
+        endocrine: formData.endocrine || {} as any,
+        neurology: formData.neurology || {} as any,
+        lifestyle: formData.lifestyle || {} as any,
+        family: formData.family || {} as any,
         completedAt: new Date(),
         userId: 'current-user-id' // Replace with actual user ID
       };

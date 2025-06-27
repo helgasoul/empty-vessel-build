@@ -6,8 +6,8 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/design-system/components';
-import { Badge } from '@/design-system/components';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 import { 
   Brain,
   Activity,
@@ -74,8 +74,8 @@ export const AIAnalysisDashboard: React.FC = () => {
                     <Button
                       variant="gradient"
                       onClick={() => setShowConfigForm(true)}
-                      icon={Play}
                     >
+                      <Play className="w-4 h-4 mr-2" />
                       Начать анализ
                     </Button>
                   )}
@@ -256,8 +256,8 @@ export const AIAnalysisDashboard: React.FC = () => {
                       <Button
                         variant="gradient"
                         onClick={() => setShowConfigForm(true)}
-                        icon={Play}
                       >
+                        <Play className="w-4 h-4 mr-2" />
                         Начать первый анализ
                       </Button>
                     </div>

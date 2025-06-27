@@ -1,4 +1,3 @@
-
 import React from 'react';
 import BackButton from '@/components/ui/back-button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -91,7 +90,7 @@ const Subscribe = () => {
                   ))}
                 </ul>
                 <Button 
-                  variant={plan.popular ? 'primary' : 'tertiary'}
+                  variant={plan.featured ? 'primary' : 'outline'}
                   size="lg"
                   fullWidth
                 >

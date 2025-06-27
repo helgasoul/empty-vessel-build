@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { Navigate } from 'react-router-dom';
@@ -215,7 +214,7 @@ const Dashboard = () => {
                 <HealthCard
                   title={feature.title}
                   icon={feature.icon}
-                  status={feature.status}
+                  status={riskLevel === 'low' ? 'normal' : riskLevel === 'high' ? 'critical' : 'warning'}
                   value={feature.value}
                   subtitle={feature.description}
                   actionLabel={feature.comingSoon ? 'В разработке' : feature.actionLabel}

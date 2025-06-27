@@ -6,7 +6,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/design-system/components';
+import { Button } from '@/components/ui/button';
 import { CheckCircle2, X } from 'lucide-react';
 
 interface AnalysisResultsHeaderProps {
@@ -31,8 +31,9 @@ export const AnalysisResultsHeader: React.FC<AnalysisResultsHeaderProps> = ({ on
             variant="ghost"
             size="sm"
             onClick={onClose}
-            icon={X}
-          />
+          >
+            <X className="w-4 h-4" />
+          </Button>
         </div>
       </CardHeader>
     </Card>

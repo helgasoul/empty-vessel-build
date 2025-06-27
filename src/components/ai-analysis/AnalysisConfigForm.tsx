@@ -6,7 +6,7 @@
 
 import React, { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/design-system/components';
+import { Button } from '@/components/ui/button';
 import { 
   Settings,
   Calendar,
@@ -110,9 +110,10 @@ export const AnalysisConfigForm: React.FC<AnalysisConfigFormProps> = ({
             variant="ghost"
             size="sm"
             onClick={onCancel}
-            icon={ArrowLeft}
             className="p-2"
-          />
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
           <div>
             <CardTitle className="text-h3 text-text-primary">
               Настройка анализа
@@ -248,9 +249,9 @@ export const AnalysisConfigForm: React.FC<AnalysisConfigFormProps> = ({
           <Button
             variant="gradient"
             onClick={handleSubmit}
-            loading={isLoading}
-            icon={Play}
+            disabled={isLoading}
           >
+            <Play className="w-4 h-4 mr-2" />
             {isLoading ? 'Запускаем анализ...' : 'Начать анализ'}
           </Button>
         </div>

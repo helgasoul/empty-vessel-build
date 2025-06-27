@@ -6,8 +6,8 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/design-system/components';
-import { Button } from '@/design-system/components';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 import { 
   Lightbulb,
   Calendar,
@@ -60,25 +60,29 @@ export const RecommendationsSection: React.FC<RecommendationsSectionProps> = ({
     switch (type) {
       case 'medical':
         return (
-          <Button variant="outline" size="sm" icon={Calendar}>
+          <Button variant="outline" size="sm">
+            <Calendar className="w-4 h-4 mr-2" />
             Записаться к врачу
           </Button>
         );
       case 'nutrition':
         return (
-          <Button variant="outline" size="sm" icon={ShoppingCart}>
+          <Button variant="outline" size="sm">
+            <ShoppingCart className="w-4 h-4 mr-2" />
             Купить продукты
           </Button>
         );
       case 'exercise':
         return (
-          <Button variant="outline" size="sm" icon={Users}>
+          <Button variant="outline" size="sm">
+            <Users className="w-4 h-4 mr-2" />
             Найти тренера
           </Button>
         );
       default:
         return (
-          <Button variant="outline" size="sm" icon={ArrowRight}>
+          <Button variant="outline" size="sm">
+            <ArrowRight className="w-4 h-4 mr-2" />
             Подробнее
           </Button>
         );
