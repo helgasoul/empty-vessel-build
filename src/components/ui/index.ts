@@ -3,7 +3,7 @@
 // Стандартизированные экспорты без дублирования
 
 // Core shadcn/ui components
-export { Button } from './Button';
+export { Button } from './button';
 export { 
   Card, 
   CardHeader, 
@@ -12,9 +12,9 @@ export {
   CardFooter,
   CardDescription 
 } from './card';
-export { Input, Textarea } from './Input';
-export { Badge, StatusBadge, PriorityBadge } from './Badge';
-export { Avatar, AvatarImage, AvatarFallback } from './Avatar';
+export { Input } from './input';
+export { Badge } from './badge';
+export { Avatar, AvatarImage, AvatarFallback } from './avatar';
 export { Tabs, TabsList, TabsTrigger, TabsContent } from './tabs';
 export { Progress } from './progress';
 
