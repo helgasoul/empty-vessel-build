@@ -1,45 +1,67 @@
-
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { LandingPage } from './components/landing/LandingPage';
-import PatientDashboard from './components/dashboards/PatientDashboard';
-import DoctorDashboard from './components/dashboards/DoctorDashboard';
-import AdminDashboard from './components/admin/AdminDashboard';
+import { createBrowserRouter } from 'react-router-dom';
+import App from './App';
+import MenopauseLanding from './pages/MenopauseLanding';
+import MenopauseDashboard from './pages/MenopauseDashboard';
+import MenopauseDemo from './pages/MenopauseDemo';
+import AuthPage from './pages/AuthPage';
+import ProtectedRoute from './components/ProtectedRoute';
 
-// Создаем заглушки для недостающих компонентов
-const ClinicDashboard = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold">Clinic Dashboard</h1>
-    <p>Coming soon...</p>
-  </div>
-);
+// Keep some existing pages for backward compatibility during transition
+import Dashboard from './pages/Dashboard';
+import RiskAssessment from './pages/RiskAssessment';
+import Recommendations from './pages/Recommendations';
 
-const LaboratoryDashboard = () => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold">Laboratory Dashboard</h1>
-    <p>Coming soon...</p>
-  </div>
-);
-
-function AppRouter() {
-  return (
-    <Router>
-      <Routes>
-        {/* Лендинг страница */}
-        <Route path="/" element={<LandingPage />} />
-        
-        {/* Дашборды для разных ролей */}
-        <Route path="/patient/dashboard" element={<PatientDashboard />} />
-        <Route path="/doctor/dashboard" element={<DoctorDashboard />} />
-        <Route path="/clinic/dashboard" element={<ClinicDashboard />} />
-        <Route path="/laboratory/dashboard" element={<LaboratoryDashboard />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        
-        {/* Перенаправление для неизвестных маршрутов */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </Router>
-  );
-}
-
-export default AppRouter;
+export const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <App />,
+    children: [
+      {
+        index: true,
+        element: <MenopauseLanding />
+      },
+      {
+        path: '/auth',
+        element: <AuthPage />
+      },
+      {
+        path: '/menopause-dashboard',
+        element: (
+          <ProtectedRoute>
+            <MenopauseDashboard />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/menopause-demo',
+        element: <MenopauseDemo />
+      },
+      // Legacy routes for transition period
+      {
+        path: '/dashboard',
+        element: (
+          <ProtectedRoute>
+            <Dashboard />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/risk-assessment',
+        element: (
+          <ProtectedRoute>
+            <RiskAssessment />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: '/recommendations',
+        element: (
+          <ProtectedRoute>
+            <Recommendations />
+          </ProtectedRoute>
+        )
+      }
+    ]
+  }
+]);

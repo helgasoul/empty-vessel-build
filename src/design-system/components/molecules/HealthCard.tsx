@@ -51,7 +51,7 @@ export const HealthCard: React.FC<HealthCardProps> = ({
             <CardTitle className="text-base">{title}</CardTitle>
           </div>
           <Badge variant={statusBadgeColors[status]} size="sm">
-            {status}
+            {status === 'normal' ? 'Норма' : status === 'warning' ? 'Внимание' : 'Критично'}
           </Badge>
         </div>
         {description && (

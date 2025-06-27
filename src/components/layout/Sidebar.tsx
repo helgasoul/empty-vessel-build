@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Heart, Shield, Sparkles, FolderOpen, MessageCircle, Calendar, Link } from 'lucide-react';
+import { Heart, Shield, Sparkles, Calendar, MessageCircle, BookOpen, Settings } from 'lucide-react';
 import { NavigationItem } from '../navigation/NavigationItem';
 import { UserProfileSection } from '../navigation/UserProfileSection';
 
@@ -22,47 +22,46 @@ interface SidebarProps {
 const navigationItems: NavigationItemType[] = [
   {
     id: 'overview',
-    label: 'Обзор здоровья',
+    label: 'Обзор',
     icon: <Heart className="w-5 h-5" />,
-    href: '/dashboard'
+    href: '/menopause-dashboard'
   },
   {
-    id: 'risks',
-    label: 'Мои риски',
+    id: 'symptoms',
+    label: 'Отслеживание симптомов',
+    icon: <Calendar className="w-5 h-5" />,
+    href: '/menopause-dashboard?tab=symptoms'
+  },
+  {
+    id: 'health',
+    label: 'Здоровье',
     icon: <Shield className="w-5 h-5" />,
-    href: '/risk-assessment',
-    badge: 'Обновлено'
+    href: '/menopause-dashboard?tab=health'
   },
   {
     id: 'recommendations',
     label: 'Рекомендации',
     icon: <Sparkles className="w-5 h-5" />,
     href: '/recommendations',
-    badge: '3'
+    badge: 'Новое'
   },
   {
-    id: 'health-vault',
-    label: 'Мои данные',
-    icon: <FolderOpen className="w-5 h-5" />,
-    href: '/health-vault'
-  },
-  {
-    id: 'chat',
-    label: 'ИИ-помощник',
+    id: 'community',
+    label: 'Сообщество',
     icon: <MessageCircle className="w-5 h-5" />,
-    href: '/ai-health'
+    href: '/menopause-dashboard?tab=community'
   },
   {
-    id: 'calendar',
-    label: 'Календарь здоровья',
-    icon: <Calendar className="w-5 h-5" />,
-    href: '/medical-calendar'
+    id: 'education',
+    label: 'Обучение',
+    icon: <BookOpen className="w-5 h-5" />,
+    href: '/menopause-dashboard?tab=education'
   },
   {
-    id: 'integrations',
-    label: 'Интеграции',
-    icon: <Link className="w-5 h-5" />,
-    href: '/medical-integrations'
+    id: 'settings',
+    label: 'Настройки',
+    icon: <Settings className="w-5 h-5" />,
+    href: '/menopause-dashboard?tab=settings'
   }
 ];
 
@@ -86,14 +85,14 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen, onClose, currentModule
         {/* Logo Section */}
         <div className="p-6 border-b border-neutral-200">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-[#FF6B9D] to-[#9B59B6] rounded-full flex items-center justify-center">
+            <div className="w-10 h-10 bg-gradient-to-r from-orange-500 to-amber-500 rounded-full flex items-center justify-center">
               <Heart className="w-6 h-6 text-white" />
             </div>
             <div>
-              <h1 className="text-xl font-bold bg-gradient-to-r from-[#FF6B9D] to-[#9B59B6] bg-clip-text text-transparent">
+              <h1 className="text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
                 YTime
               </h1>
-              <p className="text-sm text-neutral-500">Забота о себе</p>
+              <p className="text-sm text-neutral-500">Поддержка менопаузы</p>
             </div>
           </div>
         </div>

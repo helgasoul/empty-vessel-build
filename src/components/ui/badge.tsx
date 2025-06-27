@@ -17,11 +17,16 @@ const badgeVariants = cva(
         info: 'border-transparent bg-blue-100 text-blue-800',
         error: 'border-transparent bg-red-100 text-red-800',
         primary: 'border-transparent bg-purple-100 text-purple-800',
+        low: 'border-transparent bg-green-100 text-green-800',
+        medium: 'border-transparent bg-yellow-100 text-yellow-800',
+        high: 'border-transparent bg-red-100 text-red-800',
+        ovulation: 'border-transparent bg-pink-100 text-pink-800',
       },
       size: {
         sm: 'px-2 py-0.5 text-xs',
         default: 'px-2.5 py-0.5 text-xs',
         lg: 'px-3 py-1 text-sm',
+        md: 'px-3 py-1 text-sm',
       },
     },
     defaultVariants: {

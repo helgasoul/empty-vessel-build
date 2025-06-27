@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface GailInputData {
@@ -108,17 +107,15 @@ export class GailCalculatorService {
     try {
       const { data, error } = await supabase
         .from('risk_assessments')
-        .insert([
-          {
-            user_id: userId,
-            assessment_type: 'gail_breast_cancer',
-            assessment_data: inputData,
-            results_data: results,
-            risk_percentage: results.fiveYear,
-            risk_level: results.fiveYear < 1.7 ? 'low' : results.fiveYear < 5.0 ? 'moderate' : 'high',
-            recommendations: GailCalculatorService.generateRecommendations(results)
-          }
-        ])
+        .insert({
+          user_id: userId,
+          assessment_type: 'gail_breast_cancer',
+          assessment_data: inputData as any,
+          results_data: results as any,
+          risk_percentage: results.fiveYear,
+          risk_level: results.fiveYear < 1.7 ? 'low' : results.fiveYear < 5.0 ? 'moderate' : 'high',
+          recommendations: GailCalculatorService.generateRecommendations(results)
+        })
         .select();
 
       if (error) throw error;
